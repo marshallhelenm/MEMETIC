@@ -1,0 +1,25 @@
+.stub {
+  display: flex;
+  float: left;
+  height: 100%;
+}
+
+.board {
+  justify-content: space-around;
+  margin-bottom: 10%;
+}
+
+.board-page{
+  top: 0;
+  left: 0;
+  margin-top: 10%;
+  padding: 5%;
+}
+
+.stub-image{
+  margin: 2%;
+}
+
+.stub-bar{
+  /* height: 20%; */
+}
