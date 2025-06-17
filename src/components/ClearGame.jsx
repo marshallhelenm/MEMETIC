@@ -4,10 +4,12 @@ import { memeSampler } from "../assets/memeCollection";
 
 // TODO: Implement confirmation modal here 
 
-function ClearGame({ roomKey }) {
+function ClearGame({ roomKey, setMemeCollection }) {
   // a way to start a new game at the same roomkey
   function clearMemes() {
-    localStorage.setItem(`guessy-${roomKey}`, JSON.stringify(memeSampler()) )
+    let new_memes = memeSampler()
+    localStorage.setItem(`guessy-${roomKey}`, JSON.stringify(new_memes) )
+    setMemeCollection(new_memes)
     // plus socket stuff
   }
 

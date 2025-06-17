@@ -10,6 +10,8 @@ import { memeSampler } from "../assets/memeCollection";
 function PlayGame() {
   const roomKey = "asgSdg"
   const [memeCollection, setMemeCollection] = useState([])
+  // TODO: toggle to make all gifs still
+
 
   useEffect(()=>{
     const memes = JSON.parse(localStorage.getItem(`guessy-${roomKey}`));
@@ -20,7 +22,7 @@ function PlayGame() {
       localStorage.setItem(`guessy-${roomKey}`, JSON.stringify(new_memes))
       setMemeCollection(new_memes)
     }
-  }, [memeCollection])
+  }, [])
 
   return (
     <div className="play-game">
@@ -31,7 +33,7 @@ function PlayGame() {
           <QuestionsModal />
         </div>
         <div className="column-md-6">
-          <ClearGame roomKey={roomKey} />
+          <ClearGame roomKey={roomKey} setMemeCollection={setMemeCollection} />
         </div>
       </div>
       <Board items={memeCollection} />
