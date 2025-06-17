@@ -1,5 +1,5 @@
+import { Link } from "react-router-dom";
 import "../App.css";
-import Join from "../components/Join/Join";
 import { Button } from "semantic-ui-react";
 
 function NewGame () {
@@ -10,18 +10,9 @@ function NewGame () {
   }
   
   return (
-    <div className="primary-style">
-      <h1>Choose a Category</h1>
-        <div>
-          <Button>Memes</Button>
-          <div>
-            <h1>Other Options Coming Soon!</h1>
-            <Button >Historical Figures</Button>
-            <Button >Cartoon Characters</Button>
-          </div>
-        </div>
-      <Join />
-    </div>
+    <Link to={`/play?roomKey=${generateRoomKey()}`}>
+      <Button>New Game</Button>
+    </Link>
   );
 }
 
