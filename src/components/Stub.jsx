@@ -11,10 +11,6 @@ function Stub ({item, roomKey}) {
     status === "dimmed" ? setDimmer(true) : setDimmer(false);
   }
 
-  function getStubStatus(){
-    return localStorage.getItem(storageId)
-  }
-
   function flip(e){
     e.preventDefault();
     const newStatus = dimmer ? "visible" : "dimmed"
@@ -23,12 +19,16 @@ function Stub ({item, roomKey}) {
   }
 
   useEffect(() => {
+    function getStubStatus(){
+      return localStorage.getItem(storageId)
+    }
+
     if (getStubStatus() === "dimmed") {
       setDimmer(true);
     } else {
       setDimmer(false);
     }
-  }, []);
+  }, [setDimmer, storageId]);
 
   return (
     <Card raised id={item.id}>
