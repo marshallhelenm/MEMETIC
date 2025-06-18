@@ -4,9 +4,7 @@ import { Button } from "semantic-ui-react";
 
 function NewGame () {
   function generateRoomKey() {
-    let room = Math.random().toString(36).substring(7);
-    localStorage.setItem("roomkey", room);
-    return room;
+    return Math.random().toString(36).substring(8);
   }
   
   return (

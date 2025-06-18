@@ -9,7 +9,7 @@ Building a version of the game "Guess Who" to be played online, inspired by [thi
 - Implement coordinated room contents (sockets?)
 - Select player's card - highlight or show at top of page
 - Fix awkward scroll
-- Make it look good :(
+- Make it look good
 
 ### Nice to have/aesthetics
 

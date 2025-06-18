@@ -18,6 +18,8 @@ function Join() {
             onChange={(e) => {
               setRoomKey(e.target.value);
             }}
+            maxLength={8}
+            minLength={8}
           />
         </div>
         <Link to={`/play?roomKey=${roomKey}`}>

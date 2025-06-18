@@ -3,9 +3,6 @@ import Stub from "../components/Stub";
 
 // holds all the picture cards
 function Board({items}) {
-
-  // dynamically organize based on height? surely there's a package for that.
-
   function generateColumn(cards, index){
     return (
       <GridColumn key={`column-${index}`}>
