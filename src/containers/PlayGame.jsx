@@ -10,8 +10,6 @@ import { memeSampler } from "../assets/memeCollection";
 function PlayGame() {
   const roomKey = "asgSdg"
   const [memeCollection, setMemeCollection] = useState([])
-  // TODO: toggle to make all gifs still
-
 
   useEffect(()=>{
     const memes = JSON.parse(localStorage.getItem(`guessy-${roomKey}`));
