@@ -4,7 +4,13 @@ import { Button } from "semantic-ui-react";
 
 function NewGame () {
   function generateRoomKey() {
-    return Math.random().toString(36).substring(8);
+    var newRoomKey = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < 8; i++ ) {
+        newRoomKey += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return newRoomKey;
   }
   
   return (

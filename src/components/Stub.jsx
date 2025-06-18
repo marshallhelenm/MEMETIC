@@ -2,27 +2,33 @@ import { useState, useEffect } from "react";
 import { Card, Button, Dimmer, DimmerDimmable, CardContent, CardHeader, Image, Icon } from "semantic-ui-react";
 import "../App.css";
 
-function Stub ({item}) {
+function Stub ({item, roomKey}) {
   const [dimmer, setDimmer] = useState(false);
+  const storageId = `${roomKey}-${item.stub}`
 
-  function stubStatus(id, status) {
-    // status of true means dimmed, false means not dimmed
-    localStorage.setItem(id, status);
+  function setStubStatus(status) {
+    localStorage.setItem(storageId, status);
     status === "dimmed" ? setDimmer(true) : setDimmer(false);
+  }
+
+  function getStubStatus(){
+    return localStorage.getItem(storageId)
   }
 
   function flip(e){
     e.preventDefault();
-    stubStatus(item.id, dimmer ? "dimmed" : "visible");
+    const newStatus = dimmer ? "visible" : "dimmed"
+    setStubStatus(newStatus);
     setDimmer(!dimmer)
   }
+
   useEffect(() => {
-    if (localStorage.getItem(item.id) === "dimmed") {
+    if (getStubStatus() === "dimmed") {
       setDimmer(true);
     } else {
       setDimmer(false);
     }
-  }, [item.id]);
+  }, []);
 
   return (
     <Card raised id={item.id}>

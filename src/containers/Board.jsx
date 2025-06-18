@@ -2,7 +2,7 @@ import { Card, CardGroup, Grid, GridColumn, GridRow } from "semantic-ui-react";
 import Stub from "../components/Stub";
 
 // holds all the picture cards
-function Board({items}) {
+function Board({items, roomKey}) {
   function generateColumn(cards, index){
     return (
       <GridColumn key={`column-${index}`}>
@@ -11,6 +11,7 @@ function Board({items}) {
           <Stub
           item={item}
           key={`${item.stub}-${Math.random() * 10}`}
+          roomKey={roomKey}
           /> : null
         ))}
       </GridColumn>

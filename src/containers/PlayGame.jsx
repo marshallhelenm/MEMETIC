@@ -24,7 +24,7 @@ function PlayGame() {
       localStorage.setItem(`guessy-${roomKey}`, JSON.stringify(new_memes))
       setMemeCollection(new_memes)
     }
-  }, [])
+  }, [roomKey])
 
   function handleClearGame(){
     let new_memes = memeSampler()
@@ -48,7 +48,7 @@ function PlayGame() {
           <Button onClick={handleClearGame}>New Game</Button>;
         </div>
       </div>
-      <Board items={memeCollection} />
+      <Board items={memeCollection} roomKey={roomKey} />
     </div>
   );
 }
