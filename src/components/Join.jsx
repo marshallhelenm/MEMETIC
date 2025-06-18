@@ -20,7 +20,7 @@ function Join() {
             }}
           />
         </div>
-        <Link to={`/play?room=${roomKey}`}>
+        <Link to={`/play?roomKey=${roomKey}`}>
           <Button>
             Join Game
           </Button>

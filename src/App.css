@@ -174,10 +174,12 @@ html, body {
   .joinInnerContainer {
     width: 90%;
   }
-
-
 }
 
 button:focus {
   outline: 0;
+}
+
+.roomkey-header {
+  color: gainsboro;
 }

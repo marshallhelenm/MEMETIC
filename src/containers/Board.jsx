@@ -3,7 +3,7 @@ import Stub from "../components/Stub";
 
 // holds all the picture cards
 function Board({items}) {
-  // TODO: implement loading version of cards
+
   // dynamically organize based on height? surely there's a package for that.
 
   function generateColumn(cards, index){

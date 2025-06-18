@@ -8,7 +8,8 @@ const QuestionsModal = () => {
     "Would I be attracted to this meme?",
     "Would I want this person to fight alongside me during the apocalypse?",
     "Would this meme be my sidekick?",
-    "Would I get in trouble for using this meme in the office slack channel?"
+    "Would I get in trouble for using this meme in the office slack channel?",
+    "Does conversation with me regularly inspire use of this meme?"
   ];
 
   return (
