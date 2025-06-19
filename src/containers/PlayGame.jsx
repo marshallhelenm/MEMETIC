@@ -7,29 +7,36 @@ import QuestionsModal from "../components/QuestionsModal";
 import Logo from "../components/Logo";
 import InvalidRoomKey from "./InvalidRoomKey";
 import { memeSampler } from "../assets/memeCollection";
+import { useGuessy } from "../contexts/GuessyContext";
+import { useWS } from "../contexts/WSContext";
 
 //the page you see while actually playing the game
 function PlayGame() {
   const [searchParams, setSearchParams] = useSearchParams();
   const roomKey = searchParams.get("roomKey")
   const [memeCollection, setMemeCollection] = useState([])
+  const {setRoomContents, joinRoom} = useGuessy()
+  const {lastJsonMessage} = useWS()
 
 
   useEffect(()=>{
+    joinRoom(roomKey)
     const memes = JSON.parse(localStorage.getItem(`guessy-${roomKey}`));
     if (memes) {
       setMemeCollection(memes);
     } else {
-      let new_memes = memeSampler()
-      localStorage.setItem(`guessy-${roomKey}`, JSON.stringify(new_memes))
+      console.log("getRoomContents: ", lastJsonMessage);
+      const new_memes = JSON.parse(lastJsonMessage.memeSet)
       setMemeCollection(new_memes)
+      localStorage.setItem(`guessy-${roomKey}`, JSON.stringify(new_memes))
     }
-  }, [roomKey])
+  }, [roomKey, joinRoom, lastJsonMessage])
 
   function handleClearGame(){
     let new_memes = memeSampler()
-    localStorage.setItem(`guessy-${roomKey}`, JSON.stringify(new_memes) )
     setMemeCollection(new_memes)
+    setRoomContents(roomKey, new_memes)
+    localStorage.setItem(`guessy-${roomKey}`, JSON.stringify(new_memes) )
   }
 
   if (roomKey.length != 8){
@@ -45,6 +52,7 @@ function PlayGame() {
           <QuestionsModal />
         </div>
         <div className="column-md-6">
+          {/* TODO: implement confirmation modal for clearing the game */}
           <Button onClick={handleClearGame}>New Game</Button>;
         </div>
       </div>

@@ -3,6 +3,8 @@ import LandingPage from "./containers/LandingPage";
 import PlayGame from "./containers/PlayGame";
 import Join from "./components/Join";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { useWS } from "./contexts/WSContext";
+import { useEffect } from "react";
 
 const router = createBrowserRouter([
   {

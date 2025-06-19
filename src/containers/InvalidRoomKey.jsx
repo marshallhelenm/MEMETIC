@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "semantic-ui-react";
 import "../App.css";
 import Logo from "../components/Logo";
-import NewGame from "./NewGame";
+import NewGame from "../components/NewGame";
 
 //the page you see while actually playing the game
 function PlayGame() {
