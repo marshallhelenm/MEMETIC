@@ -6,7 +6,6 @@ Building a version of the game "Guess Who" to be played online, inspired by [thi
 
 ### MVP
 
-- Implement coordinated room contents (sockets?)
 - Fix awkward scroll
 - Make it look good
 - periodically clear out local storage?
@@ -14,10 +13,17 @@ Building a version of the game "Guess Who" to be played online, inspired by [thi
 ### Nice to have/aesthetics
 
 - Select player's card - highlight or show at top of page
-- toggle to make gifs static
+        - prompt user to pick this on joining the room?
 - temp loading version of cards
 - dynamically organize cards based on height to fit columns best?
+- Prompt player for name when joining a new room
+- Display own & fellow player's name
 
 ### Future Features
 
 - Live chat between players
+
+### Dumb Ideas
+
+- Every time you click on the spinning question mark it gets faster
+        - if it gets fast enough it explodes?

@@ -19,9 +19,6 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
 const QuestionsModal = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = (e) => {
-    e.preventDefault()
-    console.log('handleOpen');
-    
     setOpen(true);
   }
   const handleClose = () => setOpen(false);

@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { Button } from "semantic-ui-react";
 import "../App.css";
 import Logo from "../components/Logo";
 import NewGame from "../components/NewGame";
+import GuessyButton from "../components/GuessyButton";
 
 //the page you see while actually playing the game
 function PlayGame() {
@@ -12,9 +12,9 @@ function PlayGame() {
         <h3 className="heading">Invalid Room Key</h3>
         <NewGame />
         <Link to="/join">
-          <Button>
+          <GuessyButton>
             Join game
-          </Button>
+          </GuessyButton>
         </Link>
     </div>
   );

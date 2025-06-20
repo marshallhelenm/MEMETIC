@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Button } from "semantic-ui-react";
 import "../App.css";
 import Board from "./Board";
-import QuestionsModal from "../components/QuestionsModal";
-import Logo from "../components/Logo";
 import InvalidRoomKey from "../components/InvalidRoomKey";
 import PlayGameHeader from "../components/PlayGameHeader";
-import { memeSampler } from "../assets/memeCollection";
 import { useGuessy } from "../contexts/GuessyContext";
 import { useWS } from "../contexts/WSContext";
 
@@ -16,7 +12,7 @@ function PlayGame() {
   const [searchParams, setSearchParams] = useSearchParams();
   const roomKey = searchParams.get("roomKey")
   const [memeCollection, setMemeCollection] = useState([])
-  const {setRoomContents, joinRoom} = useGuessy()
+  const {joinRoom, cleanUpLocalStorage} = useGuessy()
   const {lastJsonMessage} = useWS()
 
 
@@ -26,19 +22,21 @@ function PlayGame() {
     if (memes) {
       setMemeCollection(memes);
     } else {
-      console.log("getRoomContents: ", lastJsonMessage);
+      if (!lastJsonMessage) return; // TODO: make this display an 'error connecting, try again' thingy instead of an empty screen
       const new_memes = JSON.parse(lastJsonMessage.memeSet)
       setMemeCollection(new_memes)
-      localStorage.setItem(`guessy-${roomKey}`, JSON.stringify(new_memes))
+      cleanUpLocalStorage(roomKey)
+      localStorage.setItem(`guessy-${roomKey}`, JSON.stringify({
+        memes: new_memes,
+        est: lastJsonMessage.est
+      }))
     }
+    Object.keys(localStorage).forEach(key => {
+          if (key.startsWith(roomKey)) {
+              localStorage.removeItem(key);
+          }
+      });
   }, [roomKey, joinRoom, lastJsonMessage])
-
-  function handleClearGame(){
-    let new_memes = memeSampler()
-    setMemeCollection(new_memes)
-    setRoomContents(roomKey, new_memes)
-    localStorage.setItem(`guessy-${roomKey}`, JSON.stringify(new_memes) )
-  }
 
   if (roomKey.length != 8){
     return <InvalidRoomKey />

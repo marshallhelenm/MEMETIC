@@ -1,4 +1,3 @@
-import { Button } from "semantic-ui-react";
 import "../App.css";
 import { memeSampler } from "../assets/memeCollection";
 import { useGuessy } from "../contexts/GuessyContext";
@@ -37,12 +36,13 @@ function ConfirmationDialogRaw({onConfirm, open, setOpen}) {
 
 function ClearGame({setMemeCollection, roomKey}) {
   const [open, setOpen] = useState(false);
-  const {setRoomContents} = useGuessy()
+  const {setRoomContents, cleanUpLocalStorage} = useGuessy()
   
   function handleClearGame(){
     let new_memes = memeSampler()
     setMemeCollection(new_memes)
     setRoomContents(roomKey, new_memes)
+    cleanUpLocalStorage(roomKey)
     localStorage.setItem(`guessy-${roomKey}`, JSON.stringify(new_memes) )
   }
 

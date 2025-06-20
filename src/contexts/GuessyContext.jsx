@@ -17,14 +17,22 @@ function GuessyProvider({ children }) {
       sendJsonMessage({type: "setRoomContents", roomKey: key, memeSet: memes})
     }
     function joinRoom(key){
-      console.log("Guessy Context joinRoom");
-      
       setRoomKey(key)
       sendJsonMessage({type: "joinRoom", roomKey: key, user: uuid})
     }
     function leaveRoom(key, uuid){
       setRoomKey(key)
       sendJsonMessage({type: "leaveRoom", roomKey: key, user: uuid})
+    }
+
+    function cleanUpLocalStorage(roomKey){
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith(roomKey)) {
+            localStorage.removeItem(key);
+        } else if (key.startsWith(`guessy-`) && Date.parse(localStorage.getItem(key)["est"]) < (new Date() - 7)) {
+          localStorage.removeItem(key);
+        }
+      });
     }
 
     return {
@@ -34,7 +42,8 @@ function GuessyProvider({ children }) {
       joinRoom,
       leaveRoom,
       staticGifs,
-      setStaticGifs
+      setStaticGifs,
+      cleanUpLocalStorage
     };
   }, [roomKey, username, sendJsonMessage, uuid, staticGifs, setStaticGifs]);
 

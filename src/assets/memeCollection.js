@@ -25,6 +25,10 @@ import thanks_satan from "../assets/memes/thanks_satan.gif";
 import then_perish from "../assets/memes/then_perish.jpg";
 import this_is_fine from "../assets/memes/this_is_fine.png";
 import woman_yelling_cat from "../assets/memes/woman_yelling_cat.jpg";
+// brazilian soap opera star math
+// let me in
+// who could have done this
+
 
 const memes = [
   {
