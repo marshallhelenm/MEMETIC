@@ -14,14 +14,17 @@ Building a version of the game "Guess Who" to be played online, inspired by [thi
 
 - Select player's card - highlight or show at top of page
         - prompt user to pick this on joining the room?
-- temp loading version of cards
-- dynamically organize cards based on height to fit columns best?
 - Prompt player for name when joining a new room
 - Display own & fellow player's name
 
 ### Future Features
 
 - Live chat between players
+- Make Guess
+
+### Pipe Dreams
+
+- dynamically organize cards based on height to fit columns best?
 
 ### Dumb Ideas
 
