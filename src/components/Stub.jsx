@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Card, Button, Dimmer, DimmerDimmable, CardContent, CardHeader, Image, Icon } from "semantic-ui-react";
+import { Card, Dimmer, DimmerDimmable, Icon } from "semantic-ui-react";
 import "../App.css";
+import StubImage from "./StubImage"
 
 function Stub ({item, roomKey}) {
   const [dimmer, setDimmer] = useState(false);
@@ -32,15 +33,18 @@ function Stub ({item, roomKey}) {
 
   return (
     <Card raised id={item.id}>
-      <div className="stub-origin">
-        <a href={item.origin} target="_blank" rel="noopener noreferrer" className="origin-link">
-          <Icon name='question' />
-        </a>
+      <div className="stub">
+        <div className="stub-origin ui icon">
+          <a href={item.origin} target="_blank" rel="noopener noreferrer">
+            <Icon name='question' />
+            <span className="tooltip">Origin</span>
+          </a>
+        </div>
+        <DimmerDimmable dimmed={dimmer}>
+          <StubImage item={item} flip={flip} />
+          <Dimmer active={dimmer} onClickOutside={flip}/>
+        </DimmerDimmable>
       </div>
-      <DimmerDimmable dimmed={dimmer}>
-        <Image src={item.img} alt={item.alt} onClick={flip} className="stub-image" />
-        <Dimmer active={dimmer} onClickOutside={flip}/>
-      </DimmerDimmable>
     </Card>
   );
 }

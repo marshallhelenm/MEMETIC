@@ -9,7 +9,7 @@ function PlayGame() {
   return (
     <div>
         <Logo />
-        <h3 className="roomkey-header">Invalid Room Key</h3>
+        <h3 className="heading">Invalid Room Key</h3>
         <NewGame />
         <Link to="/join">
           <Button>

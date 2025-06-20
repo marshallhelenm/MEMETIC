@@ -8,16 +8,10 @@ const GuessyContext = createContext();
 function GuessyProvider({ children }) {
   const [username, setUsername] = useState("");
   const [roomKey, setRoomKey] = useState("");
-  // const [memeSet, setMemeSet] = useState([]);
   const { sendJsonMessage, uuid } = useWS()
+  const [staticGifs, setStaticGifs] = useState(false)
 
   const value = useMemo(() => {
-    function handleLogin(username){
-      if (username.length >= 2) {
-        setUsername(username)
-        sendJsonMessage({type: "login", username})
-      }
-    }
     function setRoomContents(key, memes){
       setRoomKey(key)
       sendJsonMessage({type: "setRoomContents", roomKey: key, memeSet: memes})
@@ -36,13 +30,13 @@ function GuessyProvider({ children }) {
     return {
       roomKey,
       username,
-      // memeSet,
-      onLogin: handleLogin,
       setRoomContents,
       joinRoom,
-      leaveRoom
+      leaveRoom,
+      staticGifs,
+      setStaticGifs
     };
-  }, [roomKey, username, sendJsonMessage, uuid]);
+  }, [roomKey, username, sendJsonMessage, uuid, staticGifs, setStaticGifs]);
 
   return (
     // 2) PROVIDE VALUE TO CHILD COMPONENTS

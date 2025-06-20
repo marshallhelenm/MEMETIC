@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import "../App.css";
-import { Button } from "semantic-ui-react";
 import { useGuessy } from "../contexts/GuessyContext";
 import { memeSampler } from "../assets/memeCollection";
+import GuessyButton from "./GuessyButton";
 
 function NewGame () {
   const {setRoomContents} = useGuessy()
@@ -26,7 +26,7 @@ function NewGame () {
   
   return (
     <Link to={`/play?roomKey=${newRoomKey}`} onClick={handleNewGame}>
-      <Button>New Game</Button>
+      <GuessyButton>New Game</GuessyButton>
     </Link>
   );
 }

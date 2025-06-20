@@ -7,27 +7,25 @@ function Join() {
   const [roomKey, setRoomKey] = useState("");
 
   return (
-    <div className="joinOuterContainer">
-      <div className="joinInnerContainer">
-        <Logo />
-        <h1 className="heading">Join Game</h1>
-        <div>
-          <Input
-            placeholder="Room Name"
-            type="text"
-            onChange={(e) => {
-              setRoomKey(e.target.value);
-            }}
-            maxLength={8}
-            minLength={8}
-          />
-        </div>
-        <Link to={`/play?roomKey=${roomKey}`}>
-          <Button>
-            Join Game
-          </Button>
-        </Link>
+    <div >
+      <Logo />
+      <h1 className="heading">Join Game</h1>
+      <div>
+        <Input
+          placeholder="Room Name"
+          type="text"
+          onChange={(e) => {
+            setRoomKey(e.target.value);
+          }}
+          maxLength={8}
+          minLength={8}
+        />
       </div>
+      <Link to={`/play?roomKey=${roomKey}`}>
+        <Button>
+          Join Game
+        </Button>
+      </Link>
     </div>
   );
 }

@@ -5,7 +5,8 @@ import "../App.css";
 import Board from "./Board";
 import QuestionsModal from "../components/QuestionsModal";
 import Logo from "../components/Logo";
-import InvalidRoomKey from "./InvalidRoomKey";
+import InvalidRoomKey from "../components/InvalidRoomKey";
+import PlayGameHeader from "../components/PlayGameHeader";
 import { memeSampler } from "../assets/memeCollection";
 import { useGuessy } from "../contexts/GuessyContext";
 import { useWS } from "../contexts/WSContext";
@@ -45,17 +46,7 @@ function PlayGame() {
 
   return (
     <div className="play-game">
-      <div className="play-header">
-        <Logo spin={false} />
-        <h3 className="roomkey-header">Room Key: {roomKey}</h3>
-        <div className="column-md-6">
-          <QuestionsModal />
-        </div>
-        <div className="column-md-6">
-          {/* TODO: implement confirmation modal for clearing the game */}
-          <Button onClick={handleClearGame}>New Game</Button>;
-        </div>
-      </div>
+      <PlayGameHeader setMemeCollection={setMemeCollection} roomKey={roomKey}  />
       <Board items={memeCollection} roomKey={roomKey} />
     </div>
   );

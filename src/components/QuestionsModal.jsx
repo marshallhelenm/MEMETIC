@@ -1,7 +1,31 @@
-import React from "react";
-import { Button, Modal } from "semantic-ui-react";
+import { IconButton, Dialog, styled, DialogTitle, DialogContent } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import GuessyButton from "./GuessyButton";
+import { colorE } from "../assets/styles";
+import { useState } from "react";
+
+const StyledDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(2),
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(1),
+  },
+  '& .MuiPaper-root': {
+    backgroundColor: colorE,
+  },
+}));
 
 const QuestionsModal = () => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = (e) => {
+    e.preventDefault()
+    console.log('handleOpen');
+    
+    setOpen(true);
+  }
+  const handleClose = () => setOpen(false);
+  
   const qs = [
     "Hypothetically, would I go on a date with this meme?",
     "Would I relate to this meme?",
@@ -13,18 +37,38 @@ const QuestionsModal = () => {
   ];
 
   return (
-    <Modal trigger={<Button>Question Ideas</Button>} centered={false} closeIcon>
-      <Modal.Header>Question Ideas</Modal.Header>
-      <Modal.Content>
-        <Modal.Description>
-          <ul>
+    <>
+      <GuessyButton onClick={handleOpen}>Question Ideas</GuessyButton>
+      <StyledDialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <DialogTitle sx={{ m: 0, p: 2 }}>
+          <h1>Questions to Ask</h1>
+        </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={(theme) => ({
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: theme.palette.grey[500],
+          })}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent id="modal-modal-description" dividers sx={{ mt: 2, padding: "10%" }}>
+          <div style={{padding:"5%"}}>
             {qs.map((item, index) => (
-              <li key={"q"+index}>{item}</li>
+              <p key={"q"+index} style={{textAlign: "center", fontSize: "1.1em"}}>{item}</p>
             ))}
-          </ul>
-        </Modal.Description>
-      </Modal.Content>
-    </Modal>
+          </div>
+        </DialogContent>
+      </StyledDialog>
+    </>
   );
 };
 
