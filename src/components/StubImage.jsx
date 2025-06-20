@@ -7,12 +7,12 @@ function StubImage ({item, flip}) {
   if (staticGifs && item.img.includes(".gif")){
     return (
       <ReactFreezeframe className="stub-image">
-        <img src={item.img} alt={item.alt} onClick={flip} className="stub-image ui medium image" />
+        <img src={`/memes/${item.img}`} alt={item.alt} onClick={flip} className="stub-image ui medium image" />
       </ReactFreezeframe>
     );
   } else {
     return (
-      <img src={item.img} alt={item.alt} onClick={flip} className="stub-image ui medium image" />
+      <img src={`/memes/${item.img}`} alt={item.alt} onClick={flip} className="stub-image ui medium image" />
     );
   }
 }

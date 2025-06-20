@@ -31,12 +31,7 @@ function PlayGame() {
         est: lastJsonMessage.est
       }))
     }
-    Object.keys(localStorage).forEach(key => {
-          if (key.startsWith(roomKey)) {
-              localStorage.removeItem(key);
-          }
-      });
-  }, [roomKey, joinRoom, lastJsonMessage])
+  }, [roomKey, joinRoom, lastJsonMessage, cleanUpLocalStorage])
 
   if (roomKey.length != 8){
     return <InvalidRoomKey />
@@ -45,7 +40,7 @@ function PlayGame() {
   return (
     <div className="play-game">
       <PlayGameHeader setMemeCollection={setMemeCollection} roomKey={roomKey}  />
-      <Board items={memeCollection} roomKey={roomKey} />
+      <Board itemKeys={memeCollection} roomKey={roomKey} />
     </div>
   );
 }

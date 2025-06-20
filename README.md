@@ -8,7 +8,7 @@ Building a version of the game "Guess Who" to be played online, inspired by [thi
 
 - Fix awkward scroll
 - Make it look good
-- periodically clear out local storage?
+- Dockerize for deployment
 
 ### Nice to have/aesthetics
 
@@ -21,12 +21,8 @@ Building a version of the game "Guess Who" to be played online, inspired by [thi
 
 - Live chat between players
 - Make Guess
+- Image upload by players?
 
 ### Pipe Dreams
 
 - dynamically organize cards based on height to fit columns best?
-
-### Dumb Ideas
-
-- Every time you click on the spinning question mark it gets faster
-        - if it gets fast enough it explodes?

@@ -1,40 +1,23 @@
-import { Card, CardGroup, Grid, GridColumn, GridRow } from "semantic-ui-react";
 import Stub from "../components/Stub";
+import { memeData } from "../assets/memeCollection";
+import { useEffect } from "react";
 
 // holds all the picture cards
-function Board({items, roomKey}) {
-  // function generateColumn(cards, index){
-  //   return (
-  //     <GridColumn key={`column-${index}`}>
-  //       {cards.map((item) => (
-  //         item ? 
-  //         <Stub
-  //         item={item}
-  //         key={`${item.stub}-${Math.random() * 10}`}
-  //         roomKey={roomKey}
-  //         /> : null
-  //       ))}
-  //     </GridColumn>
-  //   )
-  // }
+function Board({itemKeys, roomKey}) {
 
-  // function generateColumns(){
-  //   const item_array = items.slice(0)
-  //   let columns = []
-  //   for (let index = 0; index < 6; index++) {
-  //     columns.push(generateColumn(item_array.splice(0,4), index))
-  //   }
-  //   return columns
-  // }
 
+  useEffect(()=>{
+    console.log('itemKeys: ', itemKeys);
+    
+  }, [])
   return (
     <div className="gameBoard" >
         {/* {generateColumns()} */}
         {
-          items.map((item) => (
+          itemKeys.map((itemKey) => (
             <Stub
-              item={item}
-              key={`${item.stub}-${Math.random() * 10}`}
+              item={memeData[itemKey]}
+              key={`${itemKey}-${Math.random() * 10}`}
               roomKey={roomKey}
               />
           ))

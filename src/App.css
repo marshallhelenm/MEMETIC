@@ -70,36 +70,6 @@ button:focus {
   justify-content: center;
 }
 
-/* Logo */
-.guessy-logo-spin {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.header-logo{
-  margin: 10px;
-  height: 10vh;
-}
-
-.header-logo img {
-  height: 100%;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .guessy-logo-spin {
-    animation: Guessy-logo-spin infinite 20s linear;
-  }
-}
-
-@keyframes Guessy-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 /* PlayGame */
 .play-game {
   display: flex;
@@ -190,4 +160,33 @@ button:focus {
 
 .static:hover {
   opacity:0;
+}
+/* Logo */
+.guessy-logo-spin {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.header-logo{
+  margin: 10px;
+  height: 10vh;
+}
+
+.header-logo img {
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .guessy-logo-spin {
+    animation: guessy-logo-spin infinite linear;
+  }
+}
+
+@keyframes guessy-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
