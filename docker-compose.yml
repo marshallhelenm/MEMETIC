@@ -1,0 +1,22 @@
+services:
+  ws:
+    container_name: guessy_ws_server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    image: guessy/server
+    command: node server.js
+    ports:
+      - "8080:8080"
+
+  react-app:
+    container_name: guessy_react_app
+    build: 
+      context: ./client
+      dockerfile: Dockerfile
+    image: guessy/client
+    command: npm run build
+    ports:
+      - "3000:3000"
+    depends_on:
+      - ws
