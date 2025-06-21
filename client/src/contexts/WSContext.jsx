@@ -8,6 +8,8 @@ const WSContext = createContext(false, null, () => {})
 
 function WSProvider({ children }) {
   const [isReady, setIsReady] = useState(false)
+  const [connectionAttempts, setConnectionAttempts] = useState(0)
+  const [connectionError, setConnectionError] = useState(false)
   const [uuid] = useState(null)
   const WS_URL = "ws://localhost:6969"
 
@@ -24,7 +26,10 @@ function WSProvider({ children }) {
   useEffect(() => {
     const socket = new WebSocket("wss://echo.websocket.events/")
 
-    socket.onopen = () => setIsReady(true)
+    socket.onopen = () => {
+      setIsReady(true)
+      setConnectionAttempts(0)
+    }
     socket.onclose = () => setIsReady(false)
     // socket.onmessage = (event) => {
     //   console.log('socket message: ', lastJsonMessage);
@@ -44,9 +49,13 @@ function WSProvider({ children }) {
       sendJsonMessage,
       lastJsonMessage,
       uuid,
+      connectionAttempts,
+      setConnectionAttempts,
+      connectionError, 
+      setConnectionError,
       ws: ws.current?.send.bind(ws.current)
     };
-  }, [isReady, sendJsonMessage, lastJsonMessage, uuid]);
+  }, [isReady, sendJsonMessage, lastJsonMessage, uuid, connectionAttempts, setConnectionAttempts, connectionError, setConnectionError]);
 
   return (
     <WSContext.Provider value={value}>{children}</WSContext.Provider>

@@ -14,8 +14,8 @@ function PlayGame() {
   const [memeCollection, setMemeCollection] = useState([])
   const [loading, setLoading] = useState(true)
   const roomKey = searchParams.get("roomKey")
-  const {joinRoom, cleanUpLocalStorage, handleNewGame, getRoomContents, connectionAttempts, setConnectionAttempts, connectionError, setConnectionError} = useGuessy()
-  const {lastJsonMessage, serverReady} = useWS()
+  const {joinRoom, cleanUpLocalStorage, handleNewGame, getRoomContents} = useGuessy()
+  const {lastJsonMessage, serverReady, connectionAttempts, setConnectionAttempts, connectionError, setConnectionError} = useWS()
 
 
   useEffect(()=>{
@@ -41,7 +41,7 @@ function PlayGame() {
     }
   }, [roomKey, joinRoom, lastJsonMessage, cleanUpLocalStorage, getRoomContents, handleNewGame, serverReady, connectionAttempts, setConnectionAttempts, connectionError, setConnectionError])
 
-  if (connectionError){
+  if (connectionError && !serverReady){
     return <ConnectionError />
   } else if (roomKey.length != 8){
     return <InvalidRoomKey />

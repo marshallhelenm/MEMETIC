@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Dimmer, DimmerDimmable } from "semantic-ui-react";
-import {Paper} from '@mui/material';
 import "../App.css";
 import StubImage from "./StubImage"
 

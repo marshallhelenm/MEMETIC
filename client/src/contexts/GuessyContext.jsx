@@ -9,9 +9,7 @@ function GuessyProvider({ children }) {
   const [username] = useState("");
   const [roomKey, setRoomKey] = useState("");
   const [staticGifs, setStaticGifs] = useState(false)
-  const [connectionAttempts, setConnectionAttempts] = useState(0)
-  const [connectionError, setConnectionError] = useState(false)
-  const { sendJsonMessage, uuid } = useWS()
+  const { sendJsonMessage, uuid, connectionAttempts, connectionError } = useWS()
 
   const value = useMemo(() => {
     function setRoomContents(key, memes){
@@ -50,12 +48,8 @@ function GuessyProvider({ children }) {
       cleanUpLocalStorage,
       handleNewGame,
       getRoomContents,
-      connectionAttempts,
-      setConnectionAttempts,
-      connectionError, 
-      setConnectionError
     };
-  }, [roomKey, username, sendJsonMessage, uuid, staticGifs, setStaticGifs, connectionAttempts, setConnectionAttempts, connectionError, setConnectionError]);
+  }, [roomKey, username, sendJsonMessage, uuid, staticGifs, setStaticGifs]);
 
   return (
     // 2) PROVIDE VALUE TO CHILD COMPONENTS
