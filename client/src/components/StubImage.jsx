@@ -1,5 +1,5 @@
 import ReactFreezeframe from "react-freezeframe"
-import { useGuessy } from "../contexts/GuessyContext";
+import { useGuessy } from "../contexts/useGuessy";
 
 function StubImage ({item, flip}) {
   const {staticGifs} = useGuessy()

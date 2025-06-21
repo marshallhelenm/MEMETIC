@@ -1,8 +1,7 @@
 import { createContext, useContext, useMemo, useState } from "react";
-import { useWS } from "./WSContext";
+import { useWS } from "./useWS";
 import { memeSampler } from "../assets/memeCollection";
 
-// 1) CREATE A CONTEXT
 const GuessyContext = createContext();
 
 function GuessyProvider({ children }) {
@@ -57,11 +56,4 @@ function GuessyProvider({ children }) {
   );
 }
 
-function useGuessy() {
-  const context = useContext(GuessyContext);
-  if (context === undefined)
-    throw new Error("GuessyContext was used outside of the GuessyProvider");
-  return context;
-}
-
-export { GuessyProvider, useGuessy };
+export { GuessyProvider, GuessyContext };

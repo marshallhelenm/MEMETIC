@@ -5,8 +5,8 @@ import Board from "./Board";
 import InvalidRoomKey from "../components/InvalidRoomKey";
 import PlayGameHeader from "../components/PlayGameHeader";
 import ConnectionError from "../components/ConnectionError";
-import { useGuessy } from "../contexts/GuessyContext";
-import { useWS } from "../contexts/WSContext";
+import { useGuessy } from "../contexts/useGuessy";
+import { useWS } from "../contexts/useWS";
 
 //the page you see while actually playing the game
 function PlayGame() {
@@ -14,21 +14,12 @@ function PlayGame() {
   const [memeCollection, setMemeCollection] = useState([])
   const [loading, setLoading] = useState(true)
   const roomKey = searchParams.get("roomKey")
-  const {joinRoom, cleanUpLocalStorage, handleNewGame, getRoomContents} = useGuessy()
-  const {lastJsonMessage, serverReady, connectionAttempts, setConnectionAttempts, connectionError, setConnectionError} = useWS()
+  const {joinRoom, handleNewGame} = useGuessy()
+  const {lastJsonMessage, serverReady } = useWS()
 
 
   useEffect(()=>{
-    if(connectionError) return;
-    if (!serverReady){
-      setConnectionAttempts(connectionAttempts + 1)
-      if (connectionAttempts > 20) {
-        setConnectionError(true)
-        return
-      }
-    } else {
-      joinRoom(roomKey)
-    }
+    joinRoom(roomKey)
     if (!lastJsonMessage) {
       return
     } else if (lastJsonMessage['alert'] == 'no game in room') {
@@ -39,11 +30,9 @@ function PlayGame() {
       setMemeCollection(new_memes)
       setLoading(false)
     }
-  }, [roomKey, joinRoom, lastJsonMessage, cleanUpLocalStorage, getRoomContents, handleNewGame, serverReady, connectionAttempts, setConnectionAttempts, connectionError, setConnectionError])
+  }, [roomKey, joinRoom, lastJsonMessage, handleNewGame])
 
-  if (connectionError && !serverReady){
-    return <ConnectionError />
-  } else if (roomKey.length != 8){
+  if (roomKey.length != 8){
     return <InvalidRoomKey />
   } else {
     return (

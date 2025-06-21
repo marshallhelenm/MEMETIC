@@ -3,7 +3,6 @@ import { useRef } from "react";
 import { createContext, useContext, useMemo, useState } from "react";
 import useWebSocket from "react-use-websocket";
 
-// 1) CREATE A CONTEXT
 const WSContext = createContext(false, null, () => {})
 
 function WSProvider({ children }) {
@@ -62,11 +61,4 @@ function WSProvider({ children }) {
   );
 }
 
-function useWS() {
-  const context = useContext(WSContext);
-  if (context === undefined)
-    throw new Error("WSContext was used outside of the WSProvider");
-  return context;
-}
-
-export { WSProvider, useWS };
+export { WSContext, WSProvider};

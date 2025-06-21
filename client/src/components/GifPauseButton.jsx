@@ -1,5 +1,5 @@
 import "../App.css";
-import { useGuessy } from "../contexts/GuessyContext";
+import { useGuessy } from "../contexts/useGuessy";
 import {FormControlLabel, Switch, styled, alpha} from '@mui/material';
 import {colorC, colorF} from "../assets/styles"
 

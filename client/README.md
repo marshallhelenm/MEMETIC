@@ -8,9 +8,8 @@ Building a version of the game "Guess Who" to be played online, inspired by [thi
 
 - Fix awkward scroll
 - Make it look good
-- Dockerize for deployment
 
-### Nice to have/aesthetics
+### NVP
 
 - Select player's card - highlight or show at top of page
         - prompt user to pick this on joining the room?

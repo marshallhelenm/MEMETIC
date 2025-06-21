@@ -107,7 +107,7 @@ const joinRoom = (roomKey, uuid) => {
 };
 
 wsServer.on("connection", (connection, request) => {
-  console.log("connection established");
+  // console.log("connection established");
   const { username, roomKey } = url.parse(request.url, true).query;
   const uuid = uuidv4();
   connections[uuid] = connection;

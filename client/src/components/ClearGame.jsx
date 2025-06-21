@@ -1,6 +1,6 @@
 import "../App.css";
 import { memeSampler } from "../assets/memeCollection";
-import { useGuessy } from "../contexts/GuessyContext";
+import { useGuessy } from "../contexts/useGuessy";
 import GuessyButton from "./GuessyButton";
 import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { useState } from "react";

@@ -3,7 +3,7 @@ import QuestionsModal from "../components/QuestionsModal";
 import Logo from "../components/Logo";
 import GifPauseButton from "../components/GifPauseButton";
 import { memeSampler } from "../assets/memeCollection";
-import { useGuessy } from "../contexts/GuessyContext";
+import { useGuessy } from "../contexts/useGuessy";
 import ClearGame from "./ClearGame";
 
 function PlayGameHeader({setMemeCollection, roomKey}) {

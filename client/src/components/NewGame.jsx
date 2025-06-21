@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import "../App.css";
-import { useGuessy } from "../contexts/GuessyContext";
+import { useGuessy } from "../contexts/useGuessy";
 import GuessyButton from "./GuessyButton";
 
 function NewGame () {

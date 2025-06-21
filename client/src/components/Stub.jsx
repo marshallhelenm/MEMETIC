@@ -25,6 +25,7 @@ function Stub ({itemKey, item, roomKey}) {
     } else {
       setDimmer(false);
     }
+    
   }, [setDimmer, storageId]);
 
   return (
@@ -37,7 +38,7 @@ function Stub ({itemKey, item, roomKey}) {
       </div>
       <DimmerDimmable dimmed={dimmer}>
         <StubImage item={item} flip={flip} />
-        <Dimmer active={dimmer} onClickOutside={flip}/>
+        <Dimmer active={dimmer} onClickOutside={flip} className="guessy-dimmer"/>
       </DimmerDimmable>
     </div>
   );
