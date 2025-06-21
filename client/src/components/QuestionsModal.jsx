@@ -1,5 +1,4 @@
 import { IconButton, Dialog, styled, DialogTitle, DialogContent } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import GuessyButton from "./GuessyButton";
 import { colorE } from "../assets/styles";
 import { useState } from "react";
@@ -43,7 +42,7 @@ const QuestionsModal = () => {
         aria-describedby="modal-modal-description"
       >
         <DialogTitle sx={{ m: 0, p: 2 }}>
-          <h1>Questions to Ask</h1>
+          Questions to Ask
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -55,7 +54,7 @@ const QuestionsModal = () => {
             color: theme.palette.grey[500],
           })}
         >
-          <CloseIcon />
+        <i className="fa-solid fa-xmark"></i>
         </IconButton>
         <DialogContent id="modal-modal-description" dividers sx={{ mt: 2, padding: "10%" }}>
           <div style={{padding:"5%"}}>

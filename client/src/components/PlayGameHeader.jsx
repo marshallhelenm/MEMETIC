@@ -1,4 +1,3 @@
-import { Button, Icon } from "semantic-ui-react";
 import "../App.css";
 import QuestionsModal from "../components/QuestionsModal";
 import Logo from "../components/Logo";
@@ -8,27 +7,6 @@ import { useGuessy } from "../contexts/GuessyContext";
 import ClearGame from "./ClearGame";
 
 function PlayGameHeader({setMemeCollection, roomKey}) {
-  const {setRoomContents, joinRoom, staticGifs, setStaticGifs} = useGuessy()
-  
-  function handleClearGame(){
-    let new_memes = memeSampler()
-    setMemeCollection(new_memes)
-    setRoomContents(roomKey, new_memes)
-    localStorage.setItem(`guessy-${roomKey}`, JSON.stringify(new_memes) )
-  }
-
-  function toggleStaticGifs(){
-    setStaticGifs(!staticGifs)
-  }
-
-  function gifIcon(){
-    if (staticGifs) {
-      return <Icon name='play' />
-    } else {
-      return <Icon name='pause' />
-    }
-  }
-
   return (
     <div className="play-header">
       <h4 className="roomKey">Room Key: <span className="colorF">{roomKey}</span></h4>

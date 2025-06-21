@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { Card, Dimmer, DimmerDimmable, Icon } from "semantic-ui-react";
-import {CircularProgress, Paper} from '@mui/material';
+import { Dimmer, DimmerDimmable } from "semantic-ui-react";
+import {Paper} from '@mui/material';
 import "../App.css";
 import StubImage from "./StubImage"
-import {colorC} from "../assets/styles"
 
 function Stub ({itemKey, item, roomKey}) {
   const [dimmer, setDimmer] = useState(false);
@@ -22,44 +21,29 @@ function Stub ({itemKey, item, roomKey}) {
   }
 
   useEffect(() => {
-    function getStubStatus(){
-      return localStorage.getItem(storageId)
-    }
-
-    if (getStubStatus() === "dimmed") {
+    if (localStorage.getItem(storageId) === "dimmed") {
       setDimmer(true);
     } else {
       setDimmer(false);
     }
   }, [setDimmer, storageId]);
 
-  if (item) {
-
-    return (
-      <Paper raised id={itemKey}>
-        <div className="stub">
-          <div className="stub-origin ui icon">
-            <a href={item.origin} target="_blank" rel="noopener noreferrer">
-              <Icon name='question' />
-              <span className="tooltip">Origin</span>
-            </a>
-          </div>
-          <DimmerDimmable dimmed={dimmer}>
-            <StubImage item={item} flip={flip} />
-            <Dimmer active={dimmer} onClickOutside={flip}/>
-          </DimmerDimmable>
+  return (
+    <Paper raised id={itemKey}>
+      <div className="stub">
+        <div className="stub-origin">
+          <a href={item.origin} target="_blank" rel="noopener noreferrer">
+            <i className="fa-solid fa-question-mark"></i>
+            <span className="tooltip">Origin</span>
+          </a>
         </div>
-      </Paper>
-    );
-  } else {
-    return (
-      <Paper raised id={itemKey}>
-        <div style={{height: '290px', width: '290px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-          <CircularProgress sx={{ color: colorC }} />
-        </div>
-      </Paper>
-    );
-  }
+        <DimmerDimmable dimmed={dimmer}>
+          <StubImage item={item} flip={flip} />
+          <Dimmer active={dimmer} onClickOutside={flip}/>
+        </DimmerDimmable>
+      </div>
+    </Paper>
+  );
 
 }
 
