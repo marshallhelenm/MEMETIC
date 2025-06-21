@@ -14,19 +14,17 @@ const rooms = {};
 const handleMessage = (bytes, uuid) => {
   const message = JSON.parse(bytes.toString());
   const user = users[uuid];
+
   switch (message.type) {
     case "setRoomContents":
       setRoomContents(uuid, message.roomKey, JSON.stringify(message.memeSet));
       broadcastRoom(message.roomKey);
       break;
     case "getRoomContents":
-      returnRoomContents(uuid, message.roomKey);
+      returnRoomContents(message.roomKey, uuid);
       break;
     case "joinRoom":
       joinRoom(message.roomKey, uuid);
-      break;
-    case "leaveRoom":
-      leaveRoom(message.roomKey, uuid);
       break;
     default:
       break;
@@ -50,10 +48,19 @@ const sweepRoom = (roomKey) => {
   });
 };
 
-const returnRoomContents = (uuid, roomKey) => {
+const returnRoomContents = (roomKey, uuid) => {
   const room = rooms[roomKey];
   const connection = connections[uuid];
   const message = JSON.stringify(room);
+  connection.send(message);
+};
+
+const noGameAlert = (roomKey, uuid) => {
+  const connection = connections[uuid];
+  const message = JSON.stringify({
+    alert: "no game in room",
+    roomKey: roomKey,
+  });
   connection.send(message);
 };
 
@@ -61,7 +68,7 @@ const getOrMakeRoom = (roomKey) => {
   if (!rooms[roomKey]) {
     rooms[roomKey] = {
       users: [],
-      memeSet: {},
+      memeSet: [],
       est: new Date(),
     };
   }
@@ -91,11 +98,12 @@ const joinRoom = (roomKey, uuid) => {
   const roomUsers = room["users"];
   if (!roomUsers.includes(uuid)) {
     rooms[roomKey]["users"] = [...roomUsers, uuid];
+    if (room["memeSet"].length > 0) {
+      returnRoomContents(roomKey, uuid);
+    } else {
+      noGameAlert(roomKey, uuid);
+    }
   }
-};
-
-const leaveRoom = (roomKey, uuid) => {
-  delete rooms[roomKey]["users"][uuid];
 };
 
 wsServer.on("connection", (connection, request) => {

@@ -1,35 +1,40 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import { useWS } from "./WSContext";
-import { useEffect } from "react";
+import { memeSampler } from "../assets/memeCollection";
 
 // 1) CREATE A CONTEXT
 const GuessyContext = createContext();
 
 function GuessyProvider({ children }) {
-  const [username, setUsername] = useState("");
+  const [username] = useState("");
   const [roomKey, setRoomKey] = useState("");
-  const { sendJsonMessage, uuid } = useWS()
   const [staticGifs, setStaticGifs] = useState(false)
+  const [connectionAttempts, setConnectionAttempts] = useState(0)
+  const [connectionError, setConnectionError] = useState(false)
+  const { sendJsonMessage, uuid } = useWS()
 
   const value = useMemo(() => {
     function setRoomContents(key, memes){
       setRoomKey(key)
       sendJsonMessage({type: "setRoomContents", roomKey: key, memeSet: memes})
     }
+    function getRoomContents(key){
+      setRoomKey(key)
+      sendJsonMessage({type: "getRoomContents", roomKey: key})
+    }
     function joinRoom(key){
       setRoomKey(key)
       sendJsonMessage({type: "joinRoom", roomKey: key, user: uuid})
     }
-    function leaveRoom(key, uuid){
-      setRoomKey(key)
-      sendJsonMessage({type: "leaveRoom", roomKey: key, user: uuid})
+    function handleNewGame(roomKey){
+      const new_memes = memeSampler()
+      cleanUpLocalStorage(roomKey)
+      setRoomContents(roomKey, new_memes)
     }
 
     function cleanUpLocalStorage(roomKey){
       Object.keys(localStorage).forEach(key => {
         if (key.startsWith(roomKey)) {
-            localStorage.removeItem(key);
-        } else if (key.startsWith(`guessy-`) && Date.parse(localStorage.getItem(key)["est"]) < (new Date() - 7)) {
           localStorage.removeItem(key);
         }
       });
@@ -40,12 +45,17 @@ function GuessyProvider({ children }) {
       username,
       setRoomContents,
       joinRoom,
-      leaveRoom,
       staticGifs,
       setStaticGifs,
-      cleanUpLocalStorage
+      cleanUpLocalStorage,
+      handleNewGame,
+      getRoomContents,
+      connectionAttempts,
+      setConnectionAttempts,
+      connectionError, 
+      setConnectionError
     };
-  }, [roomKey, username, sendJsonMessage, uuid, staticGifs, setStaticGifs]);
+  }, [roomKey, username, sendJsonMessage, uuid, staticGifs, setStaticGifs, connectionAttempts, setConnectionAttempts, connectionError, setConnectionError]);
 
   return (
     // 2) PROVIDE VALUE TO CHILD COMPONENTS

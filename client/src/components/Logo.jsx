@@ -4,7 +4,7 @@ import question from "../assets/question.png"
 import { useState } from "react";
 import $ from 'jquery'
 
-function Logo({spin = true, header = false}) {
+function Logo({spin = true, header = false, size}) {
     const [image, setImage] = useState(question)
 
     function spinTimeUp(){
@@ -25,7 +25,7 @@ function Logo({spin = true, header = false}) {
 
     if (header){
         return (
-            <div className="header-logo">
+            <div className="small-logo">
                 <Link to="/">
                     <img
                     src={question}
@@ -52,7 +52,7 @@ function Logo({spin = true, header = false}) {
                 <img
                 src={image}
                 alt={`a ${ spin ? "spinning " : ""}question mark`}
-                className={`${spin ? `guessy-logo-spin`: ""}`}
+                className={`${spin ? `guessy-logo-spin`: ""} ${size === "small" ? 'small-logo' : ''}`}
                 />
             </div>
         );

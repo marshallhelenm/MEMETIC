@@ -29,20 +29,18 @@ function Stub ({itemKey, item, roomKey}) {
   }, [setDimmer, storageId]);
 
   return (
-    <Paper raised id={itemKey}>
-      <div className="stub">
-        <div className="stub-origin">
-          <a href={item.origin} target="_blank" rel="noopener noreferrer">
-            <i className="fa-solid fa-question-mark"></i>
-            <span className="tooltip">Origin</span>
-          </a>
-        </div>
-        <DimmerDimmable dimmed={dimmer}>
-          <StubImage item={item} flip={flip} />
-          <Dimmer active={dimmer} onClickOutside={flip}/>
-        </DimmerDimmable>
+    <div className="stub" id={itemKey}>
+      <div className="stub-origin">
+        <a href={item.origin} target="_blank" rel="noopener noreferrer">
+          <i className="fa-solid fa-question"></i>
+          <span className="tooltip">Origin</span>
+        </a>
       </div>
-    </Paper>
+      <DimmerDimmable dimmed={dimmer}>
+        <StubImage item={item} flip={flip} />
+        <Dimmer active={dimmer} onClickOutside={flip}/>
+      </DimmerDimmable>
+    </div>
   );
 
 }

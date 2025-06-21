@@ -4,45 +4,55 @@ import "../App.css";
 import Board from "./Board";
 import InvalidRoomKey from "../components/InvalidRoomKey";
 import PlayGameHeader from "../components/PlayGameHeader";
+import ConnectionError from "../components/ConnectionError";
 import { useGuessy } from "../contexts/GuessyContext";
 import { useWS } from "../contexts/WSContext";
 
 //the page you see while actually playing the game
 function PlayGame() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const roomKey = searchParams.get("roomKey")
+  const [searchParams] = useSearchParams();
   const [memeCollection, setMemeCollection] = useState([])
-  const {joinRoom, cleanUpLocalStorage} = useGuessy()
-  const {lastJsonMessage} = useWS()
+  const [loading, setLoading] = useState(true)
+  const roomKey = searchParams.get("roomKey")
+  const {joinRoom, cleanUpLocalStorage, handleNewGame, getRoomContents, connectionAttempts, setConnectionAttempts, connectionError, setConnectionError} = useGuessy()
+  const {lastJsonMessage, serverReady} = useWS()
 
 
   useEffect(()=>{
-    joinRoom(roomKey)
-    const memes = JSON.parse(localStorage.getItem(`guessy-${roomKey}`));
-    if (memes) {
-      setMemeCollection(memes);
+    if(connectionError) return;
+    if (!serverReady){
+      setConnectionAttempts(connectionAttempts + 1)
+      if (connectionAttempts > 20) {
+        setConnectionError(true)
+        return
+      }
     } else {
-      if (!lastJsonMessage) return; // TODO: make this display an 'error connecting, try again' thingy instead of an empty screen
-      const new_memes = JSON.parse(lastJsonMessage.memeSet)
-      setMemeCollection(new_memes)
-      cleanUpLocalStorage(roomKey)
-      localStorage.setItem(`guessy-${roomKey}`, JSON.stringify({
-        memes: new_memes,
-        est: lastJsonMessage.est
-      }))
+      joinRoom(roomKey)
     }
-  }, [roomKey, joinRoom, lastJsonMessage, cleanUpLocalStorage])
+    if (!lastJsonMessage) {
+      return
+    } else if (lastJsonMessage['alert'] == 'no game in room') {
+      handleNewGame(roomKey)
+      return
+    } else {
+      const new_memes = lastJsonMessage['memeSet']
+      setMemeCollection(new_memes)
+      setLoading(false)
+    }
+  }, [roomKey, joinRoom, lastJsonMessage, cleanUpLocalStorage, getRoomContents, handleNewGame, serverReady, connectionAttempts, setConnectionAttempts, connectionError, setConnectionError])
 
-  if (roomKey.length != 8){
+  if (connectionError){
+    return <ConnectionError />
+  } else if (roomKey.length != 8){
     return <InvalidRoomKey />
+  } else {
+    return (
+      <div className="play-game">
+        <PlayGameHeader setMemeCollection={setMemeCollection} roomKey={roomKey}  />
+        <Board itemKeys={memeCollection} roomKey={roomKey} loading={loading} />
+      </div>
+    );
   }
-
-  return (
-    <div className="play-game">
-      <PlayGameHeader setMemeCollection={setMemeCollection} roomKey={roomKey}  />
-      <Board itemKeys={memeCollection} roomKey={roomKey} />
-    </div>
-  );
 }
 
 export default PlayGame;

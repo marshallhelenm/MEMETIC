@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 import "../App.css";
 import { useGuessy } from "../contexts/GuessyContext";
-import { memeSampler } from "../assets/memeCollection";
 import GuessyButton from "./GuessyButton";
 
 function NewGame () {
-  const {setRoomContents} = useGuessy()
+  const {handleNewGame} = useGuessy()
   function generateRoomKey() {
     var newRoomKey = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -16,16 +15,9 @@ function NewGame () {
     return newRoomKey;
   }
   const newRoomKey = generateRoomKey()
-
-  function handleNewGame(){
-    const new_memes = memeSampler()
-    console.log("handleNewGame, new_memes: ", new_memes);
-    
-    setRoomContents(newRoomKey, new_memes)
-  }
   
   return (
-    <Link to={`/play?roomKey=${newRoomKey}`} onClick={handleNewGame}>
+    <Link to={`/play?roomKey=${newRoomKey}`} onClick={()=>handleNewGame(newRoomKey)}>
       <GuessyButton>New Game</GuessyButton>
     </Link>
   );

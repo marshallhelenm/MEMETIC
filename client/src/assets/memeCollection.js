@@ -70,6 +70,11 @@ const memeData = {
     origin: "https://knowyourmeme.com/memes/knife-cat",
     alt: "A white cat making a smug expression as a cooking knife is pointed at it",
   },
+  let_me_in: {
+    img: "let_me_in.png",
+    origin: "https://knowyourmeme.com/memes/let-me-in",
+    alt: "LET ME IN LET ME INNNNNN!!! (adult swim)",
+  },
   marge_potato: {
     img: "marge_potato.png",
     origin: "https://knowyourmeme.com/memes/marge-simpsons-neat-potato",
@@ -90,6 +95,11 @@ const memeData = {
     img: "old_spice.jpg",
     origin: "https://knowyourmeme.com/memes/events/isaiah-mustafa-old-spice",
     alt: "A shirtless black man riding a white horse and holding up a bottle of old spice",
+  },
+  one_fear: {
+    img: "one_fear.jpg",
+    origin: "https://knowyourmeme.com/memes/events/teen-comix-no-fear-one-fear",
+    alt: "TEEN COMIX. NO FEAR. WHAT IF THEY MADE SIMPSONS PORN ILLEGAL? ONE FEAR",
   },
   pointing_spider_man: {
     img: "pointing_spider_man.jpg",
@@ -146,8 +156,6 @@ const memeData = {
 const memes = Object.keys(memeData);
 
 function memeSampler() {
-  console.log("memeSampler: ", memes);
-
   let memesArray = memes.slice(0);
   let bucket = [];
   let randomIndex;

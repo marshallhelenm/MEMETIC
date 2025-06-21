@@ -8,13 +8,12 @@ const WSContext = createContext(false, null, () => {})
 
 function WSProvider({ children }) {
   const [isReady, setIsReady] = useState(false)
-  const [val, setVal] = useState(null)
-  const [uuid, setUuid] = useState(null)
+  const [uuid] = useState(null)
   const WS_URL = "ws://localhost:6969"
 
   const ws = useRef(null)
 
-  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
+  const { sendJsonMessage, lastJsonMessage } = useWebSocket(
     WS_URL,
     {
       share: false,
@@ -27,7 +26,9 @@ function WSProvider({ children }) {
 
     socket.onopen = () => setIsReady(true)
     socket.onclose = () => setIsReady(false)
-    socket.onmessage = (event) => setVal(event.data)
+    // socket.onmessage = (event) => {
+    //   console.log('socket message: ', lastJsonMessage);
+    // }
 
     ws.current = socket
 
@@ -39,14 +40,13 @@ function WSProvider({ children }) {
   
   const value = useMemo(() => {
     return {
-      isReady,
-      val,
+      serverReady: isReady,
       sendJsonMessage,
       lastJsonMessage,
       uuid,
       ws: ws.current?.send.bind(ws.current)
     };
-  }, [isReady, val, sendJsonMessage, lastJsonMessage, uuid]);
+  }, [isReady, sendJsonMessage, lastJsonMessage, uuid]);
 
   return (
     <WSContext.Provider value={value}>{children}</WSContext.Provider>

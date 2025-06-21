@@ -4,36 +4,33 @@ import { memeData } from "../assets/memeCollection";
 import { useEffect } from "react";
 
 // holds all the picture cards
-function Board({itemKeys, roomKey}) {
-  useEffect(()=>{
-    console.log(itemKeys);
-  }, [itemKeys])
-  
+function Board({itemKeys, roomKey, loading}) {
   function generateCards(){
     let cards = []
-    if (itemKeys.length > 0){
-      return itemKeys.forEach((itemKey) => (
-        cards.unshift(
-          <Stub
-          item={memeData[itemKey]}
-          key={`${itemKey}-${Math.random() * 10}`}
-          roomKey={roomKey}
-          />
-        )
-      ))
-    } else {
-      for (let index = 0; index < 24; index++) {
-        cards.unshift(
-          <LoadingStub key={`loading-stub-${Math.random() * 10}`} />
-        )
-      }
+    JSON.parse(itemKeys).forEach((itemKey) => (
+      cards.unshift(
+        <Stub
+        item={memeData[itemKey]}
+        key={`${itemKey}-${Math.random() * 10}`}
+        roomKey={roomKey}
+        />
+      )
+    ))
+    return cards
+  }
+  function generateLoadingCards(){
+    let cards = []
+    for (let index = 0; index < 24; index++) {
+      cards.unshift(
+        <LoadingStub key={`loading-stub-${Math.random() * 10}`} />
+      )
     }
     return cards
   }
 
   return (
     <div className="gameBoard" >
-      {generateCards()}
+      {loading ? generateLoadingCards() : generateCards()}
     </div>
   );
 }

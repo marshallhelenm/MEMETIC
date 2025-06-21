@@ -5,7 +5,7 @@
   --colorD: #c8b1e4;
   --colorE: #f4effa;
   --colorF: #C2E7DA;
-  --corners: .28571429rem;
+  --corners: .3rem;
 }
 
 .corners {
@@ -111,12 +111,32 @@ button:focus {
   border-radius: var(--corners);
   border: solid 2px var(--colorD);
   margin: 2%;
+  align-items: flex-start;
 }
 
 /* Stub */
+
+.stub {
+  background-color: var(--colorD);
+  border-radius: var(--corners);
+  background-color: var(--colorE);
+  width: 15%;
+  position: relative;
+}
+
 .stub-image{
   border-radius: var(--corners);
   padding: 1%;
+  position: absolute;
+}
+
+.stub > .loading{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 0;
+  padding-bottom: 50%;
+  padding-top: 50%;
 }
 
 .ff-canvas {
@@ -124,14 +144,10 @@ button:focus {
   padding: 1%;
 }
 
-.stub {
-  background-color: var(--colorE);
-}
-
 .stub-origin{
   position: absolute;
   z-index: 99;
-  margin-top: 3%;
+  margin-top: 2%;
   margin-left: 2%;
   opacity: 0.6;
 }
@@ -158,13 +174,6 @@ button:focus {
   z-index: 1;
 }
 
-.static {
-  position:absolute;
-}
-
-.static:hover {
-  opacity:0;
-}
 /* Logo */
 .guessy-logo-spin {
   height: 40vmin;
@@ -172,12 +181,12 @@ button:focus {
   border-radius: var(--corners);
 }
 
-.header-logo{
+.small-logo{
   margin: 10px;
   height: 10vh;
 }
 
-.header-logo img {
+.small-logo img {
   height: 100%;
 }
 

@@ -4,11 +4,11 @@ import {colorC} from "../assets/styles"
 
 function LoadingStub () {
     return (
-    <Paper >
-      <div style={{height: '290px', width: '290px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+    <div className='stub' >
+      <div className='loading'>
         <CircularProgress sx={{ color: colorC }} />
       </div>
-    </Paper>
+    </div>
   );
 
 }
