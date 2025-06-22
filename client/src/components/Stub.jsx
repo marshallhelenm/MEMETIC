@@ -6,15 +6,8 @@ import $ from 'jquery'
 
 function Stub ({itemKey, item, roomKey}) {
   const [flipped, setFlipped] = useState(false);
-  // const [height, setHeight] = useState();
   const storageId = `${roomKey}-${item.stub}`
-
-  // function calcHeight(){
-  //   const h = ($(`img[src$='${item.img}']`)[0]?.height)*1.03
-  //   if (height != h){
-  //     setHeight(h)
-  //   }
-  // }
+  const height = (200 / item.height_multiplier)*1.01
 
   function setStubStatus(status) {
     localStorage.setItem(storageId, status);
@@ -51,10 +44,9 @@ function Stub ({itemKey, item, roomKey}) {
   }, [setFlipped, storageId]);
 
   return (
-    <div className="stub" id={itemKey} >
+    <div className="stub" id={itemKey} style={{height: `${height}px`}} onClick={flip}>
       {overlay()}      
-      <StubImage item={item} flip={flip} flipped={flipped} itemKey={itemKey}/>
-      <img/>
+        <StubImage item={item} flip={flip} flipped={flipped} itemKey={itemKey} height={height} />
     </div>
   );
 

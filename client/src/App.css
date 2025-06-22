@@ -124,7 +124,7 @@ button:focus {
   background-color: var(--colorD);
   border-radius: var(--corners);
   background-color: var(--colorE);
-  width: 15%;
+  width: 200px;
   position: relative;
   display: inline-block;
   bottom: 0;
@@ -138,7 +138,7 @@ button:focus {
 }
 
 .stub-image.back{
-  padding: 10%;
+  padding: 15%;
 }
 
 .stub > .loading{

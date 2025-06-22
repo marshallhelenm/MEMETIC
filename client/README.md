@@ -8,9 +8,11 @@ Building a variation on the game "Guess Who" to be played online, inspired by [t
 
 - Make it look good
 - Fix docker react app
+- flip all cards button
 
 ### NVP
 
+- implement breakpoints
 - Prompt player for name when joining a new room
 - Display own & fellow player's name
 - Select player's card - highlight or show at top of page
