@@ -1,21 +1,21 @@
 # GUESSY
 
-Building a version of the game "Guess Who" to be played online, inspired by [this tiktok](https://ve.media.tumblr.com/tumblr_q8otm9qrlU1w0qmsw.mp4).
+Building a variation on the game "Guess Who" to be played online, inspired by [this tiktok](https://ve.media.tumblr.com/tumblr_q8otm9qrlU1w0qmsw.mp4).
 
 ## TO DO list
 
 ### MVP
 
-- Fix awkward scroll
 - Make it look good
+- Fix docker react app
 
 ### NVP
 
-- Select player's card - highlight or show at top of page
-        - prompt user to pick this on joining the room?
 - Prompt player for name when joining a new room
 - Display own & fellow player's name
-- save gif motion preferences to local storage
+- Select player's card - highlight or show at top of page
+        - prompt user to pick this on joining the room?
+- convert localstorage stuff to sessions instead
 
 ### Future Features
 
