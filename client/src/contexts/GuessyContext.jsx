@@ -7,7 +7,7 @@ const GuessyContext = createContext();
 function GuessyProvider({ children }) {
   const [username] = useState("");
   const [roomKey, setRoomKey] = useState("");
-  const [staticGifs, setStaticGifs] = useState(false)
+  const [staticGifs, setStaticGifs] = useState(localStorage.getItem('guessy_gifs') == "true")
   const { sendJsonMessage, uuid, connectionAttempts, connectionError } = useWS()
 
   const value = useMemo(() => {

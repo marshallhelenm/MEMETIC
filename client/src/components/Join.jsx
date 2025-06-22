@@ -1,4 +1,5 @@
-import { Button, Input } from "semantic-ui-react";
+import GuessyButton from "./GuessyButton"
+import Input from "@mui/material/Input"
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "./Logo";
@@ -22,9 +23,9 @@ function Join() {
         />
       </div>
       <Link to={`/play?roomKey=${roomKey}`}>
-        <Button>
+        <GuessyButton>
           Join Game
-        </Button>
+        </GuessyButton>
       </Link>
     </div>
   );

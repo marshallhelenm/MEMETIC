@@ -125,13 +125,21 @@ button:focus {
   border-radius: var(--corners);
   background-color: var(--colorE);
   width: 15%;
+  height: fit-content(100%);
   position: relative;
+  display: inline-block;
+  bottom: 0;
 }
 
 .stub-image{
   border-radius: var(--corners);
-  padding: 1%;
-  position: absolute;
+  margin: 1%;
+  /* position: absolute; */
+  width: 98%;
+}
+
+.stub-back{
+  max-height: 50%;
 }
 
 .stub > .loading{
@@ -177,10 +185,6 @@ button:focus {
   /* Position the tooltip */
   position: absolute;
   z-index: 1;
-}
-
-.dimmer.guessy-dimmer {
-  border-radius: var(--corners);
 }
 
 /* Logo */

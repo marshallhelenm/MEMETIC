@@ -28,7 +28,7 @@ function GifPauseButton() {
   
   function toggleStaticGifs(){
     setStaticGifs(!staticGifs)
-    
+    localStorage.setItem('guessy_gifs', !staticGifs)
   }
 
   return (

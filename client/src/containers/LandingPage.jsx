@@ -1,5 +1,4 @@
 import "../App.css";
-import { Input } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
 import NewGame from "../components/NewGame";
