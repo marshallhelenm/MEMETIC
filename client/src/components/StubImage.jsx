@@ -4,13 +4,12 @@ import question from "../assets/question.png"
 
 function StubImage ({item, flip, flipped}) {
   const {staticGifs} = useGuessy()
-  
   if (flipped){
     return (<img
       src={question}
       alt={`a question mark`}
       onClick={flip} 
-      className="stub-image ui medium image"
+      className="stub-image"
       />)
   } else if (staticGifs && item.img.includes(".gif")){
     return (

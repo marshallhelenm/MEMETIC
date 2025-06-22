@@ -9,6 +9,7 @@ function Board({itemKeys, roomKey, loading}) {
     JSON.parse(itemKeys).forEach((itemKey) => (
       cards.unshift(
         <Stub
+        itemKey={itemKey}
         item={memeData[itemKey]}
         key={`${itemKey}-${Math.random() * 10}`}
         roomKey={roomKey}

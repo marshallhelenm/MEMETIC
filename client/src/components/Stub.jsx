@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import "../App.css";
 import StubImage from "./StubImage"
 import question from "../assets/question.png"
@@ -6,14 +6,15 @@ import $ from 'jquery'
 
 function Stub ({itemKey, item, roomKey}) {
   const [flipped, setFlipped] = useState(false);
+  // const [height, setHeight] = useState();
   const storageId = `${roomKey}-${item.stub}`
 
-  function width() {
-    return $(`img#${itemKey}`).get(0).naturalWidth;
-  }
-  function height() {
-    return document.getElementById(itemKey).getElementByTagName('img').naturalHeight;
-  }
+  // function calcHeight(){
+  //   const h = ($(`img[src$='${item.img}']`)[0]?.height)*1.03
+  //   if (height != h){
+  //     setHeight(h)
+  //   }
+  // }
 
   function setStubStatus(status) {
     localStorage.setItem(storageId, status);
@@ -50,9 +51,9 @@ function Stub ({itemKey, item, roomKey}) {
   }, [setFlipped, storageId]);
 
   return (
-    <div className="stub" id={itemKey}>
+    <div className="stub" id={itemKey} >
       {overlay()}      
-      <StubImage item={item} flip={flip} flipped={flipped} />
+      <StubImage item={item} flip={flip} flipped={flipped} itemKey={itemKey}/>
       <img/>
     </div>
   );
