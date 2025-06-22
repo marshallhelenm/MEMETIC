@@ -15,6 +15,7 @@ Building a version of the game "Guess Who" to be played online, inspired by [thi
         - prompt user to pick this on joining the room?
 - Prompt player for name when joining a new room
 - Display own & fellow player's name
+- save gif motion preferences to local storage
 
 ### Future Features
 

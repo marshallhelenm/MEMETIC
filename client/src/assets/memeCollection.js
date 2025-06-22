@@ -1,7 +1,3 @@
-// brazilian soap opera star math
-// let me in
-// who could have done this
-
 const memeData = {
   a_smoothie: {
     img: "a_smoothie.jpg",

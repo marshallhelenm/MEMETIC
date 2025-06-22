@@ -1,6 +1,8 @@
 import "../App.css";
 import { useGuessy } from "../contexts/useGuessy";
-import {FormControlLabel, Switch, styled, alpha} from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import { styled, alpha} from '@mui/material';
 import {colorC, colorF} from "../assets/styles"
 
 const PurpleSwitch = styled(Switch)(({ theme }) => ({

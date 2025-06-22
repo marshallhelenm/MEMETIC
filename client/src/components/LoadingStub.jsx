@@ -1,4 +1,4 @@
-import {CircularProgress, Paper} from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 import "../App.css";
 import {colorC} from "../assets/styles"
 

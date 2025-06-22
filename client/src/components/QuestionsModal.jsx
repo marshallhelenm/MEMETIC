@@ -1,4 +1,8 @@
-import { IconButton, Dialog, styled, DialogTitle, DialogContent } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import { styled } from '@mui/material';
 import GuessyButton from "./GuessyButton";
 import { colorE } from "../assets/styles";
 import { useState } from "react";

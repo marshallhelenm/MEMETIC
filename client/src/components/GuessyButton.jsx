@@ -1,15 +1,15 @@
 import "../App.css";
-import {Button} from '@mui/material';
+import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import {colorB, colorD} from "../assets/styles"
 
 const BolderButton = styled(Button)({
-  fontSize: 16,
+  // fontSize: 16,
   fontWeight: "bold",
   padding: '6px 12px',
   border: '2px solid',
-  lineHeight: 1.5,
-  margin: "1%",
+  // lineHeight: 1.5,
+  // margin: "1%",
   fontFamily: [
     'sans-serif',
   ].join(',')

@@ -1,7 +1,6 @@
 import Stub from "../components/Stub";
 import LoadingStub from "../components/LoadingStub";
 import { memeData } from "../assets/memeCollection";
-import { useEffect } from "react";
 
 // holds all the picture cards
 function Board({itemKeys, roomKey, loading}) {

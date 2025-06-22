@@ -4,7 +4,6 @@ import "../App.css";
 import Board from "./Board";
 import InvalidRoomKey from "../components/InvalidRoomKey";
 import PlayGameHeader from "../components/PlayGameHeader";
-import ConnectionError from "../components/ConnectionError";
 import { useGuessy } from "../contexts/useGuessy";
 import { useWS } from "../contexts/useWS";
 
@@ -14,8 +13,8 @@ function PlayGame() {
   const [memeCollection, setMemeCollection] = useState([])
   const [loading, setLoading] = useState(true)
   const roomKey = searchParams.get("roomKey")
-  const {joinRoom, handleNewGame} = useGuessy()
-  const {lastJsonMessage, serverReady } = useWS()
+  const { joinRoom, handleNewGame } = useGuessy()
+  const { lastJsonMessage } = useWS()
 
 
   useEffect(()=>{
