@@ -6,16 +6,17 @@ import $ from 'jquery'
 
 function Stub ({itemKey, item, roomKey}) {
   const [flipped, setFlipped] = useState(false);
+  const [overlay, setOverlay] = useState(false)
   const storageId = `${roomKey}-${item.stub}`
-  const height = (200 / item.height_multiplier)*1.01
+  const height = (200 / item.height_multiplier) + 2
 
   function setStubStatus(status) {
     localStorage.setItem(storageId, status);
     status === "flipped" ? setFlipped(true) : setFlipped(false);
   }
 
-  function overlay(){
-    if (!flipped) {
+  function generateOverlay(){
+    if (!flipped && overlay) {
       return (
         <div className="stub-origin">
           <a href={item.origin} target="_blank" rel="noopener noreferrer">
@@ -44,8 +45,8 @@ function Stub ({itemKey, item, roomKey}) {
   }, [setFlipped, storageId]);
 
   return (
-    <div className="stub" id={itemKey} style={{height: `${height}px`}} onClick={flip}>
-      {overlay()}      
+    <div className="stub" id={itemKey} style={{height: `${height}px`}} onClick={flip} onMouseEnter={()=>setOverlay(true)} onMouseLeave={()=>setOverlay(false)}>
+      {generateOverlay()}      
         <StubImage item={item} flip={flip} flipped={flipped} itemKey={itemKey} height={height} />
     </div>
   );

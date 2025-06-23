@@ -7,11 +7,11 @@ import ClearGame from "./ClearGame";
 function PlayGameHeader({setMemeCollection, roomKey}) {
   return (
     <div className="play-header">
-      <div className="row">
+      <div className="row header-title">
         <Logo spin={false} header={true} />
         <h1 className="heading">Guessy</h1>
       </div>
-      <h4 className="roomKey">Room Key: <span className="colorF">{roomKey}</span></h4>
+      <h4 className="header-roomKey">Room Key: <span className="colorF">{roomKey}</span></h4>
       <div className="row header-buttons">
         <GifPauseButton />
         <QuestionsModal />

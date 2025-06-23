@@ -34,15 +34,6 @@ button:focus {
   outline: 0;
 }
 
-.roomKey {
-  color: var(--colorD);
-  font-size: 1.5em;
-  border: solid 2px var(--colorC);
-  border-radius: var(--corners);
-  height: fit-content;
-  padding: .5%;
-}
-
 .heading {
   color: var(--colorC);
   font-size: 2.5em;
@@ -86,24 +77,40 @@ button:focus {
 
 .play-header {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
-  /* padding: 2%; */
-  height: 15vh
-  /* border-bottom: 2px solid var(--colorA); */
-  /* background-color: #191c21; */
+  height: 15vh;
+  align-items: center;
+}
+
+.header-title {
+  align-items: center;
+  margin-right: 2%;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  /* grid-row-start: 1;
+  grid-row-end: 3; */
 }
 
 .header-buttons {
-  align-items: center;
+  justify-items: end;
   margin-right: 2%;
+}
+
+.header-roomKey {
+  color: var(--colorD);
+  font-size: 1.2em;
+  border: solid 2px var(--colorC);
+  border-radius: var(--corners);
+  height: fit-content;
+  padding: .5%;
 }
 
 .gameBoard {
   text-align: center;
   background-color: var(--colorB);
   width: 90vw;
-  height: 85vh;
+  min-height: 33em;
+  max-height: 33em;
   display: flex;
   flex-flow: column wrap;
   column-gap: 10px !important;

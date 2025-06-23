@@ -10,6 +10,7 @@ const BolderButton = styled(Button)({
   border: '2px solid',
   // lineHeight: 1.5,
   // margin: "1%",
+  height: 'fit-content',
   fontFamily: [
     'sans-serif',
   ].join(',')
