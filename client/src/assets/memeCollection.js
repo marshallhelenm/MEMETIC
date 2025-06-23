@@ -1,3 +1,4 @@
+import { sortedColumns } from "../utils/cardSorter";
 import memes from "./memes.json";
 
 // const memeData = JSON.parse(memes);
@@ -6,14 +7,15 @@ const memeKeys = Object.keys(memes);
 
 function memeSampler() {
   let memesArray = memeKeys.slice(0);
-  let bucket = [];
+  let gameKeys = [];
   let randomIndex;
 
   for (let i = 0; i < 24; i++) {
     randomIndex = Math.floor(Math.random() * (memesArray.length - 1));
-    bucket.push(memesArray.splice(randomIndex, 1)[0]);
+    gameKeys.push(memesArray.splice(randomIndex, 1)[0]);
   }
-  return bucket;
+
+  return sortedColumns(gameKeys);
 }
 
 export { memeSampler, memeData };

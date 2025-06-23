@@ -2,22 +2,32 @@ import Stub from "../components/Stub";
 import LoadingStub from "../components/LoadingStub";
 import { memeData } from "../assets/memeCollection";
 import MissingStub from "../components/MissingStub";
+import BoardColumn from "./BoardColumn";
 
 // holds all the picture cards
 function Board({itemKeys, roomKey, loading}) {
-  function generateCards(){
+  function generateColumns() {
+    let boardColumns = []
+    for (let i = 1; i < 7; i++) {
+      let col = itemKeys[i]
+      let cards = loading ? generateLoadingCards() : generateCards(col)
+      boardColumns.push(<BoardColumn cards={cards} key={`col-${i}`} />)
+    }
+    return boardColumns
+  }
+  function generateCards(keys){
+    
     let cards = []
-    let keys = JSON.parse(itemKeys)
     for (let itemKey of keys) {
       let item = memeData[itemKey];
       if (!item){
-        cards.unshift(
+        cards.push(
           <MissingStub
           key={Math.random() * 10}
           />
         )
       } else {
-        cards.unshift(
+        cards.push(
           <Stub
           itemKey={itemKey}
           item={memeData[itemKey]}
@@ -32,7 +42,7 @@ function Board({itemKeys, roomKey, loading}) {
 
   function generateLoadingCards(){
     let cards = []
-    for (let index = 0; index < 24; index++) {
+    for (let index = 0; index < 4; index++) {
       cards.unshift(
         <LoadingStub key={`loading-stub-${Math.random() * 10}`} />
       )
@@ -42,7 +52,7 @@ function Board({itemKeys, roomKey, loading}) {
 
   return (
     <div className="gameBoard" >
-      {loading ? generateLoadingCards() : generateCards()}
+      {generateColumns()}
     </div>
   );
 }

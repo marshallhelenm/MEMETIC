@@ -108,13 +108,13 @@ button:focus {
 .gameBoard {
   text-align: center;
   background-color: var(--colorB);
-  width: 90vw;
+  width: 1300px;
   min-height: 33em;
-  max-height: 33em;
+  max-height: 33
+  em;
   display: flex;
-  flex-flow: column wrap;
-  column-gap: 10px !important;
-  font-size: calc(10px + 2vmin);
+  flex-flow: row;
+  /* font-size: calc(10px + 2vmin); */
   overflow-x: none;
   overflow-y: scroll;
   gap: 10px 20px;
@@ -122,7 +122,13 @@ button:focus {
   border-radius: var(--corners);
   border: solid 2px var(--colorD);
   margin: auto;
-  align-items: flex-start;
+}
+
+.boardColumn {
+  display: flex;
+  flex-flow: column wrap;
+  column-gap: 10px !important;
+  justify-content: flex-start;
 }
 
 /* Stub */
@@ -134,7 +140,7 @@ button:focus {
   width: 200px;
   position: relative;
   display: inline-block;
-  bottom: 0;
+  margin-bottom: 10px; 
 }
 
 .stub-image{

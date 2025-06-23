@@ -7,6 +7,7 @@ const BolderButton = styled(Button)({
   // fontSize: 16,
   fontWeight: "bold",
   padding: '6px 12px',
+  margin: '2px',
   border: '2px solid',
   // lineHeight: 1.5,
   // margin: "1%",

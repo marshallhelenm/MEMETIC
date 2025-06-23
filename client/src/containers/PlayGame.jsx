@@ -26,7 +26,7 @@ function PlayGame() {
       return
     } else {
       const new_memes = lastJsonMessage['memeSet']
-      setMemeCollection(new_memes)
+      setMemeCollection(JSON.parse(new_memes))
       setLoading(false)
     }
   }, [roomKey, joinRoom, lastJsonMessage, handleNewGame])
