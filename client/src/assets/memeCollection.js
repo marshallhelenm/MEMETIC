@@ -15,7 +15,9 @@ function memeSampler() {
     gameKeys.push(memesArray.splice(randomIndex, 1)[0]);
   }
 
-  return sortedColumns(gameKeys);
+  const columnsObject = sortedColumns(gameKeys);
+  columnsObject["allKeys"] = gameKeys;
+  return columnsObject;
 }
 
 export { memeSampler, memeData };

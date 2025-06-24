@@ -1,60 +1,50 @@
-import Stub from "../components/Stub";
+import Stub from "../containers/Stub";
 import LoadingStub from "../components/LoadingStub";
 import { memeData } from "../assets/memeCollection";
 import MissingStub from "../components/MissingStub";
 import BoardColumn from "./BoardColumn";
 
 // holds all the picture cards
-function Board({itemKeys, roomKey, loading}) {
+function Board({ itemKeys, roomKey, loading, playerCard }) {
   function generateColumns() {
-    let boardColumns = []
+    let boardColumns = [];
     for (let i = 1; i < 7; i++) {
-      let col = itemKeys[i]
-      let cards = loading ? generateLoadingCards() : generateCards(col)
-      boardColumns.push(<BoardColumn cards={cards} key={`col-${i}`} />)
+      let col = itemKeys[i];
+      let cards = loading ? generateLoadingCards() : generateCards(col);
+      boardColumns.push(<BoardColumn cards={cards} key={`col-${i}`} />);
     }
-    return boardColumns
+    return boardColumns;
   }
-  function generateCards(keys){
-    
-    let cards = []
+  function generateCards(keys) {
+    let cards = [];
     for (let itemKey of keys) {
       let item = memeData[itemKey];
-      if (!item){
-        cards.push(
-          <MissingStub
-          key={Math.random() * 10}
-          />
-        )
+      if (!item) {
+        cards.push(<MissingStub key={Math.random() * 10} />);
       } else {
         cards.push(
           <Stub
-          itemKey={itemKey}
-          item={memeData[itemKey]}
-          key={`${itemKey}-${Math.random() * 10}`}
-          roomKey={roomKey}
+            itemKey={itemKey}
+            item={memeData[itemKey]}
+            key={`${itemKey}-${Math.random() * 10}`}
+            roomKey={roomKey}
+            isPlayerCard={playerCard == itemKey}
           />
-        )
+        );
       }
     }
-    return cards
+    return cards;
   }
 
-  function generateLoadingCards(){
-    let cards = []
+  function generateLoadingCards() {
+    let cards = [];
     for (let index = 0; index < 4; index++) {
-      cards.unshift(
-        <LoadingStub key={`loading-stub-${Math.random() * 10}`} />
-      )
+      cards.unshift(<LoadingStub key={`loading-stub-${Math.random() * 10}`} />);
     }
-    return cards
+    return cards;
   }
 
-  return (
-    <div className="gameBoard" >
-      {generateColumns()}
-    </div>
-  );
+  return <div className="gameBoard">{generateColumns()}</div>;
 }
 
 export default Board;

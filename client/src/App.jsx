@@ -1,10 +1,10 @@
 import "./App.css";
-import LandingPage from "./containers/LandingPage";
-import PlayGame from "./containers/PlayGame";
+import LandingPage from "./pages/LandingPage";
+import PlayGame from "./pages/PlayGame";
 import Join from "./components/Join";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Upload from "./containers/Upload";
-import ImageAnalyzer from "./containers/ImageAnalyzer";
+import Upload from "./pages/Upload";
+import ImageAnalyzer from "./pages/ImageAnalyzer";
 
 const router = createBrowserRouter([
   {

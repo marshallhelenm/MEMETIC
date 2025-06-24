@@ -2,25 +2,24 @@ import ReactFreezeframe from "react-freezeframe"
 import { useGuessy } from "../contexts/useGuessy";
 import question from "../assets/question.png"
 
-function StubImage ({item, flipped, height}) {
-  const {staticGifs} = useGuessy()
-  if (flipped){
-    return (<img
+function StubImage({ item, flipped, height, children }) {
+  const { staticGifs } = useGuessy();
+  const imgElement = flipped ? (
+    <img
       src={question}
       alt={`a question mark`}
       className="stub-image back"
-      style={{height: height/2}}
-      />)
-  } else if (staticGifs && item.img.includes(".gif")){
+      style={{ height: height / 2 }}
+    />
+  ) : (
+    <img src={`/memes/${item.img}`} alt={item.alt} className="stub-image" />
+  );
+  if (staticGifs && item.img.includes(".gif")) {
     return (
-      <ReactFreezeframe className="stub-image">
-        <img src={`/memes/${item.img}`} alt={item.alt} className="stub-image" />
-      </ReactFreezeframe>
+      <ReactFreezeframe className="stub-image">{imgElement}</ReactFreezeframe>
     );
   } else {
-    return (
-      <img src={`/memes/${item.img}`} alt={item.alt} className="stub-image" />
-    );
+    return <>{imgElement}</>;
   }
 }
 

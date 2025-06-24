@@ -9,6 +9,9 @@ Building a variation on the game "Guess Who" to be played online, inspired by [t
 - Make it look good
 - Fix docker react app
 - flip all cards button
+- little 'gif' overlay on static gifs
+- fix zoom modal sizing
+-
 
 ### NVP
 
@@ -25,6 +28,8 @@ Building a variation on the game "Guess Who" to be played online, inspired by [t
 - Make Guess
 - Image upload by players?
 
-### Pipe Dreams
+### Memes to add
 
-- dynamically organize cards based on height to fit columns best?
+- cas i love you
+- jerry
+- hide the pain harold

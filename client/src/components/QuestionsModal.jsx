@@ -6,18 +6,8 @@ import { styled } from '@mui/material';
 import GuessyButton from "./GuessyButton";
 import { colorE } from "../assets/styles";
 import { useState } from "react";
+import StyledDialog from "./StyledDialog";
 
-const StyledDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
-    padding: theme.spacing(2),
-  },
-  '& .MuiDialogActions-root': {
-    padding: theme.spacing(1),
-  },
-  '& .MuiPaper-root': {
-    backgroundColor: colorE,
-  },
-}));
 
 const QuestionsModal = () => {
   const [open, setOpen] = useState(false);

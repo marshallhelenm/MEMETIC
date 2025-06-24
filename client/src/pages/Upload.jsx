@@ -1,8 +1,7 @@
 import "../App.css";
-import { useEffect } from "react";
 import * as XLSX from 'xlsx';
 import $ from 'jquery'
-//The first page you see. Holds options to join a game or start a new game.
+
 function Upload() {
     var ExcelToJSON = function() {
         this.parseExcel = function(file) {

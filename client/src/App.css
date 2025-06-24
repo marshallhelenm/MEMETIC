@@ -4,8 +4,9 @@
   --colorC: #9b72cf;
   --colorD: #c8b1e4;
   --colorE: #f4effa;
-  --colorF: #C2E7DA;
-  --corners: .3rem;
+  --colorF: #c2e7da;
+  --colorG: #67AAF9;
+  --corners: 0.3rem;
 }
 
 .corners {
@@ -13,11 +14,12 @@
 }
 
 .colorF {
-  color: var(--colorF)
+  color: var(--colorF);
 }
 
-html, body {
-  font-family: 'Roboto', sans-serif;
+html,
+body {
+  font-family: "Roboto", sans-serif;
   padding: 0;
   margin: 0;
 }
@@ -26,7 +28,9 @@ html, body {
   height: 100vh;
 }
 
-input:focus, textarea:focus, select:focus{
+input:focus,
+textarea:focus,
+select:focus {
   outline: none;
 }
 
@@ -102,7 +106,7 @@ button:focus {
   border: solid 2px var(--colorC);
   border-radius: var(--corners);
   height: fit-content;
-  padding: .5%;
+  padding: 0.5%;
 }
 
 .gameBoard {
@@ -110,8 +114,7 @@ button:focus {
   background-color: var(--colorB);
   width: 1300px;
   min-height: 33em;
-  max-height: 33
-  em;
+  max-height: 33 em;
   display: flex;
   flex-flow: row;
   /* font-size: calc(10px + 2vmin); */
@@ -128,7 +131,7 @@ button:focus {
   display: flex;
   flex-flow: column wrap;
   column-gap: 10px !important;
-  justify-content: flex-start;
+  justify-content: space-around;
 }
 
 /* Stub */
@@ -140,21 +143,21 @@ button:focus {
   width: 200px;
   position: relative;
   display: inline-block;
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
 }
 
-.stub-image{
+.stub-image {
   border-radius: var(--corners);
   margin: 1%;
   /* position: absolute; */
   max-width: 98%;
 }
 
-.stub-image.back{
+.stub-image.back {
   padding: 15%;
 }
 
-.stub > .loading{
+.stub > .loading {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -170,34 +173,36 @@ button:focus {
   max-width: 98%;
 }
 
-.stub-origin{
+.overlay {
   position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  bottom: 0;
   z-index: 99;
-  margin-top: 2%;
-  margin-left: 2%;
-  opacity: 0.6;
-}
-
-.stub-origin a{
-  color: var(--colorB);
-}
-
-.stub-origin:hover .tooltip {
-  visibility: visible;
-}
-
-.tooltip {
-  visibility: hidden;
-  width: 120px;
+  height: fit-content;
+  width: 98%;
   background-color: var(--colorA);
-  color: var(--colorD);
-  text-align: center;
-  border-radius: var(--corners);
-  padding: 5px 0;
+  opacity: 0.8;
+  border-bottom-left-radius: var(--corners);
+  border-bottom-right-radius: var(--corners);
+  margin: 1%;
+}
 
-  /* Position the tooltip */
-  position: absolute;
-  z-index: 1;
+.overlay-item {
+  z-index: 99;
+  opacity: 1;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.overlay-icon {
+  color: var(--colorE) !important;
+}
+
+.player-card {
+  background-color: var(--colorG);
 }
 
 /* Logo */
@@ -207,7 +212,7 @@ button:focus {
   border-radius: var(--corners);
 }
 
-.small-logo{
+.small-logo {
   margin: 10px;
   height: 5vh;
 }
