@@ -15,7 +15,7 @@ const BolderButton = styled(Button)({
   fontFamily: ["sans-serif"].join(","),
 });
 
-function GuessyButton({ onClick, children, dark, ...props }) {
+function GuessyButton({ onClick, children, dark, sx, ...props }) {
   const btnColor = dark ? colorB : colorD;
   return (
     <BolderButton
@@ -23,7 +23,7 @@ function GuessyButton({ onClick, children, dark, ...props }) {
       color="secondary"
       onClick={onClick}
       {...props}
-      sx={{ color: btnColor }}
+      sx={{ ...sx, color: btnColor }}
     >
       {children}
     </BolderButton>

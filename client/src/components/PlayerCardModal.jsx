@@ -9,8 +9,10 @@ import GuessyButton from "./GuessyButton";
 
 const PlayerCardModal = ({ playerCard, newPlayerCard }) => {
   let item = memeData[playerCard];
-
   const [open, setOpen] = useState(false);
+
+  if (!item) return;
+  
   const handleOpen = (e) => {
     setOpen(true);
   };

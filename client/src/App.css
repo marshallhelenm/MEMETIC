@@ -51,14 +51,6 @@ button:focus {
   flex-direction: row;
 }
 
-.input {
-  border: none;
-  border-radius: 0;
-  padding: 5%;
-  width: 80%;
-  font-size: 1.2em;
-}
-
 .guessy-background {
   background-color: var(--colorA);
   min-height: 100vh;

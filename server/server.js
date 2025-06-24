@@ -1,30 +1,38 @@
 const http = require('http')
 const {WebSocketServer} = require("ws")
 const uuidv4 = require("uuid").v4;
-const url = require("url");
+// const url = require("url");
 
 const server = http.createServer();
 const wsServer = new WebSocketServer({ server });
 const port = 6969;
 
 const connections = {};
-const users = {};
 const rooms = {};
 
 const handleMessage = (bytes, uuid) => {
   const message = JSON.parse(bytes.toString());
-  const user = users[uuid];
 
   switch (message.type) {
     case "setRoomContents":
-      setRoomContents(uuid, message.roomKey, JSON.stringify(message.memeSet));
+      setRoomContents(
+        uuid,
+        message.roomKey,
+        JSON.stringify(message.memeSet),
+        message.username
+      );
       broadcastRoom(message.roomKey);
       break;
     case "getRoomContents":
       returnRoomContents(message.roomKey, uuid);
       break;
     case "joinRoom":
-      joinRoom(message.roomKey, uuid);
+      joinRoom(message.roomKey, uuid, message.username);
+      break;
+    case "setUsername":
+      console.log("setUsername: ", message, uuid);
+
+      setUsername(message.roomKey, uuid, message.username);
       break;
     default:
       break;
@@ -32,18 +40,14 @@ const handleMessage = (bytes, uuid) => {
 };
 const handleClose = (uuid) => {
   delete connections[uuid];
-  delete users[uuid];
 };
 
 const sweepRoom = (roomKey) => {
   if (!rooms[roomKey]) return;
   const roomUsers = rooms[roomKey]["users"];
-  roomUsers.forEach((u) => {
+  Object.keys(roomUsers).forEach((u) => {
     if (!connections[u]) {
-      const index = roomUsers.indexOf(u);
-      if (index > -1) {
-        roomUsers.splice(index, 1);
-      }
+      delete roomUsers[u];
     }
   });
 };
@@ -67,7 +71,7 @@ const noGameAlert = (roomKey, uuid) => {
 const getOrMakeRoom = (roomKey) => {
   if (!rooms[roomKey]) {
     rooms[roomKey] = {
-      users: [],
+      users: {},
       memeSet: [],
       est: new Date(),
     };
@@ -75,9 +79,9 @@ const getOrMakeRoom = (roomKey) => {
   return rooms[roomKey];
 };
 
-const setRoomContents = (uuid, roomKey, memeSet) => {
+const setRoomContents = (uuid, roomKey, memeSet, username) => {
   sweepRoom(roomKey);
-  joinRoom(roomKey, uuid);
+  joinRoom(roomKey, uuid, username);
   rooms[roomKey]["memeSet"] = memeSet;
 };
 
@@ -85,19 +89,23 @@ const broadcastRoom = (roomKey) => {
   const room = rooms[roomKey];
   if (!room) return;
   sweepRoom(roomKey);
-  room["users"]?.forEach((u) => {
+  if (!room["users"]) return;
+  Object.keys(room["users"]).forEach((u) => {
     const connection = connections[u];
     const message = JSON.stringify(room);
     connection.send(message);
   });
 };
 
-const joinRoom = (roomKey, uuid) => {
+const joinRoom = (roomKey, uuid, username) => {
   let room = getOrMakeRoom(roomKey);
   sweepRoom(roomKey);
-  const roomUsers = room["users"];
+  const roomUsers = Object.keys(room["users"]);
   if (!roomUsers.includes(uuid)) {
-    rooms[roomKey]["users"] = [...roomUsers, uuid];
+    rooms[roomKey]["users"][uuid] = {
+      username: username,
+      card: "",
+    };
     if (room["memeSet"].length > 0) {
       returnRoomContents(roomKey, uuid);
     } else {
@@ -106,16 +114,18 @@ const joinRoom = (roomKey, uuid) => {
   }
 };
 
+const setUsername = (roomKey, uuid, username) => {
+  if (!rooms[roomKey]["users"][uuid]) {
+    rooms[roomKey]["users"][uuid] = {};
+  }
+  rooms[roomKey]["users"][uuid]["username"] = username;
+};
+
+
 wsServer.on("connection", (connection, request) => {
-  // console.log("connection established");
-  const { username, roomKey } = url.parse(request.url, true).query;
   const uuid = uuidv4();
   connections[uuid] = connection;
-  users[uuid] = {
-    username,
-    state: {},
-  };
-
+  connection.send(JSON.stringify({ uuid: uuid }));
   connection.on("message", (message) => {
     handleMessage(message, uuid);
   });
