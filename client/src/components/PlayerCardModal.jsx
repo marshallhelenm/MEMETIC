@@ -2,13 +2,13 @@ import IconButton from "@mui/material/IconButton";
 import StyledDialog from "./StyledDialog";
 import DialogContent from "@mui/material/DialogContent";
 import { useState } from "react";
-import { colorA } from "../assets/styles";
+import { colorA, colorB } from "../assets/styles";
 import { memeData } from "../assets/memeCollection";
 import { DialogTitle } from "@mui/material";
+import GuessyButton from "./GuessyButton";
 
-const PlayerCardModal = ({ playerCard }) => {
+const PlayerCardModal = ({ playerCard, newPlayerCard }) => {
   let item = memeData[playerCard];
-  console.log(item);
 
   const [open, setOpen] = useState(false);
   const handleOpen = (e) => {
@@ -36,14 +36,37 @@ const PlayerCardModal = ({ playerCard }) => {
         >
           <i className="fa-solid fa-xmark"></i>
         </IconButton>
-        <DialogTitle >
-            <i className={`fa-solid fa-star fa-lg player-card-star`}></i>
-            Your Meme
+        <DialogTitle>
+          <div
+            style={{
+              display: "flex",
+              //   justifyContent: "space-around",
+              alignItems: "center",
+            }}
+          >
+            <div style={{ width: "50%" }}>
+              <i
+                className={`fa-solid fa-star fa-xl`}
+                style={{ color: colorB, marginRight: "5%" }}
+              ></i>
+              Your Meme
+            </div>
+            <div style={{ width: "50%" }}>
+              <GuessyButton onClick={newPlayerCard} dark={true}>
+                Pick Another
+              </GuessyButton>
+            </div>
+          </div>
         </DialogTitle>
-        <DialogContent dividers id="modal-modal-description" >
+        <DialogContent dividers id="modal-modal-description">
+          <div
+            className="row"
+            style={{ textAlign: "center", alignItems: "center" }}
+          >
             <h4>This is your meme! Your partner is trying to guess it.</h4>
+          </div>
         </DialogContent>
-        <DialogContent dividers >
+        <DialogContent dividers>
           <img
             src={`/memes/${item.img}`}
             alt={item.alt}

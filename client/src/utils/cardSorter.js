@@ -1,8 +1,6 @@
 import memeData from "../assets/memes.json";
 
 function sortKeysByHeight(itemKeys) {
-  console.log(itemKeys);
-
   return itemKeys.sort((a, b) => {
     return parseHeight(b) - parseHeight(a);
   });
