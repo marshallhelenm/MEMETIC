@@ -5,7 +5,7 @@
   --colorD: #c8b1e4;
   --colorE: #f4effa;
   --colorF: #c2e7da;
-  --colorG: #67AAF9;
+  --colorG: #80fbc6;
   --corners: 0.3rem;
 }
 
@@ -131,7 +131,9 @@ button:focus {
   display: flex;
   flex-flow: column wrap;
   column-gap: 10px !important;
-  justify-content: space-around;
+  /* justify-content: space-between; */
+  justify-content: flex-start;
+  /* justify-content: center; */
 }
 
 /* Stub */
@@ -205,6 +207,20 @@ button:focus {
   background-color: var(--colorG);
 }
 
+.player-card-star {
+  /* color: var(--colorG) !important; */
+  color: yellow !important;
+  z-index: 99;
+}
+
+.absolute {
+  position: absolute;
+}
+.modal-image {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
 /* Logo */
 .guessy-logo-spin {
   height: 40vmin;

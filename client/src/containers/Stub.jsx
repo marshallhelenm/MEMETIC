@@ -28,6 +28,11 @@ function Stub({ itemKey, item, roomKey, isPlayerCard }) {
     }
   }, [setFlipped, storageId]);
 
+  function playerStar() {
+    if (!isPlayerCard) return;
+    return <i className="fa-solid fa-star fa-xl player-card-star absolute"></i>;
+  }
+
   return (
     <div
       className={`stub ${isPlayerCard ? "player-card" : ""}`}
@@ -37,6 +42,7 @@ function Stub({ itemKey, item, roomKey, isPlayerCard }) {
       onMouseEnter={() => setOverlay(true)}
       onMouseLeave={() => setOverlay(false)}
     >
+      {playerStar()}
       {<Overlay item={item} overlay={overlay} flipped={flipped} />}
       <StubImage
         item={item}

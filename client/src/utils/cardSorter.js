@@ -192,14 +192,10 @@ function sortedColumns(unsortedKeys) {
     columnKeys = columnKeys.sort((a, b) => {
       return parseFloat(finalHeights[a - 1]) - parseFloat(finalHeights[b - 1]);
     });
-    let orderedColumns = {
-      1: columns[columnKeys[1]],
-      2: columns[columnKeys[3]],
-      3: columns[columnKeys[5]],
-      4: columns[columnKeys[4]],
-      5: columns[columnKeys[2]],
-      6: columns[columnKeys[0]],
-    };
+    let orderedColumns = {};
+    for (let i = 0; i < 6; i++) {
+      orderedColumns[i + 1] = columns[columnKeys[i]];
+    }
     columns = orderedColumns;
   }
 

@@ -23,7 +23,7 @@ function Overlay({ item, overlay, flipped }) {
             <img
               src={`/memes/${item.img}`}
               alt={item.alt}
-              style={{ objectFit: "contain", width: "100%", height: "100%" }}
+              className="modal-image"
             />
           </CardModal>
         </div>
