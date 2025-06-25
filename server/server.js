@@ -12,6 +12,7 @@ const rooms = {};
 
 const handleMessage = (bytes, uuid) => {
   const message = JSON.parse(bytes.toString());
+  console.log("Message: ", message);
 
   switch (message.type) {
     case "setRoomContents":
@@ -30,16 +31,25 @@ const handleMessage = (bytes, uuid) => {
       joinRoom(message.roomKey, uuid, message.username);
       break;
     case "setUsername":
-      console.log("setUsername: ", message, uuid);
-
       setUsername(message.roomKey, uuid, message.username);
+      break;
+    case "setPlayerCard":
+      setPlayerCard(message.roomKey, uuid, message.playerCard);
+      break;
+    case "clearPlayerCards":
+      clearPlayerCards(message.roomKey, uuid);
       break;
     default:
       break;
   }
 };
+
 const handleClose = (uuid) => {
   delete connections[uuid];
+};
+
+const sendToUuid = (uuid, message) => {
+  connections[uuid].send(JSON.stringify(message));
 };
 
 const sweepRoom = (roomKey) => {
@@ -54,18 +64,15 @@ const sweepRoom = (roomKey) => {
 
 const returnRoomContents = (roomKey, uuid) => {
   const room = rooms[roomKey];
-  const connection = connections[uuid];
-  const message = JSON.stringify(room);
-  connection.send(message);
+  sendToUuid(uuid, { type: "roomContents", room: JSON.stringify(room) });
 };
 
 const noGameAlert = (roomKey, uuid) => {
-  const connection = connections[uuid];
   const message = JSON.stringify({
-    alert: "no game in room",
+    type: "noGameAlert",
     roomKey: roomKey,
   });
-  connection.send(message);
+  sendToUuid(uuid, message);
 };
 
 const getOrMakeRoom = (roomKey) => {
@@ -91,9 +98,11 @@ const broadcastRoom = (roomKey) => {
   sweepRoom(roomKey);
   if (!room["users"]) return;
   Object.keys(room["users"]).forEach((u) => {
-    const connection = connections[u];
-    const message = JSON.stringify(room);
-    connection.send(message);
+    const message = {
+      type: "roomContents",
+      room: JSON.stringify(room),
+    };
+    sendToUuid(uuid, message);
   });
 };
 
@@ -115,17 +124,35 @@ const joinRoom = (roomKey, uuid, username) => {
 };
 
 const setUsername = (roomKey, uuid, username) => {
+  if (!rooms[roomKey]) return;
   if (!rooms[roomKey]["users"][uuid]) {
     rooms[roomKey]["users"][uuid] = {};
   }
   rooms[roomKey]["users"][uuid]["username"] = username;
 };
 
+const setPlayerCard = (roomKey, uuid, playerCard) => {
+  if (!rooms[roomKey]) return;
+  if (!rooms[roomKey]["users"][uuid]) {
+    rooms[roomKey]["users"][uuid] = {};
+  }
+  rooms[roomKey]["users"][uuid]["playerCard"] = playerCard;
+};
+
+const clearPlayerCards = (roomKey) => {
+  if (!rooms[roomKey]) return;
+  const roomUsers = rooms[roomKey]["users"];
+  Object.keys(roomUsers).forEach((u) => {
+    roomUsers[u].playerCard = undefined;
+    sendToUuid(u, { type: "clearPlayerCard" });
+  });
+};
 
 wsServer.on("connection", (connection, request) => {
   const uuid = uuidv4();
   connections[uuid] = connection;
-  connection.send(JSON.stringify({ uuid: uuid }));
+  sendToUuid(uuid, { type: "uuid", uuid: uuid });
+
   connection.on("message", (message) => {
     handleMessage(message, uuid);
   });
