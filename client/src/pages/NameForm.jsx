@@ -1,15 +1,19 @@
 import { faker } from "@faker-js/faker";
 import { useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+
+import { useGuessy } from "../contexts/useGuessy";
+import { colorA, colorD, corners } from "../assets/styles";
 import Logo from "../components/Logo";
 import GuessyButton from "../components/GuessyButton";
 import TextField from "@mui/material/TextField";
-import { useGuessy } from "../contexts/useGuessy";
-import { colorA, colorC, colorD, corners } from "../assets/styles";
 
 //The first page you see. Holds options to join a game or start a new game.
 function NameForm() {
+  const [searchParams] = useSearchParams();
   const [proposedUsername, setProposedUsername] = useState("");
-  const { sendUsername, assignUsername } = useGuessy();
+  const { assignUsername } = useGuessy();
+  const currentRoomKey = searchParams.get("roomKey");
 
   function polish(fakerOutput) {
     let arr = fakerOutput.split(" ");
@@ -23,6 +27,10 @@ function NameForm() {
     setProposedUsername(
       polish(faker.color.human()) + polish(faker.animal.type())
     );
+  }
+
+  function handleContinue() {
+    assignUsername(proposedUsername);
   }
 
   return (
@@ -60,9 +68,12 @@ function NameForm() {
             marginRight: "2%",
           }}
         />
-        <GuessyButton onClick={() => assignUsername(proposedUsername)}>
-          Continue
-        </GuessyButton>
+        <Link
+          to={`/play?roomKey=${currentRoomKey}&username=${proposedUsername}`}
+          onClick={handleContinue}
+        >
+          <GuessyButton>Continue</GuessyButton>
+        </Link>
       </div>
     </div>
   );

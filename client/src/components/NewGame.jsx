@@ -17,7 +17,10 @@ function NewGame () {
   const newRoomKey = generateRoomKey()
   
   return (
-    <Link to={`/play?roomKey=${newRoomKey}`} onClick={()=>handleNewGame(newRoomKey)}>
+    <Link
+      to={`/name_thyself?roomKey=${newRoomKey}`}
+      onClick={() => handleNewGame(newRoomKey)}
+    >
       <GuessyButton>New Game</GuessyButton>
     </Link>
   );

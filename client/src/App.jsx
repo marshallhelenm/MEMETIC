@@ -5,6 +5,7 @@ import Join from "./components/Join";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Upload from "./pages/Upload";
 import ImageAnalyzer from "./pages/ImageAnalyzer";
+import NameForm from "./pages/NameForm";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
     path: "/join",
     element: <Join />,
   },
+  {
+    path: "/name_thyself",
+    element: <NameForm />,
+  },
   // {
   //   path: "/upload",
   //   element: <Upload />,
@@ -27,7 +32,7 @@ const router = createBrowserRouter([
   //   path: "/image_analyzer",
   //   element: <ImageAnalyzer />,
   // },
-])
+]);
 
 function App() {
   return (
