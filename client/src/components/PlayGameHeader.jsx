@@ -6,7 +6,7 @@ import ClearGame from "./ClearGame";
 import PlayerCardModal from "./PlayerCardModal";
 import { useGuessy } from "../contexts/useGuessy";
 
-function PlayGameHeader({ setMemeCollection, roomKey }) {
+function PlayGameHeader({ roomKey, setLoading }) {
   const { username } = useGuessy();
   return (
     <div className="play-header">
@@ -31,7 +31,7 @@ function PlayGameHeader({ setMemeCollection, roomKey }) {
       <div className="row header-buttons">
         <GifPauseButton />
         <QuestionsModal />
-        <ClearGame setMemeCollection={setMemeCollection} roomKey={roomKey} />
+        <ClearGame roomKey={roomKey} setLoading={setLoading} />
       </div>
     </div>
   );
