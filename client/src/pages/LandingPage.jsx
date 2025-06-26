@@ -9,7 +9,9 @@ function LandingPage() {
   return (
     <div>
       <Logo spin={true} />
-      <h1 className="heading">Guessy</h1>
+      <h1 className="heading" style={{ marginTop: "5%", marginBottom: "5%" }}>
+        Guessy
+      </h1>
       <NewGame />
       <Link to="/join">
         <GuessyButton>Join game</GuessyButton>

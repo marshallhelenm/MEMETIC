@@ -5,7 +5,7 @@ import { useGuessy } from "../contexts/useGuessy";
 import { useWS } from "../contexts/useWS";
 import Board from "../containers/Board";
 import InvalidRoomKey from "../components/InvalidRoomKey";
-import PlayGameHeader from "../components/PlayGameHeader";
+import PlayGameHeader from "../containers/PlayGameHeader";
 import RoomLoading from "../components/RoomLoading";
 import { devLog } from "../utils/Helpers";
 

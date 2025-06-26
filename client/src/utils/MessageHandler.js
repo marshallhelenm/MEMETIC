@@ -85,9 +85,10 @@ const handleMessages = ({
       devLog("Message Handler: noGameAlert: ", message.info);
       createRoom(message.roomKey);
       break;
-    case "uuid":
-      devLog("Message Handler: uuid", message.uuid);
-      setUuidRef(message.uuid);
+    case "replaceGame":
+      devLog("Message Handler: replaceGame", message.roomKey, message.room);
+      if (!message.roomKey) return;
+      processRoomContents(JSON.parse(message.room));
       break;
     case "requestRoomKey":
       devLog("Message Handler: requestRoomKey");
@@ -99,6 +100,10 @@ const handleMessages = ({
     case "roomContents":
       devLog("Received room contents:", message.room);
       processRoomContents(message.room);
+      break;
+    case "uuid":
+      devLog("Message Handler: uuid", message.uuid);
+      setUuidRef(message.uuid);
       break;
     default:
       devLog("Unhandled message type:", message["type"], message);

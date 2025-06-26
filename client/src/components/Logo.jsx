@@ -23,9 +23,7 @@ function Logo({ spin = true, header = false, size }) {
     } else {
       spinner.css("animation-duration", "0s");
       setFade(true);
-      setTimeout(() => {
-        setImage("gnome");
-      }, 500);
+      setImage("gnome");
     }
   }
 
@@ -44,19 +42,21 @@ function Logo({ spin = true, header = false, size }) {
     );
   } else if (image == "gnome") {
     return (
-      <Zoom in={true} style={{ transitionDelay: "100ms" }}>
-        <img
-          src="/memes/gnome_barf.gif"
-          alt={
-            "a gif of a gnome from the cartoon Gravity Falls barfing up a rainbow continuously"
-          }
-          className="corners"
-          onClick={() => {
-            setImage(question);
-            setFade(false);
-          }}
-        />
-      </Zoom>
+      <div style={{ height: "40vmin", cursor: "pointer" }}>
+        <Zoom in={true} style={{ transitionDelay: "100ms" }}>
+          <img
+            src="/memes/gnome_barf.gif"
+            alt={
+              "a gif of a gnome from the cartoon Gravity Falls barfing up a rainbow continuously"
+            }
+            className="corners"
+            onClick={() => {
+              setImage(question);
+              setFade(false);
+            }}
+          />
+        </Zoom>
+      </div>
     );
   } else {
     return (

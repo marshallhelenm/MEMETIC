@@ -17,14 +17,14 @@ function GuessyProvider({ children }) {
   );
   const { uuidRef, setUuidRef, sendJsonMessage, readyState, lastJsonMessage } =
     useWS();
-
-  const roomKey = searchParams.get("roomKey");
-  const username = searchParams.get("username");
   const { lastJsonMessageChanged } = useTraceUpdate({
     component: "GuessyProvider",
     lastJsonMessage,
   });
+  const roomKey = searchParams.get("roomKey");
+  const username = searchParams.get("username");
 
+  // ** useMemo functions **
   const updateRoomObject = useMemo(() => {
     return (newRoomObject) => {
       devLog("updateRoomObject", newRoomObject);
@@ -70,30 +70,67 @@ function GuessyProvider({ children }) {
         return;
       }
       const newMemes = memeSampler();
-      const requesterCard = randomCardKey(newMemes.allKeys);
-
-      sendJsonMessage({
-        type: "createRoom",
-        roomKey: newRoomKey,
-        memeSet: newMemes,
-        requesterCard,
-        uuid: uuidRef.current,
-      });
-
       const newRoomObject = {
         users: {},
         memeSet: newMemes,
         est: new Date(),
       };
+      const requesterCard = randomCardKey(newMemes.allKeys);
       newRoomObject.users[uuidRef.current] = {
         playerCard: requesterCard,
         username: username,
       };
-
       updateRoomObject(newRoomObject);
       localStorage.setItem(`${newRoomKey}-player-card`, requesterCard);
+
+      sendJsonMessage({
+        type: "createRoom",
+        newRoomObject: JSON.stringify(newRoomObject),
+      });
     };
   }, [sendJsonMessage, uuidRef, username, updateRoomObject]);
+
+  const replaceGame = useMemo(() => {
+    return () => {
+      devLog("Clearing game, new memes: ", newMemes);
+      let newMemes = memeSampler();
+      // generate a new set of memes and create a new room object
+      let newRoomObject = { memeSet: newMemes, users: {}, est: new Date() };
+
+      // assign each player a new playerCard
+      Object.keys(roomObject["users"]).forEach((key) => {
+        let newCard = randomCardKey(newMemes.allKeys);
+        newRoomObject["users"][key].playerCard = newCard;
+        if (key === uuidRef.current) {
+          // if it's the current user, update the local storage
+          localStorage.setItem(`${roomKey}-player-card`, newCard);
+        }
+      });
+
+      updateRoomObject(newRoomObject); // update the room object with new memes and player cards
+
+      // clean up local storage
+      handleLocalStorage({
+        type: "cleanUp",
+        roomKey: roomKey,
+        searchParams,
+      });
+
+      // send the new memes to the server
+      sendJsonMessage({
+        type: "replaceGame",
+        roomKey: roomKey,
+        newRoomObject: newRoomObject,
+      });
+    };
+  }, [
+    sendJsonMessage,
+    uuidRef,
+    roomObject,
+    roomKey,
+    updateRoomObject,
+    searchParams,
+  ]);
 
   const assignUsername = useMemo(() => {
     return (newUsername) => {
@@ -155,6 +192,7 @@ function GuessyProvider({ children }) {
       assignUsername,
       createRoom,
       roomObject,
+      replaceGame,
     };
   }, [
     assignUsername,
@@ -163,7 +201,10 @@ function GuessyProvider({ children }) {
     setRoomObject,
     createRoom,
     roomObject,
+    replaceGame,
   ]);
+
+  // ** run logic **
 
   useEffect(() => {
     if (lastJsonMessageChanged) {

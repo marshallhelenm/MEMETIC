@@ -1,18 +1,19 @@
-import IconButton from "@mui/material/IconButton";
-import StyledDialog from "./StyledDialog";
-import DialogContent from "@mui/material/DialogContent";
 import { useState } from "react";
+import IconButton from "@mui/material/IconButton";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+
+import StyledDialog from "../components/StyledDialog";
+import GuessyButton from "../components/GuessyButton";
 import { colorA, colorB } from "../assets/styles";
 import { memeData } from "../assets/memeCollection";
-import { DialogTitle } from "@mui/material";
-import GuessyButton from "./GuessyButton";
 
 const PlayerCardModal = ({ playerCard, newPlayerCard }) => {
   let item = memeData[playerCard];
   const [open, setOpen] = useState(false);
 
   if (!item) return;
-  
+
   const handleOpen = (e) => {
     setOpen(true);
   };

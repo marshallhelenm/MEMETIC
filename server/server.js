@@ -1,5 +1,6 @@
 const http = require("http");
 const { WebSocketServer } = require("ws");
+const { devLog } = require("../client/src/utils/Helpers");
 const uuidv4 = require("uuid").v4;
 // const url = require("url");
 
@@ -12,9 +13,55 @@ const rooms = {};
 
 const handleMessage = (bytes, uuid) => {
   const message = JSON.parse(bytes.toString());
-  console.log("Message: ", message.type, "from UUID:", uuid);
+  console.log(
+    "Message: ",
+    message.type,
+    "from UUID:",
+    uuid,
+    "with data:",
+    message
+  );
 
   switch (message.type) {
+    case "clearPlayerCards":
+      clearPlayerCards(message.roomKey, uuid);
+      break;
+    case "createRoom":
+      if (!message.roomKey) return;
+      rooms[message.roomKey] = rooms[message.roomKey]
+        ? { ...rooms[message.roomKey], ...JSON.parse(message.newRoomObject) }
+        : JSON.parse(message.newRoomObject);
+      break;
+    case "getRoomContents":
+      sendRoomContentsToUuid(message.roomKey, uuid);
+      break;
+    case "joinRoom":
+      joinRoom(
+        message.roomKey,
+        uuid,
+        message.username,
+        message.returnRoomContents
+      );
+      break;
+    case "replaceGame":
+      const newRoomObject = JSON.parse(message.newRoomObject);
+      devLog("replaceGame", message.roomKey, newRoomObject);
+
+      if (!message.roomKey) {
+        return;
+      }
+      const existingRoom = rooms[message.roomKey];
+      rooms[message.roomKey] = { ...existingRoom, ...newRoomObject };
+      const outgoingMessage = {
+        type: "replaceGame",
+        roomKey: message.roomKey,
+        room: JSON.stringify(rooms[message.roomKey]),
+      };
+      broadcast(outgoingMessage.roomKey, message, uuid);
+      break;
+    case "setPlayerCard":
+      setPlayerCard(message.roomKey, uuid, message.playerCard);
+      break;
     case "setRoomContents":
       if (!message.roomKey) requestRoomKey(uuid);
       setRoomContents(
@@ -32,41 +79,10 @@ const handleMessage = (bytes, uuid) => {
         uuid
       );
       break;
-    case "getRoomContents":
-      sendRoomContentsToUuid(message.roomKey, uuid);
-      break;
-    case "joinRoom":
-      joinRoom(
-        message.roomKey,
-        uuid,
-        message.username,
-        message.returnRoomContents
-      );
-      break;
-    case "createRoom":
-      if (!message.roomKey) {
-        return;
-      }
-      rooms[message.roomKey] = {
-        users: {},
-        memeSet: message.memeSet,
-        est: new Date(),
-      };
-      rooms[message.roomKey]["users"][uuid] = {
-        card: message.requesterCard,
-        username: message.username,
-      };
-      break;
     case "setUsername":
       console.log("setUsername", message.username);
       if (!rooms[message.roomKey]) return;
       rooms[message.roomKey]["users"][uuid]["username"] = message.username;
-      break;
-    case "setPlayerCard":
-      setPlayerCard(message.roomKey, uuid, message.playerCard);
-      break;
-    case "clearPlayerCards":
-      clearPlayerCards(message.roomKey, uuid);
       break;
     default:
       break;

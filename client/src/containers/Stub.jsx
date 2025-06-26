@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import StubImage from "../components/StubImage";
-import Overlay from "../components/Overlay";
+import Overlay from "../containers/Overlay";
 
 function Stub({ itemKey, item, roomKey, isPlayerCard }) {
   const [flipped, setFlipped] = useState(false);

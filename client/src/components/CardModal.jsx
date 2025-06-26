@@ -12,7 +12,7 @@ const CardModal = ({ item, children, icon, setModalOpen }) => {
     setModalOpen(true);
   };
   const handleClose = (e) => {
-    e.stopPropagation()
+    e.stopPropagation();
     setModalOpen(false);
     setOpen(false);
   };
@@ -24,7 +24,7 @@ const CardModal = ({ item, children, icon, setModalOpen }) => {
       <div onClick={handleOpen}>
         <i className={`fa-solid fa-${icon} fa-lg overlay-icon`}></i>
       </div>
-      <StyledDialog open={open} onClose={handleClose} maxWidth="md" >
+      <StyledDialog open={open} onClose={handleClose} maxWidth="md">
         <IconButton
           aria-label="close"
           onClick={handleClose}
@@ -33,15 +33,12 @@ const CardModal = ({ item, children, icon, setModalOpen }) => {
             right: 10,
             top: 8,
             color: colorA,
+            cursor: "pointer",
           })}
-          >
+        >
           <i className="fa-solid fa-xmark"></i>
         </IconButton>
-        <DialogContent
-          id="modal-modal-description"
-        >
-          {children}
-        </DialogContent>
+        <DialogContent id="modal-modal-description">{children}</DialogContent>
       </StyledDialog>
     </>
   );

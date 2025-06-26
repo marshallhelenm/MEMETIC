@@ -2,7 +2,7 @@ import $ from "jquery";
 import { memeData } from "../assets/memeCollection";
 
 function ImageAnalyzer() {
-  const imgKeys = ['bugs_bunny_no'];
+  const imgKeys = ["gnome_barf"];
   const allKeys = Object.keys(memeData);
   const keys = imgKeys.length > 0 ? imgKeys : allKeys;
   let workingData = { ...memeData };

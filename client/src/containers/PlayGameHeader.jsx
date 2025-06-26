@@ -1,7 +1,7 @@
 import QuestionsModal from "../components/QuestionsModal";
 import Logo from "../components/Logo";
 import GifPauseButton from "../components/GifPauseButton";
-import ClearGame from "./ClearGame";
+import ClearGame from "../components/ClearGame";
 import PlayerCardModal from "./PlayerCardModal";
 import { useSearchParams } from "react-router-dom";
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CardModal from "./CardModal";
+import CardModal from "../components/CardModal";
 
 function Overlay({ item, overlay, flipped }) {
   const [modalOpen, setModalOpen] = useState(false);

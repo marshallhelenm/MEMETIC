@@ -321,5 +321,11 @@
     "origin": "https://knowyourmeme.com/memes/the-most-interesting-man-in-the-world",
     "alt": "The Most Interesting Man In The World meme",
     "height_multiplier": 1.25
+  },
+  "gnome_barf": {
+    "img": "gnome_barf.gif",
+    "origin": "https://knowyourmeme.com/memes/subcultures/gravity-falls",
+    "alt": "a gif of a gnome from the cartoon Gravity Falls barfing up a rainbow continuously",
+    "height_multiplier": 0.5555555555555556
   }
 }
