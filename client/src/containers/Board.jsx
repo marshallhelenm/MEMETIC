@@ -10,14 +10,20 @@ function Board({ loading, roomKey, playerCard }) {
   const { roomObject } = useGuessy();
   console.log("Board rendered, roomObject: ", roomObject);
 
-  const itemKeys = Object.keys(roomObject).length > 0 ? roomObject.allKeys : [];
-
   function generateColumns() {
     let boardColumns = [];
     for (let i = 1; i < 7; i++) {
-      let col = itemKeys[i];
-      let cards =
-        loading || !itemKeys ? generateLoadingCards() : generateCards(col);
+      let col = roomObject.memeSet[i]; // col is an array of keys
+      let cards = generateCards(col);
+      boardColumns.push(<BoardColumn cards={cards} key={`col-${i}`} />);
+    }
+    return boardColumns;
+  }
+  function generateLoadingColumns() {
+    let boardColumns = [];
+    for (let i = 1; i < 7; i++) {
+      let col = roomObject[i];
+      let cards = generateLoadingCards();
       boardColumns.push(<BoardColumn cards={cards} key={`col-${i}`} />);
     }
     return boardColumns;
@@ -51,7 +57,13 @@ function Board({ loading, roomKey, playerCard }) {
     return cards;
   }
 
-  return <div className="gameBoard">{generateColumns()}</div>;
+  return (
+    <div className="gameBoard">
+      {loading && roomObject.memeSet
+        ? generateColumns()
+        : generateLoadingColumns()}
+    </div>
+  );
 }
 
 export default Board;

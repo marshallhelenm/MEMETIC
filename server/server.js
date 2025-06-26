@@ -33,7 +33,7 @@ const handleMessage = (bytes, uuid) => {
       );
       break;
     case "getRoomContents":
-      returnRoomContents(message.roomKey, uuid);
+      sendRoomContentsToUuid(message.roomKey, uuid);
       break;
     case "joinRoom":
       joinRoom(
@@ -105,7 +105,7 @@ const sweepRoom = (roomKey) => {
   });
 };
 
-const returnRoomContents = (roomKey, uuid) => {
+const sendRoomContentsToUuid = (roomKey, uuid) => {
   const room = rooms[roomKey];
   sendToUuid(uuid, { type: "roomContents", room: JSON.stringify(room) });
 };
@@ -169,7 +169,7 @@ const joinRoom = (roomKey, uuid, username, returnRoomContents) => {
     }
     if (returnRoomContents) {
       if (room["memeSet"].length > 0) {
-        returnRoomContents(roomKey, uuid);
+        sendRoomContentsToUuid(roomKey, uuid);
       } else {
         noGameAlert(roomKey, uuid);
       }
