@@ -4,11 +4,12 @@ import MissingStub from "../components/MissingStub";
 import Stub from "../containers/Stub";
 import { memeData } from "../assets/memeCollection";
 import { useGuessy } from "../contexts/useGuessy";
+import { devLog } from "../utils/Helpers";
 
 // holds all the picture cards
 function Board({ loading, roomKey, playerCard }) {
   const { roomObject } = useGuessy();
-  console.log("Board rendered, roomObject: ", roomObject);
+  devLog("Board rendered, roomObject: ", roomObject);
 
   function generateColumns() {
     let boardColumns = [];

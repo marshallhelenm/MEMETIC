@@ -5,6 +5,7 @@ import { handleMessages } from "../utils/MessageHandler";
 import { memeSampler } from "../assets/memeCollection";
 import { handleLocalStorage } from "../utils/LocalStorageHandler";
 import { useTraceUpdate } from "../hooks/useTraceUpdate";
+import { devLog } from "../utils/Helpers";
 
 const GuessyContext = createContext();
 
@@ -26,7 +27,7 @@ function GuessyProvider({ children }) {
 
   const updateRoomObject = useMemo(() => {
     return (newRoomObject) => {
-      console.log("updateRoomObject", newRoomObject);
+      devLog("updateRoomObject", newRoomObject);
       setRoomObject((prevRoomObject) => {
         return {
           ...prevRoomObject,
@@ -42,7 +43,7 @@ function GuessyProvider({ children }) {
       joinKey = roomKey,
       returnRoomContents = roomObject ? true : false
     ) => {
-      console.log("joinRoom");
+      devLog("joinRoom");
 
       sendJsonMessage({
         type: "joinRoom",
@@ -63,7 +64,7 @@ function GuessyProvider({ children }) {
 
   const createRoom = useMemo(() => {
     return (newRoomKey) => {
-      console.log("guessy createRoom", newRoomKey);
+      devLog("guessy createRoom", newRoomKey);
       if (newRoomKey.length !== 8) {
         console.warn("Invalid room key length:", newRoomKey);
         return;
@@ -96,7 +97,7 @@ function GuessyProvider({ children }) {
 
   const assignUsername = useMemo(() => {
     return (newUsername) => {
-      console.log("assignUsername", newUsername);
+      devLog("assignUsername", newUsername);
       localStorage.setItem(`${roomKey}-username`, newUsername);
       updateRoomObject({
         users: {
@@ -117,7 +118,7 @@ function GuessyProvider({ children }) {
 
   const dispatchMessages = useMemo(() => {
     return ({ message, dispatchKey, dispatchUsername }) => {
-      console.log("GuessyProvider dispatchMessages", message);
+      devLog("GuessyProvider dispatchMessages", message);
       handleMessages({
         message,
         send: sendJsonMessage,

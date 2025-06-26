@@ -1,4 +1,5 @@
 import { memeSampler } from "../assets/memeCollection";
+import { devLog } from "../utils/Helpers";
 
 const handleMessages = ({
   message,
@@ -23,7 +24,7 @@ const handleMessages = ({
   }
 
   const processRoomContents = (roomContents) => {
-    console.log("processRoomContents", roomContents);
+    devLog("processRoomContents", roomContents);
 
     setRoomObject(JSON.parse(roomContents));
     let card;
@@ -66,7 +67,7 @@ const handleMessages = ({
   };
 
   const assignRandomPlayerCard = (keys) => {
-    console.log("assignRandomPlayerCard", keys);
+    devLog("assignRandomPlayerCard", keys);
 
     let newCard = randomCardKey(keys);
     sendPlayerCard(newCard);
@@ -81,26 +82,26 @@ const handleMessages = ({
   if (!message) return;
   switch (message["type"]) {
     case "noGameAlert":
-      console.log("Message Handler: noGameAlert: ", message.info);
+      devLog("Message Handler: noGameAlert: ", message.info);
       createRoom(message.roomKey);
       break;
     case "uuid":
-      console.log("Message Handler: uuid", message.uuid);
+      devLog("Message Handler: uuid", message.uuid);
       setUuidRef(message.uuid);
       break;
     case "requestRoomKey":
-      console.log("Message Handler: requestRoomKey");
+      devLog("Message Handler: requestRoomKey");
       send({
         type: "joinRoom",
         roomKey: message.roomKey,
       });
       break;
     case "roomContents":
-      console.log("Received room contents:", message.room);
+      devLog("Received room contents:", message.room);
       processRoomContents(message.room);
       break;
     default:
-      console.log("Unhandled message type:", message["type"], message);
+      devLog("Unhandled message type:", message["type"], message);
   }
 };
 export { handleMessages };

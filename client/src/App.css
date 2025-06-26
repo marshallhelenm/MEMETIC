@@ -92,7 +92,7 @@ button:focus {
   margin-right: 2%;
 }
 
-.header-roomKey {
+.header-box {
   color: var(--colorD);
   font-size: 1.2em;
   border: solid 2px var(--colorC);

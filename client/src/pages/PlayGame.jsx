@@ -7,16 +7,17 @@ import Board from "../containers/Board";
 import InvalidRoomKey from "../components/InvalidRoomKey";
 import PlayGameHeader from "../components/PlayGameHeader";
 import RoomLoading from "../components/RoomLoading";
+import { devLog } from "../utils/Helpers";
 
 //the page you see while actually playing the game
 function PlayGame() {
-  console.log("rendered PlayGame");
+  devLog("rendered PlayGame");
 
   const [searchParams] = useSearchParams();
   const [loadingCards, setLoadingCards] = useState(true);
   const { roomObject } = useGuessy();
   const { uuidRef, sendJsonMessage } = useWS();
-  console.log("PlayGame rendered, roomObject: ", roomObject);
+  devLog("PlayGame rendered, roomObject: ", roomObject);
 
   const currentRoomKey = searchParams.get("roomKey");
   let playerCard =

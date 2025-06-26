@@ -44,7 +44,6 @@ const handleMessage = (bytes, uuid) => {
       );
       break;
     case "createRoom":
-      console.log("createRoom", message.roomKey);
       if (!message.roomKey) {
         return;
       }

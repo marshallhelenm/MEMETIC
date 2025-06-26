@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { devLog } from "../utils/Helpers";
 
 function useTraceUpdate(props) {
   const prev = useRef(props);
@@ -16,12 +17,12 @@ function useTraceUpdate(props) {
       }
     }
     if (Object.keys(changedProps).length > 0) {
-      console.log(
+      devLog(
         `useTraceUpdate: Changed props in ${props.component || "component"}:`,
         changedProps
       );
     } else {
-      console.log(
+      devLog(
         `useTraceUpdate: No props changed in ${props.component || "component"}`
       );
     }

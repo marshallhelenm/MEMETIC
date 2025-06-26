@@ -2,6 +2,8 @@ import { useCallback } from "react";
 import { createContext, useMemo, useState, useEffect, useRef } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { useTraceUpdate } from "../hooks/useTraceUpdate";
+import { devLog } from "../utils/Helpers";
+
 const WSContext = createContext(false, null, () => {});
 
 function WSProvider({ children }) {
@@ -51,7 +53,7 @@ function WSProvider({ children }) {
     };
     socket.onclose = () => setIsReady(false);
     socket.onmessage = () => {
-      console.log("socket message received: ", lastJsonMessage);
+      devLog("socket message received: ", lastJsonMessage);
     };
 
     ws.current = socket;

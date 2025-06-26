@@ -9,6 +9,7 @@ import DialogActions from "@mui/material/DialogActions";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { handleLocalStorage } from "../utils/LocalStorageHandler";
+import { devLog } from "../utils/Helpers";
 
 function ConfirmationDialogRaw({ onConfirm, open, setOpen }) {
   const handleCancel = () => setOpen(false);
@@ -52,7 +53,7 @@ function ClearGame({ roomKey, setLoadingCards }) {
     // TODO: make this into a 'replaceRoomContents' message type
     // This will replace the current memes in the room with a new set
     // make corresponding changes in the server code
-    console.log("Clearing game, new memes: ", new_memes);
+    devLog("Clearing game, new memes: ", new_memes);
     sendJsonMessage({
       type: "setRoomContents",
       roomKey: roomKey,
