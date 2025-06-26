@@ -1,15 +1,12 @@
 import { useState, useEffect } from "react";
 import StubImage from "../components/StubImage";
 import Overlay from "../components/Overlay";
-import { useGuessy } from "../contexts/useGuessy";
 
-function Stub({ itemKey, item, roomKey }) {
+function Stub({ itemKey, item, roomKey, isPlayerCard }) {
   const [flipped, setFlipped] = useState(false);
   const [overlay, setOverlay] = useState(false);
   const storageId = `${roomKey}-${item.stub}`;
   const height = 200 * item.height_multiplier + 2;
-  const { playerCard } = useGuessy();
-  const isPlayerCard = playerCard == itemKey;
 
   function setStubStatus(status) {
     localStorage.setItem(storageId, status);

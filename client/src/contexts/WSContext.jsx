@@ -1,51 +1,74 @@
+import { useCallback } from "react";
 import { createContext, useMemo, useState, useEffect, useRef } from "react";
-import useWebSocket from "react-use-websocket";
-
+import useWebSocket, { ReadyState } from "react-use-websocket";
 const WSContext = createContext(false, null, () => {});
 
 function WSProvider({ children }) {
-  const WS_URL = "ws://localhost:6969";
+  const socketURL = "ws://localhost:6969";
   const [isReady, setIsReady] = useState(false);
-  const [uuid, setUuid] = useState(null);
+  const uuidRef = useRef(null);
+  const setUuidRef = useCallback((newUuid) => {
+    uuidRef.current = newUuid;
+  }, []);
 
   const ws = useRef(null);
 
-  const { sendJsonMessage, lastJsonMessage } = useWebSocket(WS_URL, {
-    share: false,
-    shouldReconnect: () => true,
-  });
+  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
+    socketURL,
+    {
+      share: false,
+      shouldReconnect: () => true,
+    }
+  );
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState];
 
   useEffect(() => {
     const socket = new WebSocket("wss://echo.websocket.events/");
-    if (lastJsonMessage && lastJsonMessage["uuid"]) {
-      setUuid[lastJsonMessage["uuid"]];
+    if (lastJsonMessage?.type == "uuid") {
+      setUuidRef[lastJsonMessage.uuid];
     }
 
     socket.onopen = () => {
       setIsReady(true);
     };
     socket.onclose = () => setIsReady(false);
-    // socket.onmessage = (event) => {
-    //   console.log("socket message: ", lastJsonMessage);
-    // const message = JSON.parse(event.toString());
-    // };
+    socket.onmessage = () => {
+      console.log("socket message received: ", lastJsonMessage);
+    };
 
     ws.current = socket;
 
     return () => {
       socket.close();
     };
-  }, []);
+  }, [lastJsonMessage]);
 
   const value = useMemo(() => {
     return {
       serverReady: isReady,
-      sendJsonMessage,
-      lastJsonMessage,
-      uuid,
+      setUuidRef,
+      uuidRef,
+      socketURL,
       ws: ws.current?.send.bind(ws.current),
+      sendJsonMessage,
+      readyState,
+      lastJsonMessage,
     };
-  }, [isReady, sendJsonMessage, lastJsonMessage, uuid]);
+  }, [
+    isReady,
+    uuidRef,
+    sendJsonMessage,
+    readyState,
+    lastJsonMessage,
+    setUuidRef,
+  ]);
 
   return <WSContext.Provider value={value}>{children}</WSContext.Provider>;
 }

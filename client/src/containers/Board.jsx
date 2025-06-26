@@ -1,11 +1,15 @@
-import Stub from "../containers/Stub";
-import LoadingStub from "../components/LoadingStub";
-import { memeData } from "../assets/memeCollection";
-import MissingStub from "../components/MissingStub";
 import BoardColumn from "./BoardColumn";
+import LoadingStub from "../components/LoadingStub";
+import MissingStub from "../components/MissingStub";
+import Stub from "../containers/Stub";
+import { memeData } from "../assets/memeCollection";
+import { useGuessy } from "../contexts/useGuessy";
 
 // holds all the picture cards
-function Board({ itemKeys, roomKey, loading, playerCard }) {
+function Board({ loading, roomKey, playerCard }) {
+  const { roomObject } = useGuessy();
+  const itemKeys = roomObject?.allKeys || [];
+
   function generateColumns() {
     let boardColumns = [];
     for (let i = 1; i < 7; i++) {
@@ -28,7 +32,7 @@ function Board({ itemKeys, roomKey, loading, playerCard }) {
             item={memeData[itemKey]}
             key={`${itemKey}-${Math.random() * 10}`}
             roomKey={roomKey}
-            isPlayerCard={playerCard == itemKey}
+            isPlayerCard={itemKey === playerCard}
           />
         );
       }

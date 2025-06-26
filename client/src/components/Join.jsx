@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 import Logo from "./Logo";
 
 function Join() {
-  const [roomKey, setRoomKey] = useState("");
+  const [enteredRoomKey, setEnteredRoomKey] = useState("");
 
   return (
-    <div >
+    <div>
       <Logo />
       <h1 className="heading">Join Game</h1>
       <div>
@@ -16,16 +16,14 @@ function Join() {
           placeholder="Room Name"
           type="text"
           onChange={(e) => {
-            setRoomKey(e.target.value);
+            setEnteredRoomKey(e.target.value);
           }}
           maxLength={8}
           minLength={8}
         />
       </div>
-      <Link to={`/play?roomKey=${roomKey}`}>
-        <GuessyButton>
-          Join Game
-        </GuessyButton>
+      <Link to={`/play?roomKey=${enteredRoomKey}`}>
+        <GuessyButton>Join Game</GuessyButton>
       </Link>
     </div>
   );

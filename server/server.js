@@ -1,5 +1,5 @@
-const http = require('http')
-const {WebSocketServer} = require("ws")
+const http = require("http");
+const { WebSocketServer } = require("ws");
 const uuidv4 = require("uuid").v4;
 // const url = require("url");
 
@@ -15,24 +15,61 @@ const handleMessage = (bytes, uuid) => {
 
   switch (message.type) {
     case "setRoomContents":
+      if (!message.roomKey) requestRoomKey(uuid);
       setRoomContents(
         uuid,
         message.roomKey,
         JSON.stringify(message.memeSet),
         message.username
       );
-      broadcastRoom(message.roomKey);
+      broadcast(
+        message.roomKey,
+        {
+          type: "roomContents",
+          room: JSON.stringify(room),
+        },
+        uuid
+      );
       break;
     case "getRoomContents":
       returnRoomContents(message.roomKey, uuid);
       break;
     case "joinRoom":
-      joinRoom(message.roomKey, uuid, message.username);
+      joinRoom(
+        message.roomKey,
+        uuid,
+        message.username,
+        message.returnRoomContents
+      );
+      break;
+    case "createRoom":
+      console.log("createRoom", message.roomKey);
+      if (!message.roomKey) {
+        return;
+      }
+      if (message.roomKey.length !== 8) {
+        console.warn("Invalid room key length:", message.roomKey);
+        return;
+      }
+      if (rooms[message.roomKey]) {
+        console.warn("Room already exists:", message.roomKey);
+        return;
+      }
+      rooms[message.roomKey] = {
+        users: {},
+        memeSet: message.memeSet,
+        est: new Date(),
+      };
+
+      rooms[message.roomKey]["users"][uuid] = {
+        card: message.requesterCard,
+      };
+
       break;
     case "setUsername":
-      console.log("setUsername: ", message, uuid);
-
-      setUsername(message.roomKey, uuid, message.username);
+      console.log("setUsername", message.username);
+      if (!rooms[message.roomKey]) return;
+      rooms[message.roomKey]["users"][uuid]["username"] = message.username;
       break;
     default:
       break;
@@ -40,6 +77,14 @@ const handleMessage = (bytes, uuid) => {
 };
 const handleClose = (uuid) => {
   delete connections[uuid];
+};
+
+const sendToUuid = (uuid, message) => {
+  connections[uuid].send(JSON.stringify(message));
+};
+
+const requestRoomKey = (uuid) => {
+  sendToUuid(uuid, { type: "requestRoomKey" });
 };
 
 const sweepRoom = (roomKey) => {
@@ -85,20 +130,28 @@ const setRoomContents = (uuid, roomKey, memeSet, username) => {
   rooms[roomKey]["memeSet"] = memeSet;
 };
 
-const broadcastRoom = (roomKey) => {
+const broadcast = (roomKey, message, excludeUuid = null) => {
   const room = rooms[roomKey];
   if (!room) return;
   sweepRoom(roomKey);
   if (!room["users"]) return;
   Object.keys(room["users"]).forEach((u) => {
-    const connection = connections[u];
-    const message = JSON.stringify(room);
-    connection.send(message);
+    if (!excludeUuid && u === excludeUuid) return;
+    if (!connections[u]) return;
+    // If the user is not connected, skip sending the message
+    if (!room["users"][u]) return;
+    // If the user is not in the room, skip sending the message
+    sendToUuid(u, message);
   });
 };
 
-const joinRoom = (roomKey, uuid, username) => {
-  let room = getOrMakeRoom(roomKey);
+const joinRoom = (roomKey, uuid, username, returnRoomContents) => {
+  const room = rooms[roomKey];
+  if (!room) {
+    console.warn("Room does not exist:", roomKey);
+    return;
+  }
+
   sweepRoom(roomKey);
   const roomUsers = Object.keys(room["users"]);
   if (!roomUsers.includes(uuid)) {
@@ -106,26 +159,43 @@ const joinRoom = (roomKey, uuid, username) => {
       username: username,
       card: "",
     };
-    if (room["memeSet"].length > 0) {
-      returnRoomContents(roomKey, uuid);
-    } else {
-      noGameAlert(roomKey, uuid);
+    if (username) {
+      rooms[roomKey]["users"][uuid]["username"] = username;
+    }
+    if (returnRoomContents) {
+      if (room["memeSet"].length > 0) {
+        returnRoomContents(roomKey, uuid);
+      } else {
+        noGameAlert(roomKey, uuid);
+      }
     }
   }
 };
 
-const setUsername = (roomKey, uuid, username) => {
+const setPlayerCard = (roomKey, uuid, playerCard) => {
+  if (!rooms[roomKey]) return;
   if (!rooms[roomKey]["users"][uuid]) {
     rooms[roomKey]["users"][uuid] = {};
   }
-  rooms[roomKey]["users"][uuid]["username"] = username;
+  rooms[roomKey]["users"][uuid]["playerCard"] = playerCard;
 };
 
+const clearPlayerCards = (roomKey) => {
+  if (!rooms[roomKey]) return;
+  const roomUsers = rooms[roomKey]["users"];
+  Object.keys(roomUsers).forEach((u) => {
+    roomUsers[u].playerCard = undefined;
+    sendToUuid(u, { type: "clearPlayerCard" });
+  });
+};
 
 wsServer.on("connection", (connection, request) => {
   const uuid = uuidv4();
   connections[uuid] = connection;
-  connection.send(JSON.stringify({ uuid: uuid }));
+  console.log(`New connection established with UUID: ${uuid}`);
+
+  sendToUuid(uuid, { type: "uuid", uuid: uuid });
+
   connection.on("message", (message) => {
     handleMessage(message, uuid);
   });
@@ -134,7 +204,6 @@ wsServer.on("connection", (connection, request) => {
   });
 });
 
-server.listen(port, ()=>{
-    console.log(`Websocket server is running on port ${port}`)
-})
-
+server.listen(port, () => {
+  console.log(`Websocket server is running on port ${port}`);
+});

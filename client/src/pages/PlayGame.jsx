@@ -1,73 +1,58 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import "../App.css";
+
+import { useGuessy } from "../contexts/useGuessy";
+import { useWS } from "../contexts/useWS";
 import Board from "../containers/Board";
 import InvalidRoomKey from "../components/InvalidRoomKey";
 import PlayGameHeader from "../components/PlayGameHeader";
-import { useGuessy } from "../contexts/useGuessy";
-import { useWS } from "../contexts/useWS";
-import NameForm from "./NameForm";
+import RoomLoading from "../components/RoomLoading";
 
 //the page you see while actually playing the game
 function PlayGame() {
+  console.log("rendered PlayGame");
+
   const [searchParams] = useSearchParams();
-  const roomKey = searchParams.get("roomKey");
-  const [memeCollection, setMemeCollection] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const {
-    joinRoom,
-    handleNewGame,
-    playerCard,
-    username,
-    setUsername,
-    getUsernameLocal,
-  } = useGuessy();
-  const { lastJsonMessage, uuid } = useWS();
+  const [loadingCards, setLoadingCards] = useState(true);
+  const { roomObject } = useGuessy();
+  const { uuidRef, sendJsonMessage } = useWS();
+  console.log("PlayGame rendered, roomObject: ", roomObject);
+
+  const currentRoomKey = searchParams.get("roomKey");
+  let playerCard = roomObject
+    ? roomObject.users[uuidRef.current]?.playerCard
+    : undefined;
+  let username = searchParams.get("username");
 
   useEffect(() => {
-    joinRoom(roomKey);
-    if (!lastJsonMessage) {
-      return;
-    } else if (lastJsonMessage["alert"] == "no game in room") {
-      handleNewGame(roomKey);
-      return;
-    } else if (lastJsonMessage["memeSet"]) {
-      if (!username) getUsernameLocal();
-      const new_memes = JSON.parse(lastJsonMessage["memeSet"]);
-      setMemeCollection(new_memes);
-      setLoading(false);
-    }
-  }, [
-    roomKey,
-    getUsernameLocal,
-    joinRoom,
-    lastJsonMessage,
-    handleNewGame,
-    playerCard,
-    uuid,
-    username,
-    setUsername,
-  ]);
+    sendJsonMessage({
+      type: "joinRoom",
+      roomKey: currentRoomKey,
+      username,
+      returnRoomContents: Object.keys(roomObject).length == 0 ? true : false,
+    });
+  }, [username, currentRoomKey, sendJsonMessage, roomObject]);
 
-  if (roomKey.length != 8) {
+  if (currentRoomKey.length != 8) {
     return <InvalidRoomKey />;
-  } else if (!username) {
-    return <NameForm />;
+  } else if (roomObject) {
+    return <h1>got the roomObject!</h1>;
+    // return (
+    //   <div className="play-game">
+    //     <PlayGameHeader
+    //       setLoadingCards={setLoadingCards}
+    //       username={username}
+    //       playerCard={playerCard}
+    //     />
+    //     <Board
+    //       loading={loadingCards}
+    //       roomKey={currentRoomKey}
+    //       playerCard={playerCard}
+    //     />
+    //   </div>
+    // );
   } else {
-    return (
-      <div className="play-game">
-        <PlayGameHeader
-          setMemeCollection={setMemeCollection}
-          roomKey={roomKey}
-        />
-        <Board
-          itemKeys={memeCollection}
-          roomKey={roomKey}
-          loading={loading}
-          playerCard={playerCard}
-        />
-      </div>
-    );
+    return <RoomLoading />;
   }
 }
 

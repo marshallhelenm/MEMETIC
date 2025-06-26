@@ -1,40 +1,25 @@
-import "./App.css";
-import LandingPage from "./pages/LandingPage";
-import PlayGame from "./pages/PlayGame";
-import Join from "./components/Join";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Upload from "./pages/Upload";
-import ImageAnalyzer from "./pages/ImageAnalyzer";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <LandingPage />,
-  },
-  {
-    path: "/play",
-    element: <PlayGame />,
-  },
-  {
-    path: "/join",
-    element: <Join />,
-  },
-  // {
-  //   path: "/upload",
-  //   element: <Upload />,
-  // },
-  // {
-  //   path: "/image_analyzer",
-  //   element: <ImageAnalyzer />,
-  // },
-])
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { WSProvider } from "./contexts/WSContext";
+import { GuessyProvider } from "./contexts/GuessyContext";
+import { useEffect } from "react";
 
 function App() {
+  let navigate = useNavigate();
+  let location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname == "/") navigate("/home");
+  }, [location, navigate]);
+
   return (
     <div className="guessy-background">
-      <RouterProvider router={router} />
+      <WSProvider>
+        <GuessyProvider>
+          <Outlet />
+        </GuessyProvider>
+      </WSProvider>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

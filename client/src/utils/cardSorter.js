@@ -227,30 +227,3 @@ function unsortedColumns(itemKeys) {
 }
 
 export { sortedColumns, unsortedColumns };
-
-sortedColumns([
-  "a_smoothie",
-  "sickos",
-  "smoking_affleck",
-  "i_guess_guy",
-  "nyan_cat",
-  "let_me_in",
-  "road_work_ahead",
-  "guess_ill_die",
-  "surprise_motherfucker",
-  "marge_potato",
-  "the_what",
-  "rick_roll",
-  "citizen_kane",
-  "thumbs_up_kid",
-  "free_real_estate",
-  "doge",
-  "communist_bugs_bunny",
-  "woman_yelling_cat",
-  "bugs_bunny_no",
-  "doubt",
-  "distracted_boyfriend",
-  "cheers_bro",
-  "thanks_satan",
-  "more_likely",
-]);
