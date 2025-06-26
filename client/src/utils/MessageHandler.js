@@ -9,6 +9,7 @@ const handleMessages = ({
   setUuidRef,
   joinRoom,
   randomCardKey,
+  createRoom,
 }) => {
   if (typeof message == "string") {
     message = JSON.parse(message);
@@ -20,40 +21,6 @@ const handleMessages = ({
     );
     return;
   }
-
-  const getRoomContents = () => {
-    send({ type: "getRoomContents", roomKey: roomKey });
-  };
-
-  const handleNewRoom = (newRoomKey) => {
-    console.log("messageHandler handleNewRoom", newRoomKey);
-    if (newRoomKey.length !== 8) {
-      console.warn("Invalid room key length:", newRoomKey);
-      return;
-    }
-    joinRoom(newRoomKey);
-    const new_memes = memeSampler();
-    send({
-      type: "setRoomContents",
-      roomKey: newRoomKey,
-      memeSet: new_memes,
-    });
-    let newPlayerCard = randomCardKey(new_memes["allKeys"]);
-    sendPlayerCard(newPlayerCard);
-    localStorage.setItem(`${roomKey}-player-card`, newPlayerCard);
-  };
-
-  const handleNewGame = (gameRoomKey) => {
-    console.log("handleNewGame");
-    joinRoom(gameRoomKey);
-    const new_memes = memeSampler();
-    send({
-      type: "setRoomContents",
-      roomKey: gameRoomKey,
-      memeSet: new_memes,
-    });
-    assignRandomPlayerCard(new_memes["allKeys"]);
-  };
 
   const processRoomContents = (roomContents) => {
     console.log("processRoomContents", roomContents);
@@ -106,11 +73,6 @@ const handleMessages = ({
     localStorage.setItem(`${roomKey}-player-card`, newCard);
   };
 
-  //   const handlePlayerCard = () => {
-  //     let card = this.getPlayerCardLocal();
-  //     if (!!roomObject && !card) assignRandomPlayerCard(roomObject["allKeys"]);
-  //   };
-
   const clearPlayerCards = () => {
     send({ type: "clearPlayerCards" });
   };
@@ -118,17 +80,9 @@ const handleMessages = ({
   //   **Message Handling**
   if (!message) return;
   switch (message["type"]) {
-    // case "assignUsername":
-    //   console.log("Message Handler: assignUsername", message.username);
-    //   assignUsername(message.newUsername);
-    //   break;
     case "noGameAlert":
-      console.log("Message Handler: noGameAlert");
-      handleNewGame(message.roomKey);
-      break;
-    case "handleNewRoom":
-      console.log("Message Handler: handleNewRoom", message.roomKey);
-      handleNewRoom(message.roomKey);
+      console.log("Message Handler: noGameAlert: ", message.info);
+      createRoom(message.roomKey);
       break;
     case "uuid":
       console.log("Message Handler: uuid", message.uuid);

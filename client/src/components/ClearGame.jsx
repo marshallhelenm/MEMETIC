@@ -8,6 +8,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { handleLocalStorage } from "../utils/LocalStorageHandler";
 
 function ConfirmationDialogRaw({ onConfirm, open, setOpen }) {
   const handleCancel = () => setOpen(false);
@@ -41,7 +42,6 @@ function ConfirmationDialogRaw({ onConfirm, open, setOpen }) {
 
 function ClearGame({ roomKey, setLoadingCards }) {
   const [open, setOpen] = useState(false);
-  const { cleanUpLocalStorage } = useGuessy();
   const [searchParams] = useSearchParams();
   const username = searchParams.get("username");
   const { sendJsonMessage } = useGuessy();
@@ -49,6 +49,10 @@ function ClearGame({ roomKey, setLoadingCards }) {
   function handleClearGame() {
     let new_memes = memeSampler();
     setLoadingCards(true);
+    // TODO: make this into a 'replaceRoomContents' message type
+    // This will replace the current memes in the room with a new set
+    // make corresponding changes in the server code
+    console.log("Clearing game, new memes: ", new_memes);
     sendJsonMessage({
       type: "setRoomContents",
       roomKey: roomKey,
@@ -56,7 +60,11 @@ function ClearGame({ roomKey, setLoadingCards }) {
       username,
     });
     // TODO: updateRoomObject should be called here
-    cleanUpLocalStorage(roomKey);
+    handleLocalStorage({
+      type: "cleanUp",
+      roomKey: roomKey,
+      searchParams,
+    });
   }
 
   return (

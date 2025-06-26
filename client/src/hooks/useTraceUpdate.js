@@ -1,0 +1,33 @@
+import { useEffect, useRef } from "react";
+
+function useTraceUpdate(props) {
+  const prev = useRef(props);
+  const changedProps = {};
+  const propsDidChange = useRef({});
+  useEffect(() => {
+    // propsDidChange.current = {};
+    for (const [k, v] of Object.entries(props)) {
+      if (k == "component") continue; // Skip component name
+      if (prev.current[k] !== v) {
+        changedProps[k] = [prev.current[k], v];
+        propsDidChange.current[`${k}Changed`] = true;
+      } else {
+        propsDidChange.current[`${k}Changed`] = false;
+      }
+    }
+    if (Object.keys(changedProps).length > 0) {
+      console.log(
+        `useTraceUpdate: Changed props in ${props.component || "component"}:`,
+        changedProps
+      );
+    } else {
+      console.log(
+        `useTraceUpdate: No props changed in ${props.component || "component"}`
+      );
+    }
+    prev.current = props;
+  });
+  return propsDidChange.current;
+}
+
+export { useTraceUpdate };

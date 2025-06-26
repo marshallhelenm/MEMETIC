@@ -13,8 +13,8 @@ function Board({ loading, roomKey, playerCard }) {
   function generateColumns() {
     let boardColumns = [];
     for (let i = 1; i < 7; i++) {
-      let col = roomObject.memeSet[i]; // col is an array of keys
-      let cards = generateCards(col);
+      let colKeys = roomObject.memeSet[i];
+      let cards = generateCards(colKeys);
       boardColumns.push(<BoardColumn cards={cards} key={`col-${i}`} />);
     }
     return boardColumns;
@@ -22,7 +22,6 @@ function Board({ loading, roomKey, playerCard }) {
   function generateLoadingColumns() {
     let boardColumns = [];
     for (let i = 1; i < 7; i++) {
-      let col = roomObject[i];
       let cards = generateLoadingCards();
       boardColumns.push(<BoardColumn cards={cards} key={`col-${i}`} />);
     }

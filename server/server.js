@@ -12,7 +12,7 @@ const rooms = {};
 
 const handleMessage = (bytes, uuid) => {
   const message = JSON.parse(bytes.toString());
-  console.log("Message: ", message);
+  console.log("Message: ", message.type, "from UUID:", uuid);
 
   switch (message.type) {
     case "setRoomContents":
@@ -48,24 +48,15 @@ const handleMessage = (bytes, uuid) => {
       if (!message.roomKey) {
         return;
       }
-      if (message.roomKey.length !== 8) {
-        console.warn("Invalid room key length:", message.roomKey);
-        return;
-      }
-      if (rooms[message.roomKey]) {
-        console.warn("Room already exists:", message.roomKey);
-        return;
-      }
       rooms[message.roomKey] = {
         users: {},
         memeSet: message.memeSet,
         est: new Date(),
       };
-
       rooms[message.roomKey]["users"][uuid] = {
         card: message.requesterCard,
+        username: message.username,
       };
-
       break;
     case "setUsername":
       console.log("setUsername", message.username);
@@ -110,23 +101,23 @@ const sendRoomContentsToUuid = (roomKey, uuid) => {
   sendToUuid(uuid, { type: "roomContents", room: JSON.stringify(room) });
 };
 
-const noGameAlert = (roomKey, uuid) => {
+const noGameAlert = (roomKey, uuid, info) => {
+  console.log("No game alert for room:", roomKey);
   const message = JSON.stringify({
     type: "noGameAlert",
     roomKey: roomKey,
+    info: info,
   });
   sendToUuid(uuid, message);
 };
 
-const getOrMakeRoom = (roomKey) => {
-  if (!rooms[roomKey]) {
-    rooms[roomKey] = {
-      users: {},
-      memeSet: [],
-      est: new Date(),
-    };
-  }
-  return rooms[roomKey];
+const noRoomAlert = (roomKey, uuid) => {
+  console.log("No room alert for room:", roomKey);
+  const message = JSON.stringify({
+    type: "noRoomAlert",
+    roomKey: roomKey,
+  });
+  sendToUuid(uuid, message);
 };
 
 const setRoomContents = (uuid, roomKey, memeSet, username) => {
@@ -152,8 +143,11 @@ const broadcast = (roomKey, message, excludeUuid = null) => {
 
 const joinRoom = (roomKey, uuid, username, returnRoomContents) => {
   const room = rooms[roomKey];
+  console.log("joinRoom", roomKey, uuid, username, returnRoomContents);
+
   if (!room) {
     console.warn("Room does not exist:", roomKey);
+    noGameAlert(roomKey, uuid, "Room does not exist");
     return;
   }
 
@@ -168,10 +162,17 @@ const joinRoom = (roomKey, uuid, username, returnRoomContents) => {
       rooms[roomKey]["users"][uuid]["username"] = username;
     }
     if (returnRoomContents) {
+      console.log(
+        "Returning room contents to UUID:",
+        uuid,
+        "room[memeSet]:",
+        room["memeSet"]
+      );
+
       if (room["memeSet"].length > 0) {
         sendRoomContentsToUuid(roomKey, uuid);
       } else {
-        noGameAlert(roomKey, uuid);
+        noGameAlert(roomKey, uuid, "No game in progress");
       }
     }
   }

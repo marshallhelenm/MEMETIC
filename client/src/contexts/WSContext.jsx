@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { createContext, useMemo, useState, useEffect, useRef } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
+import { useTraceUpdate } from "../hooks/useTraceUpdate";
 const WSContext = createContext(false, null, () => {});
 
 function WSProvider({ children }) {
@@ -20,14 +21,24 @@ function WSProvider({ children }) {
       shouldReconnect: () => true,
     }
   );
+  // useTraceUpdate({
+  //   component: "WSProvider",
+  //   sendJsonMessage,
+  //   lastJsonMessage,
+  //   readyState,
+  //   isReady,
+  //   setIsReady,
+  //   uuidRef,
+  //   setUuidRef,
+  // });
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
+  // const connectionStatus = {
+  //   [ReadyState.CONNECTING]: "Connecting",
+  //   [ReadyState.OPEN]: "Open",
+  //   [ReadyState.CLOSING]: "Closing",
+  //   [ReadyState.CLOSED]: "Closed",
+  //   [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  // }[readyState];
 
   useEffect(() => {
     const socket = new WebSocket("wss://echo.websocket.events/");
@@ -48,7 +59,7 @@ function WSProvider({ children }) {
     return () => {
       socket.close();
     };
-  }, [lastJsonMessage]);
+  }, [lastJsonMessage, setUuidRef]);
 
   const value = useMemo(() => {
     return {
@@ -56,7 +67,6 @@ function WSProvider({ children }) {
       setUuidRef,
       uuidRef,
       socketURL,
-      ws: ws.current?.send.bind(ws.current),
       sendJsonMessage,
       readyState,
       lastJsonMessage,
