@@ -3,7 +3,6 @@ import Logo from "../components/Logo";
 import GifPauseButton from "../components/GifPauseButton";
 import ClearGame from "./ClearGame";
 import PlayerCardModal from "./PlayerCardModal";
-// import { useGuessy } from "../contexts/useGuessy";
 
 function PlayGameHeader({ roomKey, setLoadingCards, username, playerCard }) {
   return (

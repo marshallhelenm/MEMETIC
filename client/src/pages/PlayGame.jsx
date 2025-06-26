@@ -19,9 +19,10 @@ function PlayGame() {
   console.log("PlayGame rendered, roomObject: ", roomObject);
 
   const currentRoomKey = searchParams.get("roomKey");
-  let playerCard = roomObject
-    ? roomObject.users[uuidRef.current]?.playerCard
-    : undefined;
+  let playerCard =
+    Object.keys(roomObject).length > 0 && roomObject.users
+      ? roomObject.users[uuidRef.current]?.playerCard
+      : undefined;
   let username = searchParams.get("username");
 
   useEffect(() => {
@@ -35,22 +36,21 @@ function PlayGame() {
 
   if (currentRoomKey.length != 8) {
     return <InvalidRoomKey />;
-  } else if (roomObject) {
-    return <h1>got the roomObject!</h1>;
-    // return (
-    //   <div className="play-game">
-    //     <PlayGameHeader
-    //       setLoadingCards={setLoadingCards}
-    //       username={username}
-    //       playerCard={playerCard}
-    //     />
-    //     <Board
-    //       loading={loadingCards}
-    //       roomKey={currentRoomKey}
-    //       playerCard={playerCard}
-    //     />
-    //   </div>
-    // );
+  } else if (Object.keys(roomObject).length > 0) {
+    return (
+      <div className="play-game">
+        <PlayGameHeader
+          setLoadingCards={setLoadingCards}
+          username={username}
+          playerCard={playerCard}
+        />
+        <Board
+          loading={loadingCards}
+          roomKey={currentRoomKey}
+          playerCard={playerCard}
+        />
+      </div>
+    );
   } else {
     return <RoomLoading />;
   }

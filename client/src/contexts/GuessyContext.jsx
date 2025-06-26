@@ -143,6 +143,7 @@ function GuessyProvider({ children }) {
         uuidRef,
         setUuidRef,
         joinRoom,
+        randomCardKey,
       });
     };
   }, [

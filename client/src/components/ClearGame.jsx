@@ -39,7 +39,7 @@ function ConfirmationDialogRaw({ onConfirm, open, setOpen }) {
   );
 }
 
-function ClearGame({ setMemeCollection, roomKey, setLoadingCards }) {
+function ClearGame({ roomKey, setLoadingCards }) {
   const [open, setOpen] = useState(false);
   const { cleanUpLocalStorage } = useGuessy();
   const [searchParams] = useSearchParams();
@@ -49,13 +49,13 @@ function ClearGame({ setMemeCollection, roomKey, setLoadingCards }) {
   function handleClearGame() {
     let new_memes = memeSampler();
     setLoadingCards(true);
-    setMemeCollection(new_memes);
     sendJsonMessage({
       type: "setRoomContents",
       roomKey: roomKey,
       memeSet: new_memes,
       username,
     });
+    // TODO: updateRoomObject should be called here
     cleanUpLocalStorage(roomKey);
   }
 

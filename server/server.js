@@ -12,6 +12,7 @@ const rooms = {};
 
 const handleMessage = (bytes, uuid) => {
   const message = JSON.parse(bytes.toString());
+  console.log("Message: ", message);
 
   switch (message.type) {
     case "setRoomContents":
@@ -26,7 +27,7 @@ const handleMessage = (bytes, uuid) => {
         message.roomKey,
         {
           type: "roomContents",
-          room: JSON.stringify(room),
+          room: JSON.stringify(rooms[message.roomKey]),
         },
         uuid
       );
@@ -71,10 +72,17 @@ const handleMessage = (bytes, uuid) => {
       if (!rooms[message.roomKey]) return;
       rooms[message.roomKey]["users"][uuid]["username"] = message.username;
       break;
+    case "setPlayerCard":
+      setPlayerCard(message.roomKey, uuid, message.playerCard);
+      break;
+    case "clearPlayerCards":
+      clearPlayerCards(message.roomKey, uuid);
+      break;
     default:
       break;
   }
 };
+
 const handleClose = (uuid) => {
   delete connections[uuid];
 };
@@ -99,18 +107,15 @@ const sweepRoom = (roomKey) => {
 
 const returnRoomContents = (roomKey, uuid) => {
   const room = rooms[roomKey];
-  const connection = connections[uuid];
-  const message = JSON.stringify(room);
-  connection.send(message);
+  sendToUuid(uuid, { type: "roomContents", room: JSON.stringify(room) });
 };
 
 const noGameAlert = (roomKey, uuid) => {
-  const connection = connections[uuid];
   const message = JSON.stringify({
-    alert: "no game in room",
+    type: "noGameAlert",
     roomKey: roomKey,
   });
-  connection.send(message);
+  sendToUuid(uuid, message);
 };
 
 const getOrMakeRoom = (roomKey) => {

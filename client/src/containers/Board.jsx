@@ -8,13 +8,16 @@ import { useGuessy } from "../contexts/useGuessy";
 // holds all the picture cards
 function Board({ loading, roomKey, playerCard }) {
   const { roomObject } = useGuessy();
-  const itemKeys = roomObject?.allKeys || [];
+  console.log("Board rendered, roomObject: ", roomObject);
+
+  const itemKeys = Object.keys(roomObject).length > 0 ? roomObject.allKeys : [];
 
   function generateColumns() {
     let boardColumns = [];
     for (let i = 1; i < 7; i++) {
       let col = itemKeys[i];
-      let cards = loading ? generateLoadingCards() : generateCards(col);
+      let cards =
+        loading || !itemKeys ? generateLoadingCards() : generateCards(col);
       boardColumns.push(<BoardColumn cards={cards} key={`col-${i}`} />);
     }
     return boardColumns;
