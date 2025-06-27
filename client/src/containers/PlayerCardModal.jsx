@@ -2,6 +2,7 @@ import { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import Tooltip from "@mui/material/Tooltip";
 
 import StyledDialog from "../components/StyledDialog";
 import GuessyButton from "../components/GuessyButton";
@@ -12,6 +13,7 @@ import { useGuessy } from "../contexts/useGuessy";
 import { handleLocalStorage } from "../utils/LocalStorageHandler";
 import { useWS } from "../contexts/useWS";
 import { devLog } from "../utils/Helpers";
+import { useRoomParser } from "../hooks/useRoomParser";
 
 const PlayerCardModal = ({ playerCard, roomKey, setPlayerCard }) => {
   const [modalCard, setModalCard] = useState(
@@ -21,6 +23,7 @@ const PlayerCardModal = ({ playerCard, roomKey, setPlayerCard }) => {
   const [open, setOpen] = useState(false);
   const { randomCardKey, roomObject, updateRoomObjectLocalPlayerCard } =
     useGuessy();
+  const { allKeys, observer } = useRoomParser({ roomObject });
   const { sendJsonMessage } = useWS();
 
   const handleOpen = (e) => {
@@ -31,8 +34,7 @@ const PlayerCardModal = ({ playerCard, roomKey, setPlayerCard }) => {
   };
 
   const assignNewPlayerCard = () => {
-    const keys = roomObject["memeSet"]["allKeys"];
-    const newCard = randomCardKey(keys);
+    const newCard = randomCardKey(allKeys);
     devLog(["assignNewPlayerCard: ", newCard]);
 
     sendJsonMessage({
@@ -60,59 +62,75 @@ const PlayerCardModal = ({ playerCard, roomKey, setPlayerCard }) => {
     }
   }
 
-  return (
-    <>
-      <div onClick={handleOpen} className="pointer">
-        <i className={`fa-solid fa-star fa-lg player-card-star`}></i>
-        View Your Meme
+  if (observer) {
+    return (
+      <div>
+        <Tooltip title="This room is full! You're just an observer here.">
+          <i className={`fa-solid fa-star fa-lg observer-star`}></i>
+          Observer
+        </Tooltip>
       </div>
-      <StyledDialog open={open} onClose={handleClose} maxWidth="md">
-        <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={() => ({
-            position: "absolute",
-            right: 10,
-            top: 8,
-            color: colorA,
-          })}
-        >
-          <i className="fa-solid fa-xmark"></i>
-        </IconButton>
-        <DialogTitle>
-          <div
-            style={{
-              display: "flex",
-              //   justifyContent: "space-around",
-              alignItems: "center",
-            }}
+    );
+  } else {
+    return (
+      <>
+        <div onClick={handleOpen} className="pointer">
+          <i className={`fa-solid fa-star fa-lg player-card-star`}></i>
+          View Your Meme
+        </div>
+        <StyledDialog open={open} onClose={handleClose} maxWidth="md">
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={() => ({
+              position: "absolute",
+              right: 10,
+              top: 8,
+              color: colorA,
+            })}
           >
-            <div style={{ width: "50%" }}>
-              <i
-                className={`fa-solid fa-star fa-xl`}
-                style={{ color: colorB, marginRight: "5%" }}
-              ></i>
-              Your Meme
+            <i className="fa-solid fa-xmark"></i>
+          </IconButton>
+          <DialogTitle>
+            <div
+              style={{
+                display: "flex",
+                //   justifyContent: "space-around",
+                alignItems: "center",
+              }}
+            >
+              <div style={{ width: "50%" }}>
+                <i
+                  className={`fa-solid fa-star fa-xl`}
+                  style={{ color: colorB, marginRight: "5%" }}
+                ></i>
+                Your Meme
+              </div>
+              <div style={{ width: "50%" }}>
+                <GuessyButton onClick={assignNewPlayerCard} dark={true}>
+                  Pick Another
+                </GuessyButton>
+              </div>
             </div>
-            <div style={{ width: "50%" }}>
-              <GuessyButton onClick={assignNewPlayerCard} dark={true}>
-                Pick Another
-              </GuessyButton>
+          </DialogTitle>
+          {item.title && (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <h2>{item.title}</h2>
             </div>
-          </div>
-        </DialogTitle>
-        <DialogContent dividers id="modal-modal-description">
-          <div
-            className="row"
-            style={{ textAlign: "center", alignItems: "center" }}
-          >
-            <h4>This is your meme! Your partner is trying to guess it.</h4>
-          </div>
-        </DialogContent>
-        <DialogContent dividers>{content()}</DialogContent>
-      </StyledDialog>
-    </>
-  );
+          )}
+          <DialogContent dividers id="modal-modal-description">
+            <div
+              className="row"
+              style={{ textAlign: "center", alignItems: "center" }}
+            >
+              <h4>This is your meme! Your partner is trying to guess it.</h4>
+            </div>
+          </DialogContent>
+          <DialogContent dividers>{content()}</DialogContent>
+        </StyledDialog>
+      </>
+    );
+  }
 };
 
 export default PlayerCardModal;

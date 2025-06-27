@@ -3,6 +3,7 @@ import StyledDialog from "./StyledDialog";
 import DialogContent from "@mui/material/DialogContent";
 import { useState } from "react";
 import { colorA } from "../assets/styles";
+import { DialogTitle } from "@mui/material";
 
 const CardModal = ({ item, children, icon, setModalOpen }) => {
   const [open, setOpen] = useState(false);
@@ -38,6 +39,11 @@ const CardModal = ({ item, children, icon, setModalOpen }) => {
         >
           <i className="fa-solid fa-xmark"></i>
         </IconButton>
+        {item.title && (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <h2>{item.title}</h2>
+          </div>
+        )}
         <DialogContent id="modal-modal-description">{children}</DialogContent>
       </StyledDialog>
     </>

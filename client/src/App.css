@@ -151,6 +151,10 @@ button:focus {
   max-width: 98%;
 }
 
+.dud-origin {
+  color: var(--colorB) !important;
+}
+
 .stub-image.back {
   padding: 15%;
 }
@@ -207,6 +211,12 @@ button:focus {
 .player-card-star {
   /* color: var(--colorG) !important; */
   color: yellow !important;
+  z-index: 99;
+}
+
+.observer-star {
+  /* color: var(--colorG) !important; */
+  color: var(--colorD) !important;
   z-index: 99;
 }
 
