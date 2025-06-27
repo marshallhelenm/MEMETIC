@@ -14,6 +14,7 @@ import { handleLocalStorage } from "../utils/LocalStorageHandler";
 import { useWS } from "../contexts/useWS";
 import { devLog } from "../utils/Helpers";
 import { useRoomParser } from "../hooks/useRoomParser";
+import { useTraceUpdate } from "../hooks/useTraceUpdate";
 
 const PlayerCardModal = ({ playerCard, roomKey, setPlayerCard }) => {
   const [modalCard, setModalCard] = useState(
@@ -25,6 +26,13 @@ const PlayerCardModal = ({ playerCard, roomKey, setPlayerCard }) => {
     useGuessy();
   const { allKeys, observer } = useRoomParser({ roomObject });
   const { sendJsonMessage } = useWS();
+  // useTraceUpdate({
+  //   playerCard,
+  //   roomKey,
+  //   modalCard,
+  //   component: "PlayerCardModal",
+  // });
+  if (!item) return;
 
   const handleOpen = (e) => {
     setOpen(true);

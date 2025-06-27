@@ -5,16 +5,26 @@ import Stub from "../containers/Stub";
 import { memeData } from "../assets/memeCollection";
 import { useGuessy } from "../contexts/useGuessy";
 import { devLog } from "../utils/Helpers";
+import { useRoomParser } from "../hooks/useRoomParser";
+import { useWS } from "../contexts/useWS";
 
 // holds all the picture cards
-function Board({ loading, roomKey, playerCard }) {
+function Board({ loading, roomKey, columnCount }) {
   const { roomObject } = useGuessy();
+  const { columns, validRoomObject } = useRoomParser({
+    roomObject,
+    columnCount,
+  });
+  const { uuid } = useWS();
+  const { myPlayerCard } = useRoomParser({ roomObject, uuid });
   // devLog(["Board rendered, roomObject: ", roomObject]);
 
   function generateColumns() {
     let boardColumns = [];
-    for (let i = 1; i < 7; i++) {
-      let colKeys = roomObject.memeSet[i];
+    for (let i = 1; i <= columnCount; i++) {
+      console.log(columns);
+
+      let colKeys = columns[i];
       let cards = generateCards(colKeys);
       boardColumns.push(<BoardColumn cards={cards} key={`col-${i}`} />);
     }
@@ -22,7 +32,7 @@ function Board({ loading, roomKey, playerCard }) {
   }
   function generateLoadingColumns() {
     let boardColumns = [];
-    for (let i = 1; i < 7; i++) {
+    for (let i = 1; i <= columnCount; i++) {
       let cards = generateLoadingCards();
       boardColumns.push(<BoardColumn cards={cards} key={`col-${i}`} />);
     }
@@ -41,7 +51,7 @@ function Board({ loading, roomKey, playerCard }) {
             item={memeData[itemKey]}
             key={`${itemKey}-${Math.random() * 10}`}
             roomKey={roomKey}
-            isPlayerCard={itemKey === playerCard}
+            isPlayerCard={itemKey === myPlayerCard}
           />
         );
       }
@@ -51,7 +61,7 @@ function Board({ loading, roomKey, playerCard }) {
 
   function generateLoadingCards() {
     let cards = [];
-    for (let index = 0; index < 4; index++) {
+    for (let index = 0; index < 24 / columnCount; index++) {
       cards.unshift(<LoadingStub key={`loading-stub-${Math.random() * 10}`} />);
     }
     return cards;
@@ -59,7 +69,7 @@ function Board({ loading, roomKey, playerCard }) {
 
   return (
     <div className="gameBoard">
-      {loading && roomObject.memeSet
+      {loading && validRoomObject
         ? generateColumns()
         : generateLoadingColumns()}
     </div>
