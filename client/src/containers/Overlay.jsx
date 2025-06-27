@@ -1,7 +1,8 @@
 import { useState } from "react";
 import CardModal from "../components/CardModal";
+import GuessCard from "../components/GuessCard";
 
-function Overlay({ item, overlay, flipped }) {
+function Overlay({ item, overlay, flipped, itemKey }) {
   const [modalOpen, setModalOpen] = useState(false);
   if (modalOpen || (!flipped && overlay)) {
     return (
@@ -28,13 +29,11 @@ function Overlay({ item, overlay, flipped }) {
           </CardModal>
         </div>
         <div className="overlay-item">
-          <CardModal
+          <GuessCard
             item={item}
             setModalOpen={setModalOpen}
-            icon={"square-check"}
-          >
-            <h1>GUESS THIS?</h1>
-          </CardModal>
+            itemKey={itemKey}
+          />
         </div>
       </div>
     );

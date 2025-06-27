@@ -30,7 +30,12 @@ function Stub({ itemKey, item, roomKey, isPlayerCard }) {
 
   function playerStar() {
     if (!isPlayerCard) return;
-    return <i className="fa-solid fa-star fa-xl player-card-star absolute"></i>;
+    return (
+      <i
+        className="fa-solid fa-star fa-xl player-card-star absolute"
+        style={{ transform: "translateX(-50%)" }}
+      ></i>
+    );
   }
 
   return (
@@ -43,7 +48,14 @@ function Stub({ itemKey, item, roomKey, isPlayerCard }) {
       onMouseLeave={() => setOverlay(false)}
     >
       {playerStar()}
-      {<Overlay item={item} overlay={overlay} flipped={flipped} />}
+      {
+        <Overlay
+          item={item}
+          overlay={overlay}
+          flipped={flipped}
+          itemKey={itemKey}
+        />
+      }
       <StubImage
         item={item}
         flip={flip}

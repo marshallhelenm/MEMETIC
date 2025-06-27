@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -7,13 +6,20 @@ import DialogActions from "@mui/material/DialogActions";
 
 import { useGuessy } from "../contexts/useGuessy";
 import GuessyButton from "./GuessyButton";
+import { devLog } from "../utils/Helpers";
 
-function ConfirmDialog({ onConfirm, open, setOpen }) {
-  const handleCancel = () => setOpen(false);
+function ConfirmDialog({ onConfirm, open, setOpen, setModalOpen }) {
+  const handleCancel = (e) => {
+    e.stopPropagation();
+    setOpen(false);
+    setModalOpen(false);
+  };
 
-  const handleOk = () => {
+  const handleOk = (e) => {
+    e.stopPropagation();
     onConfirm();
     setOpen(false);
+    setModalOpen(false);
   };
 
   return (
@@ -21,6 +27,7 @@ function ConfirmDialog({ onConfirm, open, setOpen }) {
       sx={{ "& .MuiDialog-paper": { width: "80%", maxHeight: 435 } }}
       maxWidth="xs"
       open={open}
+      onClose={handleCancel}
     >
       <DialogTitle>Clear current game?</DialogTitle>
       <DialogContent dividers>
@@ -38,27 +45,33 @@ function ConfirmDialog({ onConfirm, open, setOpen }) {
   );
 }
 
-function ClearGame({ setLoadingCards }) {
+function GuessCard({ item, setModalOpen, itemKey }) {
   const [open, setOpen] = useState(false);
-  const { replaceGame } = useGuessy();
 
-  function handleClearGame() {
-    setLoadingCards(true);
-    replaceGame();
+  function handleOpen(e) {
+    e.stopPropagation();
+    setModalOpen(true);
+    setOpen(true);
+  }
+
+  function handleGuess() {
+    devLog(["guess card: ", itemKey]);
   }
 
   return (
     <>
-      <GuessyButton onClick={() => setOpen(true)}>New Game</GuessyButton>
+      <div onClick={handleOpen}>
+        <i className={`fa-solid fa-square-check fa-lg overlay-icon`}></i>
+      </div>
       <ConfirmDialog
-        id="ringtone-menu"
         keepMounted
         open={open}
-        onConfirm={handleClearGame}
+        onConfirm={handleGuess}
         setOpen={setOpen}
+        setModalOpen={setModalOpen}
       />
     </>
   );
 }
 
-export default ClearGame;
+export default GuessCard;
