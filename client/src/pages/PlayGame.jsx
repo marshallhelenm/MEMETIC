@@ -7,18 +7,29 @@ import Board from "../containers/Board";
 import InvalidRoomKey from "../components/InvalidRoomKey";
 import PlayGameHeader from "../containers/PlayGameHeader";
 import RoomLoading from "../components/RoomLoading";
-import { devLog } from "../utils/Helpers";
+import ConnectionError from "../components/ConnectionError";
+import { devLog, waitUntil } from "../utils/Helpers";
 import { handleLocalStorage } from "../utils/LocalStorageHandler";
+import { useTraceUpdate } from "../hooks/useTraceUpdate";
 
 //the page you see while actually playing the game
 function PlayGame() {
   const [searchParams] = useSearchParams();
   const [loadingCards, setLoadingCards] = useState(true);
+  const [connectionError, setConnectionError] = useState(false);
   const { roomObject } = useGuessy();
+  const [roomReady, setRoomReady] = useState(
+    Object.keys(roomObject).length > 0
+  );
   const { uuid, sendJsonMessage } = useWS();
-  const [localRoomObject, setLocalRoomObject] = useState(roomObject); // setting this to local state prompts a re-render when the roomObject changes
-  const [localUuid, setLocalUuid] = useState(uuid); // setting this to local state prompts a re-render when the roomObject changes
-  // devLog(["PlayGame rendered, roomObject: ", JSON.stringify(roomObject)]);
+  const [localRoomObject, setLocalRoomObject] = useState(roomObject);
+  const [localUuid, setLocalUuid] = useState(uuid);
+
+  let { uuidChanged, roomObjectChanged } = useTraceUpdate({
+    uuid,
+    roomObject,
+    roomReady,
+  });
 
   const currentRoomKey = searchParams.get("roomKey");
   let playerCard = findPlayerCard();
@@ -41,28 +52,48 @@ function PlayGame() {
     }
   }
 
-  devLog([
-    "PlayGame rendered",
-    "playerCard:",
-    playerCard,
-    "username:",
-    username,
-    "roomKey:",
-    currentRoomKey,
-  ]);
+  // devLog([
+  //   "PlayGame rendered",
+  //   "playerCard:",
+  //   playerCard,
+  //   "username:",
+  //   username,
+  //   "roomKey:",
+  //   currentRoomKey,
+  //   "Object.keys(roomObject).length > 0:",
+  //   Object.keys(roomObject).length > 0,
+  //   "roomObject:",
+  //   roomObject,
+  // ]);
   useEffect(() => {
-    sendJsonMessage({
-      type: "joinRoom",
-      roomKey: currentRoomKey,
-      username,
-      playerCard,
-      returnRoomContents: Object.keys(roomObject).length == 0 ? true : false,
-    });
-  }, [username, currentRoomKey, sendJsonMessage, roomObject, playerCard]);
+    if (
+      (typeof uuid === "string" && !roomObject["memeSet"]) ||
+      uuidChanged ||
+      roomObjectChanged
+    ) {
+      setRoomReady(true);
+      sendJsonMessage({
+        type: "joinRoom",
+        roomKey: currentRoomKey,
+        username,
+        playerCard,
+        returnRoomContents: Object.keys(roomObject).length == 0 ? true : false,
+      });
+    }
+  }, [
+    username,
+    currentRoomKey,
+    sendJsonMessage,
+    roomObject,
+    playerCard,
+    uuid,
+    uuidChanged,
+    roomObjectChanged,
+  ]);
 
   if (currentRoomKey.length != 8) {
     return <InvalidRoomKey />;
-  } else if (Object.keys(roomObject).length > 0) {
+  } else if (roomReady) {
     return (
       <div className="play-game">
         <PlayGameHeader
@@ -77,6 +108,8 @@ function PlayGame() {
         />
       </div>
     );
+  } else if (connectionError) {
+    return <ConnectionError />;
   } else {
     return <RoomLoading />;
   }

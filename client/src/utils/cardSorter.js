@@ -97,7 +97,7 @@ function bestColumn(key, columns, targetHeight) {
           // favor leaving the smallest fit
           continue;
         } else {
-          // pick the current one if it is emptier
+          // pick the current one - it's emptier
           bestFitColumn = i;
           closestFit = currentFit;
         }
@@ -124,11 +124,18 @@ function bestColumn(key, columns, targetHeight) {
       }
     } else if (currentFit > 0 && closestFit < 0) {
       // if best match overflows but our current match doesn't
-      // favor the one that doesn't overflow
-
-      closestFit = currentFit;
-      bestFitColumn = i;
-      continue;
+      if (!isTall) {
+        // favor the one that doesn't overflow
+        closestFit = currentFit;
+        bestFitColumn = i;
+        continue;
+      } else {
+        // unless the card is tall - in which case, go for the closest fit
+        if (Math.abs(currentFit) < Math.abs(closestFit)) {
+          bestFitColumn = i;
+          closestFit = currentFit;
+        }
+      }
     }
   }
 
