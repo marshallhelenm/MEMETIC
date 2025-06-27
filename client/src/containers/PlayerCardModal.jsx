@@ -21,7 +21,6 @@ const PlayerCardModal = ({ playerCard, roomKey }) => {
   const [open, setOpen] = useState(false);
   const { randomCardKey, roomObject } = useGuessy();
   const { sendJsonMessage } = useWS();
-  const keys = roomObject["memeSet"]["allKeys"];
 
   const handleOpen = (e) => {
     setOpen(true);
@@ -31,6 +30,7 @@ const PlayerCardModal = ({ playerCard, roomKey }) => {
   };
 
   const assignNewPlayerCard = () => {
+    const keys = roomObject["memeSet"]["allKeys"];
     const newCard = randomCardKey(keys);
     devLog(["assignNewPlayerCard: ", newCard]);
 

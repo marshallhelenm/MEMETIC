@@ -32,8 +32,10 @@ const handleMessages = ({
       devLog(["no roomContents to process!", roomContents]);
       return;
     }
+    if (typeof roomContents === "string")
+      roomContents = JSON.parse(roomContents);
     setRoomObject((prev) => {
-      return { ...prev, ...JSON.parse(roomContents) };
+      return { ...prev, ...roomContents };
     });
     let card;
     if (roomContents.users) card = roomContents.users[uuid]?.playerCard;
