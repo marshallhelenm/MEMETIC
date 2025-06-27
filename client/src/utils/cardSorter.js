@@ -31,6 +31,25 @@ function findColHeights(columns) {
   return heights;
 }
 
+function avgColHeight(columns) {
+  const heights = findColHeights(columns);
+  let curTotalHeight = heights.reduce((sum, h) => {
+    return sum + h;
+  }, 0.0);
+
+  let avg = curTotalHeight / 6;
+  return avg;
+}
+
+function avgCardHeight(keys) {
+  let height = keys.reduce((sum, key) => {
+    return sum + parseHeight(key);
+  }, 0);
+  console.log("avgHeight: ", height, keys.length);
+
+  return height / keys.length;
+}
+
 function findShortestColumn(columns) {
   const heights = findColHeights(columns);
   let shortestCol = 1;
@@ -68,7 +87,9 @@ function bestFit(currentHeight, keys, targetHeight) {
   return closestMatch;
 }
 
-function bestColumn(key, columns, targetHeight) {
+function leastOverflowingColumn(key, columns, targetHeight) {}
+
+function bestColumn(key, columns, targetHeight, finalCards = false) {
   let cardHeight = parseHeight(key);
   let isTall = cardHeight * 3 > targetHeight;
 
@@ -81,7 +102,7 @@ function bestColumn(key, columns, targetHeight) {
     let colHeight = findColHeight(columns[i]);
     let currentGap = targetHeight - colHeight; // amount of empty space left in the column we are currently looking at
 
-    if (currentGap <= 0) continue; // this column is full, don't add anything to it
+    if (!finalCards && currentGap <= 0) continue; // this column is full, don't add anything to it
 
     let currentFit = currentGap - cardHeight; // the difference between the proposed height if we use this column and the target height
 
@@ -149,31 +170,41 @@ function sortedColumns(unsortedKeys) {
   const totalHeight = itemKeys.reduce((sum, key) => {
     return sum + parseHeight(key);
   }, 0.0);
-  const targetHeight = totalHeight / 6;
+  let targetHeight = totalHeight / 6;
+  let finalCards = false;
   const finalHeights = [];
-  function fillColumns() {
-    const remainingKeys = itemKeys.slice(0);
-    while (remainingKeys.length > 0) {
-      for (let i = 1; i < 7; i++) {
-        let col = columns[i];
-        let currentHeight = findColHeight(col);
-        let nextKey = bestFit(currentHeight, remainingKeys, targetHeight);
-        col.push(nextKey);
-        const index = remainingKeys.indexOf(nextKey);
-        if (index > -1) {
-          remainingKeys.splice(index, 1);
-        }
-        if (remainingKeys.length < 6) {
-          finalHeights.push(currentHeight + parseHeight(nextKey));
-        }
-      }
-    }
-    return columns;
-  }
+  // function fillColumns() {
+  //   const remainingKeys = itemKeys.slice(0);
+  //   while (remainingKeys.length > 0) {
+  //     if (remainingKeys.length == 6) {
+  //       targetHeight = avgColHeight(columns);
+  //     }
+  //     for (let i = 1; i < 7; i++) {
+  //       let col = columns[i];
+  //       let currentHeight = findColHeight(col);
+  //       let nextKey = bestFit(currentHeight, remainingKeys, targetHeight);
+  //       col.push(nextKey);
+  //       const index = remainingKeys.indexOf(nextKey);
+  //       if (index > -1) {
+  //         remainingKeys.splice(index, 1);
+  //       }
+  //       if (remainingKeys.length < 6) {
+  //         finalHeights.push(currentHeight + parseHeight(nextKey));
+  //       }
+  //     }
+  //   }
+  //   return columns;
+  // }
 
   function assignCardsToColumns() {
-    itemKeys.forEach((key) => {
-      let bc = bestColumn(key, columns, targetHeight);
+    itemKeys.forEach((key, i) => {
+      if (i >= 18) {
+        targetHeight =
+          avgColHeight(columns) + avgCardHeight(itemKeys.slice(18));
+        finalCards = true;
+      }
+      console.log("new target height: ", targetHeight);
+      let bc = bestColumn(key, columns, targetHeight, finalCards);
       columns[bc].push(key);
     });
     return columns;
