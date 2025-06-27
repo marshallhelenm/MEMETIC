@@ -30,7 +30,6 @@ function PlayGameHeader({ roomKey, setLoadingCards, username, playerCard }) {
       </h4>
       <h4 className="header-box">
         <PlayerCardModal playerCard={playerCard} />
-        Your Meme
       </h4>
       <h4 className="header-box">
         <i

@@ -9,7 +9,7 @@ import { devLog } from "../utils/Helpers";
 // holds all the picture cards
 function Board({ loading, roomKey, playerCard }) {
   const { roomObject } = useGuessy();
-  devLog("Board rendered, roomObject: ", roomObject);
+  // devLog(["Board rendered, roomObject: ", roomObject]);
 
   function generateColumns() {
     let boardColumns = [];

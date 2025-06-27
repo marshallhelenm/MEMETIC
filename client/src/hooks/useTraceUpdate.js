@@ -1,12 +1,11 @@
 import { useEffect, useRef } from "react";
 import { devLog } from "../utils/Helpers";
 
-function useTraceUpdate(props) {
+function useTraceUpdate(props, log = true) {
   const prev = useRef(props);
   const changedProps = {};
   const propsDidChange = useRef({});
   useEffect(() => {
-    // propsDidChange.current = {};
     for (const [k, v] of Object.entries(props)) {
       if (k == "component") continue; // Skip component name
       if (prev.current[k] !== v) {
@@ -17,14 +16,18 @@ function useTraceUpdate(props) {
       }
     }
     if (Object.keys(changedProps).length > 0) {
-      devLog(
-        `useTraceUpdate: Changed props in ${props.component || "component"}:`,
-        changedProps
-      );
+      log &&
+        devLog([
+          `useTraceUpdate: Changed props in ${props.component || "component"}:`,
+          changedProps,
+        ]);
     } else {
-      devLog(
-        `useTraceUpdate: No props changed in ${props.component || "component"}`
-      );
+      log &&
+        devLog(
+          `useTraceUpdate: No props changed in ${
+            props.component || "component"
+          }`
+        );
     }
     prev.current = props;
   });

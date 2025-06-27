@@ -10,11 +10,65 @@
     "alt": "arthur fist meme / clenched fist arthur meme",
     "height_multiplier": 0.5617977528089888
   },
+  "awkward_monkey": {
+    "img": "awkward_monkey.jpg",
+    "origin": "https://knowyourmeme.com/memes/awkward-look-monkey-puppet",
+    "alt": "Awkward Look Monkey Puppet meme format.",
+    "height_multiplier": 0.5617977528089888
+  },
   "because_reasons": {
     "img": "because_reasons.jpg",
     "origin": "",
     "alt": "A Panel from the comic Three Word Phrase, by Ryan Pequin, depicting a man with a tophat, monacle and mustache and a speech bubble that says 'I want this because of reasons.' ",
     "height_multiplier": 1.282051282051282
+  },
+  "beyonce": {
+    "img": "beyonce.jpg",
+    "origin": "https://knowyourmeme.com/memes/tiffany-pollard-beyonce",
+    "alt": "BEYONCE?",
+    "height_multiplier": 0.6060606060606061
+  },
+  "blinking_white_guy": {
+    "img": "blinking_white_guy.jpg",
+    "origin": "https://knowyourmeme.com/memes/blinking-white-guy",
+    "alt": "Blinking White Guy meme.",
+    "height_multiplier": 0.5617977528089888
+  },
+  "bugs_bunny_no": {
+    "img": "bugs_bunny_no.png",
+    "origin": "https://knowyourmeme.com/memes/bugs-bunny-no",
+    "alt": "bugs bunny no",
+    "height_multiplier": 0.9345794392523364
+  },
+  "cheers_bro": {
+    "img": "cheers_bro.png",
+    "origin": "https://knowyourmeme.com/memes/cheers-ill-drink-to-that-bro",
+    "alt": "cheers i'll drink to that bro (adultswim.com]",
+    "height_multiplier": 0.5494505494505494
+  },
+  "citizen_kane": {
+    "img": "citizen_kane.gif",
+    "origin": "https://knowyourmeme.com/memes/citizen-kane-clapping",
+    "alt": "Citizen Kane Clapping",
+    "height_multiplier": 0.7518796992481203
+  },
+  "communist_bugs_bunny": {
+    "img": "communist_bugs_bunny.png",
+    "origin": "https://knowyourmeme.com/memes/communist-bugs-bunny",
+    "alt": "Communist Bugs Bunny meme | We Have Bugs Bunny Looney Toons",
+    "height_multiplier": 0.6172839506172839
+  },
+  "confused_lady": {
+    "img": "confused_lady.jpg",
+    "origin": "https://knowyourmeme.com/memes/math-lady-confused-lady",
+    "alt": "woman looking confused surrounded by mathematical equations",
+    "height_multiplier": 0.6535947712418301
+  },
+  "controversial_brave": {
+    "img": "controversial_brave.jpg",
+    "origin": "https://knowyourmeme.com/memes/why-would-you-say-something-so-controversial-yet-so-brave",
+    "alt": "Why Would You Say Something So Controversial Yet So Brave?",
+    "height_multiplier": 0.5617977528089888
   },
   "distracted_boyfriend": {
     "img": "distracted_boyfriend.jpg",
@@ -22,11 +76,29 @@
     "alt": "Distracted Boyfriend Template of the original stock photo that went viral and became a meme",
     "height_multiplier": 0.5617977528089888
   },
+  "do_you_see_this_shit": {
+    "img": "do_you_see_this_shit.jpg",
+    "origin": "https://knowyourmeme.com/memes/do-you-see-this-shit",
+    "alt": "\"Do You See This Shit, Applejack?\"",
+    "height_multiplier": 0.7462686567164178
+  },
+  "doge": {
+    "img": "doge.jpg",
+    "origin": "https://knowyourmeme.com/memes/doge",
+    "alt": "Shiba inu dog staring at the viewer / doge meme.",
+    "height_multiplier": 0.7407407407407407
+  },
   "doubt": {
     "img": "doubt.jpg",
     "origin": "https://knowyourmeme.com/memes/la-noire-doubt-press-x-to-doubt",
     "alt": "Distracted Boyfriend Template of the original stock photo that went viral and became a meme",
     "height_multiplier": 0.5617977528089888
+  },
+  "elmo_hell": {
+    "img": "elmo_hell.gif",
+    "origin": "https://knowyourmeme.com/memes/elmo-rise",
+    "alt": "Elmo raising his arms amidst flames elmo meme.",
+    "height_multiplier": 0.6802721088435374
   },
   "evil_kermit": {
     "img": "evil_kermit.jpg",
@@ -39,10 +111,32 @@
     "alt": "Sometimes... Things That Are Expensive... Are Worse",
     "height_multiplier": 0.5617977528089888
   },
+  "free_real_estate": {
+    "img": "free_real_estate.jpg",
+    "origin": "https://knowyourmeme.com/memes/its-free-real-estate",
+    "height_multiplier": 0.7462686567164178
+  },
+  "gnome_barf": {
+    "img": "gnome_barf.gif",
+    "origin": "https://knowyourmeme.com/memes/subcultures/gravity-falls",
+    "alt": "a gif of a gnome from the cartoon Gravity Falls barfing up a rainbow continuously",
+    "height_multiplier": 0.5555555555555556
+  },
   "good_for_her": {
     "img": "good_for_her.png",
     "origin": "",
     "height_multiplier": 0.8
+  },
+  "guess_ill_die": {
+    "img": "guess_ill_die.jpg",
+    "origin": "https://knowyourmeme.com/memes/guess-ill-die",
+    "height_multiplier": 0.9433962264150942
+  },
+  "homer_bushes": {
+    "img": "homer_bushes.gif",
+    "origin": "https://knowyourmeme.com/memes/homer-simpson-backs-into-bushes",
+    "alt": "Gif of Homer Simpson backing into the bushes and disappearing from view.",
+    "height_multiplier": 0.7518796992481203
   },
   "i_cant_read": {
     "img": "i_cant_read.png",
@@ -57,7 +151,11 @@
   "is_this_a_pigeon": {
     "img": "is_this_a_pigeon.jpg",
     "origin": "https://knowyourmeme.com/memes/is-this-a-pigeon",
-    "height_multiplier": 0.5263157894736842
+    "height_multiplier": 0.5235602094240838
+  },
+  "judge_judy_laptop": {
+    "img": "judge_judy_laptop.gif",
+    "height_multiplier": 0.8130081300813008
   },
   "kermit_tea": {
     "img": "kermit_tea.png",
@@ -76,6 +174,17 @@
     "alt": "LET ME IN LET ME INNNNNN!!! (adult swim)",
     "height_multiplier": 1
   },
+  "live_slug_reaction": {
+    "img": "live_slug_reaction.jpg",
+    "origin": "https://knowyourmeme.com/memes/klaud-live-slug-reaction",
+    "alt": "LIVE SLUG REACTION",
+    "height_multiplier": 0.7407407407407407
+  },
+  "loss": {
+    "img": "loss.jpg",
+    "origin": "https://knowyourmeme.com/memes/loss",
+    "height_multiplier": 1.2658227848101264
+  },
   "marge_potato": {
     "img": "marge_potato.png",
     "origin": "https://knowyourmeme.com/memes/marge-simpsons-neat-potato",
@@ -87,17 +196,45 @@
     "origin": "https://knowyourmeme.com/memes/one-does-not-simply-walk-into-mordor",
     "height_multiplier": 0.5617977528089888
   },
+  "more_likely": {
+    "img": "more_likely.jpg",
+    "origin": "https://knowyourmeme.com/memes/its-more-likely-than-you-think",
+    "alt": "Centipeds? In my vagine? It's more likely than you think.",
+    "height_multiplier": 0.4166666666666667
+  },
+  "most_interesting_man": {
+    "img": "most_interesting_man.jpg",
+    "origin": "https://knowyourmeme.com/memes/the-most-interesting-man-in-the-world",
+    "alt": "The Most Interesting Man In The World meme",
+    "height_multiplier": 1.25
+  },
   "no_take": {
     "img": "no_take.png",
     "origin": "https://knowyourmeme.com/memes/no-take-only-throw",
     "alt": "A simple black and white comic of a dog by Tumblr user cupcakelogic. First panel it asks 'pls throw?', but when a hand appears to try to take the toy, it says 'no take! only throw'",
     "height_multiplier": 0.5
   },
+  "none_pizza_left_beef": {
+    "img": "none_pizza_left_beef.jpg",
+    "origin": "https://knowyourmeme.com/memes/none-pizza-with-left-beef-special-delivery-instructions",
+    "alt": "None Pizza With Left Beef / Special Delivery Instructions",
+    "height_multiplier": 0.8695652173913044
+  },
+  "nyan_cat": {
+    "img": "nyan_cat.gif",
+    "origin": "https://knowyourmeme.com/memes/nyan-cat",
+    "alt": "Pop Tart / Nyan Cat",
+    "height_multiplier": 1
+  },
   "old_spice": {
     "img": "old_spice.jpg",
     "origin": "https://knowyourmeme.com/memes/events/isaiah-mustafa-old-spice",
     "alt": "A shirtless black man riding a white horse and holding up a bottle of old spice",
     "height_multiplier": 0.5617977528089888
+  },
+  "omg_space": {
+    "img": "omg_space.gif",
+    "height_multiplier": 0.6535947712418301
   },
   "one_fear": {
     "img": "one_fear.jpg",
@@ -110,10 +247,9 @@
     "origin": "https://knowyourmeme.com/memes/spider-man-pointing-at-spider-man",
     "height_multiplier": 0.47619047619047616
   },
-  "free_real_estate": {
-    "img": "free_real_estate.jpg",
-    "origin": "https://knowyourmeme.com/memes/its-free-real-estate",
-    "height_multiplier": 0.7462686567164178
+  "rick_roll": {
+    "img": "rick_roll.gif",
+    "height_multiplier": 0.7518796992481203
   },
   "road_work_ahead": {
     "img": "road_work_ahead.jpg",
@@ -130,15 +266,43 @@
     "origin": "https://knowyourmeme.com/memes/sickos-haha-yes",
     "height_multiplier": 1.6666666666666667
   },
+  "side_eye_chloe": {
+    "img": "side_eye_chloe.png",
+    "origin": "https://knowyourmeme.com/memes/side-eyeing-chloe",
+    "alt": "Chloe toddler in car safety seat giving the viewer a side eye",
+    "height_multiplier": 0.8695652173913044
+  },
+  "smoking_affleck": {
+    "img": "smoking_affleck.jpg",
+    "origin": "https://knowyourmeme.com/memes/ben-affleck-smoking",
+    "alt": "Affleck Smoking on roof",
+    "height_multiplier": 1.3333333333333333
+  },
   "steel_feathers": {
     "img": "steel_feathers.png",
     "origin": "https://knowyourmeme.com/memes/steel-is-heavier-than-feathers",
     "height_multiplier": 0.9345794392523364
   },
+  "surprise_bitch": {
+    "img": "surprise_bitch.gif",
+    "origin": "https://knowyourmeme.com/memes/surprise-bitch",
+    "alt": "Surprise, bitch.",
+    "height_multiplier": 1.1494252873563218
+  },
+  "surprise_motherfucker": {
+    "img": "surprise_motherfucker.jpg",
+    "origin": "https://knowyourmeme.com/memes/james-doakes-surprise-motherfucker",
+    "alt": "James Doakes Surprise Motherfucker meme.",
+    "height_multiplier": 0.9174311926605504
+  },
   "thanks_satan": {
     "img": "thanks_satan.gif",
     "origin": "https://knowyourmeme.com/memes/thanks-satan",
     "height_multiplier": 0.42194092827004215
+  },
+  "the_what": {
+    "img": "the_what.jpg",
+    "height_multiplier": 0.7633587786259541
   },
   "then_perish": {
     "img": "then_perish.jpg",
@@ -150,182 +314,23 @@
     "origin": "https://knowyourmeme.com/memes/this-is-fine",
     "height_multiplier": 0.9803921568627451
   },
-  "woman_yelling_cat": {
-    "img": "woman_yelling_cat.jpg",
-    "origin": "https://knowyourmeme.com/memes/woman-yelling-at-a-cat",
-    "height_multiplier": 0.5617977528089888
-  },
-  "rick_roll": {
-    "img": "rick_roll.gif",
+  "thumbs_up_kid": {
+    "img": "thumbs_up_kid.gif",
     "height_multiplier": 0.7518796992481203
-  },
-  "more_likely": {
-    "img": "more_likely.jpg",
-    "origin": "https://knowyourmeme.com/memes/its-more-likely-than-you-think",
-    "alt": "Centipeds? In my vagine? It's more likely than you think.",
-    "height_multiplier": 0.4166666666666667
-  },
-  "loss": {
-    "img": "loss.jpg",
-    "origin": "https://knowyourmeme.com/memes/loss",
-    "height_multiplier": 1.2658227848101264
-  },
-  "guess_ill_die": {
-    "img": "guess_ill_die.jpg",
-    "origin": "https://knowyourmeme.com/memes/guess-ill-die",
-    "height_multiplier": 0.9433962264150942
-  },
-  "the_what": {
-    "img": "the_what.jpg",
-    "height_multiplier": 0.7633587786259541
   },
   "why_would": {
     "img": "why_would.jpg",
     "origin": "https://knowyourmeme.com/memes/who-killed-hannibal",
     "height_multiplier": 1.1235955056179776
   },
-  "confused_lady": {
-    "img": "confused_lady.jpg",
-    "origin": "https://knowyourmeme.com/memes/math-lady-confused-lady",
-    "alt": "woman looking confused surrounded by mathematical equations",
-    "height_multiplier": 0.6535947712418301
-  },
-  "elmo_hell": {
-    "img": "elmo_hell.gif",
-    "origin": "https://knowyourmeme.com/memes/elmo-rise",
-    "alt": "Elmo raising his arms amidst flames elmo meme.",
-    "height_multiplier": 0.6802721088435374
-  },
-  "awkward_monkey": {
-    "img": "awkward_monkey.jpg",
-    "origin": "https://knowyourmeme.com/memes/awkward-look-monkey-puppet",
-    "alt": "Awkward Look Monkey Puppet meme format.",
+  "woman_yelling_cat": {
+    "img": "woman_yelling_cat.jpg",
+    "origin": "https://knowyourmeme.com/memes/woman-yelling-at-a-cat",
     "height_multiplier": 0.5617977528089888
   },
-  "side_eye_chloe": {
-    "img": "side_eye_chloe.png",
-    "origin": "https://knowyourmeme.com/memes/side-eyeing-chloe",
-    "alt": "Chloe toddler in car safety seat giving the viewer a side eye",
-    "height_multiplier": 0.8695652173913044
-  },
-  "blinking_white_guy": {
-    "img": "blinking_white_guy.jpg",
-    "origin": "https://knowyourmeme.com/memes/blinking-white-guy",
-    "alt": "Blinking White Guy meme.",
-    "height_multiplier": 0.5617977528089888
-  },
-  "nyan_cat": {
-    "img": "nyan_cat.gif",
-    "origin": "https://knowyourmeme.com/memes/nyan-cat",
-    "alt": "Pop Tart / Nyan Cat",
-    "height_multiplier": 1
-  },
-  "omg_space": {
-    "img": "omg_space.gif",
-    "height_multiplier": 0.6535947712418301
-  },
-  "thumbs_up_kid": {
-    "img": "thumbs_up_kid.gif",
-    "height_multiplier": 0.7518796992481203
-  },
-  "doge": {
-    "img": "doge.jpg",
-    "origin": "https://knowyourmeme.com/memes/doge",
-    "alt": "Shiba inu dog staring at the viewer / doge meme.",
-    "height_multiplier": 0.7407407407407407
-  },
-  "homer_bushes": {
-    "img": "homer_bushes.gif",
-    "origin": "https://knowyourmeme.com/memes/homer-simpson-backs-into-bushes",
-    "alt": "Gif of Homer Simpson backing into the bushes and disappearing from view.",
-    "height_multiplier": 0.7518796992481203
-  },
-  "citizen_kane": {
-    "img": "citizen_kane.gif",
-    "origin": "https://knowyourmeme.com/memes/citizen-kane-clapping",
-    "alt": "Citizen Kane Clapping",
-    "height_multiplier": 0.7518796992481203
-  },
-  "judge_judy_laptop": {
-    "img": "judge_judy_laptop.gif",
-    "height_multiplier": 0.8130081300813008
-  },
-  "live_slug_reaction": {
-    "img": "live_slug_reaction.jpg",
-    "origin": "https://knowyourmeme.com/memes/klaud-live-slug-reaction",
-    "alt": "LIVE SLUG REACTION",
-    "height_multiplier": 0.7407407407407407
-  },
-  "none_pizza_left_beef": {
-    "img": "none_pizza_left_beef.jpg",
-    "origin": "https://knowyourmeme.com/memes/none-pizza-with-left-beef-special-delivery-instructions",
-    "alt": "None Pizza With Left Beef / Special Delivery Instructions",
-    "height_multiplier": 0.8695652173913044
-  },
-  "surprise_bitch": {
-    "img": "surprise_bitch.gif",
-    "origin": "https://knowyourmeme.com/memes/surprise-bitch",
-    "alt": "Surprise, bitch.",
-    "height_multiplier": 1.1494252873563218
-  },
-  "cheers_bro": {
-    "img": "cheers_bro.png",
-    "origin": "https://knowyourmeme.com/memes/cheers-ill-drink-to-that-bro",
-    "alt": "cheers i'll drink to that bro (adultswim.com]",
-    "height_multiplier": 0.5494505494505494
-  },
-  "beyonce": {
-    "img": "beyonce.jpg",
-    "origin": "https://knowyourmeme.com/memes/tiffany-pollard-beyonce",
-    "alt": "BEYONCE?",
-    "height_multiplier": 0.6060606060606061
-  },
-  "smoking_affleck": {
-    "img": "smoking_affleck.jpg",
-    "origin": "https://knowyourmeme.com/memes/ben-affleck-smoking",
-    "alt": "Affleck Smoking on roof",
-    "height_multiplier": 1.3333333333333333
-  },
-  "bugs_bunny_no": {
-    "img": "bugs_bunny_no.png",
-    "origin": "https://knowyourmeme.com/memes/bugs-bunny-no",
-    "alt": "bugs bunny no",
-    "height_multiplier": 0.9345794392523364
-  },
-  "surprise_motherfucker": {
-    "img": "surprise_motherfucker.jpg",
-    "origin": "https://knowyourmeme.com/memes/james-doakes-surprise-motherfucker",
-    "alt": "James Doakes Surprise Motherfucker meme.",
-    "height_multiplier": 0.9174311926605504
-  },
-  "communist_bugs_bunny": {
-    "img": "communist_bugs_bunny.png",
-    "origin": "https://knowyourmeme.com/memes/communist-bugs-bunny",
-    "alt": "Communist Bugs Bunny meme | We Have Bugs Bunny Looney Toons",
-    "height_multiplier": 0.6172839506172839
-  },
-  "do_you_see_this_shit": {
-    "img": "do_you_see_this_shit.jpg",
-    "origin": "https://knowyourmeme.com/memes/do-you-see-this-shit",
-    "alt": "\"Do You See This Shit, Applejack?\"",
-    "height_multiplier": 0.7462686567164178
-  },
-  "controversial_brave": {
-    "img": "controversial_brave.jpg",
-    "origin": "https://knowyourmeme.com/memes/why-would-you-say-something-so-controversial-yet-so-brave",
-    "alt": "Why Would You Say Something So Controversial Yet So Brave?",
-    "height_multiplier": 0.5617977528089888
-  },
-  "most_interesting_man": {
-    "img": "most_interesting_man.jpg",
-    "origin": "https://knowyourmeme.com/memes/the-most-interesting-man-in-the-world",
-    "alt": "The Most Interesting Man In The World meme",
-    "height_multiplier": 1.25
-  },
-  "gnome_barf": {
-    "img": "gnome_barf.gif",
-    "origin": "https://knowyourmeme.com/memes/subcultures/gravity-falls",
-    "alt": "a gif of a gnome from the cartoon Gravity Falls barfing up a rainbow continuously",
-    "height_multiplier": 0.5555555555555556
+  "you_know_i_had_to_do_it_to_em": {
+    "img": "you_know_i_had_to_do_it_to_em.jpg",
+    "origin": "https://knowyourmeme.com/memes/you-know-i-had-to-do-it-to-em",
+    "height_multiplier": 0.9433962264150942
   }
 }

@@ -2,7 +2,7 @@ import $ from "jquery";
 import { memeData } from "../assets/memeCollection";
 
 function ImageAnalyzer() {
-  const imgKeys = ["gnome_barf"];
+  const imgKeys = [];
   const allKeys = Object.keys(memeData);
   const keys = imgKeys.length > 0 ? imgKeys : allKeys;
   let workingData = { ...memeData };
@@ -27,7 +27,11 @@ function ImageAnalyzer() {
       h = image.height;
       workingData[itemKey]["height_multiplier"] = 1 / (w / h).toFixed(2);
     });
-    $("#new_json").val(JSON.stringify(workingData));
+    let newData = {};
+    keys.sort().forEach((itemKey) => {
+      newData[itemKey] = workingData[itemKey];
+    });
+    $("#new_json").val(JSON.stringify(newData));
   }
 
   return (

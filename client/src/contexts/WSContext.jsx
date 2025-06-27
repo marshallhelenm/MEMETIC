@@ -9,10 +9,7 @@ const WSContext = createContext(false, null, () => {});
 function WSProvider({ children }) {
   const socketURL = "ws://localhost:6969";
   const [isReady, setIsReady] = useState(false);
-  const uuidRef = useRef(null);
-  const setUuidRef = useCallback((newUuid) => {
-    uuidRef.current = newUuid;
-  }, []);
+  const [uuid, setUuid] = useState();
 
   const ws = useRef(null);
 
@@ -23,16 +20,19 @@ function WSProvider({ children }) {
       shouldReconnect: () => true,
     }
   );
-  // useTraceUpdate({
-  //   component: "WSProvider",
-  //   sendJsonMessage,
-  //   lastJsonMessage,
-  //   readyState,
-  //   isReady,
-  //   setIsReady,
-  //   uuidRef,
-  //   setUuidRef,
-  // });
+  const { uuidDidUpdate } = useTraceUpdate(
+    {
+      component: "WSProvider",
+      // sendJsonMessage,
+      // lastJsonMessage,
+      // readyState,
+      // isReady,
+      // setIsReady,
+      uuid,
+      // setUuid,
+    },
+    false
+  );
 
   // const connectionStatus = {
   //   [ReadyState.CONNECTING]: "Connecting",
@@ -44,43 +44,33 @@ function WSProvider({ children }) {
 
   useEffect(() => {
     const socket = new WebSocket("wss://echo.websocket.events/");
-    if (lastJsonMessage?.type == "uuid") {
-      setUuidRef[lastJsonMessage.uuid];
-    }
 
     socket.onopen = () => {
       setIsReady(true);
     };
     socket.onclose = () => setIsReady(false);
-    socket.onmessage = () => {
-      devLog("socket message received: ", lastJsonMessage);
-    };
+    // socket.onmessage = () => {
+    //   devLog("socket message received: ", lastJsonMessage);
+    // };
 
     ws.current = socket;
 
     return () => {
       socket.close();
     };
-  }, [lastJsonMessage, setUuidRef]);
+  }, [lastJsonMessage, setUuid]);
 
   const value = useMemo(() => {
     return {
       serverReady: isReady,
-      setUuidRef,
-      uuidRef,
+      setUuid,
+      uuid,
       socketURL,
       sendJsonMessage,
       readyState,
       lastJsonMessage,
     };
-  }, [
-    isReady,
-    uuidRef,
-    sendJsonMessage,
-    readyState,
-    lastJsonMessage,
-    setUuidRef,
-  ]);
+  }, [isReady, uuid, sendJsonMessage, readyState, lastJsonMessage, setUuid]);
 
   return <WSContext.Provider value={value}>{children}</WSContext.Provider>;
 }

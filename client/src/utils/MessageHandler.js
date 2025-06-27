@@ -1,13 +1,16 @@
-import { memeSampler } from "../assets/memeCollection";
+// import { memeSampler } from "../assets/memeCollection";
 import { devLog } from "../utils/Helpers";
+import { handleLocalStorage } from "./LocalStorageHandler";
+
+// IMPORTANT: This function is to handle INCOMING messages from the WebSocket.
 
 const handleMessages = ({
   message,
   send,
   roomKey,
   setRoomObject,
-  uuidRef,
-  setUuidRef,
+  uuid,
+  setUuid,
   joinRoom,
   randomCardKey,
   createRoom,
@@ -28,10 +31,12 @@ const handleMessages = ({
 
     setRoomObject(JSON.parse(roomContents));
     let card;
-    if (roomContents.users)
-      card = roomContents.users[uuidRef.current]?.playerCard;
+    if (roomContents.users) card = roomContents.users[uuid]?.playerCard;
     if (!card) {
-      assignRandomPlayerCard(roomContents["allKeys"]);
+      card = handleLocalStorage({ type: "getPlayerCard", roomKey });
+      if (!card) {
+        assignRandomPlayerCard(roomContents["allKeys"]);
+      }
     } else {
       localStorage.setItem(`${roomKey}-player-card`, card);
     }
@@ -82,31 +87,31 @@ const handleMessages = ({
   if (!message) return;
   switch (message["type"]) {
     case "noGameAlert":
-      devLog("Message Handler: noGameAlert: ", message.info);
+      devLog(["Message Handler: noGameAlert: ", message.info]);
       createRoom(message.roomKey);
       break;
     case "replaceGame":
-      devLog("Message Handler: replaceGame", message.roomKey, message.room);
+      devLog(["Message Handler: replaceGame", message.roomKey, message.room]);
       if (!message.roomKey) return;
       processRoomContents(JSON.parse(message.room));
       break;
     case "requestRoomKey":
-      devLog("Message Handler: requestRoomKey");
+      devLog(["Message Handler: requestRoomKey"]);
       send({
         type: "joinRoom",
         roomKey: message.roomKey,
       });
       break;
     case "roomContents":
-      devLog("Received room contents:", message.room);
+      devLog(["Received room contents:", message.room]);
       processRoomContents(message.room);
       break;
     case "uuid":
-      devLog("Message Handler: uuid", message.uuid);
-      setUuidRef(message.uuid);
+      devLog(["Message Handler: uuid", message.uuid]);
+      setUuid(message.uuid);
       break;
     default:
-      devLog("Unhandled message type:", message["type"], message);
+      devLog(["Unhandled message type:", message["type"], message]);
   }
 };
 export { handleMessages };

@@ -4,6 +4,19 @@ import { devLog } from "../utils/Helpers";
 import $ from "jquery";
 
 function Upload() {
+  function guessifyJson(jsonObject) {
+    let data = {};
+    Object.keys(jsonObject).forEach((key) => {
+      let meme = jsonObject[key];
+      data[key] = {
+        img: `${meme.img}.${meme.ext}`,
+        origin: meme.origin || "",
+        alt: meme.alt || "",
+        height_multiplier: 1,
+      };
+    });
+  }
+
   var ExcelToJSON = function () {
     this.parseExcel = function (file) {
       var reader = new FileReader();
@@ -19,8 +32,9 @@ function Upload() {
             workbook.Sheets[sheetName]
           );
           var json_object = JSON.stringify(XL_row_object);
-          devLog(JSON.parse(json_object));
-          $("#xlx_json").val(json_object);
+          devLog(json_object);
+          $("#xlx_json").val(guessifyJson(json_object));
+          return;
         });
       };
 

@@ -23,8 +23,9 @@ const PlayerCardModal = ({ playerCard, newPlayerCard }) => {
 
   return (
     <>
-      <div onClick={handleOpen}>
+      <div onClick={handleOpen} className="pointer">
         <i className={`fa-solid fa-star fa-lg player-card-star`}></i>
+        View Your Meme
       </div>
       <StyledDialog open={open} onClose={handleClose} maxWidth="md">
         <IconButton
