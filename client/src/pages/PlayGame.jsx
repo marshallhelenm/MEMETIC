@@ -25,18 +25,26 @@ function PlayGame() {
   const [localRoomObject, setLocalRoomObject] = useState(roomObject);
   const [localUuid, setLocalUuid] = useState(uuid);
 
-  let { uuidChanged, roomObjectChanged } = useTraceUpdate({
-    uuid,
-    roomObject,
-    roomReady,
-  });
+  let { uuidChanged, roomObjectChanged } = useTraceUpdate(
+    {
+      component: "PlayGame",
+      uuid,
+      roomObject,
+      roomReady,
+    },
+    false
+  );
 
   const currentRoomKey = searchParams.get("roomKey");
   let playerCard = findPlayerCard();
   let username = searchParams.get("username");
 
   function findPlayerCard() {
-    if (Object.keys(roomObject).length > 0 && roomObject.users[uuid]) {
+    if (
+      Object.keys(roomObject).length > 0 &&
+      roomObject.users &&
+      roomObject.users[uuid]
+    ) {
       return (
         roomObject.users[uuid]["playerCard"] ||
         handleLocalStorage({
@@ -100,6 +108,7 @@ function PlayGame() {
           setLoadingCards={setLoadingCards}
           username={username}
           playerCard={playerCard}
+          roomKey={currentRoomKey}
         />
         <Board
           loading={loadingCards}

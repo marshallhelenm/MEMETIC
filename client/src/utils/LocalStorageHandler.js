@@ -29,7 +29,7 @@ const handleLocalStorage = (message) => {
     }
   };
 
-  const setPlayerCard = (card, roomKey = searchParams.get("roomKey")) => {
+  const setPlayerCard = (roomKey = searchParams.get("roomKey"), card) => {
     localStorage.setItem(`${roomKey}-player-card`, card);
   };
 

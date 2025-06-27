@@ -29,7 +29,7 @@ function PlayGameHeader({ roomKey, setLoadingCards, username, playerCard }) {
         ></i>
       </h4>
       <h4 className="header-box">
-        <PlayerCardModal playerCard={playerCard} />
+        <PlayerCardModal playerCard={playerCard} roomKey={roomKey} />
       </h4>
       <h4 className="header-box">
         <i

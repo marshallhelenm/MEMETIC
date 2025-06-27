@@ -110,11 +110,15 @@ function GuessyProvider({ children }) {
 
   const replaceGame = useMemo(() => {
     return () => {
-      devLog(["Clearing game, new memes: ", newMemes]);
       let newMemes = memeSampler();
       // generate a new set of memes and create a new room object
-      let newRoomObject = { memeSet: newMemes, users: {}, est: new Date() };
+      let newRoomObject = {
+        memeSet: newMemes,
+        users: { ...roomObject.users },
+        est: new Date(),
+      };
 
+      // TODO: add some error handling here for if roomObject['users'] is undefined. shouldn't happen, but better safe than sorry.
       // assign each player a new playerCard
       Object.keys(roomObject["users"]).forEach((key) => {
         let newCard = randomCardKey(newMemes.allKeys);
@@ -124,7 +128,6 @@ function GuessyProvider({ children }) {
           localStorage.setItem(`${roomKey}-player-card`, newCard);
         }
       });
-
       updateRoomObject(newRoomObject); // update the room object with new memes and player cards
 
       // clean up local storage
@@ -138,7 +141,7 @@ function GuessyProvider({ children }) {
       sendJsonMessage({
         type: "replaceGame",
         roomKey: roomKey,
-        newRoomObject: newRoomObject,
+        newRoomObject: JSON.stringify(newRoomObject),
       });
     };
   }, [
@@ -211,8 +214,10 @@ function GuessyProvider({ children }) {
       createRoom,
       roomObject,
       replaceGame,
+      randomCardKey,
     };
   }, [
+    randomCardKey,
     assignUsername,
     staticGifs,
     setStaticGifs,

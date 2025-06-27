@@ -27,9 +27,14 @@ const handleMessages = ({
   }
 
   const processRoomContents = (roomContents) => {
-    devLog("processRoomContents", roomContents);
-
-    setRoomObject(JSON.parse(roomContents));
+    devLog(["processRoomContents", typeof roomContents, roomContents]);
+    if (!roomContents) {
+      devLog(["no roomContents to process!", roomContents]);
+      return;
+    }
+    setRoomObject((prev) => {
+      return { ...prev, ...JSON.parse(roomContents) };
+    });
     let card;
     if (roomContents.users) card = roomContents.users[uuid]?.playerCard;
     if (!card) {
@@ -91,9 +96,9 @@ const handleMessages = ({
       createRoom(message.roomKey);
       break;
     case "replaceGame":
-      devLog(["Message Handler: replaceGame", message.roomKey, message.room]);
+      devLog(["Message Handler: replaceGame", message]);
       if (!message.roomKey) return;
-      processRoomContents(JSON.parse(message.room));
+      processRoomContents(JSON.parse(message.newRoomObject));
       break;
     case "requestRoomKey":
       devLog(["Message Handler: requestRoomKey"]);
@@ -105,6 +110,15 @@ const handleMessages = ({
     case "roomContents":
       devLog(["Received room contents:", message.room]);
       processRoomContents(message.room);
+      break;
+    case "usersUpdate":
+      devLog(["usernameUpdate: ", message.users]);
+      setRoomObject((prevRoomObject) => {
+        return {
+          ...prevRoomObject,
+          users: { ...prevRoomObject.users, ...message.users },
+        };
+      });
       break;
     case "uuid":
       devLog(["Message Handler: uuid", message.uuid]);
