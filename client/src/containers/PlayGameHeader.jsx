@@ -4,8 +4,15 @@ import GifPauseButton from "../components/GifPauseButton";
 import ClearGame from "../components/ClearGame";
 import PlayerCardModal from "./PlayerCardModal";
 import { useSearchParams } from "react-router-dom";
+import Users from "../components/Users";
 
-function PlayGameHeader({ roomKey, setLoadingCards, username, playerCard }) {
+function PlayGameHeader({
+  roomKey,
+  setLoadingCards,
+  username,
+  playerCard,
+  setPlayerCard,
+}) {
   const [searchParams] = useSearchParams();
   return (
     <div className="play-header">
@@ -29,15 +36,13 @@ function PlayGameHeader({ roomKey, setLoadingCards, username, playerCard }) {
         ></i>
       </h4>
       <h4 className="header-box">
-        <PlayerCardModal playerCard={playerCard} roomKey={roomKey} />
+        <PlayerCardModal
+          playerCard={playerCard}
+          roomKey={roomKey}
+          setPlayerCard={setPlayerCard}
+        />
       </h4>
-      <h4 className="header-box">
-        <i
-          className={`fa-solid fa-xl fa-user`}
-          style={{ marginRight: "2%" }}
-        ></i>
-        {username}
-      </h4>
+      <Users username={username} />
       <div className="row header-buttons">
         <GifPauseButton />
         <QuestionsModal />

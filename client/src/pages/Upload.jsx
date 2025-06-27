@@ -2,19 +2,31 @@ import "../App.css";
 import * as XLSX from "xlsx";
 import { devLog } from "../utils/Helpers";
 import $ from "jquery";
+import memes from "../assets/memes.json";
 
 function Upload() {
-  function guessifyJson(jsonObject) {
+  let processedData = null;
+  function guessifyData(jsonObject) {
     let data = {};
     Object.keys(jsonObject).forEach((key) => {
       let meme = jsonObject[key];
-      data[key] = {
-        img: `${meme.img}.${meme.ext}`,
+      console.log(meme.title);
+
+      data[meme.tag] = {
+        title: meme.title || "",
+        img: `${meme.tag}.${meme.ext}`,
         origin: meme.origin || "",
         alt: meme.alt || "",
         height_multiplier: 1,
       };
     });
+    let allData = { ...memes, ...data };
+    let sortedData = {};
+    Object.keys(allData)
+      .sort()
+      .forEach((key) => (sortedData[key] = allData[key]));
+    processedData = JSON.stringify(sortedData);
+    return processedData;
   }
 
   var ExcelToJSON = function () {
@@ -31,9 +43,8 @@ function Upload() {
           var XL_row_object = XLSX.utils.sheet_to_row_object_array(
             workbook.Sheets[sheetName]
           );
-          var json_object = JSON.stringify(XL_row_object);
-          devLog(json_object);
-          $("#xlx_json").val(guessifyJson(json_object));
+          devLog(XL_row_object);
+          $("#xlx_json").val(guessifyData(XL_row_object));
           return;
         });
       };
@@ -62,6 +73,13 @@ function Upload() {
           onChange={handleFileSelect}
         />
       </form>
+      <i
+        className={`fa-solid fa-xl fa-copy`}
+        style={{ marginLeft: "2%", cursor: "pointer" }}
+        onClick={() => {
+          navigator.clipboard.writeText(processedData);
+        }}
+      ></i>
       <textarea
         className="form-control"
         rows="35"

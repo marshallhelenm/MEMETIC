@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 import { useGuessy } from "../contexts/useGuessy";
 import { useWS } from "../contexts/useWS";
@@ -14,6 +14,7 @@ import { useTraceUpdate } from "../hooks/useTraceUpdate";
 
 //the page you see while actually playing the game
 function PlayGame() {
+  let navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [loadingCards, setLoadingCards] = useState(true);
   const [connectionError, setConnectionError] = useState(false);
@@ -24,6 +25,8 @@ function PlayGame() {
   const { uuid, sendJsonMessage } = useWS();
   const [localRoomObject, setLocalRoomObject] = useState(roomObject);
   const [localUuid, setLocalUuid] = useState(uuid);
+  const currentRoomKey = searchParams.get("roomKey");
+  const [playerCard, setPlayerCard] = useState(findPlayerCard());
 
   let { uuidChanged, roomObjectChanged } = useTraceUpdate(
     {
@@ -35,8 +38,6 @@ function PlayGame() {
     false
   );
 
-  const currentRoomKey = searchParams.get("roomKey");
-  let playerCard = findPlayerCard();
   let username = searchParams.get("username");
 
   function findPlayerCard() {
@@ -74,6 +75,7 @@ function PlayGame() {
   //   roomObject,
   // ]);
   useEffect(() => {
+    if (!username) navigate(`/name_thyself?roomKey=${currentRoomKey}`);
     if (
       (typeof uuid === "string" && !roomObject["memeSet"]) ||
       uuidChanged ||
@@ -97,6 +99,7 @@ function PlayGame() {
     uuid,
     uuidChanged,
     roomObjectChanged,
+    navigate,
   ]);
 
   if (currentRoomKey.length != 8) {
@@ -109,6 +112,7 @@ function PlayGame() {
           username={username}
           playerCard={playerCard}
           roomKey={currentRoomKey}
+          setPlayerCard={setPlayerCard}
         />
         <Board
           loading={loadingCards}

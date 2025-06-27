@@ -13,13 +13,14 @@ import { handleLocalStorage } from "../utils/LocalStorageHandler";
 import { useWS } from "../contexts/useWS";
 import { devLog } from "../utils/Helpers";
 
-const PlayerCardModal = ({ playerCard, roomKey }) => {
+const PlayerCardModal = ({ playerCard, roomKey, setPlayerCard }) => {
   const [modalCard, setModalCard] = useState(
     playerCard || handleLocalStorage({ type: "getPlayerCard", roomKey })
   );
   let item = memeData[modalCard];
   const [open, setOpen] = useState(false);
-  const { randomCardKey, roomObject } = useGuessy();
+  const { randomCardKey, roomObject, updateRoomObjectLocalPlayerCard } =
+    useGuessy();
   const { sendJsonMessage } = useWS();
 
   const handleOpen = (e) => {
@@ -41,6 +42,8 @@ const PlayerCardModal = ({ playerCard, roomKey }) => {
     });
     handleLocalStorage({ type: "setPlayerCard", card: newCard, roomKey });
     setModalCard(newCard);
+    setPlayerCard(newCard);
+    updateRoomObjectLocalPlayerCard(newCard);
   };
 
   function content() {

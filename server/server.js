@@ -11,6 +11,8 @@ const port = 6969;
 const connections = {};
 const rooms = {};
 
+// TODO: assign player1 and player2 tags?
+
 const handleMessage = (bytes, uuid) => {
   let message;
   try {
@@ -111,7 +113,7 @@ const handleMessage = (bytes, uuid) => {
       console.log("setUsername", message.username);
       if (!rooms[message.roomKey]) return;
       rooms[message.roomKey]["users"][uuid]["username"] = message.username;
-      broadcastUsers(roomKey, uuid);
+      broadcastUsers(message.roomKey, uuid);
       break;
     default:
       break;
@@ -220,7 +222,7 @@ const joinRoom = ({
     if (username) {
       rooms[roomKey]["users"][uuid]["username"] = username;
     }
-    if (playerCard) {
+    if (playerCard && playerCard != "undefined") {
       rooms[roomKey]["users"][uuid]["playerCard"] = playerCard;
     }
     if (returnRoomContents) {

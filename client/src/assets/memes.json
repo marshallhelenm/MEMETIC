@@ -4,6 +4,27 @@
     "origin": "https://knowyourmeme.com/memes/whatcha-got-there-a-smoothie",
     "height_multiplier": 2.1739130434782608
   },
+  "all_the_things": {
+    "title": "All The Things",
+    "img": "all_the_things.jpg",
+    "origin": "https://knowyourmeme.com/memes/all-the-things",
+    "alt": "ALL the things",
+    "height_multiplier": 0.5617977528089888
+  },
+  "ancient_aliens": {
+    "title": "Ancient Aliens",
+    "img": "ancient_aliens.jpg",
+    "origin": "https://knowyourmeme.com/memes/ancient-aliens",
+    "alt": "ALIENS. H",
+    "height_multiplier": 0.7518796992481203
+  },
+  "annoyed_picard": {
+    "title": "Annoyed Picard",
+    "img": "annoyed_picard.jpg",
+    "origin": "https://knowyourmeme.com/memes/annoyed-picard",
+    "alt": "Annoyed Picard",
+    "height_multiplier": 0.7407407407407407
+  },
   "arthur_fist": {
     "img": "arthur_fist.jpg",
     "origin": "https://knowyourmeme.com/memes/arthurs-fist",
@@ -20,13 +41,20 @@
     "img": "because_reasons.jpg",
     "origin": "",
     "alt": "A Panel from the comic Three Word Phrase, by Ryan Pequin, depicting a man with a tophat, monacle and mustache and a speech bubble that says 'I want this because of reasons.' ",
-    "height_multiplier": 1.282051282051282
+    "height_multiplier": 1.2987012987012987
+  },
+  "bernie_mittens": {
+    "title": "Bernie Sanders Wearing Mittens Sitting in a Chair ",
+    "img": "bernie_mittens.png",
+    "origin": "https://knowyourmeme.com/memes/bernie-sanders-wearing-mittens-sitting-in-a-chair",
+    "alt": "Bernie Sanders Wearing Mittens Sitting in a Chair ",
+    "height_multiplier": 1.923076923076923
   },
   "beyonce": {
     "img": "beyonce.jpg",
     "origin": "https://knowyourmeme.com/memes/tiffany-pollard-beyonce",
     "alt": "BEYONCE?",
-    "height_multiplier": 0.6060606060606061
+    "height_multiplier": 0.6097560975609756
   },
   "blinking_white_guy": {
     "img": "blinking_white_guy.jpg",
@@ -70,6 +98,20 @@
     "alt": "Why Would You Say Something So Controversial Yet So Brave?",
     "height_multiplier": 0.5617977528089888
   },
+  "dead_dove": {
+    "title": "Dead Dove: Do Not Eat",
+    "img": "dead_dove.png",
+    "origin": "https://knowyourmeme.com/memes/i-dont-know-what-i-expected",
+    "alt": "Dead Dove: Do Not Eat - I don't know what I expected",
+    "height_multiplier": 1.4084507042253522
+  },
+  "disaster_girl": {
+    "title": "Disaster Girl",
+    "img": "disaster_girl.jpg",
+    "origin": "https://knowyourmeme.com/memes/disaster-girl",
+    "alt": "Evil girl looking back at the viewer in front of a burning house",
+    "height_multiplier": 0.5617977528089888
+  },
   "distracted_boyfriend": {
     "img": "distracted_boyfriend.jpg",
     "origin": "https://knowyourmeme.com/memes/distracted-boyfriend",
@@ -98,7 +140,7 @@
     "img": "elmo_hell.gif",
     "origin": "https://knowyourmeme.com/memes/elmo-rise",
     "alt": "Elmo raising his arms amidst flames elmo meme.",
-    "height_multiplier": 0.6802721088435374
+    "height_multiplier": 0.684931506849315
   },
   "evil_kermit": {
     "img": "evil_kermit.jpg",
@@ -109,6 +151,20 @@
     "img": "expensive_worse.jpg",
     "origin": "https://knowyourmeme.com/memes/sometimes-things-that-are-expensive-are-worse",
     "alt": "Sometimes... Things That Are Expensive... Are Worse",
+    "height_multiplier": 0.5617977528089888
+  },
+  "explaining": {
+    "title": "Me Explaining to My Mom",
+    "img": "explaining.jpg",
+    "origin": "https://knowyourmeme.com/memes/me-explaining-to-my-mom",
+    "alt": "Me Explaining to My Mom",
+    "height_multiplier": 1
+  },
+  "finally_good_food": {
+    "title": "Finally, Some Good Fucking Food",
+    "img": "finally_good_food.png",
+    "origin": "https://knowyourmeme.com/memes/finally-some-good-fucking-food",
+    "alt": "Finally, Some Good Fucking Food",
     "height_multiplier": 0.5617977528089888
   },
   "free_real_estate": {
@@ -132,26 +188,54 @@
     "origin": "https://knowyourmeme.com/memes/guess-ill-die",
     "height_multiplier": 0.9433962264150942
   },
+  "hide_the_pain_harold": {
+    "title": "Hide The Pain Harold",
+    "img": "hide_the_pain_harold.jpg",
+    "origin": "https://knowyourmeme.com/memes/hide-the-pain-harold",
+    "alt": "Hide The Pain Harold meme and stock photo.",
+    "height_multiplier": 0.5617977528089888
+  },
   "homer_bushes": {
     "img": "homer_bushes.gif",
     "origin": "https://knowyourmeme.com/memes/homer-simpson-backs-into-bushes",
     "alt": "Gif of Homer Simpson backing into the bushes and disappearing from view.",
     "height_multiplier": 0.7518796992481203
   },
+  "i_can_has_cheezburger": {
+    "title": "I Can Has Cheezburger?",
+    "img": "i_can_has_cheezburger.jpg",
+    "origin": "https://knowyourmeme.com/memes/happy-cat",
+    "alt": "I CAN HAS CHEEZBURGER?",
+    "height_multiplier": 1.4492753623188408
+  },
   "i_cant_read": {
     "img": "i_cant_read.png",
     "origin": "https://knowyourmeme.com/memes/that-sign-cant-stop-me-because-i-cant-read",
     "height_multiplier": 0.7518796992481203
+  },
+  "i_dont_care_for_x": {
+    "title": "I Don't Care for X",
+    "img": "i_dont_care_for_x.png",
+    "origin": "https://knowyourmeme.com/memes/i-dont-care-for-x",
+    "alt": "I LOVE ALL MY [ ] EQUALLY. earlier that day.. I DONT CARE FOR [ ]",
+    "height_multiplier": 1.1235955056179776
   },
   "i_guess_guy": {
     "img": "i_guess_guy.png",
     "origin": "https://knowyourmeme.com/memes/i-guess-guy",
     "height_multiplier": 1.0989010989010988
   },
+  "i_know_he_ate_a_cheese": {
+    "title": "I Know He Ate A Cheese",
+    "img": "i_know_he_ate_a_cheese.png",
+    "origin": "https://knowyourmeme.com/memes/i-know-he-ate-a-cheese",
+    "alt": "I Know He Ate A Cheese",
+    "height_multiplier": 0.970873786407767
+  },
   "is_this_a_pigeon": {
     "img": "is_this_a_pigeon.jpg",
     "origin": "https://knowyourmeme.com/memes/is-this-a-pigeon",
-    "height_multiplier": 0.5235602094240838
+    "height_multiplier": 0.5263157894736842
   },
   "judge_judy_laptop": {
     "img": "judge_judy_laptop.gif",
@@ -168,6 +252,20 @@
     "alt": "A white cat making a smug expression as a cooking knife is pointed at it",
     "height_multiplier": 1.0309278350515465
   },
+  "laughing_husky": {
+    "title": "Laughing Husky",
+    "img": "laughing_husky.jpg",
+    "origin": "",
+    "alt": "",
+    "height_multiplier": 0.9259259259259258
+  },
+  "lesbians_doing_makeup": {
+    "title": "Lesbians Doing Makeup",
+    "img": "lesbians_doing_makeup.jpg",
+    "origin": "https://knowyourmeme.com/memes/lesbians-doing-makeup",
+    "alt": "Lesbians Doing Makeup meme template and format depicting two women, one applying eyeliner to the other in bed.",
+    "height_multiplier": 0.5747126436781609
+  },
   "let_me_in": {
     "img": "let_me_in.png",
     "origin": "https://knowyourmeme.com/memes/let-me-in",
@@ -179,6 +277,13 @@
     "origin": "https://knowyourmeme.com/memes/klaud-live-slug-reaction",
     "alt": "LIVE SLUG REACTION",
     "height_multiplier": 0.7407407407407407
+  },
+  "lolrus": {
+    "title": "Lolrus",
+    "img": "lolrus.jpg",
+    "origin": "https://knowyourmeme.com/memes/lolrus",
+    "alt": "I Has a Bucket Noooo they be stealin'my Bucket ",
+    "height_multiplier": 0.5319148936170213
   },
   "loss": {
     "img": "loss.jpg",
@@ -226,6 +331,13 @@
     "alt": "Pop Tart / Nyan Cat",
     "height_multiplier": 1
   },
+  "o_rly": {
+    "title": "O RLY?",
+    "img": "o_rly.jpg",
+    "origin": "https://knowyourmeme.com/memes/o-rly",
+    "alt": "O RLY?",
+    "height_multiplier": 0.5617977528089888
+  },
   "old_spice": {
     "img": "old_spice.jpg",
     "origin": "https://knowyourmeme.com/memes/events/isaiah-mustafa-old-spice",
@@ -236,6 +348,13 @@
     "img": "omg_space.gif",
     "height_multiplier": 0.6535947712418301
   },
+  "one_banana": {
+    "title": "It's One Banana, Michael. What Could It Cost, $10?",
+    "img": "one_banana.gif",
+    "origin": "https://knowyourmeme.com/memes/its-one-banana-michael-what-could-it-cost-10",
+    "alt": "It's One Banana, Michael. What Could It Cost, $10?",
+    "height_multiplier": 0.4608294930875576
+  },
   "one_fear": {
     "img": "one_fear.jpg",
     "origin": "https://knowyourmeme.com/memes/events/teen-comix-no-fear-one-fear",
@@ -245,11 +364,32 @@
   "pointing_spider_man": {
     "img": "pointing_spider_man.jpg",
     "origin": "https://knowyourmeme.com/memes/spider-man-pointing-at-spider-man",
-    "height_multiplier": 0.47619047619047616
+    "height_multiplier": 0.47846889952153115
+  },
+  "polish_jerry": {
+    "title": "Polish Jerry / Khe Berga?",
+    "img": "polish_jerry.jpg",
+    "origin": "https://knowyourmeme.com/memes/polish-jerry-khe-berga",
+    "alt": "Polish Jerry / Khe Berga?",
+    "height_multiplier": 0.5617977528089888
   },
   "rick_roll": {
     "img": "rick_roll.gif",
     "height_multiplier": 0.7518796992481203
+  },
+  "ridiculously_photogenic_guy": {
+    "title": "Ridiculously Photogenic Guy",
+    "img": "ridiculously_photogenic_guy.jpg",
+    "origin": "https://knowyourmeme.com/memes/ridiculously-photogenic-guy",
+    "alt": "Ridiculously Photogenic Guy",
+    "height_multiplier": 1.25
+  },
+  "right_in_front_of_my_salad": {
+    "title": "Right In Front Of My Salad? ",
+    "img": "right_in_front_of_my_salad.jpg",
+    "origin": "https://knowyourmeme.com/memes/right-in-front-of-my-salad",
+    "alt": "Really right in front of my salad meme.",
+    "height_multiplier": 1
   },
   "road_work_ahead": {
     "img": "road_work_ahead.jpg",
@@ -283,6 +423,20 @@
     "origin": "https://knowyourmeme.com/memes/steel-is-heavier-than-feathers",
     "height_multiplier": 0.9345794392523364
   },
+  "stonks": {
+    "title": "Stonks",
+    "img": "stonks.png",
+    "origin": "https://knowyourmeme.com/memes/me-explaining-to-my-mom",
+    "alt": "stonks",
+    "height_multiplier": 0.7518796992481203
+  },
+  "success_kid": {
+    "title": "Success Kid",
+    "img": "success_kid.jpg",
+    "origin": "https://knowyourmeme.com/memes/success-kid-i-hate-sandcastles",
+    "alt": "Success Kid meme format depicting a baby with his fist clenched sitting on a beach.",
+    "height_multiplier": 1
+  },
   "surprise_bitch": {
     "img": "surprise_bitch.gif",
     "origin": "https://knowyourmeme.com/memes/surprise-bitch",
@@ -295,10 +449,24 @@
     "alt": "James Doakes Surprise Motherfucker meme.",
     "height_multiplier": 0.9174311926605504
   },
+  "surprise_tool": {
+    "title": "It's a Surprise Tool That Will Help Us Later",
+    "img": "surprise_tool.png",
+    "origin": "https://knowyourmeme.com/memes/its-a-surprise-tool-that-will-help-us-later",
+    "alt": ". Caption says: It's a surprise tool that will help us later",
+    "height_multiplier": 0.5617977528089888
+  },
   "thanks_satan": {
     "img": "thanks_satan.gif",
     "origin": "https://knowyourmeme.com/memes/thanks-satan",
     "height_multiplier": 0.42194092827004215
+  },
+  "the_economy_is_in_shambles": {
+    "title": "The Economy is in Shambles",
+    "img": "the_economy_is_in_shambles.jpg",
+    "origin": "https://knowyourmeme.com/photos/1845983-its-always-sunny-in-philadelphia",
+    "alt": "How do three men in their 30s not have $800 between them? LIU They're-- The economy is in shambles.",
+    "height_multiplier": 1.5625
   },
   "the_what": {
     "img": "the_what.jpg",

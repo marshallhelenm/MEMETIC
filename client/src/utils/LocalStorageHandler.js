@@ -14,14 +14,16 @@ const handleLocalStorage = (message) => {
   };
 
   const getUsername = (roomKey = searchParams.get("roomKey")) => {
-    const localUsername = localStorage.getItem(`${roomKey}-username`);
+    const localUsername = localStorage.getItem(`guessy-${roomKey}-username`);
     if (!!localUsername && localUsername != "undefined") {
       return localUsername;
     }
   };
 
   const getPlayerCard = (roomKey = searchParams.get("roomKey")) => {
-    const localPlayerCard = localStorage.getItem(`${roomKey}-player-card`);
+    const localPlayerCard = localStorage.getItem(
+      `guessy-${roomKey}-player-card`
+    );
     if (!localPlayerCard || localPlayerCard == "undefined") {
       return null;
     } else {
@@ -30,11 +32,11 @@ const handleLocalStorage = (message) => {
   };
 
   const setPlayerCard = (roomKey = searchParams.get("roomKey"), card) => {
-    localStorage.setItem(`${roomKey}-player-card`, card);
+    localStorage.setItem(`guessy-${roomKey}-player-card`, card);
   };
 
   const clearPlayerCard = (roomKey = searchParams.get("roomKey")) => {
-    localStorage.removeItem(`${roomKey}-player-card`);
+    localStorage.removeItem(`guessy-${roomKey}-player-card`);
   };
 
   switch (message.type) {

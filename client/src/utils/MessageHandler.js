@@ -27,7 +27,7 @@ const handleMessages = ({
   }
 
   const processRoomContents = (roomContents) => {
-    devLog(["processRoomContents", typeof roomContents, roomContents]);
+    // devLog(["processRoomContents", typeof roomContents, roomContents]);
     if (!roomContents) {
       devLog(["no roomContents to process!", roomContents]);
       return;
@@ -42,10 +42,10 @@ const handleMessages = ({
     if (!card) {
       card = handleLocalStorage({ type: "getPlayerCard", roomKey });
       if (!card) {
-        assignRandomPlayerCard(roomContents["allKeys"]);
+        assignRandomPlayerCard(roomContents.memeSet.allKeys);
       }
     } else {
-      localStorage.setItem(`${roomKey}-player-card`, card);
+      localStorage.setItem(`guessy-${roomKey}-player-card`, card);
     }
   };
 
@@ -73,17 +73,11 @@ const handleMessages = ({
     });
   };
 
-  const assignPlayerCard = (card) => {
-    sendPlayerCard(card);
-    localStorage.setItem(`${roomKey}-player-card`, card);
-  };
-
   const assignRandomPlayerCard = (keys) => {
-    devLog("assignRandomPlayerCard", keys);
-
     let newCard = randomCardKey(keys);
+    devLog(["assignRandomPlayerCard", newCard]);
     sendPlayerCard(newCard);
-    localStorage.setItem(`${roomKey}-player-card`, newCard);
+    localStorage.setItem(`guessy-${roomKey}-player-card`, newCard);
   };
 
   const clearPlayerCards = () => {
@@ -114,12 +108,19 @@ const handleMessages = ({
       processRoomContents(message.room);
       break;
     case "usersUpdate":
-      devLog(["usernameUpdate: ", message.users]);
+      devLog(["usersUpdate: ", message.users]);
       setRoomObject((prevRoomObject) => {
-        return {
-          ...prevRoomObject,
-          users: { ...prevRoomObject.users, ...message.users },
-        };
+        let newRoomObject = { ...prevRoomObject };
+        Object.keys(message.users).forEach((key) => {
+          let messageUser = message.users[key];
+          if (messageUser.playerCard && messageUser.playerCard != "undefined") {
+            newRoomObject.users[key].playerCard = messageUser.playerCard;
+          }
+          if (messageUser.username && messageUser.username != "undefined") {
+            newRoomObject.users[key].username = messageUser.username;
+          }
+        });
+        return newRoomObject;
       });
       break;
     case "uuid":

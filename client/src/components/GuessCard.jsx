@@ -18,8 +18,8 @@ function ConfirmDialog({ onConfirm, open, setOpen, setModalOpen }) {
   const handleOk = (e) => {
     e.stopPropagation();
     onConfirm();
-    setOpen(false);
-    setModalOpen(false);
+    // setOpen(false);
+    // setModalOpen(false);
   };
 
   return (
@@ -31,22 +31,23 @@ function ConfirmDialog({ onConfirm, open, setOpen, setModalOpen }) {
     >
       <DialogTitle>Clear current game?</DialogTitle>
       <DialogContent dividers>
-        The memes will be replaced with a new set for every player in the room!
+        Do you think this is player2s card?
       </DialogContent>
       <DialogActions>
         <GuessyButton autoFocus onClick={handleCancel} dark>
-          Cancel
+          No
         </GuessyButton>
         <GuessyButton onClick={handleOk} dark>
-          Ok
+          Yes!
         </GuessyButton>
       </DialogActions>
     </Dialog>
   );
 }
 
-function GuessCard({ item, setModalOpen, itemKey }) {
+function GuessCard({ setModalOpen, itemKey }) {
   const [open, setOpen] = useState(false);
+  const { roomObject } = useGuessy();
 
   function handleOpen(e) {
     e.stopPropagation();
@@ -55,7 +56,12 @@ function GuessCard({ item, setModalOpen, itemKey }) {
   }
 
   function handleGuess() {
-    devLog(["guess card: ", itemKey]);
+    let correct = false;
+    Object.keys(roomObject.users).forEach((key) => {
+      correct = roomObject.users[key].playerCard === itemKey;
+      devLog(["guess card: ", itemKey, correct]);
+    });
+    // TODO: confetti if correct?
   }
 
   return (
