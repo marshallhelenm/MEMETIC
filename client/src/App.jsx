@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { WSProvider } from "./contexts/WSContext";
 import { GuessyProvider } from "./contexts/GuessyContext";
 
-import MessageHandler from "./utils/MessageHandler";
+import MessageReceiver from "./utils/MessageReceiver";
 import { useGuessy } from "./contexts/useGuessy";
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
     <div className="guessy-background">
       <WSProvider>
         <GuessyProvider>
-          <MessageHandler />
+          <MessageReceiver />
           <Outlet />
         </GuessyProvider>
       </WSProvider>

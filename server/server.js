@@ -2,14 +2,28 @@ const http = require("http");
 const { WebSocketServer } = require("ws");
 const uuidv4 = require("uuid").v4;
 
-const devLog = require("../client/src/utils/Helpers").devLog;
-
 const server = http.createServer();
 const wsServer = new WebSocketServer({ server });
 const port = 6969;
 
 const connections = {};
 const rooms = {};
+const emptyRoomTemplate = {
+  roomKey: undefined,
+  columnsObject: {},
+  allKeys: [],
+  player1: {
+    uuid: undefined,
+    username: undefined,
+    card: undefined,
+  },
+  player2: {
+    uuid: undefined,
+    username: undefined,
+    card: undefined,
+  },
+  observers: [],
+};
 
 const handleMessage = (bytes, uuid) => {
   let message;
@@ -28,31 +42,28 @@ const handleMessage = (bytes, uuid) => {
     // "with data:",
     // message
   );
-
+  let roomKey = message.roomKey;
+  let room = rooms[roomKey];
+  let player1 = room.player1;
+  let player2 = room.player2;
   switch (message.type) {
     case "clearPlayerCards":
       clearPlayerCards(message.roomKey, uuid);
       break;
     case "createRoom":
-      console.log(
-        "creating Room",
-        message.roomKey
-        // "users: ",
-        // JSON.stringify(message.users)
-      );
+      console.log("creating Room", message.roomKey);
       if (!message.roomKey) return;
-      rooms[message.roomKey] = {
-        users: message.users || {},
-        memeSet: message.memeSet || {},
-        est: message.est || Date.now(),
+      const newRoom = rooms[message.roomKey];
+      newRoom = {
+        ...emptyRoomTemplate,
+        ...message.newRoomObject,
       };
-      // console.log("Created room:", message.roomKey, rooms[message.roomKey]);
       break;
     case "getRoomContents":
       sendRoomContentsToUuid(message.roomKey, uuid);
       break;
     case "joinRoom":
-      // (roomKey, uuid, username, returnRoomContents)
+      // joinRoom params: { roomKey, uuid, username, playerCard, returnRoomContents }
       joinRoom({
         roomKey: message.roomKey,
         uuid,
@@ -64,7 +75,6 @@ const handleMessage = (bytes, uuid) => {
     case "replaceGame":
       const newRoomObject = JSON.parse(message.newRoomObject);
       console.log("replaceGame", message.roomKey, newRoomObject);
-
       if (!message.roomKey) {
         return;
       }
@@ -75,58 +85,40 @@ const handleMessage = (bytes, uuid) => {
         roomKey: message.roomKey,
         room: JSON.stringify(rooms[message.roomKey]),
       };
-      broadcast(outgoingMessage.roomKey, message, uuid);
+      broadcast(message.roomKey, message, uuid);
       break;
     case "requestUuid":
       console.log("requestUuid for UUID:", uuid);
       sendToUuid(uuid, { type: "uuid", uuid: uuid });
       break;
     case "setPlayerCard":
-      if (!rooms[message.roomKey]) return;
-      if (!rooms[message.roomKey]["users"][uuid]) {
-        rooms[message.roomKey]["users"][uuid] = {};
+      if (!room) return;
+      if (player1.uuid === uuid) {
+        player1.card = message.playerCard;
+      } else if (player2.uuid === uuid) {
+        player2.card = message.playerCard;
+      } else {
+        // they're just an observer so don't set a card
+        return;
       }
-      rooms[message.roomKey]["users"][uuid]["playerCard"] = message.playerCard;
       broadcastUsers(message.roomKey, uuid);
       break;
-    case "setRoomContents":
-    // if (!message.roomKey) requestRoomKey(uuid);
-    // setRoomContents(
-    //   {uuid,
-    //   roomKey: message.roomKey,
-    //   memeSet: JSON.stringify(message.memeSet),
-    //   username:message.username,
-    //   message.playerCard}
-    // );
-    // broadcast(
-    //   message.roomKey,
-    //   {
-    //     type: "roomContents",
-    //     room: JSON.stringify(rooms[message.roomKey]),
-    //   },
-    //   uuid
-    // );
-    // break;
     case "setUsername":
       console.log("setUsername", message.username);
-      if (!rooms[message.roomKey]) return;
-      let user = rooms[message.roomKey]["users"][uuid];
-      if (!user) {
-        rooms[message.roomKey]["users"][uuid] = {
-          username: undefined,
-          playerCard: undefined,
-        };
+      if (!room) return;
+      if (player1.uuid === uuid) {
+        player1.username = message.username;
+      } else if (player2.uuid === uuid) {
+        player2.username = message.username;
+      } else {
+        // they're just an observer so don't set a username
+        return;
       }
-      user["username"] = message.username;
-      broadcastUsers(message.roomKey, uuid);
+      broadcastUsers(roomKey, uuid);
       break;
     default:
       break;
   }
-};
-
-const handleClose = (uuid) => {
-  delete connections[uuid];
 };
 
 const sendToUuid = (uuid, message) => {
@@ -142,18 +134,19 @@ const sendToUuid = (uuid, message) => {
   }
 };
 
-const requestRoomKey = (uuid) => {
-  sendToUuid(uuid, { type: "requestRoomKey" });
-};
-
 const sweepRoom = (roomKey) => {
-  if (!rooms[roomKey]) return;
-  const roomUsers = rooms[roomKey]["users"];
-  Object.keys(roomUsers).forEach((u) => {
-    if (!connections[u]) {
-      delete roomUsers[u];
-    }
-  });
+  let room = rooms[roomKey];
+  if (!room) return;
+  let player1 = room.player1;
+  if (!connections[player1.uuid]) {
+    player1.card = undefined;
+    player1.uuid = undefined;
+  }
+  let player2 = room.player2;
+  if (!connections[player2.uuid]) {
+    player2.card = undefined;
+    player2.uuid = undefined;
+  }
 };
 
 const sendRoomContentsToUuid = (roomKey, uuid) => {
@@ -162,9 +155,14 @@ const sendRoomContentsToUuid = (roomKey, uuid) => {
 };
 
 const broadcastUsers = (roomKey, uuid) => {
+  let room = rooms[roomKey];
   broadcast(
     roomKey,
-    { type: "usersUpdate", users: rooms[roomKey]["users"] },
+    {
+      type: "usersUpdate",
+      player1: room.player1,
+      player2: room.player2,
+    },
     uuid
   );
 };
@@ -179,26 +177,17 @@ const noGameAlert = (roomKey, uuid, info) => {
   sendToUuid(uuid, message);
 };
 
-const noRoomAlert = (roomKey, uuid) => {
-  console.log("No room alert for room:", roomKey);
-  const message = JSON.stringify({
-    type: "noRoomAlert",
-    roomKey: roomKey,
-  });
-  sendToUuid(uuid, message);
-};
-
-const broadcast = (roomKey, message, excludeUuid = null) => {
+const broadcast = (roomKey, message, uuidToExclude = null) => {
   const room = rooms[roomKey];
   if (!room) return;
   sweepRoom(roomKey);
-  if (!room["users"]) return;
-  Object.keys(room["users"]).forEach((u) => {
-    if (!excludeUuid && u === excludeUuid) return;
+  let player1 = room.player1;
+  let player2 = room.player2;
+  let recipients = [player1.uuid, player2.uuid, ...room.observers];
+  recipients.forEach((u) => {
+    if (!uuidToExclude && u === uuidToExclude) return;
     if (!connections[u]) return;
     // If the user is not connected, skip sending the message
-    if (!room["users"][u]) return;
-    // If the user is not in the room, skip sending the message
     sendToUuid(u, message);
   });
 };
@@ -211,12 +200,7 @@ const joinRoom = ({
   returnRoomContents,
 }) => {
   const room = rooms[roomKey];
-  console.log(
-    "joinRoom",
-    roomKey,
-    "users: ",
-    rooms[roomKey] && rooms[roomKey]["users"]
-  );
+  console.log("joinRoom", roomKey);
 
   if (!room) {
     console.warn("Room does not exist:", roomKey);
@@ -225,21 +209,38 @@ const joinRoom = ({
   }
 
   sweepRoom(roomKey);
-  const roomUsers = rooms[roomKey]["users"];
-  if (Object.keys(roomUsers).length > 2) {
+  let player1 = room.player1;
+  let player2 = room.player2;
+  if (player1.uuid && player2.uuid) {
     console.log("room full");
+    room.observers.push(uuid);
     // this connection is already in there or will just be an observer
-    sendRoomContentsToUuid(roomKey, uuid);
-  } else if (!roomUsers[uuid]) {
+    returnRoomContents && sendRoomContentsToUuid(roomKey, uuid);
+  } else if (player1.uuid === uuid || player2.uuid === uuid) {
+    console.log("user already in room");
+    // this connection is already in there
+    returnRoomContents && sendRoomContentsToUuid(roomKey, uuid);
+  } else {
     // user is not in server's room data. add them!
-    roomUsers[uuid] = {};
-    if (username) {
-      roomUsers[uuid]["username"] = username;
+    // TODO: remove user from observers if they're in there
+    if (!player1.uuid) {
+      let player = player1;
+    } else if (!player2.uuid) {
+      let player = player2;
+    } else {
+      // shouldn't be possible to get here. Room full!
+      room.observers.push(uuid);
+      returnRoomContents && sendRoomContentsToUuid(roomKey, uuid);
+      return;
+    }
+    player.uuid = uuid;
+    if (username && username != "undefined") {
+      player.username = username;
     }
     if (playerCard && playerCard != "undefined") {
-      roomUsers[uuid]["playerCard"] = playerCard;
+      player.card = playerCard;
     }
-    if (returnRoomContents && Object.keys(room.memeSet).length > 0) {
+    if (returnRoomContents && Object.keys(room.columnSet).length > 0) {
       sendRoomContentsToUuid(roomKey, uuid);
     }
     if (!Object.keys(room.memeSet).length > 0) {
@@ -249,13 +250,10 @@ const joinRoom = ({
   }
 };
 
-const clearPlayerCards = (roomKey) => {
-  if (!rooms[roomKey]) return;
-  const roomUsers = rooms[roomKey]["users"];
-  Object.keys(roomUsers).forEach((u) => {
-    roomUsers[u].playerCard = undefined;
-    sendToUuid(u, { type: "clearPlayerCard" });
-  });
+// *server management
+
+const handleClose = (uuid) => {
+  delete connections[uuid];
 };
 
 wsServer.on("connection", (connection, request) => {

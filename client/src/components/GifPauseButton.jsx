@@ -24,10 +24,10 @@ const PurpleSwitch = styled(Switch)(({ theme }) => ({
 }));
 
 function GifPauseButton() {
-  const { staticGifs, guessyActor } = useGuessy();
+  const { staticGifs, guessyManager } = useGuessy();
 
   function toggleStaticGifs() {
-    guessyActor("setStaticGifs", { staticGifs: !staticGifs });
+    guessyManager("setStaticGifs", { staticGifs: !staticGifs });
   }
 
   return (

@@ -1,26 +1,28 @@
 const handleLocalStorage = (message) => {
-  const searchParams =
-    message.searchParams || new URLSearchParams(window.location.search);
+  const searchParams = new URLSearchParams(window.location.search);
   const roomKey = message.roomKey || searchParams.get("roomKey");
   const username = message.username || searchParams.get("username");
   const playerCard = message.playerCard;
 
-  const cleanUp = (roomKey = searchParams.get("roomKey")) => {
+  const cleanUpRoom = (roomKey) => {
     Object.keys(localStorage).forEach((key) => {
-      if (key.startsWith(roomKey)) {
-        localStorage.removeItem(key);
-      }
+      if (key.includes(roomKey)) localStorage.removeItem(key);
+    });
+  };
+  const cleanUpGuessy = (roomKey) => {
+    Object.keys(localStorage).forEach((key) => {
+      if (key.includes("guessy")) localStorage.removeItem(key);
     });
   };
 
-  const getUsername = (roomKey = searchParams.get("roomKey")) => {
+  const getUsername = (roomKey) => {
     const localUsername = localStorage.getItem(`guessy-${roomKey}-username`);
     if (!!localUsername && localUsername != "undefined") {
       return localUsername;
     }
   };
 
-  const getPlayerCard = (roomKey = searchParams.get("roomKey")) => {
+  const getPlayerCard = (roomKey) => {
     const localPlayerCard = localStorage.getItem(
       `guessy-${roomKey}-player-card`
     );
@@ -31,17 +33,20 @@ const handleLocalStorage = (message) => {
     }
   };
 
-  const setPlayerCard = (roomKey = searchParams.get("roomKey"), card) => {
+  const setPlayerCard = (roomKey, card) => {
     localStorage.setItem(`guessy-${roomKey}-player-card`, card);
   };
 
-  const clearPlayerCard = (roomKey = searchParams.get("roomKey")) => {
+  const clearPlayerCard = (roomKey) => {
     localStorage.removeItem(`guessy-${roomKey}-player-card`);
   };
 
   switch (message.type) {
-    case "cleanUp":
-      cleanUp(roomKey);
+    case "cleanUpRoom":
+      cleanUpRoom(roomKey);
+      break;
+    case "cleanUpGuessy":
+      cleanUpGuessy(roomKey);
       break;
     case "getUsername":
       return getUsername(roomKey);

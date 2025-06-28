@@ -39,11 +39,11 @@ function ConfirmDialog({ onConfirm, open, setOpen }) {
 
 function ClearGame({ setLoadingCards }) {
   const [open, setOpen] = useState(false);
-  const { guessyActor } = useGuessy();
+  const { guessyManager } = useGuessy();
 
   function handleClearGame() {
     setLoadingCards(true);
-    guessyActor("replaceGame");
+    guessyManager("replaceGame");
   }
 
   return (

@@ -23,6 +23,7 @@ function WSProvider({ children }) {
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
   const connectionError = connectionStatus != "Open";
+  const connectionOpen = connectionStatus == "Open";
 
   useEffect(() => {
     function updateIncomingMessageHistory(newMessage) {
@@ -60,6 +61,7 @@ function WSProvider({ children }) {
       lastJsonMessage,
       connectionStatus,
       connectionError,
+      connectionOpen,
     };
   }, [
     isReady,
@@ -70,6 +72,7 @@ function WSProvider({ children }) {
     setUuid,
     connectionStatus,
     connectionError,
+    connectionOpen,
   ]);
 
   return <WSContext.Provider value={value}>{children}</WSContext.Provider>;

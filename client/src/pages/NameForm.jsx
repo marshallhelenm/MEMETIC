@@ -11,7 +11,7 @@ import TextField from "@mui/material/TextField";
 //The first page you see. Holds options to join a game or start a new game.
 function NameForm() {
   const [proposedUsername, setProposedUsername] = useState("");
-  const { guessyActor, currentRoomKey } = useGuessy();
+  const { guessyManager, roomKey } = useGuessy();
 
   function polish(fakerOutput) {
     let arr = fakerOutput.split(" ");
@@ -28,7 +28,7 @@ function NameForm() {
   }
 
   function handleContinue() {
-    guessyActor("assignUsername", { newUsername: proposedUsername });
+    guessyManager("assignUsername", { newUsername: proposedUsername });
   }
 
   return (
@@ -67,7 +67,7 @@ function NameForm() {
           }}
         />
         <Link
-          to={`/play?roomKey=${currentRoomKey}&username=${proposedUsername}`}
+          to={`/play?roomKey=${roomKey}&username=${proposedUsername}`}
           onClick={handleContinue}
         >
           <GuessyButton>Continue</GuessyButton>

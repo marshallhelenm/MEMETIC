@@ -4,7 +4,7 @@ import { useGuessy } from "../contexts/useGuessy";
 import GuessyButton from "./GuessyButton";
 
 function NewGame() {
-  const { guessyActor } = useGuessy();
+  const { guessyManager } = useGuessy();
   function generateRoomKey() {
     var newRoomKey = "";
     var characters =
@@ -22,7 +22,7 @@ function NewGame() {
   return (
     <Link
       to={`/name_thyself?roomKey=${newRoomKey}`}
-      onClick={() => guessyActor("createRoom", { newRoomKey })}
+      onClick={() => guessyManager("createRoom", { newRoomKey })}
     >
       <GuessyButton>New Game</GuessyButton>
     </Link>

@@ -12,7 +12,7 @@ import { memeData } from "../assets/memeCollection";
 import { useGuessy } from "../contexts/useGuessy";
 
 const PlayerCardModal = () => {
-  const { observer, guessyActor, myPlayerCard } = useGuessy();
+  const { observer, guessyManager, myPlayerCard } = useGuessy();
   const [open, setOpen] = useState(false);
 
   let item = memeData[myPlayerCard];
@@ -26,7 +26,7 @@ const PlayerCardModal = () => {
   };
 
   const assignNewPlayerCard = () => {
-    guessyActor("assignNewPlayerCard");
+    guessyManager("assignNewPlayerCard");
   };
 
   function content() {

@@ -12,7 +12,7 @@ import { devLog } from "../utils/Helpers";
 
 function PlayPage() {
   const { uuid, connectionStatus, connectionError } = useWS();
-  const { currentRoomKey, validRoomObject, guessyActor } = useGuessy();
+  const { roomKey, validRoomObject, guessyManager } = useGuessy();
 
   const { uuidChanged } = useTraceUpdate({ uuid }); // tracking this here, not higher up, because this is the only route where it's relevant
 
@@ -22,12 +22,12 @@ function PlayPage() {
         "PlayGame sending joinRoom. Request returnRoomContents: ",
         !validRoomObject,
       ]);
-      guessyActor("joinRoom", { returnRoomContents: !validRoomObject });
+      guessyManager("joinRoom", { returnRoomContents: !validRoomObject });
     }
-  }, [uuid, uuidChanged, validRoomObject, guessyActor]);
+  }, [uuid, uuidChanged, validRoomObject, guessyManager]);
 
   // ** RENDER
-  if (currentRoomKey.length != 8) {
+  if (roomKey.length != 8) {
     return <InvalidRoomKey />;
   } else if (connectionError) {
     return <ConnectionError />;
