@@ -11,8 +11,6 @@ const port = 6969;
 const connections = {};
 const rooms = {};
 
-// TODO: assign player1 and player2 tags?
-
 const handleMessage = (bytes, uuid) => {
   let message;
   try {
@@ -112,7 +110,14 @@ const handleMessage = (bytes, uuid) => {
     case "setUsername":
       console.log("setUsername", message.username);
       if (!rooms[message.roomKey]) return;
-      rooms[message.roomKey]["users"][uuid]["username"] = message.username;
+      let user = rooms[message.roomKey]["users"][uuid];
+      if (!user) {
+        rooms[message.roomKey]["users"][uuid] = {
+          username: undefined,
+          playerCard: undefined,
+        };
+      }
+      user["username"] = message.username;
       broadcastUsers(message.roomKey, uuid);
       break;
     default:
@@ -130,7 +135,11 @@ const sendToUuid = (uuid, message) => {
     return;
   }
   console.log(`Sending message to UUID: ${uuid}`, message);
-  connections[uuid].send(JSON.stringify(message));
+  if (typeof message === "string") {
+    connections[uuid].send(message);
+  } else {
+    connections[uuid].send(JSON.stringify(message));
+  }
 };
 
 const requestRoomKey = (uuid) => {
@@ -162,11 +171,11 @@ const broadcastUsers = (roomKey, uuid) => {
 
 const noGameAlert = (roomKey, uuid, info) => {
   console.log("No game alert for room:", roomKey);
-  const message = JSON.stringify({
+  const message = {
     type: "noGameAlert",
     roomKey: roomKey,
     info: info,
-  });
+  };
   sendToUuid(uuid, message);
 };
 
@@ -216,23 +225,27 @@ const joinRoom = ({
   }
 
   sweepRoom(roomKey);
-  if (!rooms[roomKey]["users"][uuid]) {
+  const roomUsers = rooms[roomKey]["users"];
+  if (Object.keys(roomUsers).length > 2) {
+    console.log("room full");
+    // this connection is already in there or will just be an observer
+    sendRoomContentsToUuid(roomKey, uuid);
+  } else if (!roomUsers[uuid]) {
     // user is not in server's room data. add them!
-    rooms[roomKey]["users"][uuid] = {};
+    roomUsers[uuid] = {};
     if (username) {
-      rooms[roomKey]["users"][uuid]["username"] = username;
+      roomUsers[uuid]["username"] = username;
     }
     if (playerCard && playerCard != "undefined") {
-      rooms[roomKey]["users"][uuid]["playerCard"] = playerCard;
+      roomUsers[uuid]["playerCard"] = playerCard;
     }
-    if (returnRoomContents) {
-      if (Object.keys(room.memeSet).length > 0) {
-        sendRoomContentsToUuid(roomKey, uuid);
-      } else {
-        noGameAlert(roomKey, uuid, "No game in progress", room.memeSet);
-      }
+    if (returnRoomContents && Object.keys(room.memeSet).length > 0) {
+      sendRoomContentsToUuid(roomKey, uuid);
     }
-    // TODO: and then let other users in the room know you're there
+    if (!Object.keys(room.memeSet).length > 0) {
+      noGameAlert(roomKey, uuid, "No game in progress", room.memeSet);
+    }
+    broadcastUsers(roomKey, uuid);
   }
 };
 
