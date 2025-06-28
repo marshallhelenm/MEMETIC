@@ -1,9 +1,8 @@
 import { colorC } from "../assets/styles";
 import { useGuessy } from "../contexts/useGuessy";
 
-function Users({ username }) {
-  const { roomObject } = useGuessy();
-  const users = roomObject?.users;
+function Users() {
+  const { users, username } = useGuessy();
 
   function userTags() {
     if (!users) return;

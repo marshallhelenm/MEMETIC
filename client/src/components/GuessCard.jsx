@@ -7,7 +7,6 @@ import DialogActions from "@mui/material/DialogActions";
 import { useGuessy } from "../contexts/useGuessy";
 import GuessyButton from "./GuessyButton";
 import { devLog } from "../utils/Helpers";
-import { useRoomParser } from "../hooks/useRoomParser";
 
 function ConfirmDialog({ onConfirm, open, setOpen, setModalOpen }) {
   const handleCancel = (e) => {
@@ -48,8 +47,7 @@ function ConfirmDialog({ onConfirm, open, setOpen, setModalOpen }) {
 
 function GuessCard({ setModalOpen, itemKey }) {
   const [open, setOpen] = useState(false);
-  const { roomObject } = useGuessy();
-  const { users } = useRoomParser({ roomObject });
+  const { users } = useGuessy();
 
   function handleOpen(e) {
     e.stopPropagation();
@@ -63,7 +61,7 @@ function GuessCard({ setModalOpen, itemKey }) {
       correct = users[key].playerCard === itemKey;
       devLog(["guess card: ", itemKey, correct]);
     });
-    // TODO: confetti if correct?
+    // TODO: confetti if correct? Well, some kind of feedback anyways.
   }
 
   return (

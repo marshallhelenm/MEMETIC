@@ -6,11 +6,11 @@ import "./index.css";
 import "./App.css";
 import App from "./App.jsx";
 import LandingPage from "./pages/LandingPage";
-import PlayGame from "./pages/PlayGame";
 import Join from "./components/Join";
 import Upload from "./pages/Upload";
 import ImageAnalyzer from "./pages/ImageAnalyzer";
 import NameForm from "./pages/NameForm";
+import PlayPage from "./pages/PlayPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/play",
-        element: <PlayGame />,
+        element: <PlayPage />,
       },
       {
         path: "/join",

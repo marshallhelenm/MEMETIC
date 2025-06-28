@@ -1,32 +1,33 @@
-import {
-  Outlet,
-  useNavigate,
-  useLocation,
-  useSearchParams,
-} from "react-router-dom";
-import { WSProvider } from "./contexts/WSContext";
-import { GuessyProvider } from "./contexts/GuessyContext";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
+import { WSProvider } from "./contexts/WSContext";
+import { GuessyProvider } from "./contexts/GuessyContext";
+
+import MessageHandler from "./utils/MessageHandler";
+import { useGuessy } from "./contexts/useGuessy";
+
 function App() {
-  const [searchParams] = useSearchParams();
   let navigate = useNavigate();
   let location = useLocation();
-  const currentRoomKey = searchParams.get("roomKey") || undefined;
-  const username = searchParams.get("username");
+  const { roomKey, username } = useGuessy();
 
   useEffect(() => {
-    if (location.pathname == "/" || !currentRoomKey) {
+    if (
+      location.pathname == "/" ||
+      (location.pathname != "/home" && !roomKey)
+    ) {
       navigate("/home");
     } else if (location.pathname == "/play" && !username) {
       navigate("/home");
     }
-  }, [location, navigate, currentRoomKey, username]);
+  }, [location, navigate, roomKey, username]);
 
   return (
     <div className="guessy-background">
       <WSProvider>
         <GuessyProvider>
+          <MessageHandler />
           <Outlet />
         </GuessyProvider>
       </WSProvider>

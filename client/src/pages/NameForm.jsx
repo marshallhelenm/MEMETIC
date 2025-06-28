@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { useGuessy } from "../contexts/useGuessy";
 import { colorA, colorD, corners } from "../assets/styles";
@@ -10,10 +10,8 @@ import TextField from "@mui/material/TextField";
 
 //The first page you see. Holds options to join a game or start a new game.
 function NameForm() {
-  const [searchParams] = useSearchParams();
   const [proposedUsername, setProposedUsername] = useState("");
-  const { assignUsername } = useGuessy();
-  const currentRoomKey = searchParams.get("roomKey");
+  const { guessyActor, currentRoomKey } = useGuessy();
 
   function polish(fakerOutput) {
     let arr = fakerOutput.split(" ");
@@ -30,7 +28,7 @@ function NameForm() {
   }
 
   function handleContinue() {
-    assignUsername(proposedUsername);
+    guessyActor("assignUsername", { newUsername: proposedUsername });
   }
 
   return (

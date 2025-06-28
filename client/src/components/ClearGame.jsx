@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -40,11 +39,11 @@ function ConfirmDialog({ onConfirm, open, setOpen }) {
 
 function ClearGame({ setLoadingCards }) {
   const [open, setOpen] = useState(false);
-  const { replaceGame } = useGuessy();
+  const { guessyActor } = useGuessy();
 
   function handleClearGame() {
     setLoadingCards(true);
-    replaceGame();
+    guessyActor("replaceGame");
   }
 
   return (

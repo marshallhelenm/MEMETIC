@@ -2,22 +2,14 @@ import BoardColumn from "./BoardColumn";
 import LoadingStub from "../components/LoadingStub";
 import MissingStub from "../components/MissingStub";
 import Stub from "../containers/Stub";
+
 import { memeData } from "../assets/memeCollection";
 import { useGuessy } from "../contexts/useGuessy";
-import { devLog } from "../utils/Helpers";
-import { useRoomParser } from "../hooks/useRoomParser";
-import { useWS } from "../contexts/useWS";
 
 // holds all the picture cards
 function Board({ loading, roomKey, columnCount }) {
-  const { roomObject } = useGuessy();
-  const { columns, validRoomObject } = useRoomParser({
-    roomObject,
-    columnCount,
-  });
-  const { uuid } = useWS();
-  const { myPlayerCard } = useRoomParser({ roomObject, uuid });
-  // devLog(["Board rendered, roomObject: ", roomObject]);
+  const { myPlayerCard, columnsObject, validRoomObject } = useGuessy();
+  const columns = columnsObject[`${columnCount}Column`];
 
   function generateColumns() {
     let boardColumns = [];

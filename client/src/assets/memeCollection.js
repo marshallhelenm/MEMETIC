@@ -26,7 +26,6 @@ function memeSampler() {
     }
   }
   memeSet.allKeys = gameKeys;
-  console.log("memeSampler, memeSet: ", typeof memeSet, memeSet);
 
   return memeSet;
 }

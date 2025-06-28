@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { devLog } from "../utils/Helpers";
 
-function useTraceUpdate(props, log = true) {
+function useTraceUpdate(props, log = false) {
   const prev = useRef(props);
   const changedProps = {};
   const propsDidChange = useRef({});

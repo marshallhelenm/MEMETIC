@@ -10,28 +10,12 @@ import MissingStub from "../components/MissingStub";
 import { colorA, colorB } from "../assets/styles";
 import { memeData } from "../assets/memeCollection";
 import { useGuessy } from "../contexts/useGuessy";
-import { handleLocalStorage } from "../utils/LocalStorageHandler";
-import { useWS } from "../contexts/useWS";
-import { devLog } from "../utils/Helpers";
-import { useRoomParser } from "../hooks/useRoomParser";
-import { useTraceUpdate } from "../hooks/useTraceUpdate";
 
-const PlayerCardModal = ({ playerCard, roomKey, setPlayerCard }) => {
-  const [modalCard, setModalCard] = useState(
-    playerCard || handleLocalStorage({ type: "getPlayerCard", roomKey })
-  );
-  let item = memeData[modalCard];
+const PlayerCardModal = () => {
+  const { observer, guessyActor, myPlayerCard } = useGuessy();
   const [open, setOpen] = useState(false);
-  const { randomCardKey, roomObject, updateRoomObjectLocalPlayerCard } =
-    useGuessy();
-  const { allKeys, observer } = useRoomParser({ roomObject });
-  const { sendJsonMessage } = useWS();
-  // useTraceUpdate({
-  //   playerCard,
-  //   roomKey,
-  //   modalCard,
-  //   component: "PlayerCardModal",
-  // });
+
+  let item = memeData[myPlayerCard];
   if (!item) return;
 
   const handleOpen = (e) => {
@@ -42,18 +26,7 @@ const PlayerCardModal = ({ playerCard, roomKey, setPlayerCard }) => {
   };
 
   const assignNewPlayerCard = () => {
-    const newCard = randomCardKey(allKeys);
-    devLog(["assignNewPlayerCard: ", newCard]);
-
-    sendJsonMessage({
-      type: "setPlayerCard",
-      roomKey: roomKey,
-      card: newCard,
-    });
-    handleLocalStorage({ type: "setPlayerCard", card: newCard, roomKey });
-    setModalCard(newCard);
-    setPlayerCard(newCard);
-    updateRoomObjectLocalPlayerCard(newCard);
+    guessyActor("assignNewPlayerCard");
   };
 
   function content() {
