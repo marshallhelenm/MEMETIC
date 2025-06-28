@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { useGuessy } from "../contexts/useGuessy";
@@ -12,27 +12,23 @@ import { devLog } from "../utils/Helpers";
 
 function PlayPage() {
   const { uuid, connectionStatus, connectionError } = useWS();
-  const { roomKey, validRoomObject, guessyManager } = useGuessy();
-
-  const { uuidChanged } = useTraceUpdate({ uuid }); // tracking this here, not higher up, because this is the only route where it's relevant
-
+  const { roomKey, roomObjectIsValid, guessyManager, allKeys } = useGuessy();
+  const attemptsRef = useRef(0);
   useEffect(() => {
-    if (typeof uuid === "string" || uuidChanged) {
-      devLog([
-        "PlayGame sending joinRoom. Request returnRoomContents: ",
-        !validRoomObject,
-      ]);
-      guessyManager("joinRoom", { returnRoomContents: !validRoomObject });
+    devLog(["roomObjectIsValid() in PlayPage", roomObjectIsValid(), allKeys]);
+    if (!roomObjectIsValid() && attemptsRef.current < 11) {
+      guessyManager("joinRoom");
+      attemptsRef.current = attemptsRef.current + 1;
     }
-  }, [uuid, uuidChanged, validRoomObject, guessyManager]);
+  }, [uuid, guessyManager, roomObjectIsValid, allKeys]);
 
   // ** RENDER
   if (roomKey.length != 8) {
     return <InvalidRoomKey />;
+  } else if (roomObjectIsValid() && connectionStatus == "Open") {
+    return <PlayGame />;
   } else if (connectionError) {
     return <ConnectionError />;
-  } else if (validRoomObject && connectionStatus == "Open") {
-    return <PlayGame />;
   } else {
     return <RoomLoading />;
   }

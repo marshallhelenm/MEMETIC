@@ -1,16 +1,22 @@
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import {
+  Outlet,
+  useNavigate,
+  useLocation,
+  useSearchParams,
+} from "react-router-dom";
 import { useEffect } from "react";
 
 import { WSProvider } from "./contexts/WSContext";
 import { GuessyProvider } from "./contexts/GuessyContext";
 
 import MessageReceiver from "./utils/MessageReceiver";
-import { useGuessy } from "./contexts/useGuessy";
 
 function App() {
   let navigate = useNavigate();
   let location = useLocation();
-  const { roomKey, username } = useGuessy();
+  const [searchParams] = useSearchParams();
+  const roomKey = searchParams.get("roomKey");
+  const username = searchParams.get("username");
 
   useEffect(() => {
     if (

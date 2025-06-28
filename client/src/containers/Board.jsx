@@ -5,16 +5,17 @@ import Stub from "../containers/Stub";
 
 import { memeData } from "../assets/memeCollection";
 import { useGuessy } from "../contexts/useGuessy";
+import { devLog } from "../utils/Helpers";
 
 // holds all the picture cards
 function Board({ loading, roomKey, columnCount }) {
-  const { myPlayerCard, columnsObject, validRoomObject } = useGuessy();
-  const columns = columnsObject[`${columnCount}Column`];
+  const { myPlayerCard, columnsObject, roomObjectIsValid } = useGuessy();
+  const columns = columnsObject[columnCount];
 
   function generateColumns() {
     let boardColumns = [];
     for (let i = 1; i <= columnCount; i++) {
-      console.log(columns);
+      devLog(["columns in Board: ", JSON.stringify(columns)]);
 
       let colKeys = columns[i];
       let cards = generateCards(colKeys);
@@ -61,7 +62,7 @@ function Board({ loading, roomKey, columnCount }) {
 
   return (
     <div className="gameBoard">
-      {loading && validRoomObject
+      {!loading && roomObjectIsValid()
         ? generateColumns()
         : generateLoadingColumns()}
     </div>

@@ -17,7 +17,8 @@ function MessageReceiver() {
       } else if (typeof roomContents === "string") {
         roomContents = JSON.parse(roomContents);
       }
-      devLog(["processRoomContents", typeof roomContents, roomContents]);
+      // console.log("processRoomContents: ", roomContents);
+
       dispatch({ type: "updateRoom", payload: { roomObject: roomContents } });
     };
   }, [dispatch]);
@@ -31,20 +32,20 @@ function MessageReceiver() {
         console.warn(
           "Message Handler: Invalid message received",
           typeof message,
-          message
+          JSON.stringify(message)
         );
         return;
       }
       if (!message) return;
 
-      devLog(["MessageReceiver handling message: ", message]);
+      devLog(["MessageReceiver handling message: ", message.type]);
 
-      switch (message["type"]) {
+      switch (message.type) {
         case "noGameAlert":
           guessyManager("createRoom", { newRoomKey: message.roomKey });
           break;
         case "replaceGame":
-          processRoomContents(message.newRoomObject);
+          processRoomContents(message.room);
           break;
         case "roomContents":
           processRoomContents(message.room);

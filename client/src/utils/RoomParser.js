@@ -48,16 +48,12 @@ function parseRoom({ roomKey, roomObject, myUuid }) {
     roomKey,
     allKeys: [],
     columnsObject: {},
-    validRoomObject:
-      typeof roomObject === "object" && Object.keys(roomObject).length > 0,
     myPlayerCard: undefined,
     username: undefined,
     partnerCard: undefined,
     partnerUsername: undefined,
     observer: false,
   };
-
-  if (!value.validRoomObject) return value;
 
   // start by parsing user info
   let parsedUserInfo = parseUsers({
@@ -72,11 +68,12 @@ function parseRoom({ roomKey, roomObject, myUuid }) {
 
   let allKeys = roomObject.allKeys;
   let columnsObject = roomObject.columnsObject;
+
   if (allKeys.length == 24 && Object.keys(columnsObject).length == 6) {
     value.allKeys = [...allKeys];
     value.columnsObject = { ...columnsObject };
   } else {
-    value.validRoomObject = false;
+    console.warn("Invalid Room Object in RoomParser");
   }
   return value;
 }

@@ -61,7 +61,7 @@ function Logo({ spin = true, header = false, size }) {
   } else {
     return (
       <div
-        onClick={spin && spinTimeUp}
+        onClick={spin ? spinTimeUp : undefined}
         style={{ cursor: "pointer", height: "40vmin" }}
       >
         <Fade in={!fade}>

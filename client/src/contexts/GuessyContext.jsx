@@ -1,10 +1,11 @@
-import { createContext, useMemo, useEffect, useReducer } from "react";
+import { createContext, useMemo, useEffect, useReducer, useRef } from "react";
 
 import { useWS } from "./useWS";
 import { memeSampler } from "../assets/memeCollection";
 import { handleLocalStorage } from "../utils/LocalStorageHandler";
 import { devLog, waitUntil, randomCardKey } from "../utils/Helpers";
 import { parseRoom, parseUsers } from "../utils/RoomParser";
+import { useTraceUpdate } from "../hooks/useTraceUpdate";
 
 const GuessyContext = createContext();
 
@@ -13,12 +14,11 @@ const initialState = {
   roomKey: searchParams.get("roomKey"),
   allKeys: [],
   columnsObject: {},
-  myPlayerCard: undefined,
+  myPlayerCard: "",
   username: searchParams.get("username"),
-  partnerCard: undefined,
-  partnerUsername: undefined,
+  partnerCard: "",
+  partnerUsername: "",
   observer: false,
-  validRoomObject: false,
   staticGifs: localStorage.getItem("guessy_gifs") == "true",
 };
 
@@ -79,10 +79,31 @@ function GuessyProvider({ children }) {
       partnerCard,
       partnerUsername,
       observer,
-      validRoomObject,
     },
     dispatch,
   ] = useReducer(guessyReducer, initialState);
+
+  useTraceUpdate(
+    {
+      roomKey,
+      allKeys,
+      columnsObject,
+      myPlayerCard,
+      username,
+      staticGifs,
+      partnerCard,
+      partnerUsername,
+      observer,
+      component: "GuessyContext",
+    },
+    false
+  );
+
+  const roomObjectIsValid = useMemo(() => {
+    return () => {
+      return allKeys.length == 24 && Object.keys(columnsObject).length == 6;
+    };
+  }, [allKeys, columnsObject]);
 
   const createRoom = useMemo(() => {
     return async function (newRoomKey) {
@@ -90,7 +111,7 @@ function GuessyProvider({ children }) {
       let ready = await waitUntil(connectionOpen);
       if (ready) {
         devLog(["connectionOpen, continue with createRoom"]);
-        dispatch({ type: "updateRoomKey", newRoomKey });
+        dispatch({ type: "updateRoomKey", payload: { newRoomKey } });
         const newMemes = memeSampler();
         dispatch({ type: "updateMemeSet", payload: newMemes });
         const requesterCard = randomCardKey(newMemes.allKeys);
@@ -117,7 +138,7 @@ function GuessyProvider({ children }) {
         sendJsonMessage({
           type: "createRoom",
           roomKey: newRoomKey,
-          newRoomObject,
+          newRoomObject: JSON.stringify(newRoomObject),
         });
       }
     };
@@ -161,7 +182,7 @@ function GuessyProvider({ children }) {
             type: "joinRoom",
             roomKey,
             username,
-            returnRoomContents: payload.returnRoomContents,
+            returnRoomContents: !roomObjectIsValid(),
           });
           break;
         case "replaceGame":
@@ -210,7 +231,15 @@ function GuessyProvider({ children }) {
           break;
       }
     };
-  }, [createRoom, staticGifs, allKeys, roomKey, username, sendJsonMessage]);
+  }, [
+    createRoom,
+    staticGifs,
+    allKeys,
+    roomKey,
+    username,
+    sendJsonMessage,
+    roomObjectIsValid,
+  ]);
 
   //  ** value for the context provider **
 
@@ -221,11 +250,12 @@ function GuessyProvider({ children }) {
       staticGifs,
       guessyManager,
       myPlayerCard,
-      validRoomObject,
+      roomObjectIsValid,
       observer,
       columnsObject,
       partnerCard,
       partnerUsername,
+      dispatch,
     };
   }, [
     roomKey,
@@ -233,11 +263,12 @@ function GuessyProvider({ children }) {
     staticGifs,
     guessyManager,
     myPlayerCard,
-    validRoomObject,
+    roomObjectIsValid,
     observer,
     columnsObject,
     partnerCard,
     partnerUsername,
+    dispatch,
   ]);
 
   // ** useEffect **

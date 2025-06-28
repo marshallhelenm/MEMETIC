@@ -44,6 +44,7 @@ const handleMessage = (bytes, uuid) => {
   );
   let roomKey = message.roomKey;
   let room = rooms[roomKey];
+  if (!room) room = { ...emptyRoomTemplate };
   let player1 = room.player1;
   let player2 = room.player2;
   switch (message.type) {
@@ -51,13 +52,14 @@ const handleMessage = (bytes, uuid) => {
       clearPlayerCards(message.roomKey, uuid);
       break;
     case "createRoom":
-      console.log("creating Room", message.roomKey);
+      // console.log("creating Room", message.roomKey);
       if (!message.roomKey) return;
-      const newRoom = rooms[message.roomKey];
-      newRoom = {
+      rooms[message.roomKey] = {
         ...emptyRoomTemplate,
-        ...message.newRoomObject,
+        ...JSON.parse(message.newRoomObject),
       };
+      // console.log("Created room: ", JSON.stringify(room));
+
       break;
     case "getRoomContents":
       sendRoomContentsToUuid(message.roomKey, uuid);
@@ -126,7 +128,7 @@ const sendToUuid = (uuid, message) => {
     console.warn(`No connection found for UUID: ${uuid}`);
     return;
   }
-  console.log(`Sending message to UUID: ${uuid}`, message);
+  // console.log(`Sending message to UUID: ${uuid}`, message);
   if (typeof message === "string") {
     connections[uuid].send(message);
   } else {
@@ -151,7 +153,9 @@ const sweepRoom = (roomKey) => {
 
 const sendRoomContentsToUuid = (roomKey, uuid) => {
   const room = rooms[roomKey];
-  sendToUuid(uuid, { type: "roomContents", room: JSON.stringify(room) });
+  // console.log("sendRoomContentsToUuid: ", JSON.stringify(room));
+
+  sendToUuid(uuid, { type: "roomContents", room: room });
 };
 
 const broadcastUsers = (roomKey, uuid) => {
@@ -203,6 +207,7 @@ const joinRoom = ({
   console.log("joinRoom", roomKey);
 
   if (!room) {
+    rooms[roomKey] = { ...emptyRoomTemplate };
     console.warn("Room does not exist:", roomKey);
     noGameAlert(roomKey, uuid, "Room does not exist");
     return;
@@ -213,20 +218,21 @@ const joinRoom = ({
   let player2 = room.player2;
   if (player1.uuid && player2.uuid) {
     console.log("room full");
-    room.observers.push(uuid);
+    // room.observers.push(uuid);
     // this connection is already in there or will just be an observer
     returnRoomContents && sendRoomContentsToUuid(roomKey, uuid);
   } else if (player1.uuid === uuid || player2.uuid === uuid) {
-    console.log("user already in room");
+    // console.log("user already in room");
     // this connection is already in there
     returnRoomContents && sendRoomContentsToUuid(roomKey, uuid);
   } else {
     // user is not in server's room data. add them!
     // TODO: remove user from observers if they're in there
+    let player;
     if (!player1.uuid) {
-      let player = player1;
+      player = player1;
     } else if (!player2.uuid) {
-      let player = player2;
+      player = player2;
     } else {
       // shouldn't be possible to get here. Room full!
       room.observers.push(uuid);
@@ -240,10 +246,14 @@ const joinRoom = ({
     if (playerCard && playerCard != "undefined") {
       player.card = playerCard;
     }
-    if (returnRoomContents && Object.keys(room.columnSet).length > 0) {
+    if (
+      returnRoomContents &&
+      room.columnSet &&
+      Object.keys(room.columnsObject).length > 0
+    ) {
       sendRoomContentsToUuid(roomKey, uuid);
     }
-    if (!Object.keys(room.memeSet).length > 0) {
+    if (!Object.keys(room.columnsObject).length > 0) {
       noGameAlert(roomKey, uuid, "No game in progress", room.memeSet);
     }
     broadcastUsers(roomKey, uuid);

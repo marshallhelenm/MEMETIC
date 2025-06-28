@@ -231,7 +231,7 @@ function cardSorter(unsortedKeys, columnCount) {
   columnsObject = assignCardsToColumns(columnsObject);
   columnsObject = sortColumnsByHeight(columnsObject);
 
-  console.log(columnsObject);
+  // console.log(columnsObject);
 
   return columnsObject;
 }

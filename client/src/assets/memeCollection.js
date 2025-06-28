@@ -17,15 +17,10 @@ function memeSampler() {
     gameKeys.push(memesArray.splice(randomIndex, 1)[0]);
   }
 
-  let memeSet = {};
-  for (let i = 1; i <= 6; i++) {
-    if (i == 1) {
-      memeSet["1Column"] = { 1: gameKeys };
-    } else {
-      memeSet[`${i}Column`] = cardSorter(gameKeys, i);
-    }
+  let memeSet = { columnsObject: { 1: { 1: gameKeys } }, allKeys: gameKeys };
+  for (let i = 2; i <= 6; i++) {
+    memeSet.columnsObject[i] = cardSorter(gameKeys, i);
   }
-  memeSet.allKeys = gameKeys;
 
   return memeSet;
 }
