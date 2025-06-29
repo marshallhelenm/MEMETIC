@@ -11,11 +11,10 @@ import PlayGame from "../containers/PlayGame";
 import { devLog } from "../utils/Helpers";
 
 function PlayPage() {
-  const { uuid, connectionStatus, connectionError } = useWS();
+  const { uuid, connectionStatus, connectionError, tryingToConnect } = useWS();
   const { roomKey, roomObjectIsValid, guessyManager, allKeys } = useGuessy();
   const attemptsRef = useRef(0);
   useEffect(() => {
-    devLog(["roomObjectIsValid() in PlayPage", roomObjectIsValid(), allKeys]);
     if (!roomObjectIsValid() && attemptsRef.current < 11) {
       guessyManager("joinRoom");
       attemptsRef.current = attemptsRef.current + 1;
@@ -27,7 +26,7 @@ function PlayPage() {
     return <InvalidRoomKey />;
   } else if (roomObjectIsValid() && connectionStatus == "Open") {
     return <PlayGame />;
-  } else if (connectionError) {
+  } else if (connectionError && !tryingToConnect) {
     return <ConnectionError />;
   } else {
     return <RoomLoading />;

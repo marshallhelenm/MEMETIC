@@ -5,6 +5,8 @@ const socketURL = "ws://localhost:6969";
 
 function WSProvider({ children }) {
   const [isReady, setIsReady] = useState(false);
+  const [connectionAttempts, setConnectionAttempts] = useState(0);
+  const [tryingToConnect, setTryingToConnect] = useState(true);
   const ws = useRef(null);
   let uuidRef = useRef(sessionStorage.getItem("guessy-uuid"));
 
@@ -12,8 +14,6 @@ function WSProvider({ children }) {
     `${socketURL}?uuid=${uuidRef.current}`,
     { share: false, shouldReconnect: () => true }
   );
-
-  // TODO: implement a connection attempts count so that we can show loading instead of error for the second or two it takes to load
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting",
@@ -26,24 +26,41 @@ function WSProvider({ children }) {
   const connectionOpen = connectionStatus == "Open";
 
   useEffect(() => {
-    const socket = new WebSocket("wss://echo.websocket.events/");
+    if (connectionAttempts < 51) {
+      const socket = new WebSocket("wss://echo.websocket.events/");
+      if (!isReady) {
+        setTryingToConnect(true);
+        setConnectionAttempts((a) => {
+          return a++;
+        });
+      }
+      socket.onopen = () => {
+        setIsReady(true);
+        setTryingToConnect(false);
+        setConnectionAttempts(0);
+      };
 
-    socket.onopen = () => {
-      setIsReady(true);
-    };
+      socket.onclose = () => setIsReady(false);
 
-    socket.onclose = () => setIsReady(false);
+      // socket.onmessage = () => {
+      //   //
+      // };
 
-    // socket.onmessage = () => {
-    //   //
-    // };
+      ws.current = socket;
 
-    ws.current = socket;
-
-    return () => {
-      socket.close();
-    };
-  }, [lastJsonMessage]);
+      return () => {
+        socket.close();
+      };
+    } else {
+      setTryingToConnect(false);
+    }
+  }, [
+    lastJsonMessage,
+    isReady,
+    connectionAttempts,
+    setConnectionAttempts,
+    setTryingToConnect,
+  ]);
 
   const value = useMemo(() => {
     return {
@@ -55,6 +72,7 @@ function WSProvider({ children }) {
       connectionError,
       connectionOpen,
       uuid: uuidRef.current,
+      tryingToConnect,
     };
   }, [
     isReady,
@@ -64,6 +82,7 @@ function WSProvider({ children }) {
     connectionStatus,
     connectionError,
     connectionOpen,
+    tryingToConnect,
   ]);
 
   return <WSContext.Provider value={value}>{children}</WSContext.Provider>;

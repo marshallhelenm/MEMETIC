@@ -222,7 +222,10 @@ const joinRoom = ({
     returnRoomContents && sendRoomContentsToUuid(roomKey, uuid);
   } else {
     // user is not in server's room data. add them!
-    // TODO: remove user from observers if they're in there
+    // remove from observers if they're in there
+    if (observers.includes(uuid)) {
+      observers.splice(observers.indexOf(uuid), 1);
+    }
     let player;
     if (!player1.uuid) {
       player = player1;
