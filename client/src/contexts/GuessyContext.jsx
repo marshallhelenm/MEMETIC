@@ -60,7 +60,7 @@ function guessyReducer(state, action) {
           parsedRoom.myPlayerCard || sessionPlayerCard || state.myPlayerCard,
       };
     case "updateRoomKey":
-      return { ...state, roomKey: payload.newRoomKey };
+      return { ...state, roomKey: payload.newRoomKey.toUpperCase() };
     case "updateUsername":
       return { ...state, username: payload.username };
     case "updateUsers":

@@ -41,7 +41,7 @@ const handleMessage = (bytes, uuid) => {
     // message
   );
 
-  let roomKey = message.roomKey;
+  let roomKey = message.roomKey?.toUpperCase();
   let room = rooms[roomKey];
   if (!room) room = { ...emptyRoomTemplate };
   let player1 = room.player1;

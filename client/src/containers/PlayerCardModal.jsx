@@ -7,11 +7,12 @@ import Tooltip from "@mui/material/Tooltip";
 import StyledDialog from "../components/StyledDialog";
 import GuessyButton from "../components/GuessyButton";
 import MissingStub from "../components/MissingStub";
+import { DrawerIcon } from "../components/DrawerComponents";
 import { colorA, colorB } from "../assets/styles";
 import { memeData } from "../assets/memeCollection";
 import { useGuessy } from "../contexts/useGuessy";
 
-const PlayerCardModal = () => {
+const PlayerCardModal = ({ drawerOpen }) => {
   const { observer, guessyManager, myPlayerCard } = useGuessy();
   const [open, setOpen] = useState(false);
 
@@ -55,10 +56,12 @@ const PlayerCardModal = () => {
   } else {
     return (
       <>
-        <div onClick={handleOpen} className="pointer">
-          <i className={`fa-solid fa-star fa-lg player-card-star`}></i>
-          View Your Meme
-        </div>
+        <DrawerIcon
+          onClick={handleOpen}
+          drawerOpen={drawerOpen}
+          icon="star"
+          classes="player-card-star"
+        />
         <StyledDialog open={open} onClose={handleClose} maxWidth="md">
           <IconButton
             aria-label="close"
@@ -76,7 +79,6 @@ const PlayerCardModal = () => {
             <div
               style={{
                 display: "flex",
-                //   justifyContent: "space-around",
                 alignItems: "center",
               }}
             >

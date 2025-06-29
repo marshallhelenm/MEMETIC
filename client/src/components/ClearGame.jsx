@@ -3,9 +3,11 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
+import ListItemText from "@mui/material/ListItemText";
 
-import { useGuessy } from "../contexts/useGuessy";
 import GuessyButton from "./GuessyButton";
+import { DrawerButton, DrawerIcon } from "./DrawerComponents";
+import { useGuessy } from "../contexts/useGuessy";
 
 function ConfirmDialog({ onConfirm, open, setOpen }) {
   const handleCancel = () => setOpen(false);
@@ -37,7 +39,7 @@ function ConfirmDialog({ onConfirm, open, setOpen }) {
   );
 }
 
-function ClearGame({ setLoadingCards }) {
+function ClearGame({ setLoadingCards, opacity, drawerOpen }) {
   const [open, setOpen] = useState(false);
   const { guessyManager } = useGuessy();
 
@@ -47,8 +49,9 @@ function ClearGame({ setLoadingCards }) {
   }
 
   return (
-    <>
-      <GuessyButton onClick={() => setOpen(true)}>New Game</GuessyButton>
+    <DrawerButton drawerOpen={drawerOpen}>
+      <DrawerIcon onClick={() => setOpen(true)} icon="rotate" />
+      <ListItemText primary="New Game" sx={[opacity]} />
       <ConfirmDialog
         id="ringtone-menu"
         keepMounted
@@ -56,7 +59,7 @@ function ClearGame({ setLoadingCards }) {
         onConfirm={handleClearGame}
         setOpen={setOpen}
       />
-    </>
+    </DrawerButton>
   );
 }
 

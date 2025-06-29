@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import Board from "./Board";
 import PlayGameHeader from "./PlayGameHeader";
+import MiniDrawer from "./Drawer";
 
 function PlayGame() {
   const [loadingCards, setLoadingCards] = useState(false); // this lives at this level instead of in Board.jsx so that ClearGame in the header can call it
@@ -9,8 +10,10 @@ function PlayGame() {
 
   return (
     <div className="play-game">
-      <PlayGameHeader setLoadingCards={setLoadingCards} />
-      <Board loading={loadingCards} columnCount={columnCount} />
+      {/* <PlayGameHeader setLoadingCards={setLoadingCards} /> */}
+      <MiniDrawer setLoadingCards={setLoadingCards}>
+        <Board loading={loadingCards} columnCount={columnCount} />
+      </MiniDrawer>
     </div>
   );
 }
