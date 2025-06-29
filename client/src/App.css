@@ -116,11 +116,12 @@ button:focus {
   /* font-size: calc(10px + 2vmin); */
   overflow-x: none;
   overflow-y: scroll;
-  gap: 10px 20px;
+  gap: 10px 12px;
   padding: 1%;
   border-radius: var(--corners);
   border: solid 2px var(--colorD);
   margin: auto;
+  justify-content: center;
 }
 
 .boardColumn {
@@ -209,7 +210,6 @@ button:focus {
 }
 
 .player-card-star {
-  /* color: var(--colorG) !important; */
   color: yellow !important;
   z-index: 99;
 }

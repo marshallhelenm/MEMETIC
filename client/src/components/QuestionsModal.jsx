@@ -5,7 +5,7 @@ import DialogContent from "@mui/material/DialogContent";
 import ListItemText from "@mui/material/ListItemText";
 
 import StyledDialog from "./StyledDialog";
-import { DrawerButton, DrawerIcon } from "./DrawerComponents";
+import { DrawerButton, DrawerIcon, DrawerItem } from "./DrawerComponents";
 
 const QuestionsModal = ({ opacity, drawerOpen }) => {
   const [open, setOpen] = useState(false);
@@ -25,9 +25,13 @@ const QuestionsModal = ({ opacity, drawerOpen }) => {
   ];
 
   return (
-    <DrawerButton drawerOpen={drawerOpen}>
-      <DrawerIcon onClick={handleOpen} icon="question" />
-      <ListItemText primary="How To Play" sx={[opacity]} />
+    <>
+      <DrawerItem onClick={handleOpen}>
+        <DrawerButton drawerOpen={drawerOpen}>
+          <DrawerIcon icon="question" drawerOpen={drawerOpen} />
+          <ListItemText primary="How To Play" sx={[opacity]} />
+        </DrawerButton>
+      </DrawerItem>
       <StyledDialog
         open={open}
         onClose={handleClose}
@@ -64,7 +68,7 @@ const QuestionsModal = ({ opacity, drawerOpen }) => {
           </div>
         </DialogContent>
       </StyledDialog>
-    </DrawerButton>
+    </>
   );
 };
 

@@ -1,13 +1,21 @@
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import { colorC } from "../assets/styles";
 
 function DrawerButton({ children, drawerOpen }) {
-  const listItemButtonSX = [
-    { minHeight: 48, px: 2.5 },
-    drawerOpen ? { justifyContent: "initial" } : { justifyContent: "center" },
-  ];
-  return <ListItemButton sx={listItemButtonSX}>{children}</ListItemButton>;
+  return (
+    <ListItemButton
+      sx={[
+        { minHeight: 48, px: 2.5 },
+        drawerOpen
+          ? { justifyContent: "initial" }
+          : { justifyContent: "center" },
+      ]}
+    >
+      {children}
+    </ListItemButton>
+  );
 }
 
 function DrawerIcon({ drawerOpen, icon, classes = "" }) {

@@ -223,8 +223,8 @@ const joinRoom = ({
   } else {
     // user is not in server's room data. add them!
     // remove from observers if they're in there
-    if (observers.includes(uuid)) {
-      observers.splice(observers.indexOf(uuid), 1);
+    if (room.observers.includes(uuid)) {
+      room.observers.splice(room.observers.indexOf(uuid), 1);
     }
     let player;
     if (!player1.uuid) {

@@ -26,7 +26,6 @@ function parseUsers({ roomKey, player1, player2, myUuid }) {
     parsedUserInfo.username =
       myInfo.username ||
       new URLSearchParams(window.location.search).get("username");
-    console.log("myInfo: ", myInfo);
     parsedUserInfo.myPlayerCard = myInfo.card;
   }
   if (partnerInfo) {
@@ -65,8 +64,6 @@ function parseRoom({ roomKey, roomObject, myUuid }) {
   if (allKeys.length == 24 && Object.keys(columnsObject).length == 6) {
     value.allKeys = [...allKeys];
     value.columnsObject = { ...columnsObject };
-  } else {
-    console.warn("Invalid Room Object in RoomParser");
   }
 
   return value;

@@ -6,42 +6,19 @@ import DialogActions from "@mui/material/DialogActions";
 import ListItemText from "@mui/material/ListItemText";
 
 import GuessyButton from "./GuessyButton";
-import { DrawerButton, DrawerIcon } from "./DrawerComponents";
+import { DrawerButton, DrawerIcon, DrawerItem } from "./DrawerComponents";
 import { useGuessy } from "../contexts/useGuessy";
 
-function ConfirmDialog({ onConfirm, open, setOpen }) {
-  const handleCancel = () => setOpen(false);
+function ClearGame({ setLoadingCards, opacity, drawerOpen }) {
+  const [clearGameOpen, setClearGameOpen] = useState(false);
+  const { guessyManager } = useGuessy();
+
+  const handleCancel = () => setClearGameOpen(false);
 
   const handleOk = () => {
-    onConfirm();
-    setOpen(false);
+    handleClearGame();
+    setClearGameOpen(false);
   };
-
-  return (
-    <Dialog
-      sx={{ "& .MuiDialog-paper": { width: "80%", maxHeight: 435 } }}
-      maxWidth="xs"
-      open={open}
-    >
-      <DialogTitle>Clear current game?</DialogTitle>
-      <DialogContent dividers>
-        The memes will be replaced with a new set for every player in the room!
-      </DialogContent>
-      <DialogActions>
-        <GuessyButton autoFocus onClick={handleCancel} dark>
-          Cancel
-        </GuessyButton>
-        <GuessyButton onClick={handleOk} dark>
-          Ok
-        </GuessyButton>
-      </DialogActions>
-    </Dialog>
-  );
-}
-
-function ClearGame({ setLoadingCards, opacity, drawerOpen }) {
-  const [open, setOpen] = useState(false);
-  const { guessyManager } = useGuessy();
 
   function handleClearGame() {
     setLoadingCards(true);
@@ -49,17 +26,33 @@ function ClearGame({ setLoadingCards, opacity, drawerOpen }) {
   }
 
   return (
-    <DrawerButton drawerOpen={drawerOpen}>
-      <DrawerIcon onClick={() => setOpen(true)} icon="rotate" />
-      <ListItemText primary="New Game" sx={[opacity]} />
-      <ConfirmDialog
-        id="ringtone-menu"
-        keepMounted
-        open={open}
-        onConfirm={handleClearGame}
-        setOpen={setOpen}
-      />
-    </DrawerButton>
+    <>
+      <DrawerItem onClick={() => setClearGameOpen(true)}>
+        <DrawerButton drawerOpen={drawerOpen}>
+          <DrawerIcon icon="rotate" drawerOpen={drawerOpen} />
+          <ListItemText primary="New Game" sx={[opacity]} />
+        </DrawerButton>
+      </DrawerItem>
+      <Dialog
+        sx={{ "& .MuiDialog-paper": { width: "80%", maxHeight: 435 } }}
+        maxWidth="xs"
+        open={clearGameOpen}
+      >
+        <DialogTitle>Clear current game?</DialogTitle>
+        <DialogContent dividers>
+          The memes will be replaced with a new set for every player in the
+          room!
+        </DialogContent>
+        <DialogActions>
+          <GuessyButton autoFocus onClick={handleCancel} dark>
+            Cancel
+          </GuessyButton>
+          <GuessyButton onClick={handleOk} dark>
+            Ok
+          </GuessyButton>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
 

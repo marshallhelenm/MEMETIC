@@ -3,20 +3,25 @@ import IconButton from "@mui/material/IconButton";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Tooltip from "@mui/material/Tooltip";
+import ListItemText from "@mui/material/ListItemText";
 
 import StyledDialog from "../components/StyledDialog";
 import GuessyButton from "../components/GuessyButton";
 import MissingStub from "../components/MissingStub";
-import { DrawerIcon } from "../components/DrawerComponents";
+import {
+  DrawerButton,
+  DrawerIcon,
+  DrawerItem,
+} from "../components/DrawerComponents";
 import { colorA, colorB } from "../assets/styles";
 import { memeData } from "../assets/memeCollection";
 import { useGuessy } from "../contexts/useGuessy";
 
-const PlayerCardModal = ({ drawerOpen }) => {
+const PlayerCardModal = ({ drawerOpen, opacity }) => {
   const { observer, guessyManager, myPlayerCard } = useGuessy();
   const [open, setOpen] = useState(false);
-
   let item = memeData[myPlayerCard];
+
   if (!item) return;
 
   const handleOpen = (e) => {
@@ -56,12 +61,17 @@ const PlayerCardModal = ({ drawerOpen }) => {
   } else {
     return (
       <>
-        <DrawerIcon
-          onClick={handleOpen}
-          drawerOpen={drawerOpen}
-          icon="star"
-          classes="player-card-star"
-        />
+        <DrawerItem onClick={handleOpen}>
+          <DrawerButton drawerOpen={drawerOpen}>
+            <DrawerIcon
+              onClick={handleOpen}
+              drawerOpen={drawerOpen}
+              icon="star"
+              // classes="player-card-star"
+            />
+            <ListItemText primary={"Your Meme"} sx={[opacity]} />
+          </DrawerButton>
+        </DrawerItem>
         <StyledDialog open={open} onClose={handleClose} maxWidth="md">
           <IconButton
             aria-label="close"

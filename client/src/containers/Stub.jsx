@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import StubImage from "../components/StubImage";
 import Overlay from "../containers/Overlay";
 import { useGuessy } from "../contexts/useGuessy";
+import { useTraceUpdate } from "../hooks/useTraceUpdate";
 
 function Stub({ itemKey, item, isPlayerCard }) {
   const [flipped, setFlipped] = useState(false);

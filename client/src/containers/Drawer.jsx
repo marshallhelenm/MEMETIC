@@ -9,13 +9,13 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import ListItemText from "@mui/material/ListItemText";
-import Alert from "@mui/material/Alert";
 
 import Logo from "../components/Logo";
 import PlayerCardModal from "./PlayerCardModal";
 import GifPauseButton from "../components/GifPauseButton";
 import QuestionsModal from "../components/QuestionsModal";
 import ClearGame from "../components/ClearGame";
+import CopyAlert from "../components/CopyAlert";
 import { colorB, colorE } from "../assets/styles";
 import {
   DrawerButton,
@@ -104,7 +104,7 @@ const Drawer = styled(MuiDrawer, {
       },
     },
   ],
-  backgroungColor: colorE,
+  backgroundColor: colorE,
 }));
 
 export default function MiniDrawer({ children, setLoadingCards }) {
@@ -128,9 +128,11 @@ export default function MiniDrawer({ children, setLoadingCards }) {
       `${window.location.origin}/play?roomKey=${roomKey}`
     );
     setAlert(true);
-    setTimeout(() => {
-      setAlert(false);
-    }, 1500);
+    if (drawerOpen) {
+      setTimeout(() => {
+        setAlert(false);
+      }, 1500);
+    }
   };
 
   return (
@@ -156,9 +158,12 @@ export default function MiniDrawer({ children, setLoadingCards }) {
       <Drawer variant="permanent" open={drawerOpen}>
         <DrawerHeader>
           {alert && (
-            <Alert severity="success" sx={{ position: "absolute", zIndex: 99 }}>
+            <CopyAlert
+              severity="success"
+              sx={{ position: "absolute", zIndex: 99 }}
+            >
               Room Key Copied!
-            </Alert>
+            </CopyAlert>
           )}
           <IconButton onClick={handleDrawerClose}>
             <i
@@ -177,17 +182,12 @@ export default function MiniDrawer({ children, setLoadingCards }) {
               <ListItemText primary={roomKey.toUpperCase()} sx={[opacity]} />
             </DrawerButton>
           </DrawerItem>
-          <DrawerItem>
-            {/* Player Meme */}
-            <DrawerButton drawerOpen={drawerOpen}>
-              <PlayerCardModal />
-              <ListItemText primary={"Your Meme"} sx={[opacity]} />
-            </DrawerButton>
-          </DrawerItem>
+          {/* Player Meme */}
+          <PlayerCardModal drawerOpen={drawerOpen} opacity={opacity} />
           <DrawerItem>
             {/* users */}
             <DrawerButton drawerOpen={drawerOpen}>
-              <DrawerIcon icon="users" />
+              <DrawerIcon drawerOpen={drawerOpen} icon="users" />
               <ListItemText primary={"Users"} sx={[opacity]} />
             </DrawerButton>
             {/* div here listing users hidden when closed */}
@@ -195,22 +195,13 @@ export default function MiniDrawer({ children, setLoadingCards }) {
         </List>
         <Divider />
         <List>
-          <DrawerItem>
-            <DrawerButton drawerOpen={drawerOpen}>
-              <GifPauseButton />
-              <ListItemText primary="Gifs" sx={[opacity]} />
-            </DrawerButton>
-          </DrawerItem>
-          <DrawerItem>
-            <ClearGame
-              setLoadingCards={setLoadingCards}
-              opacity={opacity}
-              drawerOpen={drawerOpen}
-            />
-          </DrawerItem>
-          <DrawerItem>
-            <QuestionsModal opacity={opacity} drawerOpen={drawerOpen} />
-          </DrawerItem>
+          <GifPauseButton drawerOpen={drawerOpen} opacity={opacity} />
+          <ClearGame
+            setLoadingCards={setLoadingCards}
+            opacity={opacity}
+            drawerOpen={drawerOpen}
+          />
+          <QuestionsModal opacity={opacity} drawerOpen={drawerOpen} />
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
