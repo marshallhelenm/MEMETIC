@@ -6,23 +6,8 @@ import { devLog } from "../utils/Helpers";
 
 function MessageReceiver() {
   const { guessyManager, dispatch } = useGuessy();
-  const { lastJsonMessage, setUuid } = useWS();
+  const { lastJsonMessage, uuid } = useWS();
   const { lastJsonMessageChanged } = useTraceUpdate({ lastJsonMessage });
-
-  const processRoomContents = useMemo(() => {
-    return (roomContents) => {
-      if (!roomContents) {
-        devLog(["no roomContents to process!", roomContents]);
-        return;
-      } else if (typeof roomContents === "string") {
-        roomContents = JSON.parse(roomContents);
-      }
-      // console.log("processRoomContents: ", roomContents);
-
-      dispatch({ type: "updateRoom", payload: { roomObject: roomContents } });
-    };
-  }, [dispatch]);
-
   //   **Message Handling**
   const handleIncomingMessage = useMemo(() => {
     return (message) => {
@@ -44,11 +29,18 @@ function MessageReceiver() {
         case "noGameAlert":
           guessyManager("createRoom", { newRoomKey: message.roomKey });
           break;
-        case "replaceGame":
-          processRoomContents(message.room);
-          break;
-        case "roomContents":
-          processRoomContents(message.room);
+        case ("replaceGame", "roomContents"):
+          // it's fuckin gone already
+          if (!message.room) {
+            devLog(["no roomContents to process!", message.room]);
+            return;
+          } else if (typeof message.room === "string") {
+            message.room = JSON.parse(message.room);
+          }
+          dispatch({
+            type: "updateRoom",
+            payload: { roomObject: message.room },
+          });
           break;
         case "usersUpdate":
           dispatch({
@@ -57,13 +49,15 @@ function MessageReceiver() {
           });
           break;
         case "uuid":
-          setUuid(message.uuid);
+          if (!sessionStorage.getItem("guessy-uuid")) {
+            sessionStorage.setItem("guessy-uuid", message.uuid);
+          }
           break;
         default:
           devLog(["Unhandled message type:", message["type"], message]);
       }
     };
-  }, [processRoomContents, setUuid, dispatch, guessyManager]);
+  }, [dispatch, guessyManager]);
 
   useEffect(() => {
     if (lastJsonMessageChanged) handleIncomingMessage(lastJsonMessage);

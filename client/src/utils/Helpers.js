@@ -22,18 +22,18 @@ const waitUntil = (condition, ping) => {
 
   function waitForConditional(resolve, reject) {
     if (condition) {
-      devLog("condition met");
+      // devLog("condition met");
       resolve(true);
     } else if (Date.now() - start >= 5000) {
       // timeout after 5 seconds
-      devLog("timeout exceeded, rejecting promise");
+      // devLog("timeout exceeded, rejecting promise");
       reject(new Error("timeout"));
     } else if (ping && pingCount < 10) {
       ping();
       pingCount++;
-      devLog(["pinging", "count:", pingCount]);
+      // devLog(["pinging", "count:", pingCount]);
     } else {
-      devLog(["waiting for condition to be met", condition]);
+      // devLog(["waiting for condition to be met", condition]);
       setTimeout(waitForConditional.bind(this, resolve, reject), 30);
     }
   }

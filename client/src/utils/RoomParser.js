@@ -1,5 +1,3 @@
-import { handleLocalStorage } from "../utils/LocalStorageHandler";
-
 function parseUsers({ roomKey, player1, player2, myUuid }) {
   const parsedUserInfo = {
     myPlayerCard: undefined,
@@ -14,12 +12,12 @@ function parseUsers({ roomKey, player1, player2, myUuid }) {
 
   if (player1.uuid === myUuid) {
     // i'm player 1
-    myInfo = player1;
-    partnerInfo = player2;
+    myInfo = { ...player1 };
+    partnerInfo = { ...player2 };
   } else if (player2.uuid === myUuid) {
     // i'm player 2
-    myInfo = player2;
-    partnerInfo = player1;
+    myInfo = { ...player2 };
+    partnerInfo = { ...player1 };
   } else {
     parsedUserInfo.observer = true;
   }
@@ -28,12 +26,8 @@ function parseUsers({ roomKey, player1, player2, myUuid }) {
     parsedUserInfo.username =
       myInfo.username ||
       new URLSearchParams(window.location.search).get("username");
-    parsedUserInfo.myPlayerCard =
-      myInfo.card ||
-      handleLocalStorage({
-        type: "getPlayerCard",
-        roomKey: roomKey,
-      });
+    console.log("myInfo: ", myInfo);
+    parsedUserInfo.myPlayerCard = myInfo.card;
   }
   if (partnerInfo) {
     parsedUserInfo.partnerUsername = partnerInfo.username;
@@ -58,14 +52,13 @@ function parseRoom({ roomKey, roomObject, myUuid }) {
   // start by parsing user info
   let parsedUserInfo = parseUsers({
     roomKey,
-    player1: roomObject.player1,
-    player2: roomObject.player2,
+    player1: roomObject["player1"],
+    player2: roomObject["player2"],
     myUuid,
   });
   value = { ...value, ...parsedUserInfo };
 
   // next parse game info
-
   let allKeys = roomObject.allKeys;
   let columnsObject = roomObject.columnsObject;
 
@@ -75,6 +68,7 @@ function parseRoom({ roomKey, roomObject, myUuid }) {
   } else {
     console.warn("Invalid Room Object in RoomParser");
   }
+
   return value;
 }
 

@@ -2,7 +2,6 @@ import { createContext, useMemo, useEffect, useReducer, useRef } from "react";
 
 import { useWS } from "./useWS";
 import { memeSampler } from "../assets/memeCollection";
-import { handleLocalStorage } from "../utils/LocalStorageHandler";
 import { devLog, waitUntil, randomCardKey } from "../utils/Helpers";
 import { parseRoom, parseUsers } from "../utils/RoomParser";
 import { useTraceUpdate } from "../hooks/useTraceUpdate";
@@ -19,12 +18,18 @@ const initialState = {
   partnerCard: "",
   partnerUsername: "",
   observer: false,
-  staticGifs: localStorage.getItem("guessy_gifs") == "true",
+  staticGifs: sessionStorage.getItem("guessy_gifs") == "true",
 };
 
 function guessyReducer(state, action) {
   const type = action.type;
   const payload = action.payload;
+  let parsedRoom = {};
+  let parsedUsers = {};
+  const sessionPlayerCard = sessionStorage.getItem(
+    `guessy-${state.roomKey}-player-card`
+  );
+  devLog(["guessyReducer: ", type]);
 
   switch (type) {
     case "setStaticGifs":
@@ -32,34 +37,44 @@ function guessyReducer(state, action) {
     case "setUsername":
       return { ...state, username: payload.newUsername };
     case "updateMemeSet":
+      // not happening here, payload is only columnsObject and allKeys
       return { ...state, ...payload };
     case "updateMyPlayerCard":
-      handleLocalStorage("setPlayerCard", payload.myPlayerCard);
-      return { ...state, myPlayerCard: payload.myPlayerCard };
+      sessionStorage.setItem(
+        `guessy-${state.roomKey}-player-card`,
+        payload.newCard
+      );
+      return { ...state, myPlayerCard: payload.newCard };
     case "updatePartnerCard":
       return { ...state, partnerCard: payload.partnerCard };
     case "updateRoom":
+      parsedRoom = parseRoom({
+        roomKey: state.roomKey,
+        myUuid: state.uuid,
+        roomObject: payload.roomObject,
+      });
       return {
         ...state,
-        ...parseRoom({
-          roomKey: state.roomKey,
-          myUuid: state.uuid,
-          roomObject: payload.roomObject,
-        }),
+        ...parsedRoom,
+        myPlayerCard:
+          parsedRoom.myPlayerCard || sessionPlayerCard || state.myPlayerCard,
       };
     case "updateRoomKey":
       return { ...state, roomKey: payload.newRoomKey };
     case "updateUsername":
       return { ...state, username: payload.username };
     case "updateUsers":
+      parsedUsers = parseUsers({
+        roomKey: state.roomKey,
+        myUuid: state.uuid,
+        player1: payload.player1,
+        player2: payload.player2,
+      });
       return {
         ...state,
-        ...parseUsers({
-          roomKey: state.roomKey,
-          myUuid: state.uuid,
-          player1: payload.player1,
-          player2: payload.player2,
-        }),
+        ...parsedUsers,
+        myPlayerCard:
+          parsedRoom.myPlayerCard || sessionPlayerCard || state.myPlayerCard,
       };
     default:
       throw new Error("Action unknown in guessyReducer");
@@ -107,17 +122,15 @@ function GuessyProvider({ children }) {
 
   const createRoom = useMemo(() => {
     return async function (newRoomKey) {
-      devLog(["createRoom called with newRoomKey:", newRoomKey]);
       let ready = await waitUntil(connectionOpen);
       if (ready) {
-        devLog(["connectionOpen, continue with createRoom"]);
         dispatch({ type: "updateRoomKey", payload: { newRoomKey } });
         const newMemes = memeSampler();
         dispatch({ type: "updateMemeSet", payload: newMemes });
         const requesterCard = randomCardKey(newMemes.allKeys);
         dispatch({
           type: "updateMyPlayerCard",
-          payload: { myPlayerCard: requesterCard },
+          payload: { newCard: requesterCard },
         });
         dispatch({
           type: "updateUsername",
@@ -127,12 +140,10 @@ function GuessyProvider({ children }) {
           roomKey: newRoomKey,
           columnsObject: newMemes.columnsObject,
           allKeys: newMemes.allKeys,
-          users: {
-            player1: {
-              uuid: myUuid,
-              card: requesterCard,
-              username,
-            },
+          player1: {
+            uuid: myUuid,
+            card: requesterCard,
+            username,
           },
         };
         sendJsonMessage({
@@ -153,8 +164,7 @@ function GuessyProvider({ children }) {
       devLog(["guessyManager:", action, payload]);
       switch (action) {
         case "assignUsername":
-          devLog(["assignUsername", payload.newUsername]);
-          localStorage.setItem(`${roomKey}-username`, payload.newUsername);
+          sessionStorage.setItem(`${roomKey}-username`, payload.newUsername);
           dispatch({
             type: "setUsername",
             payload: { newUsername: payload.newUsername },
@@ -182,6 +192,7 @@ function GuessyProvider({ children }) {
             type: "joinRoom",
             roomKey,
             username,
+            playerCard: myPlayerCard,
             returnRoomContents: !roomObjectIsValid(),
           });
           break;
@@ -201,9 +212,8 @@ function GuessyProvider({ children }) {
           // if it's the current user, update the local storage
 
           // clean up local storage
-          handleLocalStorage({
-            type: "cleanUpRoom",
-            roomKey: roomKey,
+          Object.keys(sessionStorage).forEach((key) => {
+            if (key.includes(roomKey)) window.sessionStorage.removeItem(key);
           });
 
           // send the new memes to the server
@@ -225,7 +235,7 @@ function GuessyProvider({ children }) {
             type: "setStaticGifs",
             payload: { staticGifs: payload.staticGifs },
           });
-          localStorage.setItem("guessy_gifs", !staticGifs);
+          sessionStorage.setItem("guessy_gifs", !staticGifs);
           break;
         default:
           break;
@@ -239,6 +249,7 @@ function GuessyProvider({ children }) {
     username,
     sendJsonMessage,
     roomObjectIsValid,
+    myPlayerCard,
   ]);
 
   //  ** value for the context provider **
@@ -273,7 +284,8 @@ function GuessyProvider({ children }) {
 
   // ** useEffect **
 
-  // useEffect(() => {}, []);
+  // useEffect(() => {
+  // }, [myPlayerCard]);
 
   // ** render provider:
 

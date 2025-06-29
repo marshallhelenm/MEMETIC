@@ -21,7 +21,8 @@ function App() {
   useEffect(() => {
     if (
       location.pathname == "/" ||
-      (location.pathname != "/home" && !roomKey)
+      (!["/home", "/image_analyzer", "/upload"].includes(location.pathname) &&
+        !roomKey)
     ) {
       navigate("/home");
     } else if (location.pathname == "/play" && !username) {

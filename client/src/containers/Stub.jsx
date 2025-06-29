@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import StubImage from "../components/StubImage";
 import Overlay from "../containers/Overlay";
+import { useGuessy } from "../contexts/useGuessy";
 
-function Stub({ itemKey, item, roomKey, isPlayerCard }) {
+function Stub({ itemKey, item, isPlayerCard }) {
   const [flipped, setFlipped] = useState(false);
   const [overlay, setOverlay] = useState(false);
+  const { roomKey } = useGuessy();
   const storageId = `${roomKey}-${item.stub}`;
   const height = 200 * item.height_multiplier + 2;
 
   function setStubStatus(status) {
-    localStorage.setItem(storageId, status);
+    window.sessionStorage.setItem(storageId, status);
     status === "flipped" ? setFlipped(true) : setFlipped(false);
   }
 
@@ -21,7 +23,7 @@ function Stub({ itemKey, item, roomKey, isPlayerCard }) {
   }
 
   useEffect(() => {
-    if (localStorage.getItem(storageId) === "flipped") {
+    if (sessionStorage.getItem(storageId) === "flipped") {
       setFlipped(true);
     } else {
       setFlipped(false);

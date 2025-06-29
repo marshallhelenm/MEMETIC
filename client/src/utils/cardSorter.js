@@ -58,7 +58,6 @@ function cardSorter(unsortedKeys, columnCount) {
 
   function avgCardHeight(keys) {
     let height = totalCardHeight(keys);
-    console.log("avgHeight: ", height, keys.length);
 
     return height / keys.length;
   }
