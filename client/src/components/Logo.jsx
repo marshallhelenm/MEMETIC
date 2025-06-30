@@ -19,7 +19,7 @@ function Logo({ spin = true, header = false, size }) {
     } else if (spinTime > 1) {
       spinner.css("animation-duration", `${spinTime / 2}s`);
     } else if (spinTime.toFixed(1) > 0.1) {
-      spinner.css("animation-duration", `${spinTime - 0.1}s`);
+      spinner.css("animation-duration", `${spinTime - 0.2}s`);
     } else {
       spinner.css("animation-duration", "0s");
       setFade(true);

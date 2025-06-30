@@ -1,12 +1,9 @@
 import ReactFreezeframe from "react-freezeframe";
 import { useGuessy } from "../contexts/useGuessy";
-import question from "../assets/question.png";
 import { colorE } from "../assets/styles";
-import { useTraceUpdate } from "../hooks/useTraceUpdate";
 
-function StubImage({ item, flipped, height }) {
+function StubImage({ item, flipped }) {
   const { staticGifs } = useGuessy();
-  // useTraceUpdate({ flipped, item, height }, true);
   const imgElement = (
     <img
       src={`/memes/${item.img}`}
@@ -15,14 +12,7 @@ function StubImage({ item, flipped, height }) {
     />
   );
   if (flipped) {
-    return (
-      <img
-        src={question}
-        alt={`a question mark`}
-        className="stub-image back pointer"
-        style={{ height: height / 2 }}
-      />
-    );
+    return <div className={`stub-back`}></div>;
   } else if (staticGifs && item.img.includes(".gif")) {
     return (
       <div>

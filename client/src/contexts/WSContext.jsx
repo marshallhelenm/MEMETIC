@@ -22,7 +22,8 @@ function WSProvider({ children }) {
     [ReadyState.CLOSED]: "Closed",
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
-  const connectionError = connectionStatus != "Open";
+  const connectionError =
+    connectionStatus == "Closed" && connectionAttemptsRef.current > 10;
   const connectionOpen = connectionStatus == "Open";
   useTraceUpdate(
     {

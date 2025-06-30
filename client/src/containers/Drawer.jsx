@@ -23,6 +23,7 @@ import {
   DrawerItem,
 } from "../components/DrawerComponents";
 import { useGuessy } from "../contexts/useGuessy";
+import Users from "../components/Users";
 
 const drawerWidth = 200;
 
@@ -139,7 +140,15 @@ export default function MiniDrawer({ children, setLoadingCards }) {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       {/* top bar */}
-      <AppBar position="fixed" open={drawerOpen}>
+      <AppBar
+        position="fixed"
+        open={drawerOpen}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
@@ -153,6 +162,7 @@ export default function MiniDrawer({ children, setLoadingCards }) {
           <Logo spin={false} header={true} />
           <h1 className="heading">Guessy</h1>
         </Toolbar>
+        <GifPauseButton />
       </AppBar>
       {/* drawer */}
       <Drawer variant="permanent" open={drawerOpen}>
@@ -174,35 +184,42 @@ export default function MiniDrawer({ children, setLoadingCards }) {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
+        <>
           <DrawerItem onClick={handleCopyKey}>
             {/* Room Key */}
             <DrawerButton drawerOpen={drawerOpen}>
               <DrawerIcon drawerOpen={drawerOpen} icon="key" />
               <ListItemText primary={roomKey.toUpperCase()} sx={[opacity]} />
+              {drawerOpen && (
+                <i
+                  className={`fa-regular fa-copy fa-md`}
+                  style={{ opacity: 0.8 }}
+                ></i>
+              )}
             </DrawerButton>
           </DrawerItem>
           {/* Player Meme */}
           <PlayerCardModal drawerOpen={drawerOpen} opacity={opacity} />
-          <DrawerItem>
-            {/* users */}
-            <DrawerButton drawerOpen={drawerOpen}>
-              <DrawerIcon drawerOpen={drawerOpen} icon="users" />
-              <ListItemText primary={"Users"} sx={[opacity]} />
-            </DrawerButton>
-            {/* div here listing users hidden when closed */}
-          </DrawerItem>
-        </List>
-        <Divider />
-        <List>
-          <GifPauseButton drawerOpen={drawerOpen} opacity={opacity} />
+          {/* Clear Game */}
           <ClearGame
             setLoadingCards={setLoadingCards}
             opacity={opacity}
             drawerOpen={drawerOpen}
           />
           <QuestionsModal opacity={opacity} drawerOpen={drawerOpen} />
-        </List>
+          <DrawerItem
+            onClick={() => {
+              if (!drawerOpen) setDrawerOpen(true);
+            }}
+          >
+            {/* users */}
+            <DrawerButton drawerOpen={drawerOpen}>
+              <DrawerIcon drawerOpen={drawerOpen} icon="users" />
+              <ListItemText primary={"Players"} sx={[opacity]} />
+            </DrawerButton>
+            {drawerOpen && <Users />}
+          </DrawerItem>
+        </>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />

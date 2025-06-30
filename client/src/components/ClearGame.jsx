@@ -25,6 +25,12 @@ function ClearGame({ setLoadingCards, opacity, drawerOpen }) {
     guessyManager("replaceGame");
   }
 
+  function handleClickAway() {
+    if (clearGameOpen) {
+      return () => setClearGameOpen(false);
+    }
+  }
+
   return (
     <>
       <DrawerItem onClick={() => setClearGameOpen(true)}>

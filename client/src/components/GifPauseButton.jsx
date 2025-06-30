@@ -2,11 +2,9 @@ import "../App.css";
 import { useGuessy } from "../contexts/useGuessy";
 import Switch from "@mui/material/Switch";
 import { styled, alpha } from "@mui/material";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 import { colorC, colorF } from "../assets/styles";
-import { DrawerButton, DrawerItem } from "./DrawerComponents";
 
 function GifPauseButton({ drawerOpen, opacity }) {
   const PurpleSwitch = styled(Switch)(({ theme }) => ({
@@ -36,19 +34,17 @@ function GifPauseButton({ drawerOpen, opacity }) {
   }
 
   return (
-    <div onClick={toggleStaticGifs} style={{ display: "block", padding: 0 }}>
-      <DrawerButton drawerOpen={drawerOpen}>
-        <ListItemIcon
-          sx={[
-            { minWidth: 0, justifyContent: "center" },
-            drawerOpen ? { mr: 3 } : { mr: "auto" },
-          ]}
-        >
-          <PurpleSwitch checked={!staticGifs} color="#907AD6" />
-          <ListItemText primary="Gifs" sx={[opacity]} />
-        </ListItemIcon>
-      </DrawerButton>
-    </div>
+    <FormControlLabel
+      control={
+        <PurpleSwitch
+          checked={!staticGifs}
+          onChange={toggleStaticGifs}
+          color="#907AD6"
+        />
+      }
+      label="Gifs"
+      sx={{ color: "#DABFFF" }}
+    />
   );
 }
 

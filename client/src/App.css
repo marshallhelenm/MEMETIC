@@ -136,7 +136,6 @@ button:focus {
 /* Stub */
 
 .stub {
-  background-color: var(--colorD);
   border-radius: var(--corners);
   background-color: var(--colorE);
   width: 200px;
@@ -145,10 +144,18 @@ button:focus {
   margin-bottom: 10px;
 }
 
+.stub-back {
+  margin: 5%;
+  background-image: url("images/bgqtile-small.png");
+  height: 90%;
+  width: 90%;
+  border: solid 2px var(--colorB);
+  border-radius: var(--corners);
+}
+
 .stub-image {
   border-radius: var(--corners);
   margin: 1%;
-  /* position: absolute; */
   max-width: 98%;
 }
 
@@ -203,10 +210,6 @@ button:focus {
 
 .overlay-icon {
   color: var(--colorE) !important;
-}
-
-.player-card {
-  background-color: var(--colorG);
 }
 
 .player-card-star {

@@ -28,7 +28,7 @@ const QuestionsModal = ({ opacity, drawerOpen }) => {
     <>
       <DrawerItem onClick={handleOpen}>
         <DrawerButton drawerOpen={drawerOpen}>
-          <DrawerIcon icon="question" drawerOpen={drawerOpen} />
+          <DrawerIcon icon="circle-question" drawerOpen={drawerOpen} />
           <ListItemText primary="How To Play" sx={[opacity]} />
         </DrawerButton>
       </DrawerItem>
