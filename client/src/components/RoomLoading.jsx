@@ -1,6 +1,11 @@
+import { useEffect } from "react";
 import Logo from "../components/Logo";
 
-function RoomLoading() {
+function RoomLoading({ setLoadingPage }) {
+  useEffect(() => {
+    setLoadingPage(true);
+    setTimeout(() => setLoadingPage(false), 5000);
+  });
   return (
     <div>
       <Logo spin={true} />

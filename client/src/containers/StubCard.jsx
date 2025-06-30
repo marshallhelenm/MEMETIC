@@ -1,0 +1,53 @@
+import { useState, useEffect } from "react";
+import ReactCardFlip from "react-card-flip";
+
+import StubBack from "./StubBack";
+import StubFront from "./StubFront";
+
+function StubCard({ roomKey, itemKey, item, isPlayerCard }) {
+  const storageId = `${roomKey}-flipped-${itemKey}`;
+  const [flipped, setFlipped] = useState(
+    sessionStorage.getItem(storageId) === "true"
+  );
+  const height = 200 * item.height_multiplier + 2;
+
+  function flip(e) {
+    e.preventDefault();
+    window.sessionStorage.setItem(storageId, !flipped);
+    setFlipped(!flipped);
+  }
+
+  return (
+    <div
+      style={{
+        height: height,
+        position: "relative",
+        display: "inline-block",
+        marginBottom: "10px",
+      }}
+    >
+      <ReactCardFlip
+        isFlipped={flipped}
+        flipDirection="horizontal"
+        onClick={flip}
+      >
+        <StubFront
+          itemKey={itemKey}
+          item={item}
+          isPlayerCard={isPlayerCard}
+          flip={flip}
+          height={height}
+        />
+        <StubBack
+          itemKey={itemKey}
+          item={item}
+          isPlayerCard={isPlayerCard}
+          flip={flip}
+          height={height}
+        />
+      </ReactCardFlip>
+    </div>
+  );
+}
+
+export default StubCard;

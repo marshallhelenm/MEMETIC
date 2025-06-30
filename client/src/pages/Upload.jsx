@@ -14,7 +14,7 @@ function Upload() {
 
       data[meme.tag] = {
         title: meme.title || "",
-        img: `${meme.tag}.${meme.ext}`,
+        img: `${meme.tag}.${meme.ext || "jpg"}`,
         origin: meme.origin || "",
         alt: meme.alt || "",
         height_multiplier: 1,

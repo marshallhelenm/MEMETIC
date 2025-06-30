@@ -8,6 +8,7 @@ function WSProvider({ children }) {
   const isReadyRef = useRef(false);
   const connectionAttemptsRef = useRef(0);
   const tryingToConnectRef = useRef(true);
+  const [serverError, setServerError] = useState(""); // as opposed to connectionError, this one is if there's a failure of parsing the messages
   const ws = useRef(null);
   let uuidRef = useRef(sessionStorage.getItem("guessy-uuid"));
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
@@ -25,18 +26,18 @@ function WSProvider({ children }) {
   const connectionError =
     connectionStatus == "Closed" && connectionAttemptsRef.current > 10;
   const connectionOpen = connectionStatus == "Open";
-  useTraceUpdate(
-    {
-      isReadyRef,
-      connectionAttemptsRef,
-      tryingToConnectRef,
-      ws,
-      uuidRef,
-      connectionStatus,
-      component: "WSContext",
-    },
-    true
-  );
+  // useTraceUpdate(
+  //   {
+  //     isReadyRef,
+  //     connectionAttemptsRef,
+  //     tryingToConnectRef,
+  //     ws,
+  //     uuidRef,
+  //     connectionStatus,
+  //     component: "WSContext",
+  //   },
+  //   true
+  // );
 
   useEffect(() => {
     while (connectionAttemptsRef.current < 11 && !isReadyRef.current) {
@@ -77,6 +78,8 @@ function WSProvider({ children }) {
       connectionOpen,
       uuid: uuidRef.current,
       tryingToConnect: tryingToConnectRef.current,
+      serverError,
+      setServerError,
     };
   }, [
     isReadyRef,
@@ -87,6 +90,8 @@ function WSProvider({ children }) {
     connectionError,
     connectionOpen,
     tryingToConnectRef,
+    serverError,
+    setServerError,
   ]);
 
   return <WSContext.Provider value={value}>{children}</WSContext.Provider>;

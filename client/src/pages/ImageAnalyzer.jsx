@@ -1,19 +1,19 @@
 import $ from "jquery";
-import { memeData } from "../assets/memeCollection";
+import memes from "../assets/memes.json";
 
 function ImageAnalyzer() {
-  const imgKeys = ["destiel_confession"];
-  const allKeys = Object.keys(memeData);
+  const imgKeys = [];
+  const allKeys = Object.keys(memes);
   const keys = imgKeys.length > 0 ? imgKeys : allKeys;
-  let workingData = { ...memeData };
+  let workingData = { ...memes };
 
   function generateImages() {
     let imgs = [];
-    keys.forEach((itemKey) =>
+    keys.forEach((itemKey) => {
       imgs.unshift(
-        <img id={itemKey} src={`/memes/${memeData[itemKey]["img"]}`}></img>
-      )
-    );
+        <img id={itemKey} src={`/memes/${memes[itemKey]["img"]}`}></img>
+      );
+    });
     return imgs;
   }
 
@@ -25,7 +25,11 @@ function ImageAnalyzer() {
       image = $(`#${itemKey}`)[0];
       w = image.width;
       h = image.height;
-      workingData[itemKey]["height_multiplier"] = 1 / (w / h).toFixed(2);
+      if (!workingData[itemKey]) {
+        console.log(itemKey);
+      } else {
+        workingData[itemKey]["height_multiplier"] = 1 / (w / h).toFixed(2);
+      }
     });
     let newData = {};
     keys.sort().forEach((itemKey) => {

@@ -1,14 +1,21 @@
 import BoardColumn from "./BoardColumn";
 import LoadingStub from "../components/LoadingStub";
 import MissingStub from "../components/MissingStub";
-import Stub from "../containers/Stub";
 
 import { memeData } from "../assets/memeCollection";
 import { useGuessy } from "../contexts/useGuessy";
+import StubCard from "./StubCard";
+import { useState } from "react";
 
 // holds all the picture cards
-function Board({ loading, columnCount }) {
-  const { myPlayerCard, columnsObject, roomObjectIsValid } = useGuessy();
+function Board() {
+  const {
+    myPlayerCard,
+    columnsObject,
+    roomObjectIsValid,
+    columnCount,
+    loadingCards,
+  } = useGuessy();
   const columns = columnsObject[columnCount];
 
   function generateColumns() {
@@ -37,7 +44,7 @@ function Board({ loading, columnCount }) {
         cards.push(<MissingStub key={Math.random() * 10} />);
       } else {
         cards.push(
-          <Stub
+          <StubCard
             itemKey={itemKey}
             item={item}
             isPlayerCard={itemKey == myPlayerCard}
@@ -59,7 +66,7 @@ function Board({ loading, columnCount }) {
 
   return (
     <div className="gameBoard">
-      {!loading && roomObjectIsValid()
+      {!loadingCards && roomObjectIsValid()
         ? generateColumns()
         : generateLoadingColumns()}
     </div>

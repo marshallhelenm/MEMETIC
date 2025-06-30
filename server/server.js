@@ -29,97 +29,117 @@ const handleMessage = (bytes, uuid) => {
   let message;
   try {
     message = JSON.parse(bytes.toString());
+
+    console.log(
+      "Message: ",
+      message.type
+      // "with data:",
+      // message
+    );
+
+    let roomKey = message.roomKey?.toUpperCase();
+    let room = rooms[roomKey];
+    if (!room) room = { ...emptyRoomTemplate };
+    let player1 = room.player1;
+    let player2 = room.player2;
+    let newRoomObject;
+    let existingRoom;
+    switch (message.type) {
+      case "clearPlayerCards":
+        clearPlayerCards(message.roomKey, uuid);
+        break;
+      case "createRoom":
+        if (!message.roomKey) return;
+        newRoomObject = JSON.parse(message.newRoomObject);
+        rooms[message.roomKey] = {
+          ...emptyRoomTemplate,
+          ...newRoomObject,
+        };
+        player1 = { ...player1, ...newRoomObject.player1 };
+        player2 = { ...player2, ...newRoomObject.player2 };
+        break;
+      case "getRoomContents":
+        sendRoomContentsToUuid(message.roomKey, uuid);
+        break;
+      case "joinRoom":
+        joinRoom({
+          roomKey: message.roomKey,
+          uuid,
+          username: message.username,
+          playerCard: message.playerCard,
+          returnRoomContents: message.returnRoomContents,
+        });
+        break;
+      case "replaceGame":
+        if (!message.roomKey) {
+          return;
+        }
+        room = rooms[roomKey];
+        if (!room) {
+          rooms[roomKey] = { ...emptyRoomTemplate };
+        }
+        room.columnsObject = message.columnsObject;
+        room.allKeys = message.allKeys;
+        room.player1.card = message.player1Card;
+        room.player2.card = message.player2Card;
+
+        broadcast(
+          message.roomKey,
+          {
+            type: "replaceGame",
+            roomKey: message.roomKey,
+            room: JSON.stringify(rooms[message.roomKey]),
+          },
+          uuid
+        );
+        break;
+      case "requestUuid":
+        sendToUuid(uuid, { type: "uuid", uuid: uuid });
+        break;
+      case "setPlayerCard":
+        if (!room) return;
+        if (player1.uuid === uuid) {
+          player1.card = message.playerCard;
+        } else if (player2.uuid === uuid) {
+          player2.card = message.playerCard;
+        } else {
+          // they're just an observer so don't set a card
+          return;
+        }
+        broadcastUsers(message.roomKey, uuid);
+        break;
+      case "setUsername":
+        if (!room) return;
+        if (player1.uuid === uuid) {
+          player1.username = message.username;
+        } else if (player2.uuid === uuid) {
+          player2.username = message.username;
+        } else {
+          // they're just an observer so don't set a username
+          return;
+        }
+        broadcastUsers(roomKey, uuid);
+        break;
+      default:
+        break;
+    }
   } catch (error) {
-    console.error("Error parsing message:", error);
-    return;
-  }
-
-  console.log(
-    "Message: ",
-    message.type
-    // "with data:",
-    // message
-  );
-
-  let roomKey = message.roomKey?.toUpperCase();
-  let room = rooms[roomKey];
-  if (!room) room = { ...emptyRoomTemplate };
-  let player1 = room.player1;
-  let player2 = room.player2;
-  let newRoomObject;
-  let existingRoom;
-  switch (message.type) {
-    case "clearPlayerCards":
-      clearPlayerCards(message.roomKey, uuid);
-      break;
-    case "createRoom":
-      if (!message.roomKey) return;
-      newRoomObject = JSON.parse(message.newRoomObject);
-      rooms[message.roomKey] = {
-        ...emptyRoomTemplate,
-        ...newRoomObject,
-      };
-      player1 = { ...player1, ...newRoomObject.player1 };
-      player2 = { ...player2, ...newRoomObject.player2 };
-      break;
-    case "getRoomContents":
-      sendRoomContentsToUuid(message.roomKey, uuid);
-      break;
-    case "joinRoom":
-      joinRoom({
-        roomKey: message.roomKey,
-        uuid,
-        username: message.username,
-        playerCard: message.playerCard,
-        returnRoomContents: message.returnRoomContents,
-      });
-      break;
-    case "replaceGame":
-      newRoomObject = JSON.parse(message.newRoomObject);
-      if (!message.roomKey) {
-        return;
-      }
-      existingRoom = rooms[message.roomKey];
-      rooms[message.roomKey] = { ...existingRoom, ...newRoomObject };
+    try {
       broadcast(
         message.roomKey,
         {
-          type: "replaceGame",
+          type: "serverError",
           roomKey: message.roomKey,
-          room: JSON.stringify(rooms[message.roomKey]),
+          error,
         },
         uuid
       );
-      break;
-    case "requestUuid":
-      sendToUuid(uuid, { type: "uuid", uuid: uuid });
-      break;
-    case "setPlayerCard":
-      if (!room) return;
-      if (player1.uuid === uuid) {
-        player1.card = message.playerCard;
-      } else if (player2.uuid === uuid) {
-        player2.card = message.playerCard;
-      } else {
-        // they're just an observer so don't set a card
-        return;
-      }
-      broadcastUsers(message.roomKey, uuid);
-      break;
-    case "setUsername":
-      if (!room) return;
-      if (player1.uuid === uuid) {
-        player1.username = message.username;
-      } else if (player2.uuid === uuid) {
-        player2.username = message.username;
-      } else {
-        // they're just an observer so don't set a username
-        return;
-      }
-      broadcastUsers(roomKey, uuid);
-      break;
-    default:
-      break;
+    } catch (error) {
+      console.error("Error parsing message:", error);
+      return;
+    }
+    console.error("Error parsing message:", error);
+    return;
   }
 };
 

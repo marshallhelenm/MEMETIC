@@ -1,4 +1,5 @@
 import { createContext, useMemo, useEffect, useReducer, useRef } from "react";
+import useBreakpoint from "use-breakpoint";
 
 import { useWS } from "./useWS";
 import { memeSampler } from "../assets/memeCollection";
@@ -7,6 +8,8 @@ import { parseRoom, parseUsers } from "../utils/RoomParser";
 import { useTraceUpdate } from "../hooks/useTraceUpdate";
 
 const GuessyContext = createContext();
+
+const BREAKPOINTS = { 1: 0, 2: 540, 3: 740, 4: 980, 5: 1158, 6: 1380 };
 
 const searchParams = new URLSearchParams(window.location.search);
 const initialState = {
@@ -19,6 +22,7 @@ const initialState = {
   partnerUsername: "",
   observer: false,
   staticGifs: sessionStorage.getItem("guessy_gifs") == "true",
+  loadingCards: false,
 };
 
 function guessyReducer(state, action) {
@@ -29,9 +33,11 @@ function guessyReducer(state, action) {
   const sessionPlayerCard = sessionStorage.getItem(
     `guessy-${state.roomKey}-player-card`
   );
-  devLog(["guessyReducer: ", type]);
+  // devLog(["guessyReducer: ", type]);
 
   switch (type) {
+    case "setLoadingCards":
+      return { ...state, loadingCards: payload.loadingCards };
     case "setStaticGifs":
       return { ...state, staticGifs: payload.staticGifs };
     case "setUsername":
@@ -58,6 +64,7 @@ function guessyReducer(state, action) {
         ...parsedRoom,
         myPlayerCard:
           parsedRoom.myPlayerCard || sessionPlayerCard || state.myPlayerCard,
+        loadingCards: false,
       };
     case "updateRoomKey":
       return { ...state, roomKey: payload.newRoomKey.toUpperCase() };
@@ -94,25 +101,33 @@ function GuessyProvider({ children }) {
       partnerCard,
       partnerUsername,
       observer,
+      loadingCards,
     },
     dispatch,
   ] = useReducer(guessyReducer, initialState);
 
-  useTraceUpdate(
-    {
-      roomKey,
-      allKeys,
-      columnsObject,
-      myPlayerCard,
-      username,
-      staticGifs,
-      partnerCard,
-      partnerUsername,
-      observer,
-      component: "GuessyContext",
-    },
-    false
-  );
+  const { breakpoint, maxWidth, minWidth } = useBreakpoint(BREAKPOINTS, "l");
+  useTraceUpdate({ breakpoint, maxWidth, minWidth }, true);
+  const getColumnCount = () => {
+    switch (breakpoint) {
+      case "1":
+        return 1;
+      case "2":
+        return 2;
+      case "3":
+        return 3;
+      case "4":
+        return 4;
+      case "5":
+        return 5;
+      case "6":
+        return 6;
+      default:
+        break;
+    }
+  };
+
+  const columnCount = getColumnCount();
 
   const roomObjectIsValid = useMemo(() => {
     return () => {
@@ -161,7 +176,7 @@ function GuessyProvider({ children }) {
       let newMemes;
       let newCard1;
       let newCard2;
-      devLog(["guessyManager:", action, payload]);
+      // devLog(["guessyManager:", action, payload]);
       switch (action) {
         case "assignUsername":
           sessionStorage.setItem(`${roomKey}-username`, payload.newUsername);
@@ -201,15 +216,14 @@ function GuessyProvider({ children }) {
           // assign each player a new playerCard
           newCard1 = randomCardKey(newMemes.allKeys);
           dispatch({
-            type: "updatePlayer1Card",
+            type: "updateMyPlayerCard",
             payload: { newCard: newCard1 },
           });
           newCard2 = randomCardKey(newMemes.allKeys);
           dispatch({
-            type: "updatePlayer2Card",
+            type: "updatePartnerCard",
             payload: { newCard: newCard2 },
           });
-          // if it's the current user, update the local storage
 
           // clean up local storage
           Object.keys(sessionStorage).forEach((key) => {
@@ -220,7 +234,8 @@ function GuessyProvider({ children }) {
           sendJsonMessage({
             type: "replaceGame",
             roomKey: roomKey,
-            memeSet: JSON.stringify(newMemes),
+            allKeys: JSON.stringify(newMemes.allKeys),
+            columnsObject: JSON.stringify(newMemes.columnsObject),
             player1Card: newCard1,
             player2Card: newCard2,
           });
@@ -253,7 +268,6 @@ function GuessyProvider({ children }) {
   ]);
 
   //  ** value for the context provider **
-
   const value = useMemo(() => {
     return {
       roomKey,
@@ -267,6 +281,9 @@ function GuessyProvider({ children }) {
       partnerCard,
       partnerUsername,
       dispatch,
+      columnCount,
+      maxWidth,
+      loadingCards,
     };
   }, [
     roomKey,
@@ -280,15 +297,11 @@ function GuessyProvider({ children }) {
     partnerCard,
     partnerUsername,
     dispatch,
+    columnCount,
+    maxWidth,
   ]);
 
-  // ** useEffect **
-
-  // useEffect(() => {
-  // }, [myPlayerCard]);
-
   // ** render provider:
-
   return (
     <GuessyContext.Provider value={value}>{children}</GuessyContext.Provider>
   );

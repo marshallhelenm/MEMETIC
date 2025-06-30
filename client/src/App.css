@@ -108,7 +108,6 @@ button:focus {
 .gameBoard {
   text-align: center;
   background-color: var(--colorB);
-  width: 1300px;
   min-height: 33em;
   max-height: 33 em;
   display: flex;
@@ -124,7 +123,32 @@ button:focus {
   justify-content: center;
 }
 
-.boardColumn {
+/* l */
+@media only screen and (min-width: 1280px) {
+  .gameBoard {
+    width: 1280px;
+  }
+}
+/* m */
+@media only screen and (min-width: 768px) and (max-width: 1279px) {
+  .gameBoard {
+    min-width: 880px;
+  }
+}
+/* s */
+@media only screen and (min-width: 481) and (max-width: 767px) {
+  .gameBoard {
+    width: 481px;
+  }
+}
+/* xs */
+@media only screen and (max-width: 480px) {
+  .gameBoard {
+    width: 220px;
+  }
+}
+
+.gameBoard .boardColumn {
   display: flex;
   flex-flow: column wrap;
   column-gap: 10px !important;
@@ -145,10 +169,8 @@ button:focus {
 }
 
 .stub-back {
-  margin: 5%;
   background-image: url("images/bgqtile-small.png");
   height: 90%;
-  width: 90%;
   border: solid 2px var(--colorB);
   border-radius: var(--corners);
 }
@@ -179,8 +201,8 @@ button:focus {
 .ff-canvas {
   border-radius: var(--corners);
   padding: 1%;
-  max-height: 100%;
-  max-width: 98%;
+  /* max-height: 100%;
+  max-width: 98%; */
 }
 
 .overlay {

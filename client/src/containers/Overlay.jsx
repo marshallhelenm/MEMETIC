@@ -3,9 +3,9 @@ import CardModal from "../components/CardModal";
 import GuessCard from "../components/GuessCard";
 import MemeOrigin from "../components/MemeOrigin";
 
-function Overlay({ item, overlay, flipped, itemKey }) {
+function Overlay({ item, overlay, itemKey }) {
   const [modalOpen, setModalOpen] = useState(false);
-  if (modalOpen || (!flipped && overlay)) {
+  if (modalOpen || overlay) {
     return (
       <div className="overlay">
         <MemeOrigin item={item} />

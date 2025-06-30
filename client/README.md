@@ -4,21 +4,13 @@ Building a variation on the game "Guess Who" to be played online, inspired by [t
 
 ## TO DO list
 
-### MVP
-
-- Make it look good
 - Fix docker react app
-- flip all cards button
-- fix zoom modal sizing
--
-
-### NVP
-
-- implement breakpoints
+- flip all cards button?
+- fix sizing for breakpoints
+- fix clear game
+- fix double user in same room on refresh
 
 ### Future Features
 
 - Live chat between players
 - Make Guess
-
-### Memes to add

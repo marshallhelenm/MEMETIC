@@ -24,6 +24,7 @@ import {
 } from "../components/DrawerComponents";
 import { useGuessy } from "../contexts/useGuessy";
 import Users from "../components/Users";
+import { Tooltip } from "@mui/material";
 
 const drawerWidth = 200;
 
@@ -108,7 +109,7 @@ const Drawer = styled(MuiDrawer, {
   backgroundColor: colorE,
 }));
 
-export default function MiniDrawer({ children, setLoadingCards }) {
+export default function MiniDrawer({ children }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [alert, setAlert] = useState(false);
   const theme = useTheme();
@@ -188,7 +189,11 @@ export default function MiniDrawer({ children, setLoadingCards }) {
           <DrawerItem onClick={handleCopyKey}>
             {/* Room Key */}
             <DrawerButton drawerOpen={drawerOpen}>
-              <DrawerIcon drawerOpen={drawerOpen} icon="key" />
+              <Tooltip title="Copy Room Key" placement="right-end">
+                <div>
+                  <DrawerIcon drawerOpen={drawerOpen} icon="key" />
+                </div>
+              </Tooltip>
               <ListItemText primary={roomKey.toUpperCase()} sx={[opacity]} />
               {drawerOpen && (
                 <i
@@ -201,11 +206,7 @@ export default function MiniDrawer({ children, setLoadingCards }) {
           {/* Player Meme */}
           <PlayerCardModal drawerOpen={drawerOpen} opacity={opacity} />
           {/* Clear Game */}
-          <ClearGame
-            setLoadingCards={setLoadingCards}
-            opacity={opacity}
-            drawerOpen={drawerOpen}
-          />
+          <ClearGame opacity={opacity} drawerOpen={drawerOpen} />
           <QuestionsModal opacity={opacity} drawerOpen={drawerOpen} />
           <DrawerItem
             onClick={() => {
@@ -214,7 +215,11 @@ export default function MiniDrawer({ children, setLoadingCards }) {
           >
             {/* users */}
             <DrawerButton drawerOpen={drawerOpen}>
-              <DrawerIcon drawerOpen={drawerOpen} icon="users" />
+              <Tooltip title="View Users" placement="right-end">
+                <div>
+                  <DrawerIcon drawerOpen={drawerOpen} icon="users" />
+                </div>
+              </Tooltip>
               <ListItemText primary={"Players"} sx={[opacity]} />
             </DrawerButton>
             {drawerOpen && <Users />}

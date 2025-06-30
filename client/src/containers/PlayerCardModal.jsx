@@ -63,12 +63,16 @@ const PlayerCardModal = ({ drawerOpen, opacity }) => {
       <>
         <DrawerItem onClick={handleOpen}>
           <DrawerButton drawerOpen={drawerOpen}>
-            <DrawerIcon
-              onClick={handleOpen}
-              drawerOpen={drawerOpen}
-              icon="star"
-              // classes="player-card-star"
-            />
+            <Tooltip title="Your Meme" placement="right-end">
+              <div>
+                <DrawerIcon
+                  onClick={handleOpen}
+                  drawerOpen={drawerOpen}
+                  icon="star"
+                  // classes="player-card-star"
+                />
+              </div>
+            </Tooltip>
             <ListItemText primary={"Your Meme"} sx={[opacity]} />
           </DrawerButton>
         </DrawerItem>

@@ -3,7 +3,21 @@
     "title": "Um... Whatcha got there? A smoothie.",
     "img": "a_smoothie.jpg",
     "origin": "https://knowyourmeme.com/memes/whatcha-got-there-a-smoothie",
-    "height_multiplier": 2.1739130434782608
+    "height_multiplier": 1.1235955056179776
+  },
+  "a_very_pleasant_evening": {
+    "title": "I Wish All Lesbians a Very Pleasant Evening",
+    "img": "a_very_pleasant_evening.jpg",
+    "origin": "https://en.meming.world/wiki/I_Wish_All_Lesbians_a_Very_Pleasant_Evening",
+    "alt": "I Wish All Lesbians a Very Pleasant Evening",
+    "height_multiplier": 0.625
+  },
+  "all_coming_together": {
+    "title": "Oh Yeah, It's All Coming Together",
+    "img": "all_coming_together.jpg",
+    "origin": "https://en.meming.world/wiki/Oh_Yeah,_It%27s_All_Coming_Together",
+    "alt": "Oh Yeah, It's All Coming Together",
+    "height_multiplier": 0.5555555555555556
   },
   "all_the_things": {
     "title": "All The Things",
@@ -26,6 +40,13 @@
     "alt": "Annoyed Picard",
     "height_multiplier": 0.7407407407407407
   },
+  "are_you_challenging_me": {
+    "title": "Are you challengin me?",
+    "img": "are_you_challenging_me.jpg",
+    "origin": "https://en.meming.world/wiki/Are_you_challenging_me%3F",
+    "alt": "Are you challengin me?",
+    "height_multiplier": 0.5780346820809249
+  },
   "arthur_fist": {
     "title": "Arthur's Fist",
     "img": "arthur_fist.jpg",
@@ -45,7 +66,7 @@
     "img": "because_reasons.jpg",
     "origin": "",
     "alt": "A Panel from the comic Three Word Phrase, by Ryan Pequin, depicting a man with a tophat, monacle and mustache and a speech bubble that says 'I want this because of reasons.' ",
-    "height_multiplier": 1.2987012987012987
+    "height_multiplier": 1.282051282051282
   },
   "bernie_mittens": {
     "title": "Bernie Sanders Wearing Mittens Sitting in a Chair ",
@@ -59,7 +80,7 @@
     "img": "beyonce.jpg",
     "origin": "https://knowyourmeme.com/memes/tiffany-pollard-beyonce",
     "alt": "BEYONCE?",
-    "height_multiplier": 0.6097560975609756
+    "height_multiplier": 0.6060606060606061
   },
   "blinking_white_guy": {
     "title": "Blinking White Guy",
@@ -70,10 +91,31 @@
   },
   "bugs_bunny_no": {
     "title": "No.",
-    "img": "bugs_bunny_no.png",
+    "img": "bugs_bunny_no.jpg",
     "origin": "https://knowyourmeme.com/memes/bugs-bunny-no",
     "alt": "bugs bunny no",
-    "height_multiplier": 0.9345794392523364
+    "height_multiplier": 0.9803921568627451
+  },
+  "business_cat": {
+    "title": "Business Cat",
+    "img": "business_cat.jpg",
+    "origin": "https://knowyourmeme.com/memes/business-cat",
+    "alt": "NEED YOU TO STAY LATE TONIGHT WE REALLY HAVE TO CATCH THAT RED DOT quickmeme.com",
+    "height_multiplier": 1
+  },
+  "but_its_honest_work": {
+    "title": "But It's Honest Work",
+    "img": "but_its_honest_work.jpg",
+    "origin": "https://en.meming.world/wiki/But_It%27s_Honest_Work",
+    "alt": "It ain't much, but it's honest work",
+    "height_multiplier": 0.6666666666666666
+  },
+  "ceiling_cat": {
+    "title": "Ceiling Cat",
+    "img": "ceiling_cat.png",
+    "origin": "https://knowyourmeme.com/memes/ceiling-cat",
+    "alt": "",
+    "height_multiplier": 1
   },
   "cheers_bro": {
     "title": "Cheers, I'll drink to that, bro",
@@ -96,6 +138,20 @@
     "alt": "Communist Bugs Bunny meme | We Have Bugs Bunny Looney Toons",
     "height_multiplier": 0.6172839506172839
   },
+  "condescending_willy_wonka": {
+    "title": "Condescending Willy Wonka",
+    "img": "condescending_willy_wonka.jpg",
+    "origin": "https://en.meming.world/wiki/Condescending_Willy_Wonka",
+    "alt": "Condescending Willy Wonka",
+    "height_multiplier": 0.9900990099009901
+  },
+  "confused_gandalf": {
+    "title": "Confused Gandalf",
+    "img": "confused_gandalf.jpg",
+    "origin": "https://knowyourmeme.com/memes/confused-gandalf",
+    "alt": "I have no memory of this place.",
+    "height_multiplier": 1
+  },
   "confused_lady": {
     "title": "Confused Lady (Math variant)",
     "img": "confused_lady.jpg",
@@ -103,12 +159,26 @@
     "alt": "woman looking confused surrounded by mathematical equations",
     "height_multiplier": 0.6535947712418301
   },
+  "confused_nick_young": {
+    "title": "Confused Nick Young",
+    "img": "confused_nick_young.jpg",
+    "origin": "https://en.meming.world/wiki/Confused_Nick_Young",
+    "alt": "Confused Nick Young",
+    "height_multiplier": 0.8547008547008548
+  },
   "controversial_brave": {
     "title": "Why Would You Say Something So Controversial Yet So Brave?",
     "img": "controversial_brave.jpg",
     "origin": "https://knowyourmeme.com/memes/why-would-you-say-something-so-controversial-yet-so-brave",
     "alt": "Why Would You Say Something So Controversial Yet So Brave?",
     "height_multiplier": 0.5617977528089888
+  },
+  "cupcake_dog": {
+    "title": "Cupcake Dog",
+    "img": "cupcake_dog.jpg",
+    "origin": "https://knowyourmeme.com/memes/cupcake-dog",
+    "alt": "Cupcake Dog viral video showing a dog staring at a plate of cupcakes.",
+    "height_multiplier": 0.7518796992481203
   },
   "dead_dove": {
     "title": "Dead Dove: Do Not Eat",
@@ -158,12 +228,26 @@
     "alt": "Distracted Boyfriend Template of the original stock photo that went viral and became a meme",
     "height_multiplier": 0.5617977528089888
   },
+  "draw_25": {
+    "title": "[ ] OR Draw 25",
+    "img": "draw_25.jpg",
+    "origin": "https://en.meming.world/wiki/Draw_25",
+    "alt": "Draw 25",
+    "height_multiplier": 0.6711409395973155
+  },
   "elmo_hell": {
     "title": "Elmo rise",
     "img": "elmo_hell.gif",
     "origin": "https://knowyourmeme.com/memes/elmo-rise",
     "alt": "Elmo raising his arms amidst flames elmo meme.",
-    "height_multiplier": 0.684931506849315
+    "height_multiplier": 0.6802721088435374
+  },
+  "every_day_i_wake_up": {
+    "title": "Every Day I Wake Up",
+    "img": "every_day_i_wake_up.jpg",
+    "origin": "https://knowyourmeme.com/memes/every-day-i-wake-up",
+    "alt": "",
+    "height_multiplier": 1.2658227848101264
   },
   "evil_kermit": {
     "title": "Evil Kermit",
@@ -178,19 +262,12 @@
     "alt": "Sometimes... Things That Are Expensive... Are Worse",
     "height_multiplier": 0.5617977528089888
   },
-  "me_explaining_to_my_mom": {
-    "title": "Me Explaining to My Mom",
-    "img": "me_explaining_to_my_mom.jpg",
-    "origin": "https://knowyourmeme.com/memes/me-explaining-to-my-mom",
-    "alt": "Me Explaining to My Mom",
-    "height_multiplier": 0.5617977528089888
-  },
   "finally_good_food": {
     "title": "Finally, Some Good Fucking Food",
     "img": "finally_good_food.png",
     "origin": "https://knowyourmeme.com/memes/finally-some-good-fucking-food",
     "alt": "Finally, Some Good Fucking Food",
-    "height_multiplier": 0.5617977528089888
+    "height_multiplier": 0.5586592178770949
   },
   "free_real_estate": {
     "title": "It's free real estate",
@@ -211,12 +288,33 @@
     "alt": "Good for her.",
     "height_multiplier": 0.8
   },
+  "grumpy_cat": {
+    "title": "Grumpy Cat",
+    "img": "grumpy_cat.jpg",
+    "origin": "https://knowyourmeme.com/memes/grumpy-cat",
+    "alt": "The original Grumpy Cat pic that turned into a meme",
+    "height_multiplier": 1.2345679012345678
+  },
   "guess_ill_die": {
     "title": "Guess I'll Die",
     "img": "guess_ill_die.jpg",
     "origin": "https://knowyourmeme.com/memes/guess-ill-die",
     "alt": "Guess I'll Die",
     "height_multiplier": 0.9433962264150942
+  },
+  "he_man": {
+    "title": "He-Man Sings / HEYYEYAAEYAAAEYAEYAA",
+    "img": "he_man.gif",
+    "origin": "https://knowyourmeme.com/memes/he-man-sings-heyyeyaaeyaaaeyaeyaa",
+    "alt": "He-Man Sings / HEYYEYAAEYAAAEYAEYAA",
+    "height_multiplier": 0.7518796992481203
+  },
+  "hes_got_a_point": {
+    "title": "No, No. He's Got a Point",
+    "img": "hes_got_a_point.jpg",
+    "origin": "https://en.meming.world/wiki/No,_No._He%27s_Got_a_Point",
+    "alt": "No, No. He's Got a Point",
+    "height_multiplier": 0.78125
   },
   "hide_the_pain_harold": {
     "title": "Hide The Pain Harold",
@@ -231,6 +329,20 @@
     "origin": "https://knowyourmeme.com/memes/homer-simpson-backs-into-bushes",
     "alt": "Gif of Homer Simpson backing into the bushes and disappearing from view.",
     "height_multiplier": 0.7518796992481203
+  },
+  "how_do_you_do_fellow_kids": {
+    "title": "How Do You Do, Fellow Kids?",
+    "img": "how_do_you_do_fellow_kids.jpg",
+    "origin": "https://en.meming.world/wiki/How_Do_You_Do,_Fellow_Kids%3F",
+    "alt": "How Do You Do, Fellow Kids?",
+    "height_multiplier": 0.8
+  },
+  "i_am_once_again": {
+    "title": "I Am Once Again Asking for Your Financial Support",
+    "img": "i_am_once_again.jpg",
+    "origin": "https://en.meming.world/wiki/I_Am_Once_Again_Asking_for_Your_Financial_Support",
+    "alt": "I Am Once Again Asking for Your Financial Support",
+    "height_multiplier": 0.7692307692307692
   },
   "i_can_has_cheezburger": {
     "title": "I Can Has Cheezburger?",
@@ -260,6 +372,13 @@
     "alt": "I Guess!",
     "height_multiplier": 1.0989010989010988
   },
+  "i_have_no_idea": {
+    "title": "I Have No Idea What I'm Doing",
+    "img": "i_have_no_idea.jpg",
+    "origin": "https://knowyourmeme.com/memes/i-have-no-idea-what-im-doing",
+    "alt": "I Have No Idea What I'm Doing",
+    "height_multiplier": 0.5617977528089888
+  },
   "i_know_he_ate_a_cheese": {
     "title": "I Know He Ate A Cheese",
     "img": "i_know_he_ate_a_cheese.png",
@@ -267,16 +386,37 @@
     "alt": "I Know He Ate A Cheese",
     "height_multiplier": 0.970873786407767
   },
+  "i_started_blasting": {
+    "title": "So Anyway, I Started Blasting",
+    "img": "i_started_blasting.jpg",
+    "origin": "https://en.meming.world/wiki/So_Anyway,_I_Started_Blasting",
+    "alt": "So anyway, I started blasting",
+    "height_multiplier": 0.6666666666666666
+  },
+  "is_for_me": {
+    "title": "is for me?",
+    "img": "is_for_me.jpg",
+    "origin": "https://en.meming.world/wiki/Is_For_Me%3F",
+    "alt": "is for me?",
+    "height_multiplier": 0.7518796992481203
+  },
   "is_this_a_pigeon": {
     "title": "Is this a pigeon?",
     "img": "is_this_a_pigeon.jpg",
     "origin": "https://knowyourmeme.com/memes/is-this-a-pigeon",
     "alt": "Is this a pigeon?",
-    "height_multiplier": 0.5263157894736842
+    "height_multiplier": 0.5235602094240838
   },
   "judge_judy_laptop": {
     "img": "judge_judy_laptop.gif",
     "height_multiplier": 0.8130081300813008
+  },
+  "keep_your_secrets": {
+    "title": "All Right Then, Keep Your Secrets",
+    "img": "keep_your_secrets.jpg",
+    "origin": "https://en.meming.world/wiki/All_Right_Then,_Keep_Your_Secrets",
+    "alt": "All Right Then, Keep Your Secrets",
+    "height_multiplier": 0.7518796992481203
   },
   "kermit_tea": {
     "title": "But that's none of my business.",
@@ -285,19 +425,19 @@
     "alt": "Kermit sipping tea",
     "height_multiplier": 0.6711409395973155
   },
+  "kitty_cat": {
+    "title": "Kitty Cat Dance",
+    "img": "kitty_cat.gif",
+    "origin": "https://knowyourmeme.com/memes/kitty-cat=dance",
+    "alt": "",
+    "height_multiplier": 0.7518796992481203
+  },
   "knife_cat": {
     "title": "Knife Cat",
     "img": "knife_cat.png",
     "origin": "https://knowyourmeme.com/memes/knife-cat",
     "alt": "A white cat making a smug expression as a cooking knife is pointed at it",
     "height_multiplier": 1.0309278350515465
-  },
-  "laughing_husky": {
-    "title": "Laughing Husky",
-    "img": "laughing_husky.jpg",
-    "origin": "",
-    "alt": "",
-    "height_multiplier": 0.9259259259259258
   },
   "lesbians_doing_makeup": {
     "title": "Lesbians Doing Makeup",
@@ -327,6 +467,13 @@
     "alt": "I Has a Bucket Noooo they be stealin'my Bucket ",
     "height_multiplier": 0.5319148936170213
   },
+  "long_cat": {
+    "title": "Longcat",
+    "img": "long_cat.jpg",
+    "origin": "https://knowyourmeme.com/memes/longcat",
+    "alt": "The famous long cat held and streteched over a bed",
+    "height_multiplier": 1.8181818181818181
+  },
   "loss": {
     "title": "Loss",
     "img": "loss.jpg",
@@ -339,6 +486,27 @@
     "origin": "https://knowyourmeme.com/memes/marge-simpsons-neat-potato",
     "alt": "Marge Simpson holding up a potato with the subtitles 'I just think they're neat' ",
     "height_multiplier": 0.7751937984496123
+  },
+  "me_explaining_to_my_mom": {
+    "title": "Me Explaining to My Mom",
+    "img": "me_explaining_to_my_mom.jpg",
+    "origin": "https://knowyourmeme.com/memes/me-explaining-to-my-mom",
+    "alt": "Me Explaining to My Mom",
+    "height_multiplier": 0.5617977528089888
+  },
+  "megans_interesting": {
+    "title": "Megan's Interesting",
+    "img": "megans_interesting.jpg",
+    "origin": "https://en.meming.world/wiki/Megan%27s_Interesting",
+    "alt": "Megan's Interesting",
+    "height_multiplier": 0.9615384615384615
+  },
+  "modern_problems": {
+    "title": "Modern Problems Require Modern Solutions",
+    "img": "modern_problems.jpg",
+    "origin": "https://en.meming.world/wiki/Modern_Problems_Require_Modern_Solutions",
+    "alt": "Modern Problems Require Modern Solutions",
+    "height_multiplier": 0.7575757575757576
   },
   "mordor": {
     "title": "One does not simply walk into Mordor.",
@@ -360,6 +528,20 @@
     "origin": "https://knowyourmeme.com/memes/the-most-interesting-man-in-the-world",
     "alt": "The Most Interesting Man In The World meme",
     "height_multiplier": 1.25
+  },
+  "neil_banging_out_the_tunes": {
+    "title": "Neil Banging Out The Tunes",
+    "img": "neil_banging_out_the_tunes.jpg",
+    "origin": "https://knowyourmeme.com/memes/neil-banging-out-the-tunes",
+    "alt": "Neil banging out the tunes April 13, 2006",
+    "height_multiplier": 0.819672131147541
+  },
+  "no_god_please_no": {
+    "title": "No! God! Please! No!",
+    "img": "no_god_please_no.gif",
+    "origin": "https://knowyourmeme.com/memes/no-god-please-no",
+    "alt": "No! God! Please! No!",
+    "height_multiplier": 0.5649717514124294
   },
   "no_take": {
     "title": "No take. Only throw.",
@@ -396,6 +578,13 @@
     "alt": "A shirtless black man riding a white horse and holding up a bottle of old spice",
     "height_multiplier": 0.5617977528089888
   },
+  "omg_cat": {
+    "title": "OMG Cat",
+    "img": "omg_cat.gif",
+    "origin": "https://knowyourmeme.com/memes/omg-cat",
+    "alt": "",
+    "height_multiplier": 0.6944444444444444
+  },
   "omg_space": {
     "img": "omg_space.gif",
     "height_multiplier": 0.6535947712418301
@@ -414,10 +603,17 @@
     "alt": "TEEN COMIX. NO FEAR. WHAT IF THEY MADE SIMPSONS PORN ILLEGAL? ONE FEAR",
     "height_multiplier": 0.4424778761061947
   },
+  "peace_was_never_an_option": {
+    "title": "Peace was Never an Option",
+    "img": "peace_was_never_an_option.jpg",
+    "origin": "https://en.meming.world/wiki/Peace_Was_Never_an_Option",
+    "alt": "Untitled Goose's Peace Was Never an Option",
+    "height_multiplier": 0.6666666666666666
+  },
   "pointing_spider_man": {
     "img": "pointing_spider_man.jpg",
     "origin": "https://knowyourmeme.com/memes/spider-man-pointing-at-spider-man",
-    "height_multiplier": 0.47846889952153115
+    "height_multiplier": 0.47619047619047616
   },
   "polish_jerry": {
     "title": "Polish Jerry / Khe Berga?",
@@ -425,6 +621,27 @@
     "origin": "https://knowyourmeme.com/memes/polish-jerry-khe-berga",
     "alt": "Polish Jerry / Khe Berga?",
     "height_multiplier": 0.5617977528089888
+  },
+  "polite_cat": {
+    "title": "Polite Cat",
+    "img": "polite_cat.png",
+    "origin": "https://knowyourmeme.com/memes/polite-cat",
+    "alt": "Bruce Landlord Today 11:18 AM It is clear in the lease: no pets are allowed in the apt. Sorry Delivered OK I will make an exception because he looks very polite",
+    "height_multiplier": 1.1494252873563218
+  },
+  "pun_dog": {
+    "title": "Pun Dog",
+    "img": "pun_dog.jpg",
+    "origin": "https://knowyourmeme.com/memes/pun-dog",
+    "alt": "",
+    "height_multiplier": 0.9259259259259258
+  },
+  "pusheen_the_cat": {
+    "title": "Pusheen",
+    "img": "pusheen_the_cat.gif",
+    "origin": "https://knowyourmeme.com/memes/subcultures/pusheen",
+    "alt": "",
+    "height_multiplier": 1
   },
   "rick_roll": {
     "title": "Rickroll",
@@ -452,6 +669,13 @@
     "origin": "https://knowyourmeme.com/memes/road-work-ahead",
     "height_multiplier": 0.9900990099009901
   },
+  "scared_hamster": {
+    "title": "Scared Hamster",
+    "img": "scared_hamster.jpg",
+    "origin": "https://en.meming.world/wiki/Scared_Hamster",
+    "alt": "Scared Hamster",
+    "height_multiplier": 1.1494252873563218
+  },
   "shocked_pikachu": {
     "title": "Shocked Pikachu",
     "img": "shocked_pikachu.png",
@@ -477,6 +701,20 @@
     "origin": "https://knowyourmeme.com/memes/ben-affleck-smoking",
     "alt": "Affleck Smoking on roof",
     "height_multiplier": 1.3333333333333333
+  },
+  "somehow_palpatine_returned": {
+    "title": "Somehow, Palpatine returned.",
+    "img": "somehow_palpatine_returned.gif",
+    "origin": "https://knowyourmeme.com/memes/somehow-palpatine-returned",
+    "alt": "Somehow, Palpatine returned.",
+    "height_multiplier": 0.6134969325153374
+  },
+  "spinning_cat": {
+    "title": "Maxwell the Cat / Spinning Cat",
+    "img": "spinning_cat.gif",
+    "origin": "https://knowyourmeme.com/memes/maxwell-the-cat-spinning-cat",
+    "alt": "",
+    "height_multiplier": 0.6711409395973155
   },
   "steel_feathers": {
     "title": "Steel is Heavier than Feathers...",
@@ -532,9 +770,17 @@
     "alt": "How do three men in their 30s not have $800 between them? LIU They're-- The economy is in shambles.",
     "height_multiplier": 1.5625
   },
+  "the_same_picture": {
+    "title": "They're The Same Picture",
+    "img": "the_same_picture.jpg",
+    "origin": "https://knowyourmeme.com/memes/theyre-the-same-picture",
+    "alt": "They're The Same Picture",
+    "height_multiplier": 0.5617977528089888
+  },
   "the_what": {
     "title": "The WHAT",
     "img": "the_what.jpg",
+    "origin": "https://en.meming.world/wiki/The_What%3F",
     "height_multiplier": 0.7633587786259541
   },
   "then_perish": {
@@ -542,6 +788,13 @@
     "img": "then_perish.jpg",
     "origin": "https://knowyourmeme.com/memes/then-perish",
     "height_multiplier": 0.5434782608695652
+  },
+  "they_had_us": {
+    "title": "They Had Us In The First Half",
+    "img": "they_had_us.png",
+    "origin": "https://knowyourmeme.com/memes/they-had-us-in-the-first-half",
+    "alt": "They Had Us In The First Half, I'm Not Gonna Lie",
+    "height_multiplier": 0.7518796992481203
   },
   "this_is_fine": {
     "title": "This is fine.",
@@ -553,11 +806,25 @@
     "img": "thumbs_up_kid.gif",
     "height_multiplier": 0.7518796992481203
   },
+  "why_is_it_empty": {
+    "title": "Why is it Empty?",
+    "img": "why_is_it_empty.jpg",
+    "origin": "https://knowyourmeme.com/memes/why-is-it-empty",
+    "alt": "",
+    "height_multiplier": 0.8
+  },
   "why_would": {
     "title": "Who Killed Hannibal",
     "img": "why_would.jpg",
     "origin": "https://knowyourmeme.com/memes/who-killed-hannibal",
     "height_multiplier": 1.1235955056179776
+  },
+  "willem_dafoe_looking_up": {
+    "title": "Wellem Dafoe Looking Up",
+    "img": "willem_dafoe_looking_up.jpg",
+    "origin": "https://en.meming.world/wiki/Willem_Dafoe_Looking_Up",
+    "alt": "Wellem Dafoe Looking Up",
+    "height_multiplier": 0.5617977528089888
   },
   "woman_yelling_cat": {
     "title": "Woman Yelling At Cat",

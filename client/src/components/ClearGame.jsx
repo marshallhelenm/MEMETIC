@@ -8,10 +8,11 @@ import ListItemText from "@mui/material/ListItemText";
 import GuessyButton from "./GuessyButton";
 import { DrawerButton, DrawerIcon, DrawerItem } from "./DrawerComponents";
 import { useGuessy } from "../contexts/useGuessy";
+import { Tooltip } from "@mui/material";
 
-function ClearGame({ setLoadingCards, opacity, drawerOpen }) {
+function ClearGame({ opacity, drawerOpen }) {
   const [clearGameOpen, setClearGameOpen] = useState(false);
-  const { guessyManager } = useGuessy();
+  const { guessyManager, dispatch } = useGuessy();
 
   const handleCancel = () => setClearGameOpen(false);
 
@@ -21,7 +22,7 @@ function ClearGame({ setLoadingCards, opacity, drawerOpen }) {
   };
 
   function handleClearGame() {
-    setLoadingCards(true);
+    dispatch({ type: "setLoadingCards", payload: { loadingCards: true } });
     guessyManager("replaceGame");
   }
 
@@ -35,7 +36,11 @@ function ClearGame({ setLoadingCards, opacity, drawerOpen }) {
     <>
       <DrawerItem onClick={() => setClearGameOpen(true)}>
         <DrawerButton drawerOpen={drawerOpen}>
-          <DrawerIcon icon="rotate" drawerOpen={drawerOpen} />
+          <Tooltip title="New Game" placement="right-end">
+            <div>
+              <DrawerIcon icon="rotate" drawerOpen={drawerOpen} />
+            </div>
+          </Tooltip>
           <ListItemText primary="New Game" sx={[opacity]} />
         </DrawerButton>
       </DrawerItem>

@@ -6,7 +6,7 @@ import { devLog } from "../utils/Helpers";
 
 function MessageReceiver() {
   const { guessyManager, dispatch } = useGuessy();
-  const { lastJsonMessage, uuid } = useWS();
+  const { lastJsonMessage, uuid, setServerError } = useWS();
   const { lastJsonMessageChanged } = useTraceUpdate({ lastJsonMessage });
   //   **Message Handling**
   const handleIncomingMessage = useMemo(() => {
@@ -23,7 +23,7 @@ function MessageReceiver() {
       }
       if (!message) return;
 
-      devLog(["MessageReceiver handling message: ", message.type]);
+      // devLog(["MessageReceiver handling message: ", message.type]);
 
       switch (message.type) {
         case "noGameAlert":
@@ -41,6 +41,9 @@ function MessageReceiver() {
             type: "updateRoom",
             payload: { roomObject: message.room },
           });
+          break;
+        case "serverError":
+          setServerError(JSON.parse(message.error));
           break;
         case "usersUpdate":
           dispatch({

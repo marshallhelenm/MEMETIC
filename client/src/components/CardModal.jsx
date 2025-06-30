@@ -4,6 +4,7 @@ import DialogContent from "@mui/material/DialogContent";
 import { useState } from "react";
 import { colorA } from "../assets/styles";
 import { DialogTitle } from "@mui/material";
+import MemeOrigin from "./MemeOrigin";
 
 const CardModal = ({ item, children, icon, setModalOpen }) => {
   const [open, setOpen] = useState(false);
