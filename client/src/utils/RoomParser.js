@@ -10,14 +10,16 @@ function parseUsers({ roomKey, player1, player2, myUuid }) {
   let myInfo;
   let partnerInfo;
 
-  if (player1.uuid === myUuid) {
+  if (player1.uuid && player1.uuid === myUuid) {
     // i'm player 1
     myInfo = { ...player1 };
     partnerInfo = { ...player2 };
-  } else if (player2.uuid === myUuid) {
+    parsedUserInfo.observer = false;
+  } else if (player2.uuid && player2.uuid === myUuid) {
     // i'm player 2
     myInfo = { ...player2 };
     partnerInfo = { ...player1 };
+    parsedUserInfo.observer = false;
   } else {
     parsedUserInfo.observer = true;
   }
@@ -29,7 +31,7 @@ function parseUsers({ roomKey, player1, player2, myUuid }) {
     parsedUserInfo.myPlayerCard = myInfo.card;
   }
   if (partnerInfo) {
-    parsedUserInfo.partnerUsername = partnerInfo.username;
+    parsedUserInfo.partnerUsername = partnerInfo.username || "";
     parsedUserInfo.partnerCard = partnerInfo.card;
   }
 

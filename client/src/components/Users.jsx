@@ -10,9 +10,9 @@ function Users() {
   return (
     <>
       <Divider />
-      <div style={{ marginLeft: "10%" }}>
+      <div style={{ marginLeft: "5%" }}>
         <List component="div" disablePadding>
-          <ListItem drawerOpen={true}>
+          <ListItem>
             <i
               className={`fa-regular fa-user fa-md`}
               style={{
@@ -23,7 +23,7 @@ function Users() {
             ></i>
             <ListItemText primary={username} />
           </ListItem>
-          <ListItem drawerOpen={true}>
+          <ListItem>
             <i
               className={`fa-regular fa-user fa-md`}
               style={{
