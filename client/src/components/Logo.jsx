@@ -42,7 +42,7 @@ function Logo({ spin = true, header = false, size }) {
     );
   } else if (image == "gnome") {
     return (
-      <div style={{ height: "40vmin", cursor: "pointer" }}>
+      <div style={{ height: '"40vmin"', cursor: "pointer" }}>
         <Zoom in={true} style={{ transitionDelay: "100ms" }}>
           <img
             src="/memes/gnome_barf.gif"

@@ -150,7 +150,7 @@
     "img": "confused_gandalf.jpg",
     "origin": "https://knowyourmeme.com/memes/confused-gandalf",
     "alt": "I have no memory of this place.",
-    "height_multiplier": 1
+    "height_multiplier": 0.8474576271186441
   },
   "confused_lady": {
     "title": "Confused Lady (Math variant)",
@@ -805,6 +805,12 @@
   "thumbs_up_kid": {
     "img": "thumbs_up_kid.gif",
     "height_multiplier": 0.7518796992481203
+  },
+  "were_really_in_it_now": {
+    "title": "Oh Ariana, we're really in it now.",
+    "img": "were_really_in_it_now.jpg",
+    "origin": "https://knowyourmeme.com/memes/oh-___-were-really-in-it-now",
+    "height_multiplier": 0.5617977528089888
   },
   "why_is_it_empty": {
     "title": "Why is it Empty?",

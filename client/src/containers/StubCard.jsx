@@ -3,8 +3,11 @@ import ReactCardFlip from "react-card-flip";
 
 import StubBack from "./StubBack";
 import StubFront from "./StubFront";
+import { useSearchParams } from "react-router-dom";
 
-function StubCard({ roomKey, itemKey, item, isPlayerCard }) {
+function StubCard({ itemKey, item, isPlayerCard }) {
+  const [searchParams] = useSearchParams();
+  const roomKey = searchParams.get("roomKey");
   const storageId = `${roomKey}-flipped-${itemKey}`;
   const [flipped, setFlipped] = useState(
     sessionStorage.getItem(storageId) === "true"

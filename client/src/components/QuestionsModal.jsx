@@ -3,11 +3,12 @@ import IconButton from "@mui/material/IconButton";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import ListItemText from "@mui/material/ListItemText";
+import Divider from "@mui/material/Divider";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 import StyledDialog from "./StyledDialog";
 import { DrawerButton, DrawerIcon, DrawerItem } from "./DrawerComponents";
-import { Divider, Tooltip, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
 
 const QuestionsModal = ({ opacity, drawerOpen }) => {
   const [open, setOpen] = useState(false);
@@ -24,6 +25,7 @@ const QuestionsModal = ({ opacity, drawerOpen }) => {
     "Would I be attracted to this meme?",
     "Would I want this person to fight alongside me during the apocalypse?",
     "Would this meme be my sidekick?",
+    "Is this meme going through it?",
   ];
 
   return (
@@ -45,7 +47,7 @@ const QuestionsModal = ({ opacity, drawerOpen }) => {
         aria-describedby="modal-modal-description"
       >
         <DialogTitle sx={{ m: 0, p: 2, textAlign: "center" }}>
-          <Typography variant="h4">How To Play</Typography>
+          How To Play
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -66,7 +68,15 @@ const QuestionsModal = ({ opacity, drawerOpen }) => {
         >
           <div style={{ padding: "5%" }}>
             <Typography variant="body1" gutterBottom>
-              Did you ever play Guess Who? It’s just like that!
+              Did you ever play{" "}
+              <a
+                href="https://en.wikipedia.org/wiki/Guess_Who%3F"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Guess Who?
+              </a>{" "}
+              It’s just like that!
             </Typography>
             <Typography variant="body1" gutterBottom>
               Share the link with your room key with someone to start a game -
@@ -110,9 +120,13 @@ const QuestionsModal = ({ opacity, drawerOpen }) => {
 
             <Typography variant="body2">
               Directly inspired by{" "}
-              <Link src="https://ve.media.tumblr.com/tumblr_q8otm9qrlU1w0qmsw.mp4">
+              <a
+                href="https://ve.media.tumblr.com/tumblr_q8otm9qrlU1w0qmsw.mp4"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 this tiktok
-              </Link>
+              </a>
               .
             </Typography>
           </div>

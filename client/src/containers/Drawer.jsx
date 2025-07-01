@@ -215,15 +215,15 @@ export default function MiniDrawer({ children }) {
           >
             {/* users */}
             <DrawerButton drawerOpen={drawerOpen}>
-              <Tooltip title="View Users" placement="right-end">
+              <Tooltip title="View Players" placement="right-end">
                 <div>
                   <DrawerIcon drawerOpen={drawerOpen} icon="users" />
                 </div>
               </Tooltip>
               <ListItemText primary={"Players"} sx={[opacity]} />
             </DrawerButton>
-            {drawerOpen && <Users />}
           </DrawerItem>
+          {drawerOpen && <Users />}
         </>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
