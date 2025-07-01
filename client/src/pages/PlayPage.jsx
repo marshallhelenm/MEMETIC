@@ -20,8 +20,10 @@ function PlayPage() {
 
   useEffect(() => {
     if (!roomObjectIsValid() && attemptsRef.current < 11) {
-      guessyManager("joinRoom");
-      attemptsRef.current = attemptsRef.current + 1;
+      setTimeout(() => {
+        guessyManager("joinRoom");
+        attemptsRef.current = attemptsRef.current + 1;
+      }, 500);
     } else if (roomObjectIsValid()) {
       attemptsRef.current = 0;
     }

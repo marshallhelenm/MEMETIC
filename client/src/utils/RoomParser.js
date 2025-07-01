@@ -1,4 +1,6 @@
-function parseUsers({ roomKey, player1, player2, myUuid }) {
+import { devLog } from "./Helpers";
+
+function parseUsers({ player1, player2, myUuid }) {
   const parsedUserInfo = {
     myPlayerCard: undefined,
     username: undefined,
@@ -7,8 +9,18 @@ function parseUsers({ roomKey, player1, player2, myUuid }) {
     observer: false,
   };
 
-  let myInfo;
-  let partnerInfo;
+  let myInfo = {};
+  let partnerInfo = {};
+
+  // devLog([
+  //   "RoomParser",
+  //   "myUuid: ",
+  //   myUuid,
+  //   "player1: ",
+  //   player1,
+  //   "player2: ",
+  //   player2,
+  // ]);
 
   if (player1.uuid && player1.uuid === myUuid) {
     // i'm player 1
@@ -24,13 +36,23 @@ function parseUsers({ roomKey, player1, player2, myUuid }) {
     parsedUserInfo.observer = true;
   }
 
-  if (myInfo) {
+  // devLog([
+  //   "RoomParser",
+  //   "myInfo: ",
+  //   typeof myInfo,
+  //   myInfo,
+  //   "partnerInfo: ",
+  //   typeof partnerInfo,
+  //   partnerInfo,
+  // ]);
+
+  if (myInfo && Object.keys(myInfo).length > 0) {
     parsedUserInfo.username =
       myInfo.username ||
       new URLSearchParams(window.location.search).get("username");
     parsedUserInfo.myPlayerCard = myInfo.card;
   }
-  if (partnerInfo) {
+  if (partnerInfo && Object.keys(partnerInfo).length > 0) {
     parsedUserInfo.partnerUsername = partnerInfo.username || "";
     parsedUserInfo.partnerCard = partnerInfo.card;
   }

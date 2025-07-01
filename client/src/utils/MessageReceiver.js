@@ -6,7 +6,7 @@ import { devLog } from "../utils/Helpers";
 
 function MessageReceiver() {
   const { guessyManager, dispatch } = useGuessy();
-  const { lastJsonMessage, uuid, setServerError } = useWS();
+  const { lastJsonMessage, uuidRef, setServerError } = useWS();
   const { lastJsonMessageChanged } = useTraceUpdate({ lastJsonMessage });
   //   **Message Handling**
   const handleIncomingMessage = useMemo(() => {
@@ -23,14 +23,17 @@ function MessageReceiver() {
       }
       if (!message) return;
 
-      // devLog(["MessageReceiver handling message: ", message.type]);
-
+      // devLog(["MessageReceiver handling message: ", JSON.stringify(message)]);
+      if (!uuidRef.current && message.type != "uuid") {
+        guessyManager("requestUuid");
+        return;
+      }
       switch (message.type) {
         case "noGameAlert":
           guessyManager("createRoom", { newRoomKey: message.roomKey });
           break;
-        case ("replaceGame", "roomContents"):
-          // it's fuckin gone already
+        case "replaceGame":
+        case "roomContents":
           if (!message.room) {
             devLog(["no roomContents to process!", message.room]);
             return;
@@ -40,6 +43,7 @@ function MessageReceiver() {
           dispatch({
             type: "updateRoom",
             payload: { roomObject: message.room },
+            uuid: uuidRef.current,
           });
           break;
         case "serverError":
@@ -48,19 +52,29 @@ function MessageReceiver() {
         case "usersUpdate":
           dispatch({
             type: "updateUsers",
-            payload: { player1: message.player1, player2: message.player2 },
+            payload: {
+              player1: message.player1,
+              player2: message.player2,
+              uuid: uuidRef.current,
+            },
           });
           break;
         case "uuid":
-          if (!sessionStorage.getItem("guessy-uuid")) {
+          if (!sessionStorage.getItem("guessy-uuid") || !uuidRef.current) {
             sessionStorage.setItem("guessy-uuid", message.uuid);
+            uuidRef.current = message.uuid;
+            guessyManager("acceptUuid");
           }
           break;
         default:
-          devLog(["Unhandled message type:", message["type"], message]);
+          devLog([
+            "Unhandled message type in MessageReceiver:",
+            message.type,
+            message,
+          ]);
       }
     };
-  }, [dispatch, guessyManager]);
+  }, [dispatch, guessyManager, setServerError, uuidRef]);
 
   useEffect(() => {
     if (lastJsonMessageChanged) handleIncomingMessage(lastJsonMessage);

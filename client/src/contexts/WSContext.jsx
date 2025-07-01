@@ -5,12 +5,12 @@ const WSContext = createContext(false, null, () => {});
 const socketURL = "ws://localhost:6969";
 
 function WSProvider({ children }) {
+  let uuidRef = useRef(sessionStorage.getItem("guessy-uuid"));
   const isReadyRef = useRef(false);
   const connectionAttemptsRef = useRef(0);
   const tryingToConnectRef = useRef(true);
   const [serverError, setServerError] = useState(""); // as opposed to connectionError, this one is if there's a failure of parsing the messages
   const ws = useRef(null);
-  let uuidRef = useRef(sessionStorage.getItem("guessy-uuid"));
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
     `${socketURL}?uuid=${uuidRef.current}`,
     { share: false, shouldReconnect: () => true }
@@ -26,46 +26,48 @@ function WSProvider({ children }) {
   const connectionError =
     connectionStatus == "Closed" && connectionAttemptsRef.current > 10;
   const connectionOpen = connectionStatus == "Open";
-  // useTraceUpdate(
-  //   {
-  //     isReadyRef,
-  //     connectionAttemptsRef,
-  //     tryingToConnectRef,
-  //     ws,
-  //     uuidRef,
-  //     connectionStatus,
-  //     component: "WSContext",
-  //   },
-  //   true
-  // );
+  // useTraceUpdate({ uuidRef: uuidRef.current }, true, "WSContext");
 
   useEffect(() => {
-    while (connectionAttemptsRef.current < 11 && !isReadyRef.current) {
-      const socket = new WebSocket("wss://echo.websocket.events/");
-      if (!isReadyRef.current) {
-        tryingToConnectRef.current = true;
-        connectionAttemptsRef.current = connectionAttemptsRef.current + 1;
-      }
-      socket.onopen = () => {
-        isReadyRef.current = true;
-        tryingToConnectRef.current = false;
-        connectionAttemptsRef.current = 0;
-      };
-
-      socket.onclose = () => (isReadyRef.current = false);
-
-      // socket.onmessage = () => {
-      //   //
-      // };
-
-      ws.current = socket;
-
-      return () => {
-        socket.close();
-      };
+    const socket = new WebSocket("wss://echo.websocket.events/");
+    if (
+      !connectionOpen &&
+      connectionAttemptsRef.current < 11 &&
+      !isReadyRef.current
+    ) {
+      tryingToConnectRef.current = true;
+      connectionAttemptsRef.current = connectionAttemptsRef.current + 1;
+    } else if (connectionOpen) {
+      isReadyRef.current = true;
+      connectionAttemptsRef.current = 0;
+    } else {
+      tryingToConnectRef.current = false;
     }
-    tryingToConnectRef.current = false;
-  }, [lastJsonMessage, isReadyRef, connectionAttemptsRef, tryingToConnectRef]);
+
+    socket.onopen = () => {
+      isReadyRef.current = true;
+      tryingToConnectRef.current = false;
+      connectionAttemptsRef.current = 0;
+    };
+
+    socket.onclose = () => (isReadyRef.current = false);
+
+    // socket.onmessage = () => {
+    //   //
+    // };
+
+    ws.current = socket;
+
+    return () => {
+      socket.close();
+    };
+  }, [
+    lastJsonMessage,
+    isReadyRef,
+    connectionAttemptsRef,
+    tryingToConnectRef,
+    connectionOpen,
+  ]);
 
   const value = useMemo(() => {
     return {
@@ -76,7 +78,7 @@ function WSProvider({ children }) {
       connectionStatus,
       connectionError,
       connectionOpen,
-      uuid: uuidRef.current,
+      uuidRef,
       tryingToConnect: tryingToConnectRef.current,
       serverError,
       setServerError,
@@ -92,6 +94,7 @@ function WSProvider({ children }) {
     tryingToConnectRef,
     serverError,
     setServerError,
+    uuidRef,
   ]);
 
   return <WSContext.Provider value={value}>{children}</WSContext.Provider>;

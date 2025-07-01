@@ -37,14 +37,17 @@ const handleMessage = (bytes, uuid) => {
       // message
     );
 
-    let roomKey = message.roomKey?.toUpperCase();
+    let roomKey = message.roomKey;
     let room = rooms[roomKey];
     if (!room) room = { ...emptyRoomTemplate };
     let player1 = room.player1;
     let player2 = room.player2;
     let newRoomObject;
-    let existingRoom;
     switch (message.type) {
+      case "acceptUuid":
+        connections[uuid] = connection;
+        console.log(`New connection established with UUID: ${uuid}`);
+        break;
       case "clearPlayerCards":
         clearPlayerCards(message.roomKey, uuid);
         break;
@@ -78,8 +81,8 @@ const handleMessage = (bytes, uuid) => {
         if (!room) {
           rooms[roomKey] = { ...emptyRoomTemplate };
         }
-        room.columnsObject = message.columnsObject;
-        room.allKeys = message.allKeys;
+        room.columnsObject = { ...JSON.parse(message.columnsObject) };
+        room.allKeys = JSON.parse(message.allKeys).slice(0);
         room.player1.card = message.player1Card;
         room.player2.card = message.player2Card;
 
@@ -88,7 +91,7 @@ const handleMessage = (bytes, uuid) => {
           {
             type: "replaceGame",
             roomKey: message.roomKey,
-            room: JSON.stringify(rooms[message.roomKey]),
+            roomObject: JSON.stringify(room),
           },
           uuid
         );
@@ -225,7 +228,6 @@ const joinRoom = ({
   const room = rooms[roomKey];
   if (!room) {
     rooms[roomKey] = { ...emptyRoomTemplate };
-    console.warn("Room does not exist:", roomKey);
     noGameAlert(roomKey, uuid, "Room does not exist");
     return;
   }
@@ -234,9 +236,11 @@ const joinRoom = ({
   let player2 = room.player2;
 
   if (player1.uuid && player2.uuid) {
-    room.observers.push(uuid);
     // this connection is already in there or will just be an observer
     returnRoomContents && sendRoomContentsToUuid(roomKey, uuid);
+    if (player1.uuid != uuid && player2.uuid != uuid) {
+      room.observers.push(uuid);
+    }
   } else if (player1.uuid === uuid || player2.uuid === uuid) {
     // this connection is already in there, just send them back their data
     returnRoomContents && sendRoomContentsToUuid(roomKey, uuid);
@@ -280,17 +284,31 @@ const joinRoom = ({
   }
 };
 
+const sendNewUuid = (connection) => {
+  uuid = uuidv4();
+  connection.send(JSON.stringify({ type: "uuid", uuid: uuid }));
+};
+
 // *server management
 
 wsServer.on("connection", (connection, request) => {
-  let uuid = new URLSearchParams(request.url.slice(1))["uuid"];
-  if (!uuid) uuid = uuidv4();
-  connections[uuid] = connection;
-  console.log(`New connection established with UUID: ${uuid}`);
-  sendToUuid(uuid, { type: "uuid", uuid: uuid });
+  const searchParams = new URLSearchParams(request.url.slice(1));
+  let uuid = searchParams.get("uuid");
+  console.log("received uuid: ", uuid);
+
+  if (!uuid) {
+    console.log("sending new uuid");
+    sendNewUuid(connection);
+  } else {
+    connections[uuid] = connection;
+  }
 
   connection.on("message", (message) => {
-    handleMessage(message, uuid);
+    if (!uuid) {
+      sendNewUuid(connection);
+    } else {
+      handleMessage(message, uuid);
+    }
   });
 
   connection.on("close", () => {

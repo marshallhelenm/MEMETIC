@@ -194,7 +194,7 @@ export default function MiniDrawer({ children }) {
                   <DrawerIcon drawerOpen={drawerOpen} icon="key" />
                 </div>
               </Tooltip>
-              <ListItemText primary={roomKey.toUpperCase()} sx={[opacity]} />
+              <ListItemText primary={roomKey} sx={[opacity]} />
               {drawerOpen && (
                 <i
                   className={`fa-regular fa-copy fa-md`}

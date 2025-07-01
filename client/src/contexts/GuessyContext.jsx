@@ -33,7 +33,7 @@ function guessyReducer(state, action) {
   const sessionPlayerCard = sessionStorage.getItem(
     `guessy-${state.roomKey}-player-card`
   );
-  // devLog(["guessyReducer: ", type]);
+  // devLog(["guessyReducer: ", payload?.uuid]);
 
   switch (type) {
     case "setLoadingCards":
@@ -54,9 +54,10 @@ function guessyReducer(state, action) {
     case "updatePartnerCard":
       return { ...state, partnerCard: payload.partnerCard };
     case "updateRoom":
+      // devLog(["reducer updateRoom: ", payload]);
       parsedRoom = parseRoom({
         roomKey: state.roomKey,
-        myUuid: state.uuid,
+        myUuid: payload.uuid || sessionStorage.getItem("guessy-uuid"),
         roomObject: payload.roomObject,
       });
       return {
@@ -67,13 +68,14 @@ function guessyReducer(state, action) {
         loadingCards: false,
       };
     case "updateRoomKey":
-      return { ...state, roomKey: payload.newRoomKey.toUpperCase() };
+      return { ...state, roomKey: payload.newRoomKey };
     case "updateUsername":
       return { ...state, username: payload.username };
     case "updateUsers":
+      // devLog(["reducer updateUsers: ", payload]);
       parsedUsers = parseUsers({
         roomKey: state.roomKey,
-        myUuid: state.uuid,
+        myUuid: payload.uuid || sessionStorage.getItem("guessy-uuid"),
         player1: payload.player1,
         player2: payload.player2,
       });
@@ -83,13 +85,18 @@ function guessyReducer(state, action) {
         myPlayerCard:
           parsedRoom.myPlayerCard || sessionPlayerCard || state.myPlayerCard,
       };
+    case "wipeRoom":
+      return { ...initialState, roomKey: "" };
     default:
-      throw new Error("Action unknown in guessyReducer");
+      throw new Error(["Action unknown in guessyReducer: ", action]);
   }
 }
 
+// ** Provider Logic Start
+
 function GuessyProvider({ children }) {
-  const { connectionOpen, myUuid, sendJsonMessage } = useWS();
+  // ** State and variables
+  const { connectionOpen, uuidRef, sendJsonMessage } = useWS();
   const [
     {
       roomKey,
@@ -107,7 +114,6 @@ function GuessyProvider({ children }) {
   ] = useReducer(guessyReducer, initialState);
 
   const { breakpoint, maxWidth, minWidth } = useBreakpoint(BREAKPOINTS, "l");
-  useTraceUpdate({ breakpoint, maxWidth, minWidth }, true);
   const getColumnCount = () => {
     switch (breakpoint) {
       case "1":
@@ -126,7 +132,6 @@ function GuessyProvider({ children }) {
         break;
     }
   };
-
   const columnCount = getColumnCount();
 
   const roomObjectIsValid = useMemo(() => {
@@ -135,8 +140,24 @@ function GuessyProvider({ children }) {
     };
   }, [allKeys, columnsObject]);
 
+  // useTraceUpdate(
+  //   {
+  //     breakpoint,
+  //     maxWidth,
+  //     minWidth,
+  //     columnsObject,
+  //   },
+  //   true,
+  //   "GuessyContext"
+  // );
+
+  // ** Functions
+
   const createRoom = useMemo(() => {
     return async function (newRoomKey) {
+      if (newRoomKey != roomKey) {
+        dispatch({ type: "wipeRoom" });
+      }
       let ready = await waitUntil(connectionOpen);
       if (ready) {
         dispatch({ type: "updateRoomKey", payload: { newRoomKey } });
@@ -156,7 +177,7 @@ function GuessyProvider({ children }) {
           columnsObject: newMemes.columnsObject,
           allKeys: newMemes.allKeys,
           player1: {
-            uuid: myUuid,
+            uuid: uuidRef.current,
             card: requesterCard,
             username,
           },
@@ -168,7 +189,7 @@ function GuessyProvider({ children }) {
         });
       }
     };
-  }, [sendJsonMessage, username, connectionOpen, myUuid]);
+  }, [sendJsonMessage, username, connectionOpen, uuidRef, roomKey]);
 
   const guessyManager = useMemo(() => {
     return (action, payload) => {
@@ -178,6 +199,13 @@ function GuessyProvider({ children }) {
       let newCard2;
       // devLog(["guessyManager:", action, payload]);
       switch (action) {
+        case "acceptUuid":
+          if (uuidRef.current) {
+            sendJsonMessage({
+              type: "acceptUuid",
+            });
+          }
+          break;
         case "assignUsername":
           sessionStorage.setItem(`${roomKey}-username`, payload.newUsername);
           dispatch({
@@ -197,7 +225,10 @@ function GuessyProvider({ children }) {
             roomKey: roomKey,
             card: newCard,
           });
-          dispatch({ type: "updateMyPlayerCard", newCard });
+          dispatch({
+            type: "updateMyPlayerCard",
+            payload: { newCard: newCard },
+          });
           break;
         case "createRoom":
           createRoom(payload.newRoomKey);
@@ -265,6 +296,7 @@ function GuessyProvider({ children }) {
     sendJsonMessage,
     roomObjectIsValid,
     myPlayerCard,
+    uuidRef,
   ]);
 
   //  ** value for the context provider **
@@ -299,7 +331,10 @@ function GuessyProvider({ children }) {
     dispatch,
     columnCount,
     maxWidth,
+    loadingCards,
   ]);
+
+  // **UseEffect
 
   // ** render provider:
   return (
