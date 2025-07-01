@@ -1,3 +1,4 @@
+import { useState } from "react";
 import BoardColumn from "./BoardColumn";
 import LoadingStub from "../components/LoadingStub";
 import MissingStub from "../components/MissingStub";
@@ -5,7 +6,6 @@ import MissingStub from "../components/MissingStub";
 import { memeData } from "../assets/memeCollection";
 import { useGuessy } from "../contexts/useGuessy";
 import StubCard from "./StubCard";
-import { useState } from "react";
 
 // holds all the picture cards
 function Board() {

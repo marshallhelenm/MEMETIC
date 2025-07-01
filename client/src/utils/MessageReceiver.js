@@ -21,9 +21,13 @@ function MessageReceiver() {
         );
         return;
       }
+      // devLog([
+      //   "MessageReceiver handling message: ",
+      //   message.type,
+      //   // JSON.stringify(message),
+      // ]);
       if (!message) return;
 
-      // devLog(["MessageReceiver handling message: ", JSON.stringify(message)]);
       if (!uuidRef.current && message.type != "uuid") {
         guessyManager("requestUuid");
         return;
@@ -44,6 +48,10 @@ function MessageReceiver() {
             type: "updateRoom",
             payload: { roomObject: message.room },
             uuid: uuidRef.current,
+          });
+          dispatch({
+            type: "setLoadingCards",
+            payload: { loadingCards: false },
           });
           break;
         case "serverError":

@@ -6,7 +6,6 @@ import MiniDrawer from "./Drawer";
 function PlayGame() {
   return (
     <div className="play-game">
-      {/* <PlayGameHeader setLoadingCards={setLoadingCards} /> */}
       <MiniDrawer>
         <Board />
       </MiniDrawer>

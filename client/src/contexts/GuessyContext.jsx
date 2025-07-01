@@ -54,7 +54,6 @@ function guessyReducer(state, action) {
     case "updatePartnerCard":
       return { ...state, partnerCard: payload.partnerCard };
     case "updateRoom":
-      // devLog(["reducer updateRoom: ", payload]);
       parsedRoom = parseRoom({
         roomKey: state.roomKey,
         myUuid: payload.uuid || sessionStorage.getItem("guessy-uuid"),
@@ -243,6 +242,10 @@ function GuessyProvider({ children }) {
           });
           break;
         case "replaceGame":
+          dispatch({
+            type: "setLoadingCards",
+            payload: { loadingCards: true },
+          });
           newMemes = memeSampler();
           // assign each player a new playerCard
           newCard1 = randomCardKey(newMemes.allKeys);

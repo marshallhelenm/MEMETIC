@@ -30,12 +30,7 @@ const handleMessage = (bytes, uuid) => {
   try {
     message = JSON.parse(bytes.toString());
 
-    console.log(
-      "Message: ",
-      message.type
-      // "with data:",
-      // message
-    );
+    // console.log("Message: ", message.type, "with data:", message);
 
     let roomKey = message.roomKey;
     let room = rooms[roomKey];
@@ -77,6 +72,7 @@ const handleMessage = (bytes, uuid) => {
         if (!message.roomKey) {
           return;
         }
+
         room = rooms[roomKey];
         if (!room) {
           rooms[roomKey] = { ...emptyRoomTemplate };
@@ -95,6 +91,7 @@ const handleMessage = (bytes, uuid) => {
           },
           uuid
         );
+
         break;
       case "requestUuid":
         sendToUuid(uuid, { type: "uuid", uuid: uuid });
@@ -210,6 +207,7 @@ const broadcast = (roomKey, message, uuidToExclude = null) => {
   let player1 = room.player1;
   let player2 = room.player2;
   let recipients = [player1.uuid, player2.uuid, ...room.observers];
+
   recipients.forEach((u) => {
     if (!uuidToExclude && u === uuidToExclude) return;
     if (!connections[u]) return;

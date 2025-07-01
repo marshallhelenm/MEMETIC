@@ -22,7 +22,6 @@ function ClearGame({ opacity, drawerOpen }) {
   };
 
   function handleClearGame() {
-    dispatch({ type: "setLoadingCards", payload: { loadingCards: true } });
     guessyManager("replaceGame");
   }
 
