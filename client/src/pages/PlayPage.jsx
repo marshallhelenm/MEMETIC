@@ -8,7 +8,6 @@ import ErrorPage from "../components/ErrorPage";
 import PlayGame from "../containers/PlayGame";
 
 function PlayPage() {
-  const [loadingPage, setLoadingPage] = useState(true); // RoomLoading uses this to nudge the page to reload if it's been sitting in loading for a while
   const {
     uuid,
     connectionOpen,
@@ -18,14 +17,15 @@ function PlayPage() {
   } = useWS();
   const { roomKey, roomObjectIsValid, guessyManager, allKeys } = useGuessy();
   const attemptsRef = useRef(0);
+
   useEffect(() => {
     if (!roomObjectIsValid() && attemptsRef.current < 11) {
       guessyManager("joinRoom");
       attemptsRef.current = attemptsRef.current + 1;
-    } else {
-      setLoadingPage(false);
+    } else if (roomObjectIsValid()) {
+      attemptsRef.current = 0;
     }
-  }, [uuid, guessyManager, roomObjectIsValid, allKeys]);
+  }, [uuid, guessyManager, roomObjectIsValid, allKeys, connectionOpen]);
 
   // ** RENDER
   if (roomKey.length != 8) {
@@ -36,8 +36,8 @@ function PlayPage() {
     return <ErrorPage type="connection" />;
   } else if (serverError != "") {
     return <ErrorPage type="server" />;
-  } else if (loadingPage) {
-    return <RoomLoading setLoadingPage={setLoadingPage} />;
+  } else {
+    return <RoomLoading />;
   }
 }
 

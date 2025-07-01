@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 import Logo from "../components/Logo";
+import { useGuessy } from "../contexts/useGuessy";
 
 function RoomLoading({ setLoadingPage }) {
+  const { guessyManager } = useGuessy();
   useEffect(() => {
-    setLoadingPage(true);
-    setTimeout(() => setLoadingPage(false), 5000);
+    setTimeout(() => {
+      guessyManager("joinRoom");
+    }, 5000);
   });
   return (
     <div>
