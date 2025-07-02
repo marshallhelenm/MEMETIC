@@ -12,6 +12,7 @@ const GuessyContext = createContext();
 const BREAKPOINTS = { 1: 0, 2: 540, 3: 740, 4: 980, 5: 1158, 6: 1380 };
 
 const searchParams = new URLSearchParams(window.location.search);
+
 const initialState = {
   roomKey: searchParams.get("roomKey"),
   allKeys: [],
@@ -28,12 +29,15 @@ const initialState = {
 function guessyReducer(state, action) {
   const type = action.type;
   const payload = action.payload;
-  let parsedRoom = {};
-  let parsedUsers = {};
+
   const sessionPlayerCard = sessionStorage.getItem(
     `guessy-${state.roomKey}-player-card`
   );
-  // devLog(["guessyReducer: ", payload?.uuid]);
+
+  let parsedRoom = {};
+  let parsedUsers = {};
+
+  devLog(["guessyReducer: ", type]);
 
   switch (type) {
     case "setLoadingCards":
@@ -43,7 +47,6 @@ function guessyReducer(state, action) {
     case "setUsername":
       return { ...state, username: payload.newUsername };
     case "updateMemeSet":
-      // not happening here, payload is only columnsObject and allKeys
       return { ...state, ...payload };
     case "updateMyPlayerCard":
       sessionStorage.setItem(
@@ -51,8 +54,8 @@ function guessyReducer(state, action) {
         payload.newCard
       );
       return { ...state, myPlayerCard: payload.newCard };
-    case "updatePartnerCard":
-      return { ...state, partnerCard: payload.partnerCard };
+    // case "updatePartnerCard":
+    //   return { ...state, partnerCard: payload.partnerCard };
     case "updateRoom":
       parsedRoom = parseRoom({
         roomKey: state.roomKey,
@@ -67,11 +70,9 @@ function guessyReducer(state, action) {
         loadingCards: false,
       };
     case "updateRoomKey":
+      if (!payload.newRoomKey) return { ...state };
       return { ...state, roomKey: payload.newRoomKey };
-    case "updateUsername":
-      return { ...state, username: payload.username };
     case "updateUsers":
-      // devLog(["reducer updateUsers: ", payload]);
       parsedUsers = parseUsers({
         roomKey: state.roomKey,
         myUuid: payload.uuid || sessionStorage.getItem("guessy-uuid"),
@@ -153,22 +154,27 @@ function GuessyProvider({ children }) {
   // ** Functions
 
   const createRoom = useMemo(() => {
-    return async function (newRoomKey) {
-      if (newRoomKey != roomKey) {
+    return async function (newRoomKey, wipeRoom = false) {
+      dispatch({ type: "setLoadingCards", payload: { loadingCards: true } });
+      if (newRoomKey != roomKey || wipeRoom) {
         dispatch({ type: "wipeRoom" });
+        Object.keys(sessionStorage).forEach((key) => {
+          if (key.includes(newRoomKey)) window.sessionStorage.removeItem(key);
+        });
       }
       let ready = await waitUntil(connectionOpen);
       if (ready) {
         dispatch({ type: "updateRoomKey", payload: { newRoomKey } });
         const newMemes = memeSampler();
         dispatch({ type: "updateMemeSet", payload: newMemes });
-        const requesterCard = randomCardKey(newMemes.allKeys);
+        const newMyPlayerCard = randomCardKey(newMemes.allKeys);
+        const newPartnerCard = randomCardKey(newMemes.allKeys);
         dispatch({
           type: "updateMyPlayerCard",
-          payload: { newCard: requesterCard },
+          payload: { newCard: newMyPlayerCard },
         });
         dispatch({
-          type: "updateUsername",
+          type: "setUsername",
           payload: { username },
         });
         let newRoomObject = {
@@ -177,8 +183,12 @@ function GuessyProvider({ children }) {
           allKeys: newMemes.allKeys,
           player1: {
             uuid: uuidRef.current,
-            card: requesterCard,
+            card: newMyPlayerCard,
             username,
+          },
+          player2: {
+            card: newPartnerCard,
+            username: partnerUsername,
           },
         };
         sendJsonMessage({
@@ -188,15 +198,19 @@ function GuessyProvider({ children }) {
         });
       }
     };
-  }, [sendJsonMessage, username, connectionOpen, uuidRef, roomKey]);
+  }, [
+    sendJsonMessage,
+    username,
+    connectionOpen,
+    uuidRef,
+    roomKey,
+    partnerUsername,
+  ]);
 
   const guessyManager = useMemo(() => {
     return (action, payload) => {
       let newCard;
-      let newMemes;
-      let newCard1;
-      let newCard2;
-      // devLog(["guessyManager:", action, payload]);
+      devLog(["guessyManager:", action]);
       switch (action) {
         case "acceptUuid":
           if (uuidRef.current) {
@@ -233,46 +247,23 @@ function GuessyProvider({ children }) {
           createRoom(payload.newRoomKey);
           break;
         case "joinRoom":
-          sendJsonMessage({
-            type: "joinRoom",
-            roomKey,
-            username,
-            playerCard: myPlayerCard,
-            returnRoomContents: !roomObjectIsValid(),
-          });
-          break;
-        case "replaceGame":
-          dispatch({
-            type: "setLoadingCards",
-            payload: { loadingCards: true },
-          });
-          newMemes = memeSampler();
-          // assign each player a new playerCard
-          newCard1 = randomCardKey(newMemes.allKeys);
-          dispatch({
-            type: "updateMyPlayerCard",
-            payload: { newCard: newCard1 },
-          });
-          newCard2 = randomCardKey(newMemes.allKeys);
-          dispatch({
-            type: "updatePartnerCard",
-            payload: { newCard: newCard2 },
-          });
-
-          // clean up local storage
-          Object.keys(sessionStorage).forEach((key) => {
-            if (key.includes(roomKey)) window.sessionStorage.removeItem(key);
-          });
-
-          // send the new memes to the server
-          sendJsonMessage({
-            type: "replaceGame",
-            roomKey: roomKey,
-            allKeys: JSON.stringify(newMemes.allKeys),
-            columnsObject: JSON.stringify(newMemes.columnsObject),
-            player1Card: newCard1,
-            player2Card: newCard2,
-          });
+          if (payload && payload.roomKey) {
+            sendJsonMessage({
+              type: "joinRoom",
+              roomKey: payload.roomKey,
+              username,
+              playerCard: myPlayerCard,
+              returnRoomContents: !roomObjectIsValid(),
+            });
+          } else {
+            sendJsonMessage({
+              type: "joinRoom",
+              roomKey: roomKey,
+              username,
+              playerCard: myPlayerCard,
+              returnRoomContents: !roomObjectIsValid(),
+            });
+          }
           break;
         case "requestUuid":
           sendJsonMessage({

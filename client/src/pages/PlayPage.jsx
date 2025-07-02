@@ -6,8 +6,11 @@ import InvalidRoomKey from "../components/InvalidRoomKey";
 import RoomLoading from "../components/RoomLoading";
 import ErrorPage from "../components/ErrorPage";
 import PlayGame from "../containers/PlayGame";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 function PlayPage() {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const {
     uuid,
     connectionOpen,
@@ -17,22 +20,42 @@ function PlayPage() {
   } = useWS();
   const { roomKey, roomObjectIsValid, guessyManager, allKeys } = useGuessy();
   const attemptsRef = useRef(0);
+  const validRoom = roomObjectIsValid();
+  const searchParamRoomKey = searchParams.get("roomKey");
 
   useEffect(() => {
-    if (!roomObjectIsValid() && attemptsRef.current < 11) {
+    if (!searchParamRoomKey) {
+      navigate("/home");
+    } else if (!searchParams.get("username")) {
+      navigate(`/name_thyself?roomKey=${searchParams.get("roomKey")}`);
+    }
+    if (!validRoom && attemptsRef.current < 11) {
       setTimeout(() => {
         guessyManager("joinRoom");
         attemptsRef.current = attemptsRef.current + 1;
       }, 500);
-    } else if (roomObjectIsValid()) {
+    } else if (validRoom) {
       attemptsRef.current = 0;
     }
-  }, [uuid, guessyManager, roomObjectIsValid, allKeys, connectionOpen]);
+  }, [
+    uuid,
+    guessyManager,
+    validRoom,
+    allKeys,
+    connectionOpen,
+    searchParams,
+    navigate,
+    searchParamRoomKey,
+  ]);
 
   // ** RENDER
-  if (roomKey.length != 8) {
-    return <InvalidRoomKey />;
-  } else if (roomObjectIsValid() && connectionOpen) {
+  if (searchParamRoomKey?.length != 8) {
+    if (!searchParamRoomKey) {
+      return <RoomLoading />;
+    } else {
+      return <InvalidRoomKey />;
+    }
+  } else if (validRoom && connectionOpen) {
     return <PlayGame />;
   } else if (connectionError && !tryingToConnect) {
     return <ErrorPage type="connection" />;

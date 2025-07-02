@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import Board from "./Board";
 import MiniDrawer from "./Drawer";
 

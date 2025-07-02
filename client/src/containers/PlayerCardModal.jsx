@@ -51,12 +51,19 @@ const PlayerCardModal = ({ drawerOpen, opacity }) => {
 
   if (observer) {
     return (
-      <div>
-        <Tooltip title="This room is full! You're just an observer here.">
-          <i className={`fa-solid fa-star fa-lg observer-star`}></i>
+      <Tooltip title="This room is full! You're just an observer here.">
+        <div>
+          <DrawerItem onClick={handleOpen}>
+            <DrawerButton drawerOpen={drawerOpen}>
+              <div>
+                <DrawerIcon icon="star" />
+              </div>
+              <ListItemText primary={"Your Meme"} sx={[opacity]} />
+            </DrawerButton>
+          </DrawerItem>
           Observer
-        </Tooltip>
-      </div>
+        </div>
+      </Tooltip>
     );
   } else {
     return (

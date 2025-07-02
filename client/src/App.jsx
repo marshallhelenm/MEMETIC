@@ -14,21 +14,10 @@ import MessageReceiver from "./utils/MessageReceiver";
 function App() {
   let navigate = useNavigate();
   let location = useLocation();
-  const [searchParams] = useSearchParams();
-  const roomKey = searchParams.get("roomKey");
-  const username = searchParams.get("username");
 
   useEffect(() => {
-    if (
-      location.pathname == "/" ||
-      (!["/home", "/image_analyzer", "/upload"].includes(location.pathname) &&
-        !roomKey)
-    ) {
-      navigate("/home");
-    } else if (location.pathname == "/play" && !username) {
-      navigate("/home");
-    }
-  }, [location, navigate, roomKey, username]);
+    if (location.pathname == "/") navigate("/home");
+  }, [location, navigate]);
 
   return (
     <div className="guessy-background">

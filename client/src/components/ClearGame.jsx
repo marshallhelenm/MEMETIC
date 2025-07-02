@@ -12,7 +12,7 @@ import { Tooltip } from "@mui/material";
 
 function ClearGame({ opacity, drawerOpen }) {
   const [clearGameOpen, setClearGameOpen] = useState(false);
-  const { guessyManager, dispatch } = useGuessy();
+  const { guessyManager, roomKey } = useGuessy();
 
   const handleCancel = () => setClearGameOpen(false);
 
@@ -22,14 +22,14 @@ function ClearGame({ opacity, drawerOpen }) {
   };
 
   function handleClearGame() {
-    guessyManager("replaceGame");
+    guessyManager("createRoom", { newRoomKey: roomKey });
   }
 
-  function handleClickAway() {
-    if (clearGameOpen) {
-      return () => setClearGameOpen(false);
-    }
-  }
+  // function handleClickAway() {
+  //   if (clearGameOpen) {
+  //     return () => setClearGameOpen(false);
+  //   }
+  // }
 
   return (
     <>

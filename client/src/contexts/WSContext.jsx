@@ -5,7 +5,15 @@ const WSContext = createContext(false, null, () => {});
 const socketURL = "ws://localhost:6969";
 
 function WSProvider({ children }) {
-  let uuidRef = useRef(sessionStorage.getItem("guessy-uuid"));
+  let uuidRef = useRef("");
+  const sessionStorageUuid = sessionStorage.getItem("guessy-uuid");
+  if (
+    sessionStorageUuid &&
+    sessionStorageUuid != "null" &&
+    sessionStorageUuid != "undefined"
+  ) {
+    uuidRef.current = sessionStorageUuid;
+  }
   const isReadyRef = useRef(false);
   const connectionAttemptsRef = useRef(0);
   const tryingToConnectRef = useRef(true);

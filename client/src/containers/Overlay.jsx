@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CardModal from "../components/CardModal";
-import GuessCard from "../components/GuessCard";
+// import GuessCard from "../components/GuessCard";
 import MemeOrigin from "../components/MemeOrigin";
 
 function Overlay({ item, overlay, itemKey }) {
@@ -22,13 +22,13 @@ function Overlay({ item, overlay, itemKey }) {
             />
           </CardModal>
         </div>
-        <div className="overlay-item">
+        {/* <div className="overlay-item">
           <GuessCard
             item={item}
             setModalOpen={setModalOpen}
             itemKey={itemKey}
           />
-        </div>
+        </div> */}
       </div>
     );
   }

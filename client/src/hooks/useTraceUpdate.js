@@ -8,7 +8,7 @@ function useTraceUpdate(props, log = false, component) {
   useEffect(() => {
     for (const [k, v] of Object.entries(props)) {
       if (prev.current[k] !== v) {
-        changedProps[k] = [prev.current[k], v];
+        changedProps[k] = [JSON.stringify(prev.current[k]), JSON.stringify(v)];
         propsDidChange.current[`${k}Changed`] = true;
       } else {
         propsDidChange.current[`${k}Changed`] = false;

@@ -8,7 +8,6 @@ Building a variation on the game "Guess Who" to be played online, inspired by [t
 - flip all cards button?
 - fix sizing for breakpoints
 - fix clear game
-- fix double user in same room on refresh
 
 ### Future Features
 
