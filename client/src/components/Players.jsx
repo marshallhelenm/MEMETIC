@@ -12,9 +12,25 @@ function Players() {
   const { otherPlayers } = usePlayers();
 
   function generateOtherPlayers() {
-    return otherPlayers.map((p) => {
-      <ListItemText primary={p} />;
+    let otherPlayersItems = [];
+    otherPlayers.forEach((p) => {
+      console.log("p in Players: ", p);
+
+      otherPlayersItems.push(
+        <ListItem key={p.uuid + p.username}>
+          <i
+            className={`fa-regular fa-user fa-md`}
+            style={{
+              marginRight: "5%",
+              colorScheme: "light dark",
+              opacity: 0.8,
+            }}
+          ></i>
+          <ListItemText primary={p.username} />
+        </ListItem>
+      );
     });
+    return otherPlayersItems;
   }
 
   return (
@@ -33,17 +49,8 @@ function Players() {
             ></i>
             <ListItemText primary={myUsername} />
           </ListItem>
-          <ListItem>
-            <i
-              className={`fa-regular fa-user fa-md`}
-              style={{
-                marginRight: "5%",
-                colorScheme: "light dark",
-                opacity: 0.8,
-              }}
-            ></i>
-            {generateOtherPlayers()}
-          </ListItem>
+
+          {generateOtherPlayers()}
         </List>
       </div>
     </>
