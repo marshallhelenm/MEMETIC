@@ -1,51 +1,47 @@
-import { createContext, useMemo, useReducer, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import useBreakpoint from "use-breakpoint";
 
 import { useWS } from "./useContextHooks";
 import { memeSampler } from "../assets/memeCollection";
 import { devLog, waitUntil } from "../utils/Helpers";
 import { useSearchParams } from "react-router-dom";
+import { useTraceUpdate } from "../hooks/useTraceUpdate";
 
 const GameContext = createContext();
 
 const BREAKPOINTS = { 1: 0, 2: 540, 3: 740, 4: 980, 5: 1158, 6: 1380 };
 
-function gameReducer(state, action) {
-  const type = action.type;
-  const payload = action.payload;
-
-  devLog(["gameReducer: ", type]);
-
-  switch (type) {
-    case "setGame":
-      return {
-        ...state,
-        columnsObject: payload.columnsObject,
-        allKeys: payload.allKeys,
-        loadingCards: false,
-      };
-    default:
-      throw new Error(["Action unknown in gameReducer: ", action]);
-  }
-}
-
 function GameProvider({ children }) {
   const [searchParams] = useSearchParams();
   const { breakpoint, maxWidth, minWidth } = useBreakpoint(BREAKPOINTS, "l");
-  const { connectionOpen, sendJsonMessage } = useWS();
+  const {
+    connectionOpen,
+    sendJsonMessage,
+    lastGameContentsMessage,
+    lastJsonMessage,
+  } = useWS();
 
   const [allKeys, setAllKeys] = useState([]);
   const [loadingCards, setLoadingCards] = useState(false);
   const [columnsObject, setColumnsObject] = useState({});
+  const [validGame, setValidGame] = useState(false);
+  const [staticGifs, setStaticGifs] = useState(
+    sessionStorage.getItem("guessy-gifs") === "true"
+  );
 
   const roomKey = searchParams.get("roomKey");
   const columnCount = Number(breakpoint);
 
-  const roomObjectIsValid = useMemo(() => {
-    return () => {
-      return allKeys.length == 24 && Object.keys(columnsObject).length == 6;
-    };
-  }, [allKeys, columnsObject]);
+  const {
+    allKeysChanged,
+    columnsObjectChanged,
+    lastGameContentsMessageChanged,
+    lastJsonMessageChanged,
+  } = useTraceUpdate(
+    { allKeys, columnsObject, validGame },
+    true,
+    "GameProvider"
+  );
 
   const createGame = useMemo(() => {
     return async function () {
@@ -69,33 +65,59 @@ function GameProvider({ children }) {
     };
   }, [connectionOpen, sendJsonMessage, roomKey]);
 
-  const setGame = useMemo(() => {
-    return ({ newKeys, newColumnsObject }) => {
-      setAllKeys(newKeys.slice(0));
-      setColumnsObject({ ...newColumnsObject });
-    };
-  }, []);
+  // **UseEffect
+  useEffect(() => {
+    if (lastJsonMessageChanged && lastJsonMessage?.type === "noGameAlert") {
+      createGame();
+    }
+    if (lastGameContentsMessageChanged || !validGame) {
+      console.log("lastGameContentsMessage", lastGameContentsMessage);
+      if (
+        lastGameContentsMessage?.allKeys &&
+        lastGameContentsMessage?.columnsObject
+      ) {
+        console.log("lastGameContentsMessage", "has keys");
+        setAllKeys(lastGameContentsMessage.allKeys.slice(0));
+        setColumnsObject({ ...lastGameContentsMessage.columnsObject });
+      }
+    }
+    if (columnsObjectChanged || allKeysChanged) {
+      setValidGame(
+        allKeys.length == 24 && Object.keys(columnsObject).length == 6
+      );
+    }
+  }, [
+    allKeys,
+    columnsObject,
+    columnsObjectChanged,
+    allKeysChanged,
+    lastGameContentsMessage,
+    lastGameContentsMessageChanged,
+    validGame,
+  ]);
 
   //  ** value for the context provider **
   const value = useMemo(() => {
     return {
       createGame,
-      roomObjectIsValid,
+      validGame,
       loadingCards,
       columns: columnsObject[columnCount],
       columnCount,
-      setGame,
+      staticGifs,
+      setStaticGifs,
+      allKeys,
     };
   }, [
     createGame,
-    roomObjectIsValid,
+    validGame,
     columnsObject,
     columnCount,
     loadingCards,
-    setGame,
+    staticGifs,
+    setStaticGifs,
+    allKeys,
   ]);
-
-  // **UseEffect
 
   // ** render provider:
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

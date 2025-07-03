@@ -3,7 +3,7 @@ import ReactCardFlip from "react-card-flip";
 
 import StubBack from "./StubBack";
 import StubFront from "./StubFront";
-import { usePlayers } from "../contexts/usePlayers";
+import { usePlayers } from "../contexts/useContextHooks";
 
 function StubCard({ roomKey, itemKey, item }) {
   const { myPlayerCard } = usePlayers();

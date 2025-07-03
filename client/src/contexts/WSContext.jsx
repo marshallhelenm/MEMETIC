@@ -1,6 +1,7 @@
 import { createContext, useMemo, useState, useEffect, useRef } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { useTraceUpdate } from "../hooks/useTraceUpdate";
+import { devLog } from "../utils/Helpers";
 const WSContext = createContext(false, null, () => {});
 const socketURL = "ws://localhost:6969";
 
@@ -23,6 +24,11 @@ function WSProvider({ children }) {
     `${socketURL}?uuid=${uuidRef.current}`,
     { share: false, shouldReconnect: () => true }
   );
+  const [lastGameContentsMessage, setLastGameContentsMessage] = useState({});
+  const [lastPlayersMessage, setLastPlayersMessage] = useState({});
+  const [lastMessageReceivedAt, setLastMessageReceivedAt] = useState(
+    Date.now()
+  );
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting",
@@ -34,7 +40,8 @@ function WSProvider({ children }) {
   const connectionError =
     connectionStatus == "Closed" && connectionAttemptsRef.current > 10;
   const connectionOpen = connectionStatus == "Open";
-  // useTraceUpdate({ uuidRef: uuidRef.current }, true, "WSContext");
+
+  useTraceUpdate({ lastJsonMessage, lastMessageReceivedAt }, true, "WSContext");
 
   useEffect(() => {
     const socket = new WebSocket("wss://echo.websocket.events/");
@@ -60,9 +67,52 @@ function WSProvider({ children }) {
 
     socket.onclose = () => (isReadyRef.current = false);
 
-    // socket.onmessage = () => {
-    //   //
-    // };
+    socket.onmessage = () => {
+      let message = lastJsonMessage;
+      setLastMessageReceivedAt(Date.now());
+      try {
+        devLog([
+          "WSProvider handling message: ",
+          message.type,
+          // JSON.stringify(message),
+        ]);
+
+        if (!uuidRef.current && message.type != "uuid") {
+          // we're not ready to receive messages, ask for a uuid
+          sendJsonMessage({
+            type: "requestUuid",
+          });
+          return;
+        }
+
+        switch (message.type) {
+          case "serverError":
+            setServerError(JSON.parse(message.error));
+            break;
+          case "uuid":
+            if (!sessionStorage.getItem("guessy-uuid") || !uuidRef.current) {
+              sessionStorage.setItem("guessy-uuid", message.uuid);
+              uuidRef.current = message.uuid;
+              sendJsonMessage({
+                type: "acceptUuid",
+              });
+            }
+            break;
+          case "gameContents":
+            if (message?.allKeys && message?.columnsObject)
+              setLastGameContentsMessage({ ...lastJsonMessage });
+            break;
+          default:
+            devLog([
+              "Unhandled message type in WSProvider:",
+              message.type,
+              message,
+            ]);
+        }
+      } catch (error) {
+        devLog(["Error in WSProvider", error, JSON.stringify(message)]);
+      }
+    };
 
     ws.current = socket;
 
@@ -70,11 +120,12 @@ function WSProvider({ children }) {
       socket.close();
     };
   }, [
-    lastJsonMessage,
     isReadyRef,
     connectionAttemptsRef,
     tryingToConnectRef,
     connectionOpen,
+    lastJsonMessage,
+    sendJsonMessage,
   ]);
 
   const value = useMemo(() => {
@@ -90,6 +141,8 @@ function WSProvider({ children }) {
       tryingToConnect: tryingToConnectRef.current,
       serverError,
       setServerError,
+      lastMessageReceivedAt,
+      lastGameContentsMessage,
     };
   }, [
     isReadyRef,
@@ -103,6 +156,8 @@ function WSProvider({ children }) {
     serverError,
     setServerError,
     uuidRef,
+    lastMessageReceivedAt,
+    lastGameContentsMessage,
   ]);
 
   return <WSContext.Provider value={value}>{children}</WSContext.Provider>;

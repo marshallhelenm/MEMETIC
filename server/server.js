@@ -69,24 +69,11 @@ const handleMessage = (bytes, uuid, connection) => {
       case "requestUuid":
         sendToUuid(uuid, { type: "uuid", uuid: uuid });
         break;
-      case "setUsername":
-        if (!room || !player) return;
-        player.username = message.username;
-        broadcastPlayers(roomKey);
-        break;
       default:
         break;
     }
   } catch (error) {
-    try {
-      broadcast(roomKey, {
-        type: "serverError",
-        error,
-      });
-    } catch (error) {
-      console.error("Error parsing message:", error);
-      return;
-    }
+    sendToUuid(uuid, JSON.stringify(error));
     console.error("Error parsing message:", error);
     return;
   }
@@ -96,7 +83,7 @@ const joinRoom = ({ roomKey, uuid, username }) => {
   const room = rooms[roomKey];
   if (!room) {
     rooms[roomKey] = { ...emptyRoomTemplate };
-    noGameAlert(roomKey, uuid, "Room does not exist");
+    noGameAlert(roomKey, uuid);
     return;
   }
   const player = players[uuid];
@@ -126,10 +113,8 @@ const joinRoom = ({ roomKey, uuid, username }) => {
     sendGameContentsToUuid(roomKey, uuid);
   } else {
     // if there is no valid room, send a noGameAlert
-    noGameAlert(roomKey, uuid, "No game in progress");
+    noGameAlert(roomKey, uuid);
   }
-  // regardless of if there's a valid room, send all players in the room a players update
-  broadcastPlayers(roomKey);
 };
 
 // ** broadcast methods
@@ -142,6 +127,8 @@ const sendToUuid = (uuid, message) => {
   if (typeof message === "string") {
     connections[uuid].send(message);
   } else {
+    console.log("sendToUuid: ", uuid, message.type);
+
     connections[uuid].send(JSON.stringify(message));
   }
 };
@@ -157,22 +144,16 @@ const broadcast = (roomKey, message, uuidToExclude = null) => {
   });
 };
 
-const broadcastPlayers = (roomKey) => {
-  let room = rooms[roomKey];
-  let roomPlayers = {};
-  room.players.forEach((u) => (roomPlayers[u] = { ...players[u] }));
-  broadcast(roomKey, {
-    type: "playersUpdate",
-    players: roomPlayers,
-  });
-};
-
 const sendGameContentsToUuid = (roomKey, uuid) => {
   const room = rooms[roomKey];
+  let roomPlayers = {};
+  room.players.forEach((u) => (roomPlayers[u] = { ...players[u] }));
+  // console.log("sendGameContentsTo: ", uuid, JSON.stringify(room.allKeys));
   sendToUuid(uuid, {
     type: "gameContents",
     allKeys: room.allKeys,
     columnsObject: room.columnsObject,
+    players: roomPlayers,
   });
 };
 

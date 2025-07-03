@@ -15,7 +15,7 @@ import {
 } from "../components/DrawerComponents";
 import { colorA, colorB } from "../assets/styles";
 import { memeData } from "../assets/memeCollection";
-import { usePlayers } from "../contexts/usePlayers";
+import { usePlayers } from "../contexts/useContextHooks";
 
 const PlayerCardModal = ({ drawerOpen, opacity }) => {
   const { myPlayerCard, assignNewMyPlayerCard } = usePlayers();

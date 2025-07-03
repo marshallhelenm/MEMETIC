@@ -1,37 +1,55 @@
-import { createContext, useMemo, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 
 import { randomCardKey } from "../utils/Helpers";
+import { useGame, useWS } from "./useContextHooks";
+import { useTraceUpdate } from "../hooks/useTraceUpdate";
+import { useSearchParams } from "react-router-dom";
 
 const PlayersContext = createContext();
-
-const searchParams = new URLSearchParams(window.location.search);
 
 // ** Provider Logic Start
 
 function PlayersProvider({ children }) {
-  // ** State and variables
+  const [searchParams] = useSearchParams();
+  const { lastGameContentsMessage } = useWS();
+  const { allKeys } = useGame();
   const roomKey = searchParams.get("roomKey");
 
   const [myPlayerCard, setMyPlayerCard] = useState("");
   const [otherPlayers, setOtherPlayers] = useState([]);
 
+  const { lastGameContentsMessageChanged } = useTraceUpdate(
+    { allKeys },
+    false,
+    "PlayersProvider"
+  );
+
   // ** Functions
 
   const assignNewMyPlayerCard = useMemo(() => {
-    return function (newMemes) {
-      setMyPlayerCard(randomCardKey(newMemes.allKeys));
-    };
-  }, [setMyPlayerCard]);
-
-  const handleSetMyPlayerCard = useMemo(() => {
-    return (newCard) => {
+    return function () {
+      let newCard = randomCardKey(allKeys);
+      console.log("setMyPlayerCard: ", newCard);
       setMyPlayerCard(newCard);
       sessionStorage.setItem(`guessy-${roomKey}-player-card`, newCard);
     };
-  }, [roomKey]);
+  }, [allKeys, roomKey]);
 
-  const handleSetOtherPlayers = useMemo(() => {
-    return (players) => {
+  //  ** value for the context provider **
+  const value = useMemo(() => {
+    return {
+      myPlayerCard,
+      assignNewMyPlayerCard,
+      otherPlayers,
+    };
+  }, [myPlayerCard, assignNewMyPlayerCard, otherPlayers]);
+
+  // **UseEffect
+
+  useEffect(() => {
+    if (lastGameContentsMessageChanged && lastGameContentsMessage?.players) {
+      console.log("lastGameContentsMessage", "has players");
+      let players = lastGameContentsMessage.players;
       let incomingPlayerNames = [];
       Object.keys(players).forEach((uuid) => {
         if (
@@ -41,27 +59,8 @@ function PlayersProvider({ children }) {
           incomingPlayerNames.push(players[uuid]);
       });
       setOtherPlayers(incomingPlayerNames.slice(0));
-    };
-  }, [otherPlayers]);
-
-  //  ** value for the context provider **
-  const value = useMemo(() => {
-    return {
-      myPlayerCard,
-      assignNewMyPlayerCard,
-      handleSetMyPlayerCard,
-      otherPlayers,
-      handleSetOtherPlayers,
-    };
-  }, [
-    myPlayerCard,
-    assignNewMyPlayerCard,
-    handleSetMyPlayerCard,
-    otherPlayers,
-    handleSetOtherPlayers,
-  ]);
-
-  // **UseEffect
+    }
+  }, [lastGameContentsMessageChanged, lastGameContentsMessage, otherPlayers]);
 
   // ** render provider:
   return (

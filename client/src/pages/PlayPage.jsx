@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { useGame, useWS } from "../contexts/useContextHooks";
@@ -6,17 +6,9 @@ import InvalidRoomKey from "../components/InvalidRoomKey";
 import RoomLoading from "../components/RoomLoading";
 import ErrorPage from "../components/ErrorPage";
 import PlayGame from "../containers/PlayGame";
-import { PlayersProvider } from "../contexts/PlayersContext";
-import { GameProvider } from "../contexts/GameContext";
+import { useTraceUpdate } from "../hooks/useTraceUpdate";
 
 function PlayPage() {
-  return (
-    <GameProvider>
-      <PlayPageInnards />
-    </GameProvider>
-  );
-}
-function PlayPageInnards() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const {
@@ -26,19 +18,11 @@ function PlayPageInnards() {
     serverError,
     sendJsonMessage,
   } = useWS();
-  const { roomObjectIsValid, myPlayerCard } = useGame();
-  const attemptsRef = useRef(0);
-  const validRoom = roomObjectIsValid();
+  const { validGame } = useGame();
+  const [attempts, setAttempts] = useState(0);
   const roomKey = searchParams.get("roomKey");
-  const myUsername = searchParams.get("username");
 
-  const joinRoom = useMemo(() => {
-    sendJsonMessage({
-      type: "joinRoom",
-      roomKey,
-      username: myUsername,
-    });
-  }, [myUsername, roomKey, sendJsonMessage]);
+  useTraceUpdate({ attempts, validGame, connectionOpen }, true, "PlayPage");
 
   useEffect(() => {
     // ** route handling
@@ -49,29 +33,33 @@ function PlayPageInnards() {
     }
 
     // ** if we're in the right place, try to join the room
-    if (!validRoom && attemptsRef.current < 11) {
+    if (!validGame && attempts < 11) {
       setTimeout(() => {
-        joinRoom();
-        attemptsRef.current = attemptsRef.current + 1;
+        sendJsonMessage({
+          type: "joinRoom",
+          roomKey,
+          username: searchParams.get("username"),
+        });
+        setAttempts((a) => a++);
       }, 500);
-    } else if (validRoom) {
-      attemptsRef.current = 0;
+    } else if (validGame) {
+      setAttempts(0);
     }
-  }, [joinRoom, validRoom, connectionOpen, searchParams, navigate, roomKey]);
+  }, [
+    attempts,
+    validGame,
+    connectionOpen,
+    searchParams,
+    navigate,
+    roomKey,
+    sendJsonMessage,
+  ]);
 
   // ** RENDER
   if (roomKey?.length != 8) {
-    if (!roomKey) {
-      return <RoomLoading joinRoom={joinRoom} />;
-    } else {
-      return <InvalidRoomKey />;
-    }
-  } else if (validRoom && connectionOpen) {
-    return (
-      <PlayersProvider>
-        <PlayGame />
-      </PlayersProvider>
-    );
+    return <InvalidRoomKey />;
+  } else if (validGame && connectionOpen) {
+    return <PlayGame />;
   } else if (connectionError && !tryingToConnect) {
     return <ErrorPage type="connection" />;
   } else if (serverError != "") {

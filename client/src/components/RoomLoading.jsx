@@ -1,13 +1,6 @@
-import { useEffect } from "react";
-
 import Logo from "../components/Logo";
 
-function RoomLoading({ joinRoom }) {
-  useEffect(() => {
-    setTimeout(() => {
-      joinRoom();
-    }, 5000);
-  });
+function RoomLoading() {
   return (
     <div>
       <Logo spin={true} />

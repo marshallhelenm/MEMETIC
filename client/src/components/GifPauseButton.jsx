@@ -3,8 +3,12 @@ import { styled, alpha } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
 import { colorC, colorF } from "../assets/styles";
+import { useState } from "react";
+import { useGame } from "../contexts/useContextHooks";
 
 function GifPauseButton({ drawerOpen }) {
+  const { staticGifs, setStaticGifs } = useGame();
+
   const PurpleSwitch = styled(Switch)(({ theme }) => ({
     "& .MuiSwitch-switchBase": {
       color: colorC,
@@ -26,10 +30,9 @@ function GifPauseButton({ drawerOpen }) {
     mr: drawerOpen ? 3 : "auto",
   }));
 
-  const staticGifs = sessionStorage.getItem("guessy-gifs") === "true";
-
   function toggleStaticGifs() {
     sessionStorage.setItem("guessy-gifs", !staticGifs);
+    setStaticGifs(!staticGifs);
   }
 
   return (
