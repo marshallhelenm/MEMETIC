@@ -23,7 +23,7 @@ function PlayersProvider({ children }) {
   const { playersChanged, gameKeyChangedEstablished, lastJsonMessageChanged } =
     useTraceUpdate(
       { players: lastGameContentsMessage?.players, gameKey, lastJsonMessage },
-      true,
+      false,
       "PlayersProvider"
     );
 

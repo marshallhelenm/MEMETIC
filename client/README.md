@@ -6,7 +6,6 @@ Building a variation on the game "Guess Who" to be played online, inspired by [t
 
 - Fix docker react app
 - flip all cards button?
-- fix clear game
 
 ## Conundrums
 

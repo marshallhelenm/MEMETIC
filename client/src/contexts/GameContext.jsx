@@ -66,15 +66,16 @@ function GameProvider({ children }) {
       console.log("gameprovider noGameAlert");
       createGame();
     } else if (lastGameContentsMessageChanged || !validGame) {
-      console.log("lastGameContentsMessage", lastGameContentsMessage);
       if (
         lastGameContentsMessage?.allKeys &&
         lastGameContentsMessage?.columnsObject
       ) {
-        console.log(
-          "lastGameContentsMessage.gameKey",
-          lastGameContentsMessage.gameKey
-        );
+        setAllKeys(lastGameContentsMessage.allKeys.slice(0));
+        setColumnsObject({ ...lastGameContentsMessage.columnsObject });
+        setGameKey(lastGameContentsMessage.gameKey);
+      }
+    } else if (lastGameContentsMessage?.gameKey) {
+      if (lastGameContentsMessage.gameKey != gameKey) {
         setAllKeys(lastGameContentsMessage.allKeys.slice(0));
         setColumnsObject({ ...lastGameContentsMessage.columnsObject });
         setGameKey(lastGameContentsMessage.gameKey);
@@ -96,6 +97,7 @@ function GameProvider({ children }) {
     createGame,
     lastJsonMessage,
     lastJsonMessageChanged,
+    gameKey,
   ]);
 
   //  ** value for the context provider **
