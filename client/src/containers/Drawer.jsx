@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
@@ -22,9 +21,9 @@ import {
   DrawerIcon,
   DrawerItem,
 } from "../components/DrawerComponents";
-import { useGuessy } from "../contexts/useGuessy";
-import Users from "../components/Users";
+import Players from "../components/Players";
 import { Tooltip } from "@mui/material";
+import { useSearchParams } from "react-router-dom";
 
 const drawerWidth = 200;
 
@@ -110,11 +109,11 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer({ children }) {
+  const [searchParams] = useSearchParams();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [alert, setAlert] = useState(false);
   const theme = useTheme();
-
-  const { roomKey } = useGuessy();
+  const roomKey = searchParams.get("roomKey");
   const opacity = drawerOpen ? { opacity: 1 } : { opacity: 0 };
 
   const handleDrawerOpen = () => {
@@ -126,9 +125,7 @@ export default function MiniDrawer({ children }) {
   };
 
   const handleCopyKey = () => {
-    navigator.clipboard.writeText(
-      `${window.location.origin}/play?roomKey=${roomKey}`
-    );
+    navigator.clipboard.writeText(roomKey);
     setAlert(true);
     if (drawerOpen) {
       setTimeout(() => {
@@ -223,7 +220,7 @@ export default function MiniDrawer({ children }) {
               <ListItemText primary={"Players"} sx={[opacity]} />
             </DrawerButton>
           </DrawerItem>
-          {drawerOpen && <Users />}
+          {drawerOpen && <Players />}
         </>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

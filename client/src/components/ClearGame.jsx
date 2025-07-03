@@ -4,32 +4,21 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import ListItemText from "@mui/material/ListItemText";
+import Tooltip from "@mui/material/Tooltip";
 
 import GuessyButton from "./GuessyButton";
 import { DrawerButton, DrawerIcon, DrawerItem } from "./DrawerComponents";
-import { useGuessy } from "../contexts/useGuessy";
-import { Tooltip } from "@mui/material";
+import { useGame } from "../contexts/useContextHooks";
 
 function ClearGame({ opacity, drawerOpen }) {
   const [clearGameOpen, setClearGameOpen] = useState(false);
-  const { guessyManager, roomKey } = useGuessy();
-
+  const { createGame } = useGame();
   const handleCancel = () => setClearGameOpen(false);
 
   const handleOk = () => {
-    handleClearGame();
+    createGame();
     setClearGameOpen(false);
   };
-
-  function handleClearGame() {
-    guessyManager("createRoom", { newRoomKey: roomKey });
-  }
-
-  // function handleClickAway() {
-  //   if (clearGameOpen) {
-  //     return () => setClearGameOpen(false);
-  //   }
-  // }
 
   return (
     <>

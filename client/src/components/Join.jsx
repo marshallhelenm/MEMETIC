@@ -5,15 +5,9 @@ import TextField from "@mui/material/TextField";
 import Logo from "./Logo";
 import GuessyButton from "./GuessyButton";
 import { colorA, colorD, corners } from "../assets/styles";
-import { useGuessy } from "../contexts/useGuessy";
 
 function Join() {
   const [enteredRoomKey, setEnteredRoomKey] = useState("");
-  const { guessyManager, dispatch } = useGuessy();
-  function handleJoin() {
-    dispatch({ type: "updateRoomKey", payload: { roomKey: enteredRoomKey } });
-    guessyManager("joinRoom", { roomKey: enteredRoomKey });
-  }
 
   return (
     <div>
@@ -37,7 +31,7 @@ function Join() {
           }}
         />
       </div>
-      <Link to={`/name_thyself?roomKey=${enteredRoomKey}`} onClick={handleJoin}>
+      <Link to={`/name_thyself?roomKey=${enteredRoomKey}`}>
         <GuessyButton>Join Game</GuessyButton>
       </Link>
     </div>

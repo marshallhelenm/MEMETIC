@@ -1,14 +1,30 @@
 import { useEffect, useMemo } from "react";
 
-import { useGuessy } from "../contexts/useGuessy";
-import { useWS } from "../contexts/useWS";
+import { useGame, useWS, usePlayers } from "../contexts/useContextHooks";
 import { useTraceUpdate } from "../hooks/useTraceUpdate";
 import { devLog } from "../utils/Helpers";
+import { GameProvider } from "../contexts/GameContext";
+import { PlayersProvider } from "../contexts/PlayersContext";
 
 function MessageReceiver() {
-  const { guessyManager, dispatch } = useGuessy();
-  const { lastJsonMessage, uuidRef, setServerError } = useWS();
-  const { lastJsonMessageChanged } = useTraceUpdate({ lastJsonMessage });
+  return (
+    <GameProvider>
+      <PlayersProvider>
+        <MessageReceiverInnards />
+      </PlayersProvider>
+    </GameProvider>
+  );
+}
+
+function MessageReceiverInnards() {
+  const { createGame, setGame } = useGame();
+  const { handleSetOtherPlayers } = usePlayers();
+  const { lastJsonMessage, sendJsonMessage, uuidRef, setServerError } = useWS();
+  const { lastJsonMessageChanged } = useTraceUpdate(
+    { lastJsonMessage }
+    // true,
+    // "MessageReceiver"
+  );
 
   //   **Message Handling**
   const handleIncomingMessage = useMemo(() => {
@@ -36,44 +52,43 @@ function MessageReceiver() {
 
         if (!uuidRef.current && message.type != "uuid") {
           // we're not ready to receive messages, ask for a uuid
-          guessyManager("requestUuid");
+          sendJsonMessage({
+            type: "requestUuid",
+          });
           return;
         }
         let room;
         switch (message.type) {
           case "noGameAlert":
-            guessyManager("createRoom", { newRoomKey: message.roomKey });
+            createGame();
             break;
-          case "roomContents":
-            room = JSON.parse(message.room);
+          case "gameContents":
+            room = message.room;
+            if (typeof room === "string") {
+              room = JSON.parse(room);
+            }
             if (!room) {
-              devLog(["server sent no roomContents to process!", message.room]);
+              devLog(["server sent no gameContents to process!", message.room]);
               return;
             }
-            dispatch({
-              type: "updateRoom",
-              payload: { roomObject: message.room, loadingCards: false },
-              uuid: uuidRef.current,
+            setGame({
+              newKeys: message.allKeys,
+              newColumnsObject: message.columnsObject,
             });
             break;
           case "serverError":
             setServerError(JSON.parse(message.error));
             break;
-          case "usersUpdate":
-            dispatch({
-              type: "updateUsers",
-              payload: {
-                player1: message.player1,
-                player2: message.player2,
-                uuid: uuidRef.current,
-              },
-            });
+          case "playersUpdate":
+            handleSetOtherPlayers(message.players);
             break;
           case "uuid":
             if (!sessionStorage.getItem("guessy-uuid") || !uuidRef.current) {
               sessionStorage.setItem("guessy-uuid", message.uuid);
               uuidRef.current = message.uuid;
-              guessyManager("acceptUuid");
+              sendJsonMessage({
+                type: "acceptUuid",
+              });
             }
             break;
           default:
@@ -84,10 +99,17 @@ function MessageReceiver() {
             ]);
         }
       } catch (error) {
-        devLog(["Bad message in MessageReceiver", error]);
+        devLog(["Error in MessageReceiver", error, JSON.stringify(message)]);
       }
     };
-  }, [dispatch, guessyManager, setServerError, uuidRef]);
+  }, [
+    sendJsonMessage,
+    setServerError,
+    uuidRef,
+    createGame,
+    setGame,
+    handleSetOtherPlayers,
+  ]);
 
   useEffect(() => {
     if (lastJsonMessageChanged) handleIncomingMessage(lastJsonMessage);

@@ -1,11 +1,9 @@
 import BoardColumn from "./BoardColumn";
 import LoadingStub from "../components/LoadingStub";
-
-import { useContext } from "react";
-import { GuessyContext } from "../contexts/GuessyContext";
+import { useGame } from "../contexts/useContextHooks";
 
 function LoadingColumns() {
-  const { columnCount } = useContext(GuessyContext);
+  const { columnCount } = useGame();
 
   const generateLoadingColumns = () => {
     let boardColumns = [];

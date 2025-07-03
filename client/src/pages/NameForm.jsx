@@ -2,7 +2,6 @@ import { faker } from "@faker-js/faker";
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
-import { useGuessy } from "../contexts/useGuessy";
 import { colorA, colorD, corners } from "../assets/styles";
 import Logo from "../components/Logo";
 import GuessyButton from "../components/GuessyButton";
@@ -14,9 +13,8 @@ function NameForm() {
   const [searchParams] = useSearchParams();
   let navigate = useNavigate();
   const [proposedUsername, setProposedUsername] = useState("");
-  const { guessyManager, roomKey } = useGuessy();
 
-  function polish(fakerOutput) {
+  function polishFakerOutput(fakerOutput) {
     let arr = fakerOutput.split(" ");
     arr.forEach((word, i) => {
       arr[i] = word.charAt(0).toUpperCase() + word.slice(1);
@@ -26,12 +24,9 @@ function NameForm() {
 
   function generateRandomName() {
     setProposedUsername(
-      polish(faker.color.human()) + polish(faker.animal.type())
+      polishFakerOutput(faker.color.human()) +
+        polishFakerOutput(faker.animal.type())
     );
-  }
-
-  function handleContinue() {
-    guessyManager("assignUsername", { newUsername: proposedUsername });
   }
 
   useEffect(() => {
@@ -77,7 +72,6 @@ function NameForm() {
           to={`/play?roomKey=${searchParams.get(
             "roomKey"
           )}&username=${proposedUsername}`}
-          onClick={handleContinue}
         >
           <GuessyButton>Continue</GuessyButton>
         </Link>

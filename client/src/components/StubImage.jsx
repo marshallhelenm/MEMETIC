@@ -1,9 +1,9 @@
 import ReactFreezeframe from "react-freezeframe";
-import { useGuessy } from "../contexts/useGuessy";
 import { colorE } from "../assets/styles";
 
 function StubImage({ item, flipped, height }) {
-  const { staticGifs } = useGuessy();
+  const staticGifs = sessionStorage.getItem("guessy-gifs") === "true";
+
   const imgElement = (
     <img
       src={`/memes/${item.img}`}

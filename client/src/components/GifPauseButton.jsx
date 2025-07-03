@@ -1,12 +1,10 @@
-import "../App.css";
-import { useGuessy } from "../contexts/useGuessy";
 import Switch from "@mui/material/Switch";
 import { styled, alpha } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
 import { colorC, colorF } from "../assets/styles";
 
-function GifPauseButton({ drawerOpen, opacity }) {
+function GifPauseButton({ drawerOpen }) {
   const PurpleSwitch = styled(Switch)(({ theme }) => ({
     "& .MuiSwitch-switchBase": {
       color: colorC,
@@ -27,10 +25,11 @@ function GifPauseButton({ drawerOpen, opacity }) {
     justifyContent: "center",
     mr: drawerOpen ? 3 : "auto",
   }));
-  const { staticGifs, guessyManager } = useGuessy();
+
+  const staticGifs = sessionStorage.getItem("guessy-gifs") === "true";
 
   function toggleStaticGifs() {
-    guessyManager("setStaticGifs", { staticGifs: !staticGifs });
+    sessionStorage.setItem("guessy-gifs", !staticGifs);
   }
 
   return (

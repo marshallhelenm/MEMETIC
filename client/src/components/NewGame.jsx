@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
 import "../App.css";
-import { useGuessy } from "../contexts/useGuessy";
 import GuessyButton from "./GuessyButton";
 
 function NewGame() {
-  const { guessyManager } = useGuessy();
   function generateRoomKey() {
     var newRoomKey = "";
     var characters =
@@ -20,10 +18,7 @@ function NewGame() {
   const newRoomKey = generateRoomKey();
 
   return (
-    <Link
-      to={`/name_thyself?roomKey=${newRoomKey}`}
-      onClick={() => guessyManager("createRoom", { newRoomKey })}
-    >
+    <Link to={`/name_thyself?roomKey=${newRoomKey}`}>
       <GuessyButton>New Game</GuessyButton>
     </Link>
   );

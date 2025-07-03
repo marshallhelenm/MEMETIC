@@ -1,11 +1,13 @@
-import { useContext } from "react";
-import { GuessyContext } from "../contexts/GuessyContext";
 import LoadingColumns from "./LoadingColumns";
 import CardColumns from "./CardColumns";
+import { useTraceUpdate } from "../hooks/useTraceUpdate";
+import { useGame } from "../hooks/useContextHooks";
 
 // holds all the picture cards
 function Board() {
-  const { loadingCards } = useContext(GuessyContext);
+  const { loadingCards } = useGame();
+
+  useTraceUpdate({ loadingCards }, true, "Board");
 
   if (loadingCards) {
     return (

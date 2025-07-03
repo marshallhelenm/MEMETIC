@@ -15,10 +15,10 @@ import {
 } from "../components/DrawerComponents";
 import { colorA, colorB } from "../assets/styles";
 import { memeData } from "../assets/memeCollection";
-import { useGuessy } from "../contexts/useGuessy";
+import { usePlayers } from "../contexts/usePlayers";
 
 const PlayerCardModal = ({ drawerOpen, opacity }) => {
-  const { observer, guessyManager, myPlayerCard } = useGuessy();
+  const { myPlayerCard, assignNewMyPlayerCard } = usePlayers();
   const [open, setOpen] = useState(false);
   let item = memeData[myPlayerCard];
 
@@ -29,10 +29,6 @@ const PlayerCardModal = ({ drawerOpen, opacity }) => {
   };
   const handleClose = (e) => {
     setOpen(false);
-  };
-
-  const assignNewPlayerCard = () => {
-    guessyManager("assignNewPlayerCard");
   };
 
   function content() {
@@ -49,92 +45,74 @@ const PlayerCardModal = ({ drawerOpen, opacity }) => {
     }
   }
 
-  if (observer) {
-    return (
-      <Tooltip title="This room is full! You're just an observer here.">
-        <div>
-          <DrawerItem onClick={handleOpen}>
-            <DrawerButton drawerOpen={drawerOpen}>
-              <div>
-                <DrawerIcon icon="star" />
-              </div>
-              <ListItemText primary={"Your Meme"} sx={[opacity]} />
-            </DrawerButton>
-          </DrawerItem>
-          Observer
-        </div>
-      </Tooltip>
-    );
-  } else {
-    return (
-      <>
-        <DrawerItem onClick={handleOpen}>
-          <DrawerButton drawerOpen={drawerOpen}>
-            <Tooltip title="Your Meme" placement="right-end">
-              <div>
-                <DrawerIcon
-                  onClick={handleOpen}
-                  drawerOpen={drawerOpen}
-                  icon="star"
-                  // classes="player-card-star"
-                />
-              </div>
-            </Tooltip>
-            <ListItemText primary={"Your Meme"} sx={[opacity]} />
-          </DrawerButton>
-        </DrawerItem>
-        <StyledDialog open={open} onClose={handleClose} maxWidth="md">
-          <IconButton
-            aria-label="close"
-            onClick={handleClose}
-            sx={() => ({
-              position: "absolute",
-              right: 10,
-              top: 8,
-              color: colorA,
-            })}
+  return (
+    <>
+      <DrawerItem onClick={handleOpen}>
+        <DrawerButton drawerOpen={drawerOpen}>
+          <Tooltip title="Your Meme" placement="right-end">
+            <div>
+              <DrawerIcon
+                onClick={handleOpen}
+                drawerOpen={drawerOpen}
+                icon="star"
+                // classes="player-card-star"
+              />
+            </div>
+          </Tooltip>
+          <ListItemText primary={"Your Meme"} sx={[opacity]} />
+        </DrawerButton>
+      </DrawerItem>
+      <StyledDialog open={open} onClose={handleClose} maxWidth="md">
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={() => ({
+            position: "absolute",
+            right: 10,
+            top: 8,
+            color: colorA,
+          })}
+        >
+          <i className="fa-solid fa-xmark"></i>
+        </IconButton>
+        <DialogTitle>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
           >
-            <i className="fa-solid fa-xmark"></i>
-          </IconButton>
-          <DialogTitle>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <div style={{ width: "50%" }}>
-                <i
-                  className={`fa-solid fa-star fa-xl`}
-                  style={{ color: colorB, marginRight: "5%" }}
-                ></i>
-                Your Meme
-              </div>
-              <div style={{ width: "50%" }}>
-                <GuessyButton onClick={assignNewPlayerCard} dark={true}>
-                  Pick Another
-                </GuessyButton>
-              </div>
+            <div style={{ width: "50%" }}>
+              <i
+                className={`fa-solid fa-star fa-xl`}
+                style={{ color: colorB, marginRight: "5%" }}
+              ></i>
+              Your Meme
             </div>
-          </DialogTitle>
-          {item.title && (
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <h2>{item.title}</h2>
+            <div style={{ width: "50%" }}>
+              <GuessyButton onClick={assignNewMyPlayerCard} dark={true}>
+                Pick Another
+              </GuessyButton>
             </div>
-          )}
-          <DialogContent dividers id="modal-modal-description">
-            <div
-              className="row"
-              style={{ textAlign: "center", alignItems: "center" }}
-            >
-              <h4>This is your meme! Your partner is trying to guess it.</h4>
-            </div>
-          </DialogContent>
-          <DialogContent dividers>{content()}</DialogContent>
-        </StyledDialog>
-      </>
-    );
-  }
+          </div>
+        </DialogTitle>
+        {item.title && (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <h2>{item.title}</h2>
+          </div>
+        )}
+        <DialogContent dividers id="modal-modal-description">
+          <div
+            className="row"
+            style={{ textAlign: "center", alignItems: "center" }}
+          >
+            <h4>This is your meme! Your partner is trying to guess it.</h4>
+          </div>
+        </DialogContent>
+        <DialogContent dividers>{content()}</DialogContent>
+      </StyledDialog>
+    </>
+  );
 };
 
 export default PlayerCardModal;
