@@ -10,8 +10,6 @@ function Upload() {
     let data = {};
     Object.keys(jsonObject).forEach((key) => {
       let meme = jsonObject[key];
-      console.log(meme.title);
-
       data[meme.tag] = {
         title: meme.title || "",
         img: `${meme.tag}.${meme.ext || "jpg"}`,

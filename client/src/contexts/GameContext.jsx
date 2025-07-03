@@ -10,35 +10,30 @@ const GameContext = createContext();
 
 const BREAKPOINTS = { 1: 0, 2: 540, 3: 740, 4: 980, 5: 1158, 6: 1380 };
 
+const calculateDialogWidth = (breakpoint) => {
+  switch (breakpoint) {
+    case "1":
+      return "230px";
+    case "2":
+      return "300px";
+    case "3":
+      return "400px";
+    case "4":
+      return "500px";
+    case "5":
+      return "700px";
+    case "6":
+      return "800px";
+    default:
+      return "400px";
+  }
+};
+
 function GameProvider({ children }) {
   const [searchParams] = useSearchParams();
   const { breakpoint, maxWidth, minWidth } = useBreakpoint(BREAKPOINTS, "l");
-  let dialogWidth = "400px";
-  switch (breakpoint) {
-    case "1":
-      dialogWidth = "230px";
-      break;
-    case "2":
-      dialogWidth = "300px";
-      break;
-    case "3":
-      dialogWidth = "400px";
-      break;
-    case "4":
-      dialogWidth = "500px";
-      break;
-    case "5":
-      dialogWidth = "700px";
-      break;
-    case "6":
-      dialogWidth = "800px";
-      break;
-    default:
-      dialogWidth = "400px";
-      break;
-  }
+  let dialogWidth = calculateDialogWidth(breakpoint);
   const { sendJsonMessage, lastGameContentsMessage, lastJsonMessage } = useWS();
-
   const [allKeys, setAllKeys] = useState([]);
   const [loadingCards, setLoadingCards] = useState(false);
   const [columnsObject, setColumnsObject] = useState({});
@@ -87,7 +82,6 @@ function GameProvider({ children }) {
   // **UseEffect
   useEffect(() => {
     if (lastJsonMessageChanged && lastJsonMessage?.type === "noGameAlert") {
-      console.log("gameprovider noGameAlert");
       createGame();
     } else if (lastGameContentsMessageChanged || !validGame) {
       if (

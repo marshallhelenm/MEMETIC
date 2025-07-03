@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { useGame, useWS } from "../contexts/useContextHooks";
@@ -6,7 +6,7 @@ import InvalidRoomKey from "../components/InvalidRoomKey";
 import RoomLoading from "../components/RoomLoading";
 import ErrorPage from "../components/ErrorPage";
 import PlayGame from "../containers/PlayGame";
-import { useTraceUpdate } from "../hooks/useTraceUpdate";
+import { PlayersProvider } from "../contexts/PlayersContext";
 
 function PlayPage() {
   const [searchParams] = useSearchParams();
@@ -21,8 +21,6 @@ function PlayPage() {
   const { validGame } = useGame();
   const [attempts, setAttempts] = useState(0);
   const roomKey = searchParams.get("roomKey");
-
-  useTraceUpdate({ attempts, validGame, connectionOpen }, true, "PlayPage");
 
   useEffect(() => {
     // ** route handling
@@ -59,7 +57,11 @@ function PlayPage() {
   if (roomKey?.length != 8) {
     return <InvalidRoomKey />;
   } else if (validGame && connectionOpen) {
-    return <PlayGame />;
+    return (
+      <PlayersProvider>
+        <PlayGame />
+      </PlayersProvider>
+    );
   } else if (connectionError && !tryingToConnect) {
     return <ErrorPage type="connection" />;
   } else if (serverError != "") {

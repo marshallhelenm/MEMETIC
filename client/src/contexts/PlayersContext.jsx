@@ -32,7 +32,6 @@ function PlayersProvider({ children }) {
   const assignNewMyPlayerCard = useMemo(() => {
     return function () {
       let newCard = randomCardKey(allKeys);
-      console.log("setMyPlayerCard: ", newCard);
       setMyPlayerCard(newCard);
       sessionStorage.setItem(`guessy-${roomKey}-player-card`, newCard);
     };
@@ -51,7 +50,6 @@ function PlayersProvider({ children }) {
       setOtherPlayers(incomingPlayerNames.slice(0));
     }
     if (!myPlayerCard || myPlayerCard == "" || gameKeyChangedEstablished) {
-      console.log("gameKeyChangedEstablished");
       assignNewMyPlayerCard();
     }
   }, [

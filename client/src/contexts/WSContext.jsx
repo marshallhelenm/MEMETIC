@@ -1,6 +1,5 @@
 import { createContext, useMemo, useState, useEffect, useRef } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import { useTraceUpdate } from "../hooks/useTraceUpdate";
 import { devLog } from "../utils/Helpers";
 const WSContext = createContext(false, null, () => {});
 const socketURL = "ws://localhost:6969";
@@ -39,8 +38,6 @@ function WSProvider({ children }) {
   const connectionError =
     connectionStatus == "Closed" && connectionAttemptsRef.current > 10;
   const connectionOpen = connectionStatus == "Open";
-
-  // useTraceUpdate({ lastJsonMessage, lastMessageReceivedAt }, true, "WSContext");
 
   useEffect(() => {
     const socket = new WebSocket("wss://echo.websocket.events/");

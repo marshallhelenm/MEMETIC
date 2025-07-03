@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { WSProvider } from "./contexts/WSContext";
 
 import { GameProvider } from "./contexts/GameContext";
-import { PlayersProvider } from "./contexts/PlayersContext";
 
 function App() {
   let navigate = useNavigate();
@@ -18,9 +17,7 @@ function App() {
     <div className="guessy-background">
       <WSProvider>
         <GameProvider>
-          <PlayersProvider>
-            <Outlet />
-          </PlayersProvider>
+          <Outlet />
         </GameProvider>
       </WSProvider>
     </div>

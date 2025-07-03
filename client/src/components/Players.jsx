@@ -10,13 +10,10 @@ function Players() {
   const [searchParams] = useSearchParams();
   const myUsername = searchParams.get("username");
   const { otherPlayers } = usePlayers();
-  console.log("otherPlayers in Players.jsx: ", JSON.stringify(otherPlayers));
 
   function generateOtherPlayers() {
     let otherPlayersItems = [];
     otherPlayers.forEach((p) => {
-      console.log("p in Players: ", p);
-
       otherPlayersItems.push(
         <ListItem key={"player-" + p}>
           <i

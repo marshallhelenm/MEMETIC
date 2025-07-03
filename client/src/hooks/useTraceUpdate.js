@@ -15,8 +15,6 @@ function useTraceUpdate(props, log = false, component) {
           prev.current[k] != "null" &&
           prev.current[k] != "undefined"
         ) {
-          console.log("traceUpdate: prev present", k);
-
           propsDidChange.current[`${k}ChangedEstablished`] = true;
         }
       } else {
