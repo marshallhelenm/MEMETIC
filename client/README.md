@@ -8,6 +8,10 @@ Building a variation on the game "Guess Who" to be played online, inspired by [t
 - flip all cards button?
 - fix clear game
 
+## Conundrums
+
+- sometimes playercard does not update with a new game
+
 ### Future Features
 
 - Live chat between players

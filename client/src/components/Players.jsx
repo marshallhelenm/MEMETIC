@@ -10,6 +10,7 @@ function Players() {
   const [searchParams] = useSearchParams();
   const myUsername = searchParams.get("username");
   const { otherPlayers } = usePlayers();
+  console.log("otherPlayers in Players.jsx: ", JSON.stringify(otherPlayers));
 
   function generateOtherPlayers() {
     let otherPlayersItems = [];
@@ -17,7 +18,7 @@ function Players() {
       console.log("p in Players: ", p);
 
       otherPlayersItems.push(
-        <ListItem key={p.uuid + p.username}>
+        <ListItem key={"player-" + p}>
           <i
             className={`fa-regular fa-user fa-md`}
             style={{
@@ -26,7 +27,7 @@ function Players() {
               opacity: 0.8,
             }}
           ></i>
-          <ListItemText primary={p.username} />
+          <ListItemText primary={p} />
         </ListItem>
       );
     });

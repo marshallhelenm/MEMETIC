@@ -29,6 +29,7 @@ function Join() {
             justifySelf: "center",
             marginRight: "2%",
           }}
+          autoFocus={true}
         />
       </div>
       <Link to={`/name_thyself?roomKey=${enteredRoomKey}`}>

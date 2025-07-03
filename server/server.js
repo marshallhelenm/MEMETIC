@@ -14,7 +14,7 @@ const emptyRoomTemplate = {
   roomKey: undefined,
   columnsObject: {},
   allKeys: [],
-  players: [],
+  players: {},
 };
 const emptyPlayerTemplate = {
   uuid: undefined,
@@ -55,13 +55,7 @@ const handleMessage = (bytes, uuid, connection) => {
         room.allKeys = message.allKeys.slice(0);
         room.gameKey = message.gameKey;
 
-        broadcast(message.roomKey, {
-          type: "gameContents",
-          roomKey: room.roomKey,
-          columnsObject: room.columnsObject,
-          allKeys: room.allKeys,
-          gameKey: room.gameKey,
-        });
+        broadcastGameContents(message.roomKey);
         break;
       case "joinRoom":
         joinRoom({
@@ -93,16 +87,16 @@ const joinRoom = ({ roomKey, uuid, username }) => {
   const player = players[uuid];
   if (!player) players[uuid] = { ...emptyPlayerTemplate };
 
-  room.players.forEach((u) => {
+  Object.keys(room.players).forEach((u) => {
     // sweep up room
     if (u != uuid && !connections[u]) {
-      room.players.splice(room.players.indexOf(u), 1);
+      delete room.players[u];
       delete players[u];
     }
   });
 
   // add em
-  if (!room.players.includes(uuid)) room.players.push(uuid);
+  if (!room.players[uuid]) room.players[uuid] = player.username;
 
   player.uuid = uuid;
   if (username && username != "undefined") {
@@ -119,6 +113,14 @@ const joinRoom = ({ roomKey, uuid, username }) => {
     // if there is no valid room, send a noGameAlert
     noGameAlert(roomKey, uuid);
   }
+  broadcast(
+    roomKey,
+    {
+      type: "playersUpdate",
+      players: room.players,
+    },
+    uuid
+  );
 };
 
 // ** broadcast methods
@@ -141,7 +143,7 @@ const broadcast = (roomKey, message, uuidToExclude = null) => {
   const room = rooms[roomKey];
   if (!room) return;
 
-  room.players.forEach((u) => {
+  Object.keys(room.players).forEach((u) => {
     // only send if (there is no uuid to exclude, or there is but it's not the current one) AND there is a connection for this uuid
     if ((!uuidToExclude || u != uuidToExclude) && connections[u])
       sendToUuid(u, message);
@@ -150,15 +152,19 @@ const broadcast = (roomKey, message, uuidToExclude = null) => {
 
 const sendGameContentsToUuid = (roomKey, uuid) => {
   const room = rooms[roomKey];
-  let roomPlayers = {};
-  room.players.forEach((u) => (roomPlayers[u] = { ...players[u] }));
   // console.log("sendGameContentsTo: ", uuid, JSON.stringify(room.allKeys));
   sendToUuid(uuid, {
     type: "gameContents",
     allKeys: room.allKeys,
     columnsObject: room.columnsObject,
-    players: roomPlayers,
+    players: room.players,
     gameKey: room.gameKey,
+  });
+};
+
+const broadcastGameContents = (roomKey) => {
+  Object.keys(rooms[roomKey].players).forEach((uuid) => {
+    sendGameContentsToUuid(roomKey, uuid);
   });
 };
 
@@ -204,6 +210,13 @@ wsServer.on("connection", (connection, request) => {
 
   connection.on("close", () => {
     delete connections[uuid];
+    Object.keys(rooms).forEach((roomKey) => {
+      let room = rooms[roomKey];
+      if (room.players[uuid]) {
+        delete room.players[uuid];
+        broadcastGameContents(roomKey);
+      }
+    });
   });
 });
 

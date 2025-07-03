@@ -102,6 +102,9 @@ function WSProvider({ children }) {
               setLastGameContentsMessage({ ...lastJsonMessage });
             }
             break;
+          case "playersUpdate":
+            // nothin to do, but it IS an expected message type. PlayersContext handles this one.
+            break;
           default:
             devLog([
               "Unhandled message type in WSProvider:",

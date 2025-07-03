@@ -11,7 +11,7 @@ const PlayersContext = createContext();
 
 function PlayersProvider({ children }) {
   const [searchParams] = useSearchParams();
-  const { lastGameContentsMessage } = useWS();
+  const { lastGameContentsMessage, lastJsonMessage } = useWS();
   const { allKeys, gameKey } = useGame();
   const roomKey = searchParams.get("roomKey");
 
@@ -20,11 +20,12 @@ function PlayersProvider({ children }) {
   );
   const [otherPlayers, setOtherPlayers] = useState([]);
 
-  const { playersChanged, gameKeyChangedEstablished } = useTraceUpdate(
-    { players: lastGameContentsMessage?.players, gameKey },
-    true,
-    "PlayersProvider"
-  );
+  const { playersChanged, gameKeyChangedEstablished, lastJsonMessageChanged } =
+    useTraceUpdate(
+      { players: lastGameContentsMessage?.players, gameKey, lastJsonMessage },
+      true,
+      "PlayersProvider"
+    );
 
   // ** Functions
 
@@ -37,27 +38,14 @@ function PlayersProvider({ children }) {
     };
   }, [allKeys, roomKey]);
 
-  //  ** value for the context provider **
-  const value = useMemo(() => {
-    return {
-      myPlayerCard,
-      assignNewMyPlayerCard,
-      otherPlayers,
-    };
-  }, [myPlayerCard, assignNewMyPlayerCard, otherPlayers]);
-
   // **UseEffect
 
   useEffect(() => {
-    if (playersChanged && lastGameContentsMessage?.players) {
-      console.log("lastGameContentsMessage", "has players");
-      let players = lastGameContentsMessage.players;
+    if (lastJsonMessageChanged && lastJsonMessage?.players) {
+      let players = lastJsonMessage.players;
       let incomingPlayerNames = [];
       Object.keys(players).forEach((uuid) => {
-        if (
-          uuid != sessionStorage.getItem("guessy-uuid") &&
-          !otherPlayers.includes(players[uuid])
-        )
+        if (uuid != sessionStorage.getItem("guessy-uuid"))
           incomingPlayerNames.push(players[uuid]);
       });
       setOtherPlayers(incomingPlayerNames.slice(0));
@@ -68,12 +56,22 @@ function PlayersProvider({ children }) {
     }
   }, [
     playersChanged,
-    lastGameContentsMessage,
+    lastJsonMessage,
+    lastJsonMessageChanged,
     otherPlayers,
     gameKeyChangedEstablished,
     assignNewMyPlayerCard,
     myPlayerCard,
   ]);
+
+  //  ** value for the context provider **
+  const value = useMemo(() => {
+    return {
+      myPlayerCard,
+      assignNewMyPlayerCard,
+      otherPlayers,
+    };
+  }, [myPlayerCard, assignNewMyPlayerCard, otherPlayers]);
 
   // ** render provider:
   return (

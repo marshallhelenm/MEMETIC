@@ -67,6 +67,7 @@ function NameForm() {
             justifySelf: "center",
             marginRight: "2%",
           }}
+          autoFocus={true}
         />
         <Link
           to={`/play?roomKey=${searchParams.get(
