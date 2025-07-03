@@ -9,7 +9,6 @@ Building a variation on the game "Guess Who" to be played online, inspired by [t
 
 ## Conundrums
 
-- sometimes playercard does not update with a new game
 
 ### Future Features
 

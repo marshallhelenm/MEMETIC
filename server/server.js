@@ -45,8 +45,6 @@ const handleMessage = (bytes, uuid, connection) => {
         console.log(`New connection established with UUID: ${uuid}`);
         break;
       case "setGame":
-        console.log("setGame");
-
         if (!room) {
           room = { ...emptyRoomTemplate };
         }
@@ -152,7 +150,6 @@ const broadcast = (roomKey, message, uuidToExclude = null) => {
 
 const sendGameContentsToUuid = (roomKey, uuid) => {
   const room = rooms[roomKey];
-  // console.log("sendGameContentsTo: ", uuid, JSON.stringify(room.allKeys));
   sendToUuid(uuid, {
     type: "gameContents",
     allKeys: room.allKeys,

@@ -52,7 +52,7 @@ function GameProvider({ children }) {
     lastGameContentsMessageChanged,
     lastJsonMessageChanged,
   } = useTraceUpdate(
-    { allKeys, columnsObject, validGame, lastJsonMessage },
+    { allKeys, columnsObject, validGame, lastJsonMessage, gameKey },
     false,
     "GameProvider"
   );
@@ -75,7 +75,6 @@ function GameProvider({ children }) {
         allKeys: newMemes.allKeys,
         gameKey: newGameKey,
       });
-      setLoadingCards(false);
     };
   }, [sendJsonMessage, roomKey, gameKey]);
 
@@ -123,13 +122,13 @@ function GameProvider({ children }) {
     return {
       createGame,
       validGame,
+      setLoadingCards,
       loadingCards,
       columns: columnsObject[columnCount],
       columnCount,
       staticGifs,
       setStaticGifs,
       allKeys,
-      allKeysChanged,
       gameKey,
       dialogWidth,
     };
@@ -138,11 +137,11 @@ function GameProvider({ children }) {
     validGame,
     columnsObject,
     columnCount,
+    setLoadingCards,
     loadingCards,
     staticGifs,
     setStaticGifs,
     allKeys,
-    allKeysChanged,
     gameKey,
     dialogWidth,
   ]);

@@ -2,8 +2,8 @@ import { createContext, useEffect, useMemo, useState } from "react";
 
 import { randomCardKey } from "../utils/Helpers";
 import { useGame, useWS } from "./useContextHooks";
-import { useTraceUpdate } from "../hooks/useTraceUpdate";
 import { useSearchParams } from "react-router-dom";
+import { useRef } from "react";
 
 const PlayersContext = createContext();
 
@@ -11,21 +11,15 @@ const PlayersContext = createContext();
 
 function PlayersProvider({ children }) {
   const [searchParams] = useSearchParams();
-  const { lastGameContentsMessage, lastJsonMessage } = useWS();
+  const { lastJsonMessage } = useWS();
   const { allKeys, gameKey } = useGame();
+  const gameKeyRef = useRef(gameKey);
   const roomKey = searchParams.get("roomKey");
-
   const [myPlayerCard, setMyPlayerCard] = useState(
     sessionStorage.getItem(`guessy-${roomKey}-player-card`)
   );
   const [otherPlayers, setOtherPlayers] = useState([]);
-
-  const { playersChanged, gameKeyChangedEstablished, lastJsonMessageChanged } =
-    useTraceUpdate(
-      { players: lastGameContentsMessage?.players, gameKey, lastJsonMessage },
-      false,
-      "PlayersProvider"
-    );
+  const lastMessageRef = useRef(lastJsonMessage);
 
   // ** Functions
 
@@ -34,32 +28,39 @@ function PlayersProvider({ children }) {
       let newCard = randomCardKey(allKeys);
       setMyPlayerCard(newCard);
       sessionStorage.setItem(`guessy-${roomKey}-player-card`, newCard);
+      sessionStorage.removeItem(
+        `guessy-${roomKey}-player-card-${Number(gameKey) - 1}`
+      );
     };
-  }, [allKeys, roomKey]);
+  }, [allKeys, roomKey, gameKey]);
 
   // **UseEffect
 
   useEffect(() => {
-    if (lastJsonMessageChanged && lastJsonMessage?.players) {
-      let players = lastJsonMessage.players;
-      let incomingPlayerNames = [];
-      Object.keys(players).forEach((uuid) => {
-        if (uuid != sessionStorage.getItem("guessy-uuid"))
-          incomingPlayerNames.push(players[uuid]);
-      });
-      setOtherPlayers(incomingPlayerNames.slice(0));
+    if (lastMessageRef.current != lastJsonMessage) {
+      lastMessageRef.current = lastJsonMessage;
+      if (lastJsonMessage?.players) {
+        let players = lastJsonMessage.players;
+        let incomingPlayerNames = [];
+        Object.keys(players).forEach((uuid) => {
+          if (uuid != sessionStorage.getItem("guessy-uuid"))
+            incomingPlayerNames.push(players[uuid]);
+        });
+        setOtherPlayers(incomingPlayerNames.slice(0));
+      }
     }
-    if (!myPlayerCard || myPlayerCard == "" || gameKeyChangedEstablished) {
+    if (!myPlayerCard || myPlayerCard == "" || gameKeyRef.current != gameKey) {
       assignNewMyPlayerCard();
+      gameKeyRef.current = gameKey;
     }
   }, [
-    playersChanged,
     lastJsonMessage,
-    lastJsonMessageChanged,
+    lastMessageRef,
     otherPlayers,
-    gameKeyChangedEstablished,
     assignNewMyPlayerCard,
     myPlayerCard,
+    gameKeyRef,
+    gameKey,
   ]);
 
   //  ** value for the context provider **
