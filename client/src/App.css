@@ -123,28 +123,42 @@ button:focus {
   justify-content: center;
 }
 
-/* l */
-@media only screen and (min-width: 1280px) {
+/* const BREAKPOINTS = { 1: 0, 2: 540, 3: 740, 4: 980, 5: 1158, 6: 1380 }; */
+
+/* 6 */
+@media only screen and (min-width: 1380px) {
   .gameBoard {
     width: 1280px;
   }
 }
-/* m */
-@media only screen and (min-width: 768px) and (max-width: 1279px) {
+/* 5 */
+@media only screen and (min-width: 1158px) and (max-width: 1379px) {
   .gameBoard {
-    min-width: 880px;
+    width: 1070px;
   }
 }
-/* s */
-@media only screen and (min-width: 481) and (max-width: 767px) {
+/* 4 */
+@media only screen and (min-width: 980px) and (max-width: 1157px) {
   .gameBoard {
-    width: 481px;
+    width: 860px;
   }
 }
-/* xs */
-@media only screen and (max-width: 480px) {
+/* 3 */
+@media only screen and (min-width: 740px) and (max-width: 980px) {
   .gameBoard {
-    width: 220px;
+    min-width: 650px;
+  }
+}
+/* 2 */
+@media only screen and (min-width: 540) and (max-width: 739px) {
+  .gameBoard {
+    width: 440px;
+  }
+}
+/* 1 */
+@media only screen and (max-width: 539px) {
+  .gameBoard {
+    width: 230px;
   }
 }
 

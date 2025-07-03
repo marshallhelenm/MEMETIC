@@ -25,7 +25,6 @@ function WSProvider({ children }) {
     { share: false, shouldReconnect: () => true }
   );
   const [lastGameContentsMessage, setLastGameContentsMessage] = useState({});
-  const [lastPlayersMessage, setLastPlayersMessage] = useState({});
   const [lastMessageReceivedAt, setLastMessageReceivedAt] = useState(
     Date.now()
   );
