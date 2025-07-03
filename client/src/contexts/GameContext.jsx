@@ -13,6 +13,30 @@ const BREAKPOINTS = { 1: 0, 2: 540, 3: 740, 4: 980, 5: 1158, 6: 1380 };
 function GameProvider({ children }) {
   const [searchParams] = useSearchParams();
   const { breakpoint, maxWidth, minWidth } = useBreakpoint(BREAKPOINTS, "l");
+  let dialogWidth = "400px";
+  switch (breakpoint) {
+    case "1":
+      dialogWidth = "230px";
+      break;
+    case "2":
+      dialogWidth = "300px";
+      break;
+    case "3":
+      dialogWidth = "400px";
+      break;
+    case "4":
+      dialogWidth = "500px";
+      break;
+    case "5":
+      dialogWidth = "700px";
+      break;
+    case "6":
+      dialogWidth = "800px";
+      break;
+    default:
+      dialogWidth = "400px";
+      break;
+  }
   const { sendJsonMessage, lastGameContentsMessage, lastJsonMessage } = useWS();
 
   const [allKeys, setAllKeys] = useState([]);
@@ -113,6 +137,7 @@ function GameProvider({ children }) {
       allKeys,
       allKeysChanged,
       gameKey,
+      dialogWidth,
     };
   }, [
     createGame,
@@ -125,6 +150,7 @@ function GameProvider({ children }) {
     allKeys,
     allKeysChanged,
     gameKey,
+    dialogWidth,
   ]);
 
   // ** render provider:

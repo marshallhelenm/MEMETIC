@@ -15,11 +15,12 @@ import {
 } from "../components/DrawerComponents";
 import { colorA, colorB } from "../assets/styles";
 import { memeData } from "../assets/memeCollection";
-import { usePlayers } from "../contexts/useContextHooks";
+import { useGame, usePlayers } from "../contexts/useContextHooks";
 
 const PlayerCardModal = ({ drawerOpen, opacity }) => {
   const { myPlayerCard, assignNewMyPlayerCard } = usePlayers();
   const [open, setOpen] = useState(false);
+  const { dialogWidth } = useGame();
   let item = memeData[myPlayerCard];
 
   if (!item) return;
@@ -62,7 +63,7 @@ const PlayerCardModal = ({ drawerOpen, opacity }) => {
           <ListItemText primary={"Your Meme"} sx={[opacity]} />
         </DrawerButton>
       </DrawerItem>
-      <StyledDialog open={open} onClose={handleClose} maxWidth="md">
+      <StyledDialog open={open} onClose={handleClose} maxWidth={dialogWidth}>
         <IconButton
           aria-label="close"
           onClick={handleClose}

@@ -5,8 +5,10 @@ import { useState } from "react";
 import { colorA } from "../assets/styles";
 import { DialogTitle } from "@mui/material";
 import MemeOrigin from "./MemeOrigin";
+import { useGame } from "../contexts/useContextHooks";
 
 const CardModal = ({ item, children, icon, setModalOpen }) => {
+  const { dialogWidth } = useGame();
   const [open, setOpen] = useState(false);
   const handleOpen = (e) => {
     e.stopPropagation();
@@ -26,7 +28,7 @@ const CardModal = ({ item, children, icon, setModalOpen }) => {
       <div onClick={handleOpen}>
         <i className={`fa-solid fa-${icon} fa-lg overlay-icon`}></i>
       </div>
-      <StyledDialog open={open} onClose={handleClose} maxWidth="md">
+      <StyledDialog open={open} onClose={handleClose} maxWidth={dialogWidth}>
         <IconButton
           aria-label="close"
           onClick={handleClose}
