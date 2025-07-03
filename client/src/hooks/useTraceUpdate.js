@@ -10,6 +10,15 @@ function useTraceUpdate(props, log = false, component) {
       if (prev.current[k] !== v) {
         changedProps[k] = [JSON.stringify(prev.current[k]), JSON.stringify(v)];
         propsDidChange.current[`${k}Changed`] = true;
+        if (
+          prev.current[k] &&
+          prev.current[k] != "null" &&
+          prev.current[k] != "undefined"
+        ) {
+          console.log("traceUpdate: prev present", k);
+
+          propsDidChange.current[`${k}ChangedEstablished`] = true;
+        }
       } else {
         propsDidChange.current[`${k}Changed`] = false;
       }

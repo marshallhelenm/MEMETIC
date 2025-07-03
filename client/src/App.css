@@ -9,6 +9,44 @@
   --corners: 0.3rem;
 }
 
+/* const BREAKPOINTS = { 1: 0, 2: 540, 3: 740, 4: 980, 5: 1158, 6: 1380 }; */
+/* 6 */
+@media only screen and (min-width: 1380px) {
+  .gameBoard {
+    width: 1280px;
+  }
+}
+/* 5 */
+@media only screen and (min-width: 1158px) and (max-width: 1379px) {
+  .gameBoard {
+    width: 1070px;
+  }
+}
+/* 4 */
+@media only screen and (min-width: 980px) and (max-width: 1157px) {
+  .gameBoard {
+    width: 860px;
+  }
+}
+/* 3 */
+@media only screen and (min-width: 740px) and (max-width: 980px) {
+  .gameBoard {
+    min-width: 650px;
+  }
+}
+/* 2 */
+@media only screen and (min-width: 540) and (max-width: 739px) {
+  .gameBoard {
+    width: 440px;
+  }
+}
+/* 1 */
+@media only screen and (max-width: 539px) {
+  .gameBoard {
+    width: 230px;
+  }
+}
+
 .corners {
   border-radius: var(--corners);
 }
@@ -112,7 +150,6 @@ button:focus {
   max-height: 33 em;
   display: flex;
   flex-flow: row;
-  /* font-size: calc(10px + 2vmin); */
   overflow-x: none;
   overflow-y: scroll;
   gap: 10px 12px;
@@ -121,45 +158,6 @@ button:focus {
   border: solid 2px var(--colorD);
   margin: auto;
   justify-content: center;
-}
-
-/* const BREAKPOINTS = { 1: 0, 2: 540, 3: 740, 4: 980, 5: 1158, 6: 1380 }; */
-
-/* 6 */
-@media only screen and (min-width: 1380px) {
-  .gameBoard {
-    width: 1280px;
-  }
-}
-/* 5 */
-@media only screen and (min-width: 1158px) and (max-width: 1379px) {
-  .gameBoard {
-    width: 1070px;
-  }
-}
-/* 4 */
-@media only screen and (min-width: 980px) and (max-width: 1157px) {
-  .gameBoard {
-    width: 860px;
-  }
-}
-/* 3 */
-@media only screen and (min-width: 740px) and (max-width: 980px) {
-  .gameBoard {
-    min-width: 650px;
-  }
-}
-/* 2 */
-@media only screen and (min-width: 540) and (max-width: 739px) {
-  .gameBoard {
-    width: 440px;
-  }
-}
-/* 1 */
-@media only screen and (max-width: 539px) {
-  .gameBoard {
-    width: 230px;
-  }
 }
 
 .gameBoard .boardColumn {

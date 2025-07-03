@@ -45,18 +45,22 @@ const handleMessage = (bytes, uuid, connection) => {
         console.log(`New connection established with UUID: ${uuid}`);
         break;
       case "setGame":
+        console.log("setGame");
+
         if (!room) {
           room = { ...emptyRoomTemplate };
         }
         room.roomKey = roomKey;
         room.columnsObject = { ...message.columnsObject };
         room.allKeys = message.allKeys.slice(0);
+        room.gameKey = message.gameKey;
 
         broadcast(message.roomKey, {
           type: "gameContents",
           roomKey: room.roomKey,
           columnsObject: room.columnsObject,
           allKeys: room.allKeys,
+          gameKey: room.gameKey,
         });
         break;
       case "joinRoom":
@@ -154,6 +158,7 @@ const sendGameContentsToUuid = (roomKey, uuid) => {
     allKeys: room.allKeys,
     columnsObject: room.columnsObject,
     players: roomPlayers,
+    gameKey: room.gameKey,
   });
 };
 

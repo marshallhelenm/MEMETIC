@@ -3,7 +3,6 @@ import useBreakpoint from "use-breakpoint";
 
 import { useWS } from "./useContextHooks";
 import { memeSampler } from "../assets/memeCollection";
-import { devLog, waitUntil } from "../utils/Helpers";
 import { useSearchParams } from "react-router-dom";
 import { useTraceUpdate } from "../hooks/useTraceUpdate";
 
@@ -14,12 +13,7 @@ const BREAKPOINTS = { 1: 0, 2: 540, 3: 740, 4: 980, 5: 1158, 6: 1380 };
 function GameProvider({ children }) {
   const [searchParams] = useSearchParams();
   const { breakpoint, maxWidth, minWidth } = useBreakpoint(BREAKPOINTS, "l");
-  const {
-    connectionOpen,
-    sendJsonMessage,
-    lastGameContentsMessage,
-    lastJsonMessage,
-  } = useWS();
+  const { sendJsonMessage, lastGameContentsMessage, lastJsonMessage } = useWS();
 
   const [allKeys, setAllKeys] = useState([]);
   const [loadingCards, setLoadingCards] = useState(false);
@@ -28,6 +22,7 @@ function GameProvider({ children }) {
   const [staticGifs, setStaticGifs] = useState(
     sessionStorage.getItem("guessy-gifs") === "true"
   );
+  const [gameKey, setGameKey] = useState(null);
 
   const roomKey = searchParams.get("roomKey");
   const columnCount = Number(breakpoint);
@@ -38,47 +33,51 @@ function GameProvider({ children }) {
     lastGameContentsMessageChanged,
     lastJsonMessageChanged,
   } = useTraceUpdate(
-    { allKeys, columnsObject, validGame },
-    true,
+    { allKeys, columnsObject, validGame, lastJsonMessage },
+    false,
     "GameProvider"
   );
 
   const createGame = useMemo(() => {
-    return async function () {
+    return () => {
       setLoadingCards(true);
       Object.keys(sessionStorage).forEach((key) => {
         if (key.includes(roomKey)) window.sessionStorage.removeItem(key);
       });
-      let ready = await waitUntil(connectionOpen);
-      if (ready) {
-        const newMemes = memeSampler();
-        setColumnsObject({ ...newMemes.columnsObject });
-        setAllKeys(newMemes.allKeys.slice(0));
-        sendJsonMessage({
-          type: "setGame",
-          roomKey: roomKey,
-          columnsObject: newMemes.columnsObject,
-          allKeys: newMemes.allKeys,
-        });
-      }
+      let newGameKey = Number(gameKey) + 1;
+      setGameKey(newGameKey);
+      const newMemes = memeSampler();
+      setColumnsObject({ ...newMemes.columnsObject });
+      setAllKeys(newMemes.allKeys.slice(0));
+      sendJsonMessage({
+        type: "setGame",
+        roomKey: roomKey,
+        columnsObject: newMemes.columnsObject,
+        allKeys: newMemes.allKeys,
+        gameKey: newGameKey,
+      });
       setLoadingCards(false);
     };
-  }, [connectionOpen, sendJsonMessage, roomKey]);
+  }, [sendJsonMessage, roomKey, gameKey]);
 
   // **UseEffect
   useEffect(() => {
     if (lastJsonMessageChanged && lastJsonMessage?.type === "noGameAlert") {
+      console.log("gameprovider noGameAlert");
       createGame();
-    }
-    if (lastGameContentsMessageChanged || !validGame) {
+    } else if (lastGameContentsMessageChanged || !validGame) {
       console.log("lastGameContentsMessage", lastGameContentsMessage);
       if (
         lastGameContentsMessage?.allKeys &&
         lastGameContentsMessage?.columnsObject
       ) {
-        console.log("lastGameContentsMessage", "has keys");
+        console.log(
+          "lastGameContentsMessage.gameKey",
+          lastGameContentsMessage.gameKey
+        );
         setAllKeys(lastGameContentsMessage.allKeys.slice(0));
         setColumnsObject({ ...lastGameContentsMessage.columnsObject });
+        setGameKey(lastGameContentsMessage.gameKey);
       }
     }
     if (columnsObjectChanged || allKeysChanged) {
@@ -94,6 +93,9 @@ function GameProvider({ children }) {
     lastGameContentsMessage,
     lastGameContentsMessageChanged,
     validGame,
+    createGame,
+    lastJsonMessage,
+    lastJsonMessageChanged,
   ]);
 
   //  ** value for the context provider **
@@ -107,6 +109,8 @@ function GameProvider({ children }) {
       staticGifs,
       setStaticGifs,
       allKeys,
+      allKeysChanged,
+      gameKey,
     };
   }, [
     createGame,
@@ -117,6 +121,8 @@ function GameProvider({ children }) {
     staticGifs,
     setStaticGifs,
     allKeys,
+    allKeysChanged,
+    gameKey,
   ]);
 
   // ** render provider:

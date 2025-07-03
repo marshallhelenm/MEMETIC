@@ -12,15 +12,17 @@ const PlayersContext = createContext();
 function PlayersProvider({ children }) {
   const [searchParams] = useSearchParams();
   const { lastGameContentsMessage } = useWS();
-  const { allKeys } = useGame();
+  const { allKeys, gameKey } = useGame();
   const roomKey = searchParams.get("roomKey");
 
-  const [myPlayerCard, setMyPlayerCard] = useState("");
+  const [myPlayerCard, setMyPlayerCard] = useState(
+    sessionStorage.getItem(`guessy-${roomKey}-player-card`)
+  );
   const [otherPlayers, setOtherPlayers] = useState([]);
 
-  const { lastGameContentsMessageChanged } = useTraceUpdate(
-    { allKeys },
-    false,
+  const { playersChanged, gameKeyChangedEstablished } = useTraceUpdate(
+    { players: lastGameContentsMessage?.players, gameKey },
+    true,
     "PlayersProvider"
   );
 
@@ -47,7 +49,7 @@ function PlayersProvider({ children }) {
   // **UseEffect
 
   useEffect(() => {
-    if (lastGameContentsMessageChanged && lastGameContentsMessage?.players) {
+    if (playersChanged && lastGameContentsMessage?.players) {
       console.log("lastGameContentsMessage", "has players");
       let players = lastGameContentsMessage.players;
       let incomingPlayerNames = [];
@@ -60,7 +62,18 @@ function PlayersProvider({ children }) {
       });
       setOtherPlayers(incomingPlayerNames.slice(0));
     }
-  }, [lastGameContentsMessageChanged, lastGameContentsMessage, otherPlayers]);
+    if (!myPlayerCard || myPlayerCard == "" || gameKeyChangedEstablished) {
+      console.log("gameKeyChangedEstablished");
+      assignNewMyPlayerCard();
+    }
+  }, [
+    playersChanged,
+    lastGameContentsMessage,
+    otherPlayers,
+    gameKeyChangedEstablished,
+    assignNewMyPlayerCard,
+    myPlayerCard,
+  ]);
 
   // ** render provider:
   return (

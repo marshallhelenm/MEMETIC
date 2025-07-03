@@ -40,7 +40,7 @@ function WSProvider({ children }) {
     connectionStatus == "Closed" && connectionAttemptsRef.current > 10;
   const connectionOpen = connectionStatus == "Open";
 
-  useTraceUpdate({ lastJsonMessage, lastMessageReceivedAt }, true, "WSContext");
+  // useTraceUpdate({ lastJsonMessage, lastMessageReceivedAt }, true, "WSContext");
 
   useEffect(() => {
     const socket = new WebSocket("wss://echo.websocket.events/");
@@ -98,8 +98,9 @@ function WSProvider({ children }) {
             }
             break;
           case "gameContents":
-            if (message?.allKeys && message?.columnsObject)
+            if (message?.allKeys && message?.columnsObject) {
               setLastGameContentsMessage({ ...lastJsonMessage });
+            }
             break;
           default:
             devLog([
