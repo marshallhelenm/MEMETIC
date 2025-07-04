@@ -4,13 +4,19 @@ import { useState } from "react";
 import StubImage from "../card/StubImage";
 import Overlay from "./Overlay";
 import { colorE, colorG } from "../assets/styles";
+import goldStar from "../assets/goldStar.png";
+import { Tooltip } from "@mui/material";
 
 function StubFront({ itemKey, item, isPlayerCard, flip, height }) {
   const [overlay, setOverlay] = useState(false);
 
   function playerStar() {
     if (!isPlayerCard) return;
-    return <i className="fa-solid fa-star fa-xl player-card-star absolute"></i>;
+    return (
+      <Tooltip title="This is your meme!" placement="right-end">
+        <img src={goldStar} className="player-card-star absolute"></img>
+      </Tooltip>
+    );
   }
 
   return (

@@ -247,10 +247,9 @@ button:focus {
 }
 
 .player-card-star {
-  color: yellow !important;
   z-index: 99;
-  transform: translateY(+1480%);
-  margin-left: 1%;
+  height: 30px;
+  margin: 2%;
 }
 
 .observer-star {
