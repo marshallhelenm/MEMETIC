@@ -64,7 +64,7 @@ This project includes a custom algorithm to **dynamically arrange meme images** 
 
 ```bash
 git clone https://github.com/marshallhelenm/MEMETIC.git
-cd guessy-2025
+cd MEMETIC
 ```
 
 ### 2️⃣ Install dependencies
