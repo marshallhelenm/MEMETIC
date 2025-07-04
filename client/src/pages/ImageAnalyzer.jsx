@@ -3,7 +3,7 @@ import $ from "jquery";
 import memes from "../assets/memes.json";
 
 function ImageAnalyzer() {
-  const imgKeys = [];
+  const imgKeys = ["pull_the_trigger_piglet"];
   const allKeys = Object.keys(memes);
   const keys = imgKeys.length > 0 ? imgKeys : allKeys;
   let workingData = { ...memes };

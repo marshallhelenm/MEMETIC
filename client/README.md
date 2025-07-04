@@ -12,3 +12,4 @@ Building a variation on the game "Guess Who" to be played online, inspired by [t
 
 - Live chat between players
 - Make Guess
+- Specific alternate still images for gifs

@@ -47,6 +47,13 @@
     "alt": "Are you challengin me?",
     "height_multiplier": 0.5780346820809249
   },
+  "arrow_in_the_knee": {
+    "title": "I Took an Arrow in the Knee",
+    "img": "arrow_in_the_knee.jpg",
+    "origin": "https://knowyourmeme.com/memes/i-took-an-arrow-in-the-knee",
+    "alt": "",
+    "height_multiplier": 0.7633587786259541
+  },
   "arthur_fist": {
     "title": "Arthur's Fist",
     "img": "arthur_fist.jpg",
@@ -60,6 +67,13 @@
     "origin": "https://knowyourmeme.com/memes/awkward-look-monkey-puppet",
     "alt": "Awkward Look Monkey Puppet meme format.",
     "height_multiplier": 0.5617977528089888
+  },
+  "badger": {
+    "title": "Badger Badger Badger",
+    "img": "badger.gif",
+    "origin": "https://knowyourmeme.com/memes/badger-badger-badger",
+    "alt": "",
+    "height_multiplier": 0.7246376811594204
   },
   "because_reasons": {
     "title": "I want this because of reasons.",
@@ -88,6 +102,13 @@
     "origin": "https://knowyourmeme.com/memes/blinking-white-guy",
     "alt": "Blinking White Guy meme.",
     "height_multiplier": 0.5617977528089888
+  },
+  "both_is_good": {
+    "title": "Both? Both. Both. Both Is Good.",
+    "img": "both_is_good.gif",
+    "origin": "https://knowyourmeme.com/memes/both-both-both-both-is-good",
+    "alt": "",
+    "height_multiplier": 0.5586592178770949
   },
   "bugs_bunny_no": {
     "title": "No.",
@@ -124,12 +145,26 @@
     "alt": "cheers i'll drink to that bro (adultswim.com]",
     "height_multiplier": 0.5494505494505494
   },
+  "cinnamon_roll": {
+    "title": "Beautiful Cinnamon Roll Too Good For This World, Too Pure",
+    "img": "cinnamon_roll.png",
+    "origin": "https://knowyourmeme.com/memes/beautiful-cinnamon-roll-too-good-for-this-world-too-pure",
+    "alt": "",
+    "height_multiplier": 0.7633587786259541
+  },
   "citizen_kane": {
     "title": "Citizen Kane Clapping",
     "img": "citizen_kane.gif",
     "origin": "https://knowyourmeme.com/memes/citizen-kane-clapping",
     "alt": "Citizen Kane Clapping",
     "height_multiplier": 0.7518796992481203
+  },
+  "color_of_the_sky": {
+    "title": "Do You Love the Colour of the Sky?",
+    "img": "color_of_the_sky.png",
+    "origin": "https://knowyourmeme.com/memes/do-you-love-the-colour-of-the-sky",
+    "alt": "",
+    "height_multiplier": 1
   },
   "communist_bugs_bunny": {
     "title": "Communist Bugs Bunny or OUR X",
@@ -173,12 +208,33 @@
     "alt": "Why Would You Say Something So Controversial Yet So Brave?",
     "height_multiplier": 0.5617977528089888
   },
+  "crave_that_mineral": {
+    "title": "They Crave That Mineral",
+    "img": "crave_that_mineral.jpg",
+    "origin": "https://knowyourmeme.com/memes/i-crave-that-mineral",
+    "alt": "",
+    "height_multiplier": 1.4925373134328357
+  },
   "cupcake_dog": {
     "title": "Cupcake Dog",
     "img": "cupcake_dog.jpg",
     "origin": "https://knowyourmeme.com/memes/cupcake-dog",
     "alt": "Cupcake Dog viral video showing a dog staring at a plate of cupcakes.",
     "height_multiplier": 0.7518796992481203
+  },
+  "dangerous_to_go_alone": {
+    "title": "It's Dangerous to Go Alone! Take This",
+    "img": "dangerous_to_go_alone.jpg",
+    "origin": "https://knowyourmeme.com/memes/its-dangerous-to-go-alone-take-this",
+    "alt": "",
+    "height_multiplier": 0.9433962264150942
+  },
+  "dawson_crying": {
+    "title": "Dawson Crying",
+    "img": "dawson_crying.jpg",
+    "origin": "https://knowyourmeme.com/memes/dawson-crying",
+    "alt": "",
+    "height_multiplier": 0.5617977528089888
   },
   "dead_dove": {
     "title": "Dead Dove: Do Not Eat",
@@ -188,7 +244,7 @@
     "height_multiplier": 1.4084507042253522
   },
   "destiel_confession": {
-    "title": "Destiel Confession meme",
+    "title": "Destiel Confession",
     "img": "destiel_confession.png",
     "origin": "https://knowyourmeme.com/memes/subcultures/supernatural",
     "alt": "I love you. [BREAKING NEWS ALERT]",
@@ -228,6 +284,13 @@
     "alt": "Distracted Boyfriend Template of the original stock photo that went viral and became a meme",
     "height_multiplier": 0.5617977528089888
   },
+  "drake_wheres_the": {
+    "title": "Drake, Where's The Door Hole? ",
+    "img": "drake_wheres_the.jpg",
+    "origin": "https://knowyourmeme.com/memes/drake-wheres-the-door-hole",
+    "alt": "",
+    "height_multiplier": 0.5617977528089888
+  },
   "draw_25": {
     "title": "[ ] OR Draw 25",
     "img": "draw_25.jpg",
@@ -255,6 +318,13 @@
     "origin": "https://knowyourmeme.com/memes/evil-kermit",
     "height_multiplier": 0.5617977528089888
   },
+  "evilest_thing": {
+    "title": "That's the Evilest Thing I Can Imagine ",
+    "img": "evilest_thing.gif",
+    "origin": "https://knowyourmeme.com/memes/thats-the-evilest-thing-i-can-imagine",
+    "alt": "",
+    "height_multiplier": 0.7246376811594204
+  },
   "expensive_worse": {
     "title": "Sometimes... Things That Are Expensive... Are Worse",
     "img": "expensive_worse.jpg",
@@ -262,12 +332,26 @@
     "alt": "Sometimes... Things That Are Expensive... Are Worse",
     "height_multiplier": 0.5617977528089888
   },
+  "finally_awake": {
+    "title": "Toddroll / You're Finally Awake",
+    "img": "finally_awake.png",
+    "origin": "https://knowyourmeme.com/memes/toddroll-youre-finally-awake",
+    "alt": "",
+    "height_multiplier": 0.5263157894736842
+  },
   "finally_good_food": {
     "title": "Finally, Some Good Fucking Food",
     "img": "finally_good_food.png",
     "origin": "https://knowyourmeme.com/memes/finally-some-good-fucking-food",
     "alt": "Finally, Some Good Fucking Food",
     "height_multiplier": 0.5586592178770949
+  },
+  "five_feet_apart": {
+    "title": "Two Bros Chillin' In A Hot Tub",
+    "img": "five_feet_apart.jpg",
+    "origin": "https://knowyourmeme.com/memes/two-bros-chillin-in-a-hot-tub",
+    "alt": "Two Bros Chillin' In A Hot Tub, 5 Feet Apart cus they're not gay",
+    "height_multiplier": 1
   },
   "free_real_estate": {
     "title": "It's free real estate",
@@ -288,6 +372,13 @@
     "alt": "Good for her.",
     "height_multiplier": 0.8
   },
+  "graphic_design_is_my_passion": {
+    "title": " Graphic Design Is My Passion ",
+    "img": "graphic_design_is_my_passion.jpg",
+    "origin": "https://knowyourmeme.com/memes/graphic-design-is-my-passion",
+    "alt": "",
+    "height_multiplier": 0.5617977528089888
+  },
   "grumpy_cat": {
     "title": "Grumpy Cat",
     "img": "grumpy_cat.jpg",
@@ -295,12 +386,26 @@
     "alt": "The original Grumpy Cat pic that turned into a meme",
     "height_multiplier": 1.2345679012345678
   },
+  "grus_plan": {
+    "title": "Gru's Plan",
+    "img": "grus_plan.jpg",
+    "origin": "https://knowyourmeme.com/memes/grus-plan",
+    "alt": "",
+    "height_multiplier": 0.641025641025641
+  },
   "guess_ill_die": {
     "title": "Guess I'll Die",
     "img": "guess_ill_die.jpg",
     "origin": "https://knowyourmeme.com/memes/guess-ill-die",
     "alt": "Guess I'll Die",
     "height_multiplier": 0.9433962264150942
+  },
+  "halpert_whiteboard": {
+    "title": "Jim Halpert Pointing to Whiteboard ",
+    "img": "halpert_whiteboard.png",
+    "origin": "https://knowyourmeme.com/memes/jim-halpert-pointing-to-whiteboard",
+    "alt": "",
+    "height_multiplier": 1.1235955056179776
   },
   "he_man": {
     "title": "He-Man Sings / HEYYEYAAEYAAAEYAEYAA",
@@ -329,6 +434,20 @@
     "origin": "https://knowyourmeme.com/memes/homer-simpson-backs-into-bushes",
     "alt": "Gif of Homer Simpson backing into the bushes and disappearing from view.",
     "height_multiplier": 0.7518796992481203
+  },
+  "honey_badger": {
+    "title": "Honey Badger Don't Care",
+    "img": "honey_badger.jpg",
+    "origin": "https://knowyourmeme.com/memes/honey-badger",
+    "alt": "",
+    "height_multiplier": 0.6329113924050632
+  },
+  "horse_plinko": {
+    "title": "Horse Plinko",
+    "img": "horse_plinko.gif",
+    "origin": "https://knowyourmeme.com/memes/horse-plinko",
+    "alt": "",
+    "height_multiplier": 1
   },
   "how_do_you_do_fellow_kids": {
     "title": "How Do You Do, Fellow Kids?",
@@ -393,6 +512,27 @@
     "alt": "So anyway, I started blasting",
     "height_multiplier": 0.6666666666666666
   },
+  "if_a_dog_wore_pants": {
+    "title": "If a Dog Wore Pants",
+    "img": "if_a_dog_wore_pants.jpg",
+    "origin": "https://knowyourmeme.com/memes/if-a-dog-wore-pants",
+    "alt": "If a dog wore pants would he wear them like this or like this?",
+    "height_multiplier": 0.5617977528089888
+  },
+  "im_in_danger": {
+    "title": "I'm In Danger",
+    "img": "im_in_danger.png",
+    "origin": "https://knowyourmeme.com/memes/ralph-in-danger-im-in-danger",
+    "alt": "",
+    "height_multiplier": 0.9900990099009901
+  },
+  "inhaling_seagull": {
+    "title": "Inhaling Seagull",
+    "img": "inhaling_seagull.jpg",
+    "origin": "https://knowyourmeme.com/memes/inhaling-seagull",
+    "alt": "",
+    "height_multiplier": 1
+  },
   "is_for_me": {
     "title": "is for me?",
     "img": "is_for_me.jpg",
@@ -407,6 +547,20 @@
     "alt": "Is this a pigeon?",
     "height_multiplier": 0.5235602094240838
   },
+  "it_fucken_wimdy": {
+    "title": "it fucken WIMDY",
+    "img": "it_fucken_wimdy.png",
+    "origin": "https://knowyourmeme.com/photos/2313453-it-fucken-wimdy",
+    "alt": "",
+    "height_multiplier": 0.8695652173913044
+  },
+  "it_was_a_joke": {
+    "title": "Saying This, She Casually Threw Aside A Large Rock",
+    "img": "it_was_a_joke.png",
+    "origin": "https://knowyourmeme.com/memes/saying-this-she-casually-threw-aside-a-large-rock",
+    "alt": "",
+    "height_multiplier": 1.0989010989010988
+  },
   "judge_judy_laptop": {
     "img": "judge_judy_laptop.gif",
     "height_multiplier": 0.8130081300813008
@@ -417,6 +571,13 @@
     "origin": "https://en.meming.world/wiki/All_Right_Then,_Keep_Your_Secrets",
     "alt": "All Right Then, Keep Your Secrets",
     "height_multiplier": 0.7518796992481203
+  },
+  "keikaku": {
+    "title": "Just According to Keikaku",
+    "img": "keikaku.jpg",
+    "origin": "https://knowyourmeme.com/memes/just-according-to-keikaku",
+    "alt": "(Translator's note: keikaku means plan) Just according to keikaku.",
+    "height_multiplier": 0.7462686567164178
   },
   "kermit_tea": {
     "title": "But that's none of my business.",
@@ -452,6 +613,20 @@
     "origin": "https://knowyourmeme.com/memes/let-me-in",
     "alt": "LET ME IN LET ME INNNNNN!!! (adult swim)",
     "height_multiplier": 1
+  },
+  "lex_luthor_took_forty_cakes": {
+    "title": "Lex Luthor Took Forty Cakes",
+    "img": "lex_luthor_took_forty_cakes.jpg",
+    "origin": "knowyourmeme.com/memes/lex-luthor-took-forty-cakes",
+    "alt": "",
+    "height_multiplier": 0.5102040816326531
+  },
+  "limmy_waking_up": {
+    "title": "Limmy Waking Up",
+    "img": "limmy_waking_up.png",
+    "origin": "https://knowyourmeme.com/memes/limmy-waking-up",
+    "alt": "",
+    "height_multiplier": 1.0204081632653061
   },
   "live_slug_reaction": {
     "title": "Live Slug Reaction",
@@ -501,6 +676,20 @@
     "alt": "Megan's Interesting",
     "height_multiplier": 0.9615384615384615
   },
+  "miguels_guitar": {
+    "title": "Miguel's Guitar",
+    "img": "miguels_guitar.gif",
+    "origin": "https://knowyourmeme.com/memes/miguels-guitar",
+    "alt": "",
+    "height_multiplier": 0.9090909090909091
+  },
+  "mission_status_sick": {
+    "title": "Misson Status: SICK",
+    "img": "mission_status_sick.png",
+    "origin": "https://knowyourmeme.com/memes/mission-status-sick",
+    "alt": "",
+    "height_multiplier": 0.8474576271186441
+  },
   "modern_problems": {
     "title": "Modern Problems Require Modern Solutions",
     "img": "modern_problems.jpg",
@@ -543,6 +732,13 @@
     "alt": "No! God! Please! No!",
     "height_multiplier": 0.5649717514124294
   },
+  "no_its_becky": {
+    "title": "no its becky",
+    "img": "no_its_becky.png",
+    "origin": "https://knowyourmeme.com/memes/people/taylor-swift",
+    "alt": "",
+    "height_multiplier": 1.2658227848101264
+  },
   "no_take": {
     "title": "No take. Only throw.",
     "img": "no_take.png",
@@ -556,6 +752,13 @@
     "origin": "https://knowyourmeme.com/memes/none-pizza-with-left-beef-special-delivery-instructions",
     "alt": "None Pizza With Left Beef / Special Delivery Instructions",
     "height_multiplier": 0.8695652173913044
+  },
+  "not_sure_if": {
+    "title": "Futurama Fry / Not Sure If",
+    "img": "not_sure_if.png",
+    "origin": "https://knowyourmeme.com/memes/futurama-fry-not-sure-if",
+    "alt": "",
+    "height_multiplier": 1
   },
   "nyan_cat": {
     "title": "Nyan Cat",
@@ -610,6 +813,20 @@
     "alt": "Untitled Goose's Peace Was Never an Option",
     "height_multiplier": 0.6666666666666666
   },
+  "piracy_its_a_crime": {
+    "title": "Piracy, It's a Crime",
+    "img": "piracy_its_a_crime.jpg",
+    "origin": "https://knowyourmeme.com/memes/piracy-its-a-crime",
+    "alt": "You wouldn't download a car",
+    "height_multiplier": 0.7518796992481203
+  },
+  "pointing_rick_dalton": {
+    "title": "Pointing Rick Dalton",
+    "img": "pointing_rick_dalton.jpg",
+    "origin": "https://knowyourmeme.com/memes/pointing-rick-dalton",
+    "alt": "",
+    "height_multiplier": 0.5617977528089888
+  },
   "pointing_spider_man": {
     "img": "pointing_spider_man.jpg",
     "origin": "https://knowyourmeme.com/memes/spider-man-pointing-at-spider-man",
@@ -629,6 +846,20 @@
     "alt": "Bruce Landlord Today 11:18 AM It is clear in the lease: no pets are allowed in the apt. Sorry Delivered OK I will make an exception because he looks very polite",
     "height_multiplier": 1.1494252873563218
   },
+  "press_f_to_pay_respects": {
+    "title": "Press F to Pay Respects",
+    "img": "press_f_to_pay_respects.jpg",
+    "origin": "https://knowyourmeme.com/memes/press-f-to-pay-respects",
+    "alt": "",
+    "height_multiplier": 0.5617977528089888
+  },
+  "pull_the_trigger_piglet": {
+    "title": "Pull The Trigger Piglet",
+    "img": "pull_the_trigger_piglet.png",
+    "origin": "https://knowyourmeme.com/photos/805444-winnie-the-pooh",
+    "alt": "",
+    "height_multiplier": 0.9259259259259258
+  },
   "pun_dog": {
     "title": "Pun Dog",
     "img": "pun_dog.jpg",
@@ -642,6 +873,20 @@
     "origin": "https://knowyourmeme.com/memes/subcultures/pusheen",
     "alt": "",
     "height_multiplier": 1
+  },
+  "queens_grave": {
+    "title": "Grant Gustin Next To Oliver Queen's Grave",
+    "img": "queens_grave.jpg",
+    "origin": "https://knowyourmeme.com/memes/grant-gustin-next-to-oliver-queens-grave",
+    "alt": "",
+    "height_multiplier": 0.8928571428571428
+  },
+  "reaction_guys": {
+    "title": "Reaction Guys / Gaijin 4Koma ",
+    "img": "reaction_guys.jpg",
+    "origin": "https://knowyourmeme.com/memes/reaction-guys-gaijin-4koma",
+    "alt": "",
+    "height_multiplier": 0.7518796992481203
   },
   "rick_roll": {
     "title": "Rickroll",
@@ -682,6 +927,13 @@
     "origin": "https://knowyourmeme.com/memes/surprised-pikachu",
     "height_multiplier": 0.5780346820809249
   },
+  "shut_up_and_take_my_money": {
+    "title": "Shut Up And Take My Money!",
+    "img": "shut_up_and_take_my_money.jpg",
+    "origin": "https://knowyourmeme.com/memes/shut-up-and-take-my-money",
+    "alt": "",
+    "height_multiplier": 0.5617977528089888
+  },
   "sickos": {
     "title": "Sickos",
     "img": "sickos.jpg",
@@ -694,6 +946,20 @@
     "origin": "https://knowyourmeme.com/memes/side-eyeing-chloe",
     "alt": "Chloe toddler in car safety seat giving the viewer a side eye",
     "height_multiplier": 0.8695652173913044
+  },
+  "silly_me": {
+    "title": "Bateman and Kimball at Lunch / Kimball's Silly Me ",
+    "img": "silly_me.gif",
+    "origin": "https://knowyourmeme.com/memes/bateman-and-kimball-at-lunch-kimballs-silly-me",
+    "alt": "",
+    "height_multiplier": 1
+  },
+  "smiling_through_the_blinds": {
+    "title": "Jim Halpert Smiling Through Blinds ",
+    "img": "smiling_through_the_blinds.jpg",
+    "origin": "https://knowyourmeme.com/memes/jim-halpert-smiling-through-blinds",
+    "alt": "",
+    "height_multiplier": 0.6578947368421053
   },
   "smoking_affleck": {
     "title": "Smoking Ben Affleck",
@@ -708,6 +974,13 @@
     "origin": "https://knowyourmeme.com/memes/somehow-palpatine-returned",
     "alt": "Somehow, Palpatine returned.",
     "height_multiplier": 0.6134969325153374
+  },
+  "speed_at_which_lobsters_die": {
+    "title": "I Do Not Control the Speed at Which Lobsters Die",
+    "img": "speed_at_which_lobsters_die.png",
+    "origin": "https://knowyourmeme.com/memes/i-do-not-control-the-speed-at-which-lobsters-die",
+    "alt": "",
+    "height_multiplier": 0.9174311926605504
   },
   "spinning_cat": {
     "title": "Maxwell the Cat / Spinning Cat",
@@ -728,6 +1001,13 @@
     "origin": "https://knowyourmeme.com/memes/me-explaining-to-my-mom",
     "alt": "stonks",
     "height_multiplier": 0.7518796992481203
+  },
+  "stressed_miyazaki": {
+    "title": "Hayao Miyazaki Looking Stressed",
+    "img": "stressed_miyazaki.jpg",
+    "origin": "https://knowyourmeme.com/memes/hayao-miyazaki-looking-stressed",
+    "alt": "",
+    "height_multiplier": 0.5617977528089888
   },
   "success_kid": {
     "title": "Success Kid",
@@ -757,11 +1037,39 @@
     "alt": ". Caption says: It's a surprise tool that will help us later",
     "height_multiplier": 0.5617977528089888
   },
+  "tap_the_sign": {
+    "title": "Don't Make Me Tap the Sign",
+    "img": "tap_the_sign.jpg",
+    "origin": "https://knowyourmeme.com/memes/dont-make-me-tap-the-sign",
+    "alt": "",
+    "height_multiplier": 1.4705882352941175
+  },
+  "teenager_who_just_woke_up": {
+    "title": "Teenager Who Just Woke Up",
+    "img": "teenager_who_just_woke_up.jpg",
+    "origin": "",
+    "alt": "",
+    "height_multiplier": 0.5524861878453039
+  },
   "thanks_satan": {
     "title": "Thanks, Satan.",
     "img": "thanks_satan.gif",
     "origin": "https://knowyourmeme.com/memes/thanks-satan",
     "height_multiplier": 0.42194092827004215
+  },
+  "the_cake_is_a_lie": {
+    "title": "The Cake Is A Lie",
+    "img": "the_cake_is_a_lie.jpg",
+    "origin": "https://knowyourmeme.com/memes/the-cake-is-a-lie",
+    "alt": "",
+    "height_multiplier": 0.5617977528089888
+  },
+  "the_chanel_boots": {
+    "title": "Are You Wearing the Ch—",
+    "img": "the_chanel_boots.jpg",
+    "origin": "https://knowyourmeme.com/memes/are-you-wearing-the-ch",
+    "alt": "",
+    "height_multiplier": 0.8547008547008548
   },
   "the_economy_is_in_shambles": {
     "title": "The Economy is in Shambles",
@@ -769,6 +1077,13 @@
     "origin": "https://knowyourmeme.com/photos/1845983-its-always-sunny-in-philadelphia",
     "alt": "How do three men in their 30s not have $800 between them? LIU They're-- The economy is in shambles.",
     "height_multiplier": 1.5625
+  },
+  "the_more_you_know": {
+    "title": "The More You Know",
+    "img": "the_more_you_know.gif",
+    "origin": "https://knowyourmeme.com/memes/the-more-you-know",
+    "alt": "",
+    "height_multiplier": 0.6060606060606061
   },
   "the_same_picture": {
     "title": "They're The Same Picture",
@@ -806,11 +1121,46 @@
     "img": "thumbs_up_kid.gif",
     "height_multiplier": 0.7518796992481203
   },
+  "to_shreds_you_say": {
+    "title": "To Shreds You Say?",
+    "img": "to_shreds_you_say.gif",
+    "origin": "https://knowyourmeme.com/memes/your-musics-bad-and-you-should-feel-bad",
+    "alt": "",
+    "height_multiplier": 0.7518796992481203
+  },
+  "two_buttons": {
+    "title": "Daily Struggle / Two Buttons",
+    "img": "two_buttons.jpg",
+    "origin": "https://knowyourmeme.com/memes/daily-struggle-two-buttons",
+    "alt": "",
+    "height_multiplier": 1.5151515151515151
+  },
+  "uncomfortable_steven_face": {
+    "title": "Uncomfortable Steven Face",
+    "img": "uncomfortable_steven_face.jpg",
+    "origin": "https://knowyourmeme.com/memes/uncomfortable-steven-face",
+    "alt": "",
+    "height_multiplier": 0.5617977528089888
+  },
+  "was_anyone_going_to_tell_me": {
+    "title": "Was Anybody Going to Tell Me",
+    "img": "was_anyone_going_to_tell_me.png",
+    "origin": "https://knowyourmeme.com/photos/1491115-chris-fleming",
+    "alt": "",
+    "height_multiplier": 1.1627906976744187
+  },
   "were_really_in_it_now": {
     "title": "Oh Ariana, we're really in it now.",
     "img": "were_really_in_it_now.jpg",
     "origin": "https://knowyourmeme.com/memes/oh-___-were-really-in-it-now",
     "height_multiplier": 0.5617977528089888
+  },
+  "what_are_birds": {
+    "title": "What ARE birds? We just don't know.",
+    "img": "what_are_birds.png",
+    "origin": "",
+    "alt": "",
+    "height_multiplier": 0.5102040816326531
   },
   "why_is_it_empty": {
     "title": "Why is it Empty?",
@@ -838,10 +1188,38 @@
     "origin": "https://knowyourmeme.com/memes/woman-yelling-at-a-cat",
     "height_multiplier": 0.5617977528089888
   },
+  "worst_person_you_know": {
+    "title": "Worst Person You Know Made a Great Point",
+    "img": "worst_person_you_know.jpg",
+    "origin": "https://knowyourmeme.com/memes/worst-person-you-know-made-a-great-point",
+    "alt": "",
+    "height_multiplier": 0.7936507936507936
+  },
+  "you_are_not_immune_to_propoganda": {
+    "title": "You Are Not Immune to Propaganda ",
+    "img": "you_are_not_immune_to_propoganda.jpg",
+    "origin": "https://knowyourmeme.com/memes/you-are-not-immune-to-propaganda",
+    "alt": "",
+    "height_multiplier": 1
+  },
+  "you_guys_are_getting_paid": {
+    "title": "You Guys Are Getting Paid?",
+    "img": "you_guys_are_getting_paid.jpg",
+    "origin": "https://knowyourmeme.com/memes/you-guys-are-getting-paid",
+    "alt": "",
+    "height_multiplier": 1
+  },
   "you_know_i_had_to_do_it_to_em": {
     "title": "You know I had to do it to em.",
     "img": "you_know_i_had_to_do_it_to_em.jpg",
     "origin": "https://knowyourmeme.com/memes/you-know-i-had-to-do-it-to-em",
     "height_multiplier": 0.9433962264150942
+  },
+  "you_should_feel_bad": {
+    "title": "Your Music's Bad and You Should Feel Bad",
+    "img": "you_should_feel_bad.jpg",
+    "origin": "https://knowyourmeme.com/memes/your-musics-bad-and-you-should-feel-bad",
+    "alt": "",
+    "height_multiplier": 0.8849557522123894
   }
 }
