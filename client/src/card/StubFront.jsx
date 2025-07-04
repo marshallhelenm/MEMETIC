@@ -10,12 +10,7 @@ function StubFront({ itemKey, item, isPlayerCard, flip, height }) {
 
   function playerStar() {
     if (!isPlayerCard) return;
-    return (
-      <i
-        className="fa-solid fa-star fa-xl player-card-star absolute"
-        style={{ transform: "translateX(-50%)" }}
-      ></i>
-    );
+    return <i className="fa-solid fa-star fa-xl player-card-star absolute"></i>;
   }
 
   return (

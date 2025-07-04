@@ -3,8 +3,8 @@ import { useState, lazy, Suspense } from "react";
 
 import IconButton from "@mui/material/IconButton";
 import StyledDialog from "../components/StyledDialog";
-import DialogContent from "@mui/material/DialogContent";
-import { useState } from "react";
+const DialogContent = lazy(() => import("@mui/material/DialogContent"));
+
 import { colorA } from "../assets/styles";
 import { useGame } from "../hooks/useContextHooks";
 import { GuessySuspense } from "../components/GuessySuspense";
