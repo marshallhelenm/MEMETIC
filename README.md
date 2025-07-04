@@ -32,10 +32,11 @@ This project includes a custom algorithm to **dynamically arrange meme images** 
 * ⏳ Implement “guess opponent’s card” feature (with confirmation / win logic)
 * ⏳ Limit rooms to two players + observers (spectator mode)
 * ⏳ Chat between players
-* ⏳ User authentication
-* ⏳ Meme uploading / custom boards
-* ⏳ Mobile-responsive UI improvements
 * ⏳ Specific alternate still images for gifs
+
+### 🚀 Ambitious Ideas
+
+* ⏳ User accounts with saved custom meme boards
 
 ---
 
