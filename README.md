@@ -130,8 +130,9 @@ npm run dev
 ![full board](./client/src/assets/demo/full_board.png)
 ![smaller board](./client/src/assets/demo/smaller_board.png)
 
+![flipped cards](./client/src/assets/demo/flipped_cards.png)
 ![overlay](./client/src/assets/demo/overlay.png)
-![your_meme](./client/src/assets/demo/your_meme.png)
+![your meme](./client/src/assets/demo/your_meme.png)
 ![sidebar](./client/src/assets/demo/sidebar.png)
 
 ---
