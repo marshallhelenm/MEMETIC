@@ -156,7 +156,7 @@ export default function MiniDrawer({ children }) {
             <i className={`fa-solid fa-bars fa-lg`}></i>
           </IconButton>
           <Logo spin={false} header={true} />
-          <h1 className="heading">Guessy</h1>
+          <h1 className="heading">MEMETIC</h1>
         </Toolbar>
         <GifPauseButton />
       </AppBar>

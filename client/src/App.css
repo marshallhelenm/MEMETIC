@@ -82,10 +82,11 @@ button:focus {
 
 .heading {
   color: var(--colorC);
-  font-size: 2.5em;
+  font-size: 3.5em;
   margin: 0;
-  /* padding-bottom: 10px;
-  border-bottom: 2px solid white; */
+  font-family: "CherryBomb";
+  text-align: center;
+  padding-bottom: 1%;
 }
 
 .row {
@@ -137,7 +138,6 @@ button:focus {
 .header-box {
   color: var(--colorD);
   font-size: 1.2em;
-  border: solid 2px var(--colorC);
   border-radius: var(--corners);
   height: fit-content;
   padding: 0.5%;
@@ -155,7 +155,6 @@ button:focus {
   gap: 10px 12px;
   padding: 1%;
   border-radius: var(--corners);
-  border: solid 2px var(--colorD);
   margin: auto;
   justify-content: center;
 }
@@ -183,7 +182,6 @@ button:focus {
 .stub-back {
   background-image: url("images/bgqtile-small.png");
   height: 90%;
-  border: solid 2px var(--colorB);
   border-radius: var(--corners);
 }
 
@@ -275,7 +273,7 @@ button:focus {
 
 .small-logo {
   margin-right: 10px;
-  height: 50px;
+  height: 2.8em;
 }
 
 .small-logo img {
