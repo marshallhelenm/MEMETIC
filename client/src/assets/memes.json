@@ -1,4 +1,10 @@
 {
+  "ALOT": {
+    "title": "The Alot",
+    "img": "ALOT.png",
+    "origin": "https://knowyourmeme.com/memes/the-alot",
+    "height_multiplier": 0.7518796992481203
+  },
   "a_smoothie": {
     "title": "Um... Whatcha got there? A smoothie.",
     "img": "a_smoothie.jpg",
