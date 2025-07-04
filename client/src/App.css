@@ -248,8 +248,8 @@ button:focus {
 
 .player-card-star {
   z-index: 99;
-  height: 30px;
-  margin: 2%;
+  height: 45px;
+  margin: 3%;
 }
 
 .observer-star {
