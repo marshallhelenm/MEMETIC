@@ -764,7 +764,7 @@
     "img": "not_sure_if.png",
     "origin": "https://knowyourmeme.com/memes/futurama-fry-not-sure-if",
     "alt": "",
-    "height_multiplier": 1
+    "height_multiplier": 0.7518796992481203
   },
   "nyan_cat": {
     "title": "Nyan Cat",
@@ -1206,7 +1206,7 @@
     "img": "you_are_not_immune_to_propoganda.jpg",
     "origin": "https://knowyourmeme.com/memes/you-are-not-immune-to-propaganda",
     "alt": "",
-    "height_multiplier": 1
+    "height_multiplier": 0.7299270072992701
   },
   "you_guys_are_getting_paid": {
     "title": "You Guys Are Getting Paid?",

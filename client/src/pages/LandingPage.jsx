@@ -10,7 +10,7 @@ function LandingPage() {
     <div>
       <Logo spin={true} />
       <h1 className="heading" style={{ marginTop: "5%", marginBottom: "5%" }}>
-        Guessy
+        MEMETIC
       </h1>
       <NewGame />
       <Link to="/join">
