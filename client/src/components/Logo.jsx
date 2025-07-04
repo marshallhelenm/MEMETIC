@@ -1,11 +1,12 @@
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import Zoom from "@mui/material/Zoom";
-import Fade from "@mui/material/Fade";
 import $ from "jquery";
 
+import Zoom from "@mui/material/Zoom";
+import Fade from "@mui/material/Fade";
+
 import question from "../assets/question.png";
-import { useState } from "react";
 
 function Logo({ spin = true, header = false, size }) {
   const [image, setImage] = useState(question);

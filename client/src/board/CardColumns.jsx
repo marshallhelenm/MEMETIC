@@ -1,9 +1,10 @@
+import { lazy } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { useGame } from "../hooks/useContextHooks";
 import { memeData } from "../assets/memeCollection";
 import BoardColumn from "./BoardColumn";
-import MissingStub from "../card/MissingStub";
+const MissingStub = lazy(() => import("../card/MissingStub"));
 import StubCard from "../card/StubCard";
 
 function CardColumns() {

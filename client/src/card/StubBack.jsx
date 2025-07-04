@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+
 import StubImage from "./StubImage";
 import { colorD, colorG } from "../assets/styles";
 

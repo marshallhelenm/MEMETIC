@@ -65,6 +65,7 @@ function WSProvider({ children }) {
 
     socket.onmessage = () => {
       let message = lastJsonMessage;
+      if (!message) return;
       setLastMessageReceivedAt(Date.now());
       try {
         // devLog([

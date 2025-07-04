@@ -1,5 +1,5 @@
-import "../App.css";
 import { Link } from "react-router-dom";
+
 import Logo from "../components/Logo";
 import NewGame from "../components/NewGame";
 import GuessyButton from "../components/GuessyButton";

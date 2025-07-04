@@ -1,12 +1,11 @@
-import { faker } from "@faker-js/faker";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { faker } from "@faker-js/faker";
 
-import { colorA, colorD, corners } from "../assets/styles";
 import Logo from "../components/Logo";
 import GuessyButton from "../components/GuessyButton";
 import TextField from "@mui/material/TextField";
-import { useEffect } from "react";
+import { colorA, colorD, corners } from "../assets/styles";
 
 //The first page you see. Holds options to join a game or start a new game.
 function NameForm() {

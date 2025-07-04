@@ -1,3 +1,6 @@
+import { lazy } from "react";
+import PropTypes from "prop-types";
+
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -18,6 +21,11 @@ function DrawerButton({ children, drawerOpen }) {
   );
 }
 
+DrawerButton.propTypes = {
+  children: PropTypes.any,
+  drawerOpen: PropTypes.bool,
+};
+
 function DrawerIcon({ drawerOpen, icon, classes = "" }) {
   return (
     <ListItemIcon
@@ -31,6 +39,12 @@ function DrawerIcon({ drawerOpen, icon, classes = "" }) {
   );
 }
 
+DrawerIcon.propTypes = {
+  classes: PropTypes.string,
+  drawerOpen: PropTypes.bool,
+  icon: PropTypes.string,
+};
+
 function DrawerItem({ children, onClick }) {
   return (
     <ListItem disablePadding sx={{ display: "block" }} onClick={onClick}>
@@ -38,5 +52,10 @@ function DrawerItem({ children, onClick }) {
     </ListItem>
   );
 }
+
+DrawerItem.propTypes = {
+  children: PropTypes.any,
+  onClick: PropTypes.func,
+};
 
 export { DrawerButton, DrawerIcon, DrawerItem };

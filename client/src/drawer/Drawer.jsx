@@ -1,5 +1,5 @@
+import { useState, lazy } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useState } from "react";
 
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -18,9 +18,10 @@ import GifPauseButton from "./GifPauseButton";
 import QuestionsModal from "./QuestionsModal";
 import ClearGame from "./ClearGame";
 import CopyAlert from "./CopyAlert";
-import Players from "./Players";
+const Players = lazy(() => import("./Players"));
 import { colorB, colorE } from "../assets/styles";
 import { DrawerButton, DrawerIcon, DrawerItem } from "./DrawerComponents";
+import { GuessySuspense } from "../components/GuessySuspense";
 
 const drawerWidth = 200;
 
@@ -217,7 +218,11 @@ export default function MiniDrawer({ children }) {
               <ListItemText primary={"Players"} sx={[opacity]} />
             </DrawerButton>
           </DrawerItem>
-          {drawerOpen && <Players />}
+          {drawerOpen && (
+            <GuessySuspense>
+              <Players />
+            </GuessySuspense>
+          )}
         </>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

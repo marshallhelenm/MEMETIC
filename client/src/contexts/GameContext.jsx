@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { createContext, useEffect, useMemo, useState } from "react";
 import useBreakpoint from "use-breakpoint";
 
@@ -104,6 +103,7 @@ function GameProvider({ children }) {
       }
     }
     if (columnsObjectChanged || allKeysChanged) {
+      setLoadingCards(false);
       setValidGame(
         allKeys.length == 24 && Object.keys(columnsObject).length == 6
       );

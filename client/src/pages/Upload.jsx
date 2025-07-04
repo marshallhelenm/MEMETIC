@@ -1,7 +1,7 @@
-import "../App.css";
 import * as XLSX from "xlsx";
-import { devLog } from "../utils/Helpers";
 import $ from "jquery";
+
+import { devLog } from "../utils/Helpers";
 import memes from "../assets/memes.json";
 
 function Upload() {

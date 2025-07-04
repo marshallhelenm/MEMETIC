@@ -1,12 +1,13 @@
+import { useState, lazy } from "react";
 import PropTypes from "prop-types";
 
 import Popover from "@mui/material/Popover";
 
-import MissingStub from "../card/MissingStub";
+const MissingStub = lazy(() => import("../card/MissingStub"));
 import { memeData } from "../assets/memeCollection";
 import { usePlayers } from "../hooks/useContextHooks";
-import { useState } from "react";
 import { colorD } from "../assets/styles";
+import { GuessySuspense } from "../components/GuessySuspense";
 
 const YourMemeImage = ({ dialogWidth }) => {
   const { myPlayerCard } = usePlayers();
@@ -67,7 +68,11 @@ const YourMemeImage = ({ dialogWidth }) => {
       </>
     );
   } else {
-    return <MissingStub />;
+    return (
+      <GuessySuspense>
+        <MissingStub />;
+      </GuessySuspense>
+    );
   }
 };
 

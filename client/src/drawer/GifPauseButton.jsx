@@ -1,9 +1,8 @@
 import Switch from "@mui/material/Switch";
-import { styled, alpha } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { styled, alpha } from "@mui/material";
 
 import { colorC, colorF } from "../assets/styles";
-import { useState } from "react";
 import { useGame } from "../hooks/useContextHooks";
 
 function GifPauseButton({ drawerOpen }) {

@@ -1,12 +1,10 @@
-import CircularProgress from "@mui/material/CircularProgress";
-import "../App.css";
-import { colorC } from "../assets/styles";
+import ProgressWheel from "../components/ProgressWheel";
 
 function LoadingStub() {
   return (
     <div className="stub">
       <div className="loading">
-        <CircularProgress sx={{ color: colorC }} />
+        <ProgressWheel />
       </div>
     </div>
   );

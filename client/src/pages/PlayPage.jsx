@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { useGame, useWS } from "../hooks/useContextHooks";
-import InvalidRoomKey from "./InvalidRoomKey";
+const InvalidRoomKey = lazy(() => import("./InvalidRoomKey"));
+const ErrorPage = lazy(() => import("./ErrorPage"));
+const PlayGame = lazy(() => import("../containers/PlayGame"));
 import RoomLoading from "./RoomLoading";
-import ErrorPage from "./ErrorPage";
-import PlayGame from "../containers/PlayGame";
 import { PlayersProvider } from "../contexts/PlayersContext";
+import { useGame, useWS } from "../hooks/useContextHooks";
+import { LogoSuspense } from "../components/GuessySuspense";
 
 function PlayPage() {
   const [searchParams] = useSearchParams();
@@ -55,17 +56,31 @@ function PlayPage() {
 
   // ** RENDER
   if (roomKey?.length != 8) {
-    return <InvalidRoomKey />;
+    return (
+      <LogoSuspense>
+        <InvalidRoomKey />
+      </LogoSuspense>
+    );
   } else if (validGame && connectionOpen) {
     return (
       <PlayersProvider>
-        <PlayGame />
+        <Suspense fallback={<RoomLoading />}>
+          <PlayGame />
+        </Suspense>
       </PlayersProvider>
     );
   } else if (connectionError && !tryingToConnect) {
-    return <ErrorPage type="connection" />;
+    return (
+      <LogoSuspense>
+        <ErrorPage type="connection" />
+      </LogoSuspense>
+    );
   } else if (serverError != "") {
-    return <ErrorPage type="server" />;
+    return (
+      <LogoSuspense>
+        <ErrorPage type="server" />
+      </LogoSuspense>
+    );
   } else {
     return <RoomLoading />;
   }

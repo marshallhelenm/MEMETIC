@@ -1,6 +1,9 @@
+import { lazy } from "react";
 import PropTypes from "prop-types";
-import ReactFreezeframe from "react-freezeframe";
+
+const ReactFreezeframe = lazy(() => import("react-freezeframe"));
 import { colorE } from "../assets/styles";
+import { GuessySuspense } from "../components/GuessySuspense";
 
 function StubImage({ item, flipped, height }) {
   const staticGifs = sessionStorage.getItem("guessy-gifs") === "true";
@@ -37,9 +40,11 @@ function StubImage({ item, flipped, height }) {
           }}
           alt="gif indicator"
         ></i>
-        <ReactFreezeframe className="stub-image pointer">
-          {imgElement}
-        </ReactFreezeframe>
+        <GuessySuspense>
+          <ReactFreezeframe className="stub-image pointer">
+            {imgElement}
+          </ReactFreezeframe>
+        </GuessySuspense>
       </div>
     );
   } else {

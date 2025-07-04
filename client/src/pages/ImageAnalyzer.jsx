@@ -1,4 +1,5 @@
 import $ from "jquery";
+
 import memes from "../assets/memes.json";
 
 function ImageAnalyzer() {

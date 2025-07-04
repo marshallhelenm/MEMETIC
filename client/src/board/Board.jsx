@@ -1,9 +1,8 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, lazy, Suspense } from "react";
 
 import LoadingColumns from "./LoadingColumns";
-import CardColumns from "./CardColumns";
+const CardColumns = lazy(() => import("./CardColumns"));
 import { useGame } from "../hooks/useContextHooks";
-import { useTraceUpdate } from "../hooks/useTraceUpdate";
 
 // holds all the picture cards
 function Board() {
@@ -26,7 +25,9 @@ function Board() {
   } else {
     return (
       <div className="gameBoard">
-        <CardColumns />
+        <Suspense fallback={<LoadingColumns />}>
+          <CardColumns />
+        </Suspense>
       </div>
     );
   }

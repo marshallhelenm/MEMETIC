@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+
 function MemeOrigin({ item }) {
   if (item.origin) {
     return (
