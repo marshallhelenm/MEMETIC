@@ -123,15 +123,15 @@ npm run dev
 
 ## 📸 Screenshots
 
-<img src="./client/src/assets/demo/landing_page.png" alt="landing page" height="400"/>
-<img src="./client/src/assets/demo/join_page.png" alt="join page" height="400"/>
-<img src="./client/src/assets/demo/name_form.png" alt="username form" height="400"/>
+![landing page](./client/src/assets/demo/landing_page.png)
+![join page](./client/src/assets/demo/join_page.png)
+![username form](./client/src/assets/demo/name_form.png)
 
-<img src="./client/src/assets/demo/full_board.png" alt="full board" height="500"/>
-<img src="./client/src/assets/demo/smaller_board.png" alt="smaller board" height="500"/>
+![full board](./client/src/assets/demo/full_board.png)
+![smaller board](./client/src/assets/demo/smaller_board.png)
 
-<img src="./client/src/assets/demo/overlay.png" alt="overlay" height="300"/>
-<img src="./client/src/assets/demo/your_meme.png" alt="your_meme" height="300"/>
-<img src="./client/src/assets/demo/sidebar.png" alt="sidebar" height="300"/>
+![overlay](./client/src/assets/demo/overlay.png)
+![your_meme](./client/src/assets/demo/your_meme.png)
+![sidebar](./client/src/assets/demo/sidebar.png)
 
 ---
