@@ -1,9 +1,12 @@
-import MissingStub from "../components/MissingStub";
-import { memeData } from "../assets/memeCollection";
-import { usePlayers } from "../contexts/useContextHooks";
-import { useState } from "react";
-import { colorA, colorD } from "../assets/styles";
+import PropTypes from "prop-types";
+
 import Popover from "@mui/material/Popover";
+
+import MissingStub from "../card/MissingStub";
+import { memeData } from "../assets/memeCollection";
+import { usePlayers } from "../hooks/useContextHooks";
+import { useState } from "react";
+import { colorD } from "../assets/styles";
 
 const YourMemeImage = ({ dialogWidth }) => {
   const { myPlayerCard } = usePlayers();
@@ -66,6 +69,10 @@ const YourMemeImage = ({ dialogWidth }) => {
   } else {
     return <MissingStub />;
   }
+};
+
+YourMemeImage.propTypes = {
+  dialogWidth: PropTypes.string,
 };
 
 export default YourMemeImage;

@@ -1,7 +1,7 @@
 import { createContext, useEffect, useMemo, useState } from "react";
 
 import { randomCardKey } from "../utils/Helpers";
-import { useGame, useWS } from "./useContextHooks";
+import { useGame, useWS } from "../hooks/useContextHooks";
 import { useSearchParams } from "react-router-dom";
 import { useRef } from "react";
 

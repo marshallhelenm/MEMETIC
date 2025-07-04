@@ -1,11 +1,10 @@
+import PropTypes from "prop-types";
 import IconButton from "@mui/material/IconButton";
-import StyledDialog from "./StyledDialog";
+import StyledDialog from "../components/StyledDialog";
 import DialogContent from "@mui/material/DialogContent";
 import { useState } from "react";
 import { colorA } from "../assets/styles";
-import { DialogTitle } from "@mui/material";
-import MemeOrigin from "./MemeOrigin";
-import { useGame } from "../contexts/useContextHooks";
+import { useGame } from "../hooks/useContextHooks";
 
 const CardModal = ({ item, children, icon, setModalOpen }) => {
   const { dialogWidth } = useGame();
@@ -51,6 +50,15 @@ const CardModal = ({ item, children, icon, setModalOpen }) => {
       </StyledDialog>
     </>
   );
+};
+
+CardModal.propTypes = {
+  children: PropTypes.any,
+  icon: PropTypes.string,
+  item: PropTypes.shape({
+    title: PropTypes.string,
+  }),
+  setModalOpen: PropTypes.func,
 };
 
 export default CardModal;

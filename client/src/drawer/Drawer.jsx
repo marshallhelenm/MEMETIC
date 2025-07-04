@@ -1,4 +1,6 @@
+import { useSearchParams } from "react-router-dom";
 import { useState } from "react";
+
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -8,22 +10,17 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import ListItemText from "@mui/material/ListItemText";
+import Tooltip from "@mui/material/Tooltip";
 
 import Logo from "../components/Logo";
-import PlayerCardModal from "./PlayerCardModal";
-import GifPauseButton from "../components/GifPauseButton";
-import QuestionsModal from "../components/QuestionsModal";
-import ClearGame from "../components/ClearGame";
-import CopyAlert from "../components/CopyAlert";
+import PlayerCardModal from "../containers/PlayerCardModal";
+import GifPauseButton from "./GifPauseButton";
+import QuestionsModal from "./QuestionsModal";
+import ClearGame from "./ClearGame";
+import CopyAlert from "./CopyAlert";
+import Players from "./Players";
 import { colorB, colorE } from "../assets/styles";
-import {
-  DrawerButton,
-  DrawerIcon,
-  DrawerItem,
-} from "../components/DrawerComponents";
-import Players from "../components/Players";
-import { Tooltip } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
+import { DrawerButton, DrawerIcon, DrawerItem } from "./DrawerComponents";
 
 const drawerWidth = 200;
 

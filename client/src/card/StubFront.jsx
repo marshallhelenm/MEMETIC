@@ -1,7 +1,8 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 
-import StubImage from "../components/StubImage";
-import Overlay from "../containers/Overlay";
+import StubImage from "../card/StubImage";
+import Overlay from "./Overlay";
 import { colorE, colorG } from "../assets/styles";
 
 function StubFront({ itemKey, item, isPlayerCard, flip, height }) {
@@ -44,5 +45,17 @@ function StubFront({ itemKey, item, isPlayerCard, flip, height }) {
     </>
   );
 }
+
+StubFront.propTypes = {
+  flip: PropTypes.func,
+  height: PropTypes.number,
+  isPlayerCard: PropTypes.bool,
+  item: PropTypes.shape({
+    alt: PropTypes.string,
+    img: PropTypes.string,
+    title: PropTypes.string,
+  }),
+  itemKey: PropTypes.string,
+};
 
 export default StubFront;

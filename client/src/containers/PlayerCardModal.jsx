@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import DialogContent from "@mui/material/DialogContent";
@@ -9,11 +10,11 @@ import {
   DrawerButton,
   DrawerIcon,
   DrawerItem,
-} from "../components/DrawerComponents";
+} from "../drawer/DrawerComponents";
 import { colorA, colorB } from "../assets/styles";
 import { memeData } from "../assets/memeCollection";
-import { useGame, usePlayers } from "../contexts/useContextHooks";
-import YourMemeImage from "../components/YourMemeImage";
+import { useGame, usePlayers } from "../hooks/useContextHooks";
+import YourMemeImage from "../drawer/YourMemeImage";
 
 const PlayerCardModal = ({ drawerOpen, opacity }) => {
   const { myPlayerCard, assignNewMyPlayerCard } = usePlayers();
@@ -98,6 +99,13 @@ const PlayerCardModal = ({ drawerOpen, opacity }) => {
       </StyledDialog>
     </>
   );
+};
+
+PlayerCardModal.propTypes = {
+  drawerOpen: PropTypes.bool,
+  opacity: PropTypes.shape({
+    opacity: PropTypes.number,
+  }),
 };
 
 export default PlayerCardModal;

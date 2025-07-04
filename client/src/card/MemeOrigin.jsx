@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 function MemeOrigin({ item }) {
   if (item.origin) {
     return (
@@ -18,5 +19,11 @@ function MemeOrigin({ item }) {
     );
   }
 }
+
+MemeOrigin.propTypes = {
+  item: PropTypes.shape({
+    origin: PropTypes.string,
+  }),
+};
 
 export default MemeOrigin;

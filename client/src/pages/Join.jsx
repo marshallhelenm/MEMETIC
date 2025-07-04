@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 
-import Logo from "./Logo";
-import GuessyButton from "./GuessyButton";
+import Logo from "../components/Logo";
+import GuessyButton from "../components/GuessyButton";
 import { colorA, colorD, corners } from "../assets/styles";
 
 function Join() {

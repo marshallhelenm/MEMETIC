@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import ReactFreezeframe from "react-freezeframe";
 import { colorE } from "../assets/styles";
 
@@ -45,5 +46,15 @@ function StubImage({ item, flipped, height }) {
     return <div>{imgElement}</div>;
   }
 }
+
+StubImage.propTypes = {
+  flipped: PropTypes.bool,
+  height: PropTypes.number,
+  item: PropTypes.shape({
+    alt: PropTypes.string,
+    img: PropTypes.string,
+    title: PropTypes.string,
+  }),
+};
 
 export default StubImage;

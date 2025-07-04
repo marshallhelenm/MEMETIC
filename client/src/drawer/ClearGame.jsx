@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -6,9 +7,9 @@ import DialogActions from "@mui/material/DialogActions";
 import ListItemText from "@mui/material/ListItemText";
 import Tooltip from "@mui/material/Tooltip";
 
-import GuessyButton from "./GuessyButton";
+import GuessyButton from "../components/GuessyButton";
 import { DrawerButton, DrawerIcon, DrawerItem } from "./DrawerComponents";
-import { useGame } from "../contexts/useContextHooks";
+import { useGame } from "../hooks/useContextHooks";
 
 function ClearGame({ opacity, drawerOpen }) {
   const [clearGameOpen, setClearGameOpen] = useState(false);
@@ -54,5 +55,12 @@ function ClearGame({ opacity, drawerOpen }) {
     </>
   );
 }
+
+ClearGame.propTypes = {
+  drawerOpen: PropTypes.bool,
+  opacity: PropTypes.shape({
+    opacity: PropTypes.number,
+  }),
+};
 
 export default ClearGame;

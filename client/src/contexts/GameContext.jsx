@@ -1,7 +1,8 @@
+import PropTypes from "prop-types";
 import { createContext, useEffect, useMemo, useState } from "react";
 import useBreakpoint from "use-breakpoint";
 
-import { useWS } from "./useContextHooks";
+import { useWS } from "../hooks/useContextHooks";
 import { memeSampler } from "../assets/memeCollection";
 import { useSearchParams } from "react-router-dom";
 import { useTraceUpdate } from "../hooks/useTraceUpdate";

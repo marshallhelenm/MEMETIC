@@ -6,11 +6,11 @@ import "./index.css";
 import "./App.css";
 import App from "./App.jsx";
 import LandingPage from "./pages/LandingPage";
-import Join from "./components/Join";
+import Join from "./pages/Join";
 import Upload from "./pages/Upload";
 import ImageAnalyzer from "./pages/ImageAnalyzer";
 import NameForm from "./pages/NameForm";
-import PlayPage from "./pages/PlayPage.jsx";
+import PlayPage from "./pages/PlayPage";
 
 const router = createBrowserRouter([
   {

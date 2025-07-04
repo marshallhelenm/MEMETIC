@@ -1,5 +1,5 @@
-import Board from "./Board";
-import MiniDrawer from "./Drawer";
+import Board from "../board/Board";
+import MiniDrawer from "../drawer/Drawer";
 
 function PlayGame() {
   return (

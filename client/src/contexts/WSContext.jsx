@@ -67,11 +67,11 @@ function WSProvider({ children }) {
       let message = lastJsonMessage;
       setLastMessageReceivedAt(Date.now());
       try {
-        devLog([
-          "WSProvider handling message: ",
-          message?.type,
-          // JSON.stringify(message),
-        ]);
+        // devLog([
+        //   "WSProvider handling message: ",
+        //   message?.type,
+        //   // JSON.stringify(message),
+        // ]);
 
         if (!uuidRef.current && message.type != "uuid") {
           // we're not ready to receive messages, ask for a uuid

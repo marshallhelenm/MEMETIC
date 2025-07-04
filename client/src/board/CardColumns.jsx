@@ -1,10 +1,10 @@
 import { useSearchParams } from "react-router-dom";
 
-import { useGame } from "../contexts/useContextHooks";
+import { useGame } from "../hooks/useContextHooks";
 import { memeData } from "../assets/memeCollection";
 import BoardColumn from "./BoardColumn";
-import MissingStub from "../components/MissingStub";
-import StubCard from "./StubCard";
+import MissingStub from "../card/MissingStub";
+import StubCard from "../card/StubCard";
 
 function CardColumns() {
   const [searchParams] = useSearchParams();

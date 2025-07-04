@@ -1,6 +1,6 @@
 import BoardColumn from "./BoardColumn";
-import LoadingStub from "../components/LoadingStub";
-import { useGame } from "../contexts/useContextHooks";
+import LoadingStub from "../card/LoadingStub";
+import { useGame } from "../hooks/useContextHooks";
 
 function LoadingColumns() {
   const { columnCount } = useGame();

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { useGame, useWS } from "../contexts/useContextHooks";
-import InvalidRoomKey from "../components/InvalidRoomKey";
-import RoomLoading from "../components/RoomLoading";
-import ErrorPage from "../components/ErrorPage";
+import { useGame, useWS } from "../hooks/useContextHooks";
+import InvalidRoomKey from "./InvalidRoomKey";
+import RoomLoading from "./RoomLoading";
+import ErrorPage from "./ErrorPage";
 import PlayGame from "../containers/PlayGame";
 import { PlayersProvider } from "../contexts/PlayersContext";
 

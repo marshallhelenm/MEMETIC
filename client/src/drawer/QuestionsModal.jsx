@@ -7,7 +7,7 @@ import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import StyledDialog from "./StyledDialog";
+import StyledDialog from "../components/StyledDialog";
 import { DrawerButton, DrawerIcon, DrawerItem } from "./DrawerComponents";
 
 const QuestionsModal = ({ opacity, drawerOpen }) => {

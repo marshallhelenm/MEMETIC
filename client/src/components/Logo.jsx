@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Zoom from "@mui/material/Zoom";
 import Fade from "@mui/material/Fade";
@@ -77,5 +78,11 @@ function Logo({ spin = true, header = false, size }) {
     );
   }
 }
+
+Logo.propTypes = {
+  header: PropTypes.bool,
+  size: PropTypes.string,
+  spin: PropTypes.bool,
+};
 
 export default Logo;

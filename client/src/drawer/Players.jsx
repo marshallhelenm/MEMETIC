@@ -4,7 +4,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 
-import { usePlayers } from "../contexts/useContextHooks";
+import { usePlayers } from "../hooks/useContextHooks";
 
 function Players() {
   const [searchParams] = useSearchParams();

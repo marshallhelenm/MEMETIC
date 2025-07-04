@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import "../App.css";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
@@ -29,5 +30,12 @@ function GuessyButton({ onClick, children, dark, sx, ...props }) {
     </BolderButton>
   );
 }
+
+GuessyButton.propTypes = {
+  children: PropTypes.any,
+  dark: PropTypes.bool,
+  onClick: PropTypes.func,
+  sx: PropTypes.any,
+};
 
 export default GuessyButton;

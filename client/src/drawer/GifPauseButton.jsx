@@ -4,7 +4,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 
 import { colorC, colorF } from "../assets/styles";
 import { useState } from "react";
-import { useGame } from "../contexts/useContextHooks";
+import { useGame } from "../hooks/useContextHooks";
 
 function GifPauseButton({ drawerOpen }) {
   const { staticGifs, setStaticGifs } = useGame();

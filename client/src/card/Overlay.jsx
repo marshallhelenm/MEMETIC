@@ -1,7 +1,8 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
-import CardModal from "../components/CardModal";
-// import GuessCard from "../components/GuessCard";
-import MemeOrigin from "../components/MemeOrigin";
+
+import CardModal from "./CardModal";
+import MemeOrigin from "./MemeOrigin";
 
 function Overlay({ item, overlay, itemKey }) {
   const [modalOpen, setModalOpen] = useState(false);
@@ -33,5 +34,14 @@ function Overlay({ item, overlay, itemKey }) {
     );
   }
 }
+
+Overlay.propTypes = {
+  item: PropTypes.shape({
+    alt: PropTypes.string,
+    img: PropTypes.string,
+  }),
+  itemKey: PropTypes.string,
+  overlay: PropTypes.bool,
+};
 
 export default Overlay;
