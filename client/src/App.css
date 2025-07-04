@@ -295,3 +295,8 @@ button:focus {
     transform: rotate(360deg);
   }
 }
+
+.popover > .MuiPaper-root {
+  background-color: var(--colorB);
+  color: var(--colorE);
+}

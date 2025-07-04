@@ -1,13 +1,10 @@
 import { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
 import Tooltip from "@mui/material/Tooltip";
 import ListItemText from "@mui/material/ListItemText";
 
 import StyledDialog from "../components/StyledDialog";
-import GuessyButton from "../components/GuessyButton";
-import MissingStub from "../components/MissingStub";
 import {
   DrawerButton,
   DrawerIcon,
@@ -16,6 +13,7 @@ import {
 import { colorA, colorB } from "../assets/styles";
 import { memeData } from "../assets/memeCollection";
 import { useGame, usePlayers } from "../contexts/useContextHooks";
+import YourMemeImage from "../components/YourMemeImage";
 
 const PlayerCardModal = ({ drawerOpen, opacity }) => {
   const { myPlayerCard, assignNewMyPlayerCard } = usePlayers();
@@ -31,20 +29,6 @@ const PlayerCardModal = ({ drawerOpen, opacity }) => {
   const handleClose = (e) => {
     setOpen(false);
   };
-
-  function content() {
-    if (item) {
-      return (
-        <img
-          src={`/memes/${item.img}`}
-          alt={item.alt}
-          className="modal-image"
-        />
-      );
-    } else {
-      return <MissingStub />;
-    }
-  }
 
   return (
     <>
@@ -76,41 +60,41 @@ const PlayerCardModal = ({ drawerOpen, opacity }) => {
         >
           <i className="fa-solid fa-xmark"></i>
         </IconButton>
-        <DialogTitle>
+        {item.title && (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <h2 style={{ margin: "5px" }}>{item.title}</h2>
+          </div>
+        )}
+        <DialogContent dividers>
           <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-            }}
+            className="row"
+            style={{ justifyContent: "space-around", alignItems: "center" }}
           >
-            <div style={{ width: "50%" }}>
+            <div className="row" style={{ alignItems: "center" }}>
               <i
                 className={`fa-solid fa-star fa-xl`}
                 style={{ color: colorB, marginRight: "5%" }}
               ></i>
-              Your Meme
+              <h4 style={{ textWrap: "nowrap", margin: "5%" }}>Your Meme</h4>
+              <Tooltip title="Pick A Different Meme" placement="right-end">
+                <div>
+                  <IconButton
+                    onClick={assignNewMyPlayerCard}
+                    size="small"
+                    sx={{
+                      // backgroundColor: colorB,
+                      color: colorB,
+                    }}
+                    variant="contained"
+                  >
+                    <i className={`fa-solid fa-rotate fa-lg`}></i>
+                  </IconButton>
+                </div>
+              </Tooltip>
             </div>
-            <div style={{ width: "50%" }}>
-              <GuessyButton onClick={assignNewMyPlayerCard} dark={true}>
-                Pick Another
-              </GuessyButton>
-            </div>
           </div>
-        </DialogTitle>
-        {item.title && (
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <h2>{item.title}</h2>
-          </div>
-        )}
-        <DialogContent dividers id="modal-modal-description">
-          <div
-            className="row"
-            style={{ textAlign: "center", alignItems: "center" }}
-          >
-            <h4>This is your meme! Your partner is trying to guess it.</h4>
-          </div>
+          <YourMemeImage item={item} dialogWidth={dialogWidth} />
         </DialogContent>
-        <DialogContent dividers>{content()}</DialogContent>
       </StyledDialog>
     </>
   );

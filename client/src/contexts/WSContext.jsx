@@ -69,7 +69,7 @@ function WSProvider({ children }) {
       try {
         devLog([
           "WSProvider handling message: ",
-          message.type,
+          message?.type,
           // JSON.stringify(message),
         ]);
 

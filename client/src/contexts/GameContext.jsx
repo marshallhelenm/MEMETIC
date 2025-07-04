@@ -60,6 +60,9 @@ function GameProvider({ children }) {
   const createGame = useMemo(() => {
     return () => {
       setLoadingCards(true);
+      setValidGame(false);
+      setAllKeys([]);
+      setColumnsObject({});
       Object.keys(sessionStorage).forEach((key) => {
         if (key.includes(roomKey)) window.sessionStorage.removeItem(key);
       });
@@ -82,17 +85,18 @@ function GameProvider({ children }) {
   useEffect(() => {
     if (lastJsonMessageChanged && lastJsonMessage?.type === "noGameAlert") {
       createGame();
-    } else if (lastGameContentsMessageChanged || !validGame) {
+    } else if (
+      lastGameContentsMessageChanged ||
+      !validGame ||
+      (lastGameContentsMessage?.gameKey &&
+        lastGameContentsMessage.gameKey != gameKey)
+    ) {
       if (
         lastGameContentsMessage?.allKeys &&
         lastGameContentsMessage?.columnsObject
       ) {
-        setAllKeys(lastGameContentsMessage.allKeys.slice(0));
-        setColumnsObject({ ...lastGameContentsMessage.columnsObject });
-        setGameKey(lastGameContentsMessage.gameKey);
-      }
-    } else if (lastGameContentsMessage?.gameKey) {
-      if (lastGameContentsMessage.gameKey != gameKey) {
+        setAllKeys([]);
+        setColumnsObject({});
         setAllKeys(lastGameContentsMessage.allKeys.slice(0));
         setColumnsObject({ ...lastGameContentsMessage.columnsObject });
         setGameKey(lastGameContentsMessage.gameKey);
