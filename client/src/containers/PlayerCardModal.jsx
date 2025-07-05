@@ -15,9 +15,10 @@ import { colorA, colorB } from "../assets/styles";
 import { memeData } from "../assets/memeCollection";
 import { useGame, usePlayers } from "../hooks/useContextHooks";
 import YourMemeImage from "../drawer/YourMemeImage";
+import ObserverStar from "../components/ObserverStar";
 
 const PlayerCardModal = ({ drawerOpen, opacity }) => {
-  const { myPlayerCard, assignNewMyPlayerCard } = usePlayers();
+  const { myPlayerCard, assignNewMyPlayerCard, isObserver } = usePlayers();
   const [open, setOpen] = useState(false);
   const { dialogWidth } = useGame();
   let item = memeData[myPlayerCard];
@@ -31,74 +32,78 @@ const PlayerCardModal = ({ drawerOpen, opacity }) => {
     setOpen(false);
   };
 
-  return (
-    <>
-      <DrawerItem onClick={handleOpen}>
-        <DrawerButton drawerOpen={drawerOpen}>
-          <Tooltip title="Your Meme" placement="right-end">
-            <div>
-              <DrawerIcon
-                onClick={handleOpen}
-                drawerOpen={drawerOpen}
-                icon="star"
-                // classes="player-card-star"
-              />
-            </div>
-          </Tooltip>
-          <ListItemText primary={"Your Meme"} sx={[opacity]} />
-        </DrawerButton>
-      </DrawerItem>
-      <StyledDialog open={open} onClose={handleClose} maxWidth={dialogWidth}>
-        <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={() => ({
-            position: "absolute",
-            right: 10,
-            top: 8,
-            color: colorA,
-          })}
-        >
-          <i className="fa-solid fa-xmark"></i>
-        </IconButton>
-        {item.title && (
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <h2 style={{ margin: "5px" }}>{item.title}</h2>
+  if (isObserver) {
+    return <ObserverStar />;
+  } else {
+    return (
+      <>
+        <Tooltip title="Your Meme" placement="right-end">
+          <div>
+            <DrawerItem onClick={handleOpen}>
+              <DrawerButton drawerOpen={drawerOpen}>
+                <DrawerIcon
+                  onClick={handleOpen}
+                  drawerOpen={drawerOpen}
+                  icon="star"
+                  // classes="player-card-star"
+                />
+                <ListItemText primary={"Your Meme"} sx={[opacity]} />
+              </DrawerButton>
+            </DrawerItem>
           </div>
-        )}
-        <DialogContent dividers>
-          <div
-            className="row"
-            style={{ justifyContent: "space-around", alignItems: "center" }}
+        </Tooltip>
+        <StyledDialog open={open} onClose={handleClose} maxWidth={dialogWidth}>
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={() => ({
+              position: "absolute",
+              right: 10,
+              top: 8,
+              color: colorA,
+            })}
           >
-            <div className="row" style={{ alignItems: "center" }}>
-              <i
-                className={`fa-solid fa-star fa-xl`}
-                style={{ color: colorB, marginRight: "5%" }}
-              ></i>
-              <h4 style={{ textWrap: "nowrap", margin: "5%" }}>Your Meme</h4>
-              <Tooltip title="Pick A Different Meme" placement="right-end">
-                <div>
-                  <IconButton
-                    onClick={assignNewMyPlayerCard}
-                    size="small"
-                    sx={{
-                      // backgroundColor: colorB,
-                      color: colorB,
-                    }}
-                    variant="contained"
-                  >
-                    <i className={`fa-solid fa-rotate fa-lg`}></i>
-                  </IconButton>
-                </div>
-              </Tooltip>
+            <i className="fa-solid fa-xmark"></i>
+          </IconButton>
+          {item.title && (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <h2 style={{ margin: "5px" }}>{item.title}</h2>
             </div>
-          </div>
-          <YourMemeImage item={item} dialogWidth={dialogWidth} />
-        </DialogContent>
-      </StyledDialog>
-    </>
-  );
+          )}
+          <DialogContent dividers>
+            <div
+              className="row"
+              style={{ justifyContent: "space-around", alignItems: "center" }}
+            >
+              <div className="row" style={{ alignItems: "center" }}>
+                <i
+                  className={`fa-solid fa-star fa-xl`}
+                  style={{ color: colorB, marginRight: "5%" }}
+                ></i>
+                <h4 style={{ textWrap: "nowrap", margin: "5%" }}>Your Meme</h4>
+                <Tooltip title="Pick A Different Meme" placement="right-end">
+                  <div>
+                    <IconButton
+                      onClick={assignNewMyPlayerCard}
+                      size="small"
+                      sx={{
+                        // backgroundColor: colorB,
+                        color: colorB,
+                      }}
+                      variant="contained"
+                    >
+                      <i className={`fa-solid fa-rotate fa-lg`}></i>
+                    </IconButton>
+                  </div>
+                </Tooltip>
+              </div>
+            </div>
+            <YourMemeImage item={item} dialogWidth={dialogWidth} />
+          </DialogContent>
+        </StyledDialog>
+      </>
+    );
+  }
 };
 
 PlayerCardModal.propTypes = {

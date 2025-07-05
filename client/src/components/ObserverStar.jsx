@@ -5,7 +5,7 @@ import {
   DrawerButton,
   DrawerIcon,
   DrawerItem,
-} from "../components/DrawerComponents";
+} from "../drawer/DrawerComponents";
 
 const ObserverStar = ({ handleOpen, drawerOpen, opacity }) => {
   return (
@@ -16,7 +16,7 @@ const ObserverStar = ({ handleOpen, drawerOpen, opacity }) => {
             <div>
               <DrawerIcon icon="star" />
             </div>
-            <ListItemText primary={"Your Meme"} sx={[opacity]} />
+            <ListItemText primary={"Observer"} sx={[opacity]} />
           </DrawerButton>
         </DrawerItem>
         Observer

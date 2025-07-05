@@ -17,7 +17,6 @@ import PlayerCardModal from "../containers/PlayerCardModal";
 import GifPauseButton from "./GifPauseButton";
 import QuestionsModal from "./QuestionsModal";
 import ClearGame from "./ClearGame";
-import CopyAlert from "./CopyAlert";
 const Players = lazy(() => import("./Players"));
 import { colorB, colorE } from "../assets/styles";
 import { DrawerButton, DrawerIcon, DrawerItem } from "./DrawerComponents";
@@ -124,12 +123,6 @@ export default function MiniDrawer({ children }) {
 
   const handleCopyKey = () => {
     navigator.clipboard.writeText(roomKey);
-    setAlert(true);
-    if (drawerOpen) {
-      setTimeout(() => {
-        setAlert(false);
-      }, 1500);
-    }
   };
 
   return (
@@ -163,14 +156,6 @@ export default function MiniDrawer({ children }) {
       {/* drawer */}
       <Drawer variant="permanent" open={drawerOpen}>
         <DrawerHeader>
-          {alert && (
-            <CopyAlert
-              severity="success"
-              sx={{ position: "absolute", zIndex: 99 }}
-            >
-              Room Key Copied!
-            </CopyAlert>
-          )}
           <IconButton onClick={handleDrawerClose}>
             <i
               className={`fa-solid fa-chevron-${
