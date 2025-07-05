@@ -1,6 +1,6 @@
 # MEMETIC
 
-A web-based multiplayer game inspired by the classic **“Guess Who?”**, but with **memes** instead of faces! Players ask yes/no questions to guess their opponent’s secret meme. Built with **Vite + React**, **react-use-websocket** for real-time communication, and **Material UI** for sleek styling.
+A web-based multiplayer game inspired by the classic **“Guess Who?”**, but with **memes** instead of cartoon faces! Players ask yes/no questions to guess their opponent’s secret meme. Built with **Vite + React**, **react-use-websocket** for real-time communication, and **Material UI** for sleek styling.
 
 ---
 
@@ -96,7 +96,7 @@ npm run dev
 
 ## 🌐 How to Play
 
-1. Join a game lobby.
+1. Join a game room.
 2. View your dynamically arranged meme board.
 3. Choose your secret meme.
 4. Take turns asking yes/no questions.
@@ -107,10 +107,10 @@ npm run dev
 ## 🙏 Acknowledgments
 
 * Classic *Guess Who?* board game for the concept
-* This [TikTok that inspired the idea](https://ve.media.tumblr.com/tumblr_q8otm9qrlU1w0qmsw.mp4) — “Guess Who? but with memes” is a timeless concept
+* This [TikTok that inspired the idea](https://ve.media.tumblr.com/tumblr_q8otm9qrlU1w0qmsw.mp4)
 * Meme creators everywhere
-* [Know Your Meme](https://knowyourmeme.com) for meme research and context
-* [en.meming.world](https://en.meming.world) for meme templates and ideas
+* [Know Your Meme](https://knowyourmeme.com)
+* [en.meming.world](https://en.meming.world)
 * [Material UI](https://mui.com/) for UI components
 
 ---
@@ -130,7 +130,6 @@ npm run dev
 ![full board](./client/src/assets/demo/full_board.png)
 ![smaller board](./client/src/assets/demo/smaller_board.png)
 
-![flipped cards](./client/src/assets/demo/flipped_cards.png)
 ![overlay](./client/src/assets/demo/overlay.png)
 ![your meme](./client/src/assets/demo/your_meme.png)
 ![sidebar](./client/src/assets/demo/sidebar.png)

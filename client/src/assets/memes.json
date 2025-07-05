@@ -18,6 +18,12 @@
     "alt": "I Wish All Lesbians a Very Pleasant Evening",
     "height_multiplier": 0.625
   },
+  "afraid_to_ask": {
+    "title": "I Don't Understand This Meme And At This Point I'm Too Afraid To Ask ",
+    "img": "afraid_to_ask.png",
+    "origin": "https://knowyourmeme.com/memes/i-dont-understand-this-meme-and-at-this-point-im-too-afraid-to-ask",
+    "height_multiplier": 0.9615384615384615
+  },
   "all_coming_together": {
     "title": "Oh Yeah, It's All Coming Together",
     "img": "all_coming_together.jpg",
@@ -1083,6 +1089,12 @@
     "origin": "https://knowyourmeme.com/photos/1845983-its-always-sunny-in-philadelphia",
     "alt": "How do three men in their 30s not have $800 between them? LIU They're-- The economy is in shambles.",
     "height_multiplier": 1.5625
+  },
+  "the_final_pam": {
+    "title": "The Final Pam",
+    "img": "the_final_pam.png",
+    "origin": "https://knowyourmeme.com/memes/the-final-pam",
+    "height_multiplier": 0.5617977528089888
   },
   "the_more_you_know": {
     "title": "The More You Know",
