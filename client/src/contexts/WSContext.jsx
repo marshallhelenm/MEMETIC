@@ -65,15 +65,14 @@ function WSProvider({ children }) {
 
     socket.onmessage = () => {
       let message = lastJsonMessage;
+      devLog([
+        "WSProvider handling message: ",
+        message?.type,
+        // JSON.stringify(message),
+      ]);
       if (!message) return;
       setLastMessageReceivedAt(Date.now());
       try {
-        // devLog([
-        //   "WSProvider handling message: ",
-        //   message?.type,
-        //   // JSON.stringify(message),
-        // ]);
-
         if (!uuidRef.current && message.type != "uuid") {
           // we're not ready to receive messages, ask for a uuid
           sendJsonMessage({
