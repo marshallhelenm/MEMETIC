@@ -18,8 +18,13 @@ function PlayersProvider({ children }) {
   const [myPlayerCard, setMyPlayerCard] = useState(
     sessionStorage.getItem(`guessy-${roomKey}-player-card`)
   );
-  const [otherPlayers, setOtherPlayers] = useState([]);
-  const lastMessageRef = useRef(lastJsonMessage);
+  const [players, setPlayers] = useState([]);
+  const allPlayersRef = useRef("");
+  const [player1Uuid, setPlayer1Uuid] = useState("");
+  const [player2Uuid, setPlayer2Uuid] = useState("");
+  const isObserver = ![player1Uuid, player2Uuid].includes(
+    sessionStorage.getItem("guessy-uuid")
+  );
 
   // ** Functions
 
@@ -37,16 +42,16 @@ function PlayersProvider({ children }) {
   // **UseEffect
 
   useEffect(() => {
-    if (lastMessageRef.current != lastJsonMessage) {
-      lastMessageRef.current = lastJsonMessage;
+    let allPlayers = "";
+    if (lastJsonMessage.players) {
+      allPlayers = Object.keys(lastJsonMessage.players).join();
+    }
+    if (allPlayersRef.current != allPlayers) {
       if (lastJsonMessage?.players) {
-        let players = lastJsonMessage.players;
-        let incomingPlayerNames = [];
-        Object.keys(players).forEach((uuid) => {
-          if (uuid != sessionStorage.getItem("guessy-uuid"))
-            incomingPlayerNames.push(players[uuid]);
-        });
-        setOtherPlayers(incomingPlayerNames.slice(0));
+        setPlayers({ ...lastJsonMessage.players });
+        setPlayer1Uuid(lastJsonMessage.player1Uuid);
+        setPlayer2Uuid(lastJsonMessage.player2Uuid);
+        allPlayersRef.current = allPlayers;
       }
     }
     if (!myPlayerCard || myPlayerCard == "" || gameKeyRef.current != gameKey) {
@@ -55,8 +60,6 @@ function PlayersProvider({ children }) {
     }
   }, [
     lastJsonMessage,
-    lastMessageRef,
-    otherPlayers,
     assignNewMyPlayerCard,
     myPlayerCard,
     gameKeyRef,
@@ -68,9 +71,19 @@ function PlayersProvider({ children }) {
     return {
       myPlayerCard,
       assignNewMyPlayerCard,
-      otherPlayers,
+      players,
+      isObserver,
+      player1Uuid,
+      player2Uuid,
     };
-  }, [myPlayerCard, assignNewMyPlayerCard, otherPlayers]);
+  }, [
+    myPlayerCard,
+    assignNewMyPlayerCard,
+    players,
+    isObserver,
+    player1Uuid,
+    player2Uuid,
+  ]);
 
   // ** render provider:
   return (

@@ -65,11 +65,11 @@ function WSProvider({ children }) {
 
     socket.onmessage = () => {
       let message = lastJsonMessage;
-      devLog([
-        "WSProvider handling message: ",
-        message?.type,
-        // JSON.stringify(message),
-      ]);
+      // devLog([
+      //   "WSProvider handling message: ",
+      //   message?.type,
+      //   // JSON.stringify(message),
+      // ]);
       if (!message) return;
       setLastMessageReceivedAt(Date.now());
       try {
@@ -98,9 +98,6 @@ function WSProvider({ children }) {
             if (message?.allKeys && message?.columnsObject) {
               setLastGameContentsMessage({ ...lastJsonMessage });
             }
-            break;
-          case "playersUpdate":
-            // nothin to do, but it IS an expected message type. PlayersContext handles this one.
             break;
           default:
             devLog([

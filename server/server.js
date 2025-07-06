@@ -15,7 +15,10 @@ const emptyRoomTemplate = {
   columnsObject: {},
   allKeys: [],
   players: {},
+  player1Uuid: null,
+  player2Uuid: null,
 };
+
 const emptyPlayerTemplate = {
   uuid: undefined,
   username: undefined,
@@ -33,8 +36,14 @@ const handleMessage = (bytes, uuid, connection) => {
     if (!roomKey) return;
 
     let room = rooms[roomKey];
-    if (!room) room = { ...emptyRoomTemplate };
-
+    if (!room) {
+      room = { ...emptyRoomTemplate };
+    }
+    if (!room.player1Uuid) {
+      room.player1Uuid = uuid;
+    } else if (!room.player2Uuid && room.player1Uuid != uuid) {
+      room.player2Uuid = uuid;
+    }
     let player = players[uuid];
     if (!player) player = { ...emptyPlayerTemplate };
 
@@ -149,6 +158,8 @@ const sendGameContentsToUuid = (roomKey, uuid) => {
     columnsObject: room.columnsObject,
     players: room.players,
     gameKey: room.gameKey,
+    player1Uuid: room.player1Uuid,
+    player2Uuid: room.player2Uuid,
   });
 };
 

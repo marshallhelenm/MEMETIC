@@ -7,19 +7,19 @@ import {
   DrawerItem,
 } from "../drawer/DrawerComponents";
 
-const ObserverStar = ({ handleOpen, drawerOpen, opacity }) => {
+const ObserverStar = ({ drawerOpen, opacity }) => {
   return (
-    <Tooltip title="This room is full! You're just an observer here.">
+    <Tooltip
+      title="This room is full! You're just an observer here."
+      placement="right-end"
+    >
       <div>
-        <DrawerItem onClick={handleOpen}>
+        <DrawerItem>
           <DrawerButton drawerOpen={drawerOpen}>
-            <div>
-              <DrawerIcon icon="star" />
-            </div>
+            <DrawerIcon icon="star" drawerOpen={drawerOpen} />
             <ListItemText primary={"Observer"} sx={[opacity]} />
           </DrawerButton>
         </DrawerItem>
-        Observer
       </div>
     </Tooltip>
   );

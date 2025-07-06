@@ -33,13 +33,13 @@ const PlayerCardModal = ({ drawerOpen, opacity }) => {
   };
 
   if (isObserver) {
-    return <ObserverStar />;
+    return <ObserverStar drawerOpen={drawerOpen} opacity={opacity} />;
   } else {
     return (
       <>
-        <Tooltip title="Your Meme" placement="right-end">
-          <div>
-            <DrawerItem onClick={handleOpen}>
+        <DrawerItem onClick={handleOpen}>
+          <Tooltip title="Your Meme" placement="right-end">
+            <div>
               <DrawerButton drawerOpen={drawerOpen}>
                 <DrawerIcon
                   onClick={handleOpen}
@@ -49,9 +49,9 @@ const PlayerCardModal = ({ drawerOpen, opacity }) => {
                 />
                 <ListItemText primary={"Your Meme"} sx={[opacity]} />
               </DrawerButton>
-            </DrawerItem>
-          </div>
-        </Tooltip>
+            </div>
+          </Tooltip>
+        </DrawerItem>
         <StyledDialog open={open} onClose={handleClose} maxWidth={dialogWidth}>
           <IconButton
             aria-label="close"

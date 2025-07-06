@@ -41,7 +41,6 @@ function Upload() {
           var XL_row_object = XLSX.utils.sheet_to_row_object_array(
             workbook.Sheets[sheetName]
           );
-          devLog(XL_row_object);
           $("#xlx_json").val(guessifyData(XL_row_object));
           return;
         });

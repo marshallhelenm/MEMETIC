@@ -4,32 +4,56 @@ import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import Tooltip from "@mui/material/Tooltip";
 
 import { usePlayers } from "../hooks/useContextHooks";
 
 function Players() {
   const [searchParams] = useSearchParams();
   const myUsername = searchParams.get("username");
-  const { otherPlayers } = usePlayers();
+  const { players, player1Uuid, player2Uuid } = usePlayers();
+  const myUuid = sessionStorage.getItem("guessy-uuid");
+
+  function star(uuid) {
+    if (player1Uuid == uuid) {
+      return (
+        <Tooltip placement="right-end" title="Player 1">
+          <i className={`fa-regular fa-sun fa-md`} style={{ opacity: 0.8 }}></i>
+        </Tooltip>
+      );
+    } else if (player2Uuid == uuid) {
+      return (
+        <Tooltip placement="right-end" title="Player 2">
+          <i
+            className={`fa-regular fa-star fa-md`}
+            style={{ opacity: 0.8 }}
+          ></i>
+        </Tooltip>
+      );
+    }
+  }
 
   function generateOtherPlayers() {
-    let otherPlayersItems = [];
-    otherPlayers.forEach((p) => {
-      otherPlayersItems.push(
-        <ListItem key={"player-" + p}>
-          <i
-            className={`fa-regular fa-user fa-md`}
-            style={{
-              marginRight: "5%",
-              colorScheme: "light dark",
-              opacity: 0.8,
-            }}
-          ></i>
-          <ListItemText primary={p} />
-        </ListItem>
-      );
+    let playersItems = [];
+    Object.keys(players).forEach((uuid) => {
+      if (uuid != myUuid) {
+        playersItems.push(
+          <ListItem key={"player-" + players[uuid]}>
+            <i
+              className={`fa-regular fa-user fa-md`}
+              style={{
+                marginRight: "5%",
+                colorScheme: "light dark",
+                opacity: 0.8,
+              }}
+            ></i>
+            <ListItemText primary={players[uuid]} />
+            {star(uuid)}
+          </ListItem>
+        );
+      }
     });
-    return otherPlayersItems;
+    return playersItems;
   }
 
   return (
@@ -47,6 +71,7 @@ function Players() {
               }}
             ></i>
             <ListItemText primary={myUsername} />
+            {star(myUuid)}
           </ListItem>
 
           {generateOtherPlayers()}
