@@ -105,20 +105,13 @@ const joinRoom = ({ roomKey, uuid, username }) => {
     room.columnsObject &&
     Object.keys(room.columnsObject).length > 0 &&
     room.allKeys.length == 24;
+
   if (validRoom) {
-    sendGameContentsToUuid(roomKey, uuid);
+    broadcastGameContents(roomKey);
   } else {
     // if there is no valid room, send a noGameAlert
     noGameAlert(roomKey, uuid);
   }
-  broadcast(
-    roomKey,
-    {
-      type: "playersUpdate",
-      players: room.players,
-    },
-    uuid
-  );
 };
 
 // ** broadcast methods
