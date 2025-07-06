@@ -7,12 +7,14 @@ import ListItemText from "@mui/material/ListItemText";
 import Tooltip from "@mui/material/Tooltip";
 
 import { usePlayers } from "../hooks/useContextHooks";
+import Player2Star from "./Player2Star";
 
 function Players() {
   const [searchParams] = useSearchParams();
   const myUsername = searchParams.get("username");
   const { players, player1Uuid, player2Uuid } = usePlayers();
   const myUuid = sessionStorage.getItem("guessy-uuid");
+  const isPlayer1 = myUuid == player1Uuid;
 
   function star(uuid) {
     if (player1Uuid == uuid) {
@@ -23,12 +25,10 @@ function Players() {
       );
     } else if (player2Uuid == uuid) {
       return (
-        <Tooltip placement="right-end" title="Player 2">
-          <i
-            className={`fa-regular fa-star fa-md`}
-            style={{ opacity: 0.8 }}
-          ></i>
-        </Tooltip>
+        <Player2Star
+          canDemote={isPlayer1 && Object.keys(players).length > 2}
+          uuid={uuid}
+        />
       );
     }
   }
@@ -73,7 +73,6 @@ function Players() {
             <ListItemText primary={myUsername} />
             {star(myUuid)}
           </ListItem>
-
           {generateOtherPlayers()}
         </List>
       </div>

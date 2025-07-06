@@ -11,7 +11,7 @@ const PlayersContext = createContext();
 
 function PlayersProvider({ children }) {
   const [searchParams] = useSearchParams();
-  const { lastJsonMessage } = useWS();
+  const { lastJsonMessage, sendJsonMessage } = useWS();
   const { allKeys, gameKey } = useGame();
   const gameKeyRef = useRef(gameKey);
   const roomKey = searchParams.get("roomKey");
@@ -39,6 +39,15 @@ function PlayersProvider({ children }) {
     };
   }, [allKeys, roomKey, gameKey]);
 
+  const demotePlayer2 = useMemo(() => {
+    return function (demoteeUuid) {
+      if (demoteeUuid == player2Uuid) {
+        setPlayer2Uuid("");
+        sendJsonMessage({ type: "demotePlayer2", roomKey });
+      }
+    };
+  }, [player2Uuid, sendJsonMessage, roomKey]);
+
   // **UseEffect
 
   useEffect(() => {
@@ -53,6 +62,11 @@ function PlayersProvider({ children }) {
         setPlayer2Uuid(lastJsonMessage.player2Uuid);
         allPlayersRef.current = allPlayers;
       }
+    } else if (
+      lastJsonMessage.player2Uuid &&
+      player2Uuid != lastJsonMessage.player2Uuid
+    ) {
+      setPlayer2Uuid(lastJsonMessage.player2Uuid);
     }
     if (!myPlayerCard || myPlayerCard == "" || gameKeyRef.current != gameKey) {
       assignNewMyPlayerCard();
@@ -64,6 +78,7 @@ function PlayersProvider({ children }) {
     myPlayerCard,
     gameKeyRef,
     gameKey,
+    player2Uuid,
   ]);
 
   //  ** value for the context provider **
@@ -75,6 +90,7 @@ function PlayersProvider({ children }) {
       isObserver,
       player1Uuid,
       player2Uuid,
+      demotePlayer2,
     };
   }, [
     myPlayerCard,
@@ -83,6 +99,7 @@ function PlayersProvider({ children }) {
     isObserver,
     player1Uuid,
     player2Uuid,
+    demotePlayer2,
   ]);
 
   // ** render provider:

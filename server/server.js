@@ -47,11 +47,23 @@ const handleMessage = (bytes, uuid, connection) => {
     let player = players[uuid];
     if (!player) player = { ...emptyPlayerTemplate };
 
+    let roomPlayerKeys = Object.keys(room.players);
+
     switch (message.type) {
       case "acceptUuid":
         connections[uuid] = connection;
         if (!player) players[uuid] = { ...emptyPlayerTemplate };
         console.log(`New connection established with UUID: ${uuid}`);
+        break;
+      case "demotePlayer2":
+        for (let i = 0; i < roomPlayerKeys.length; i++) {
+          let u = roomPlayerKeys[i];
+          if (u != room.player1Uuid && u != room.player2Uuid) {
+            room.player2Uuid = u;
+            i = 999;
+          }
+        }
+        broadcastGameContents(message.roomKey);
         break;
       case "setGame":
         if (!room) {

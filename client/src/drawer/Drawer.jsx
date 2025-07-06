@@ -17,7 +17,7 @@ import PlayerCardModal from "../containers/PlayerCardModal";
 import GifPauseButton from "./GifPauseButton";
 import QuestionsModal from "./QuestionsModal";
 import ClearGame from "./ClearGame";
-const Players = lazy(() => import("./Players"));
+import Players from "./Players";
 import { colorB, colorE } from "../assets/styles";
 import { DrawerButton, DrawerIcon, DrawerItem } from "./DrawerComponents";
 import { GuessySuspense } from "../components/GuessySuspense";
