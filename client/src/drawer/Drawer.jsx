@@ -21,6 +21,7 @@ import Players from "./Players";
 import { colorB, colorE } from "../assets/styles";
 import { DrawerButton, DrawerIcon, DrawerItem } from "./DrawerComponents";
 import { GuessySuspense } from "../components/GuessySuspense";
+import { usePlayers } from "../hooks/useContextHooks";
 
 const drawerWidth = 200;
 
@@ -106,12 +107,13 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer({ children }) {
+  const theme = useTheme();
   const [searchParams] = useSearchParams();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [alert, setAlert] = useState(false);
-  const theme = useTheme();
+  const { player1Uuid } = usePlayers();
   const roomKey = searchParams.get("roomKey");
   const opacity = drawerOpen ? { opacity: 1 } : { opacity: 0 };
+  const isPlayer1 = sessionStorage.getItem("guessy-uuid") == player1Uuid;
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -186,7 +188,7 @@ export default function MiniDrawer({ children }) {
           {/* Player Meme */}
           <PlayerCardModal drawerOpen={drawerOpen} opacity={opacity} />
           {/* Clear Game */}
-          <ClearGame opacity={opacity} drawerOpen={drawerOpen} />
+          {isPlayer1 && <ClearGame opacity={opacity} drawerOpen={drawerOpen} />}
           <QuestionsModal opacity={opacity} drawerOpen={drawerOpen} />
           <DrawerItem
             onClick={() => {

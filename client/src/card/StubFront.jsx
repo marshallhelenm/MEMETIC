@@ -6,12 +6,13 @@ import Overlay from "./Overlay";
 import { colorE, colorG } from "../assets/styles";
 import goldStar from "../assets/goldStar.png";
 import { Tooltip } from "@mui/material";
+import { usePlayers } from "../hooks/useContextHooks";
 
 function StubFront({ itemKey, item, isPlayerCard, flip, height }) {
   const [overlay, setOverlay] = useState(false);
-
+  const { isObserver } = usePlayers();
   function playerStar() {
-    if (!isPlayerCard) return;
+    if (!isPlayerCard || isObserver) return;
     return (
       <Tooltip title="This is your meme!" placement="right-end">
         <img src={goldStar} className="player-card-star absolute"></img>
@@ -28,7 +29,7 @@ function StubFront({ itemKey, item, isPlayerCard, flip, height }) {
         style={{
           height: `${height}px`,
           backgroundImage: "images/bgq1.png",
-          backgroundColor: isPlayerCard ? colorG : colorE,
+          backgroundColor: isPlayerCard && !isObserver ? colorG : colorE,
         }}
         onClick={flip}
         onMouseEnter={() => setOverlay(true)}
