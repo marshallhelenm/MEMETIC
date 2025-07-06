@@ -3,9 +3,13 @@ import { useState } from "react";
 
 import CardModal from "./CardModal";
 import MemeOrigin from "./MemeOrigin";
+import GuessCard from "../components/GuessCard";
+import { usePlayers } from "../hooks/useContextHooks";
 
 function Overlay({ item, overlay, itemKey }) {
   const [modalOpen, setModalOpen] = useState(false);
+  const { isObserver } = usePlayers;
+
   if (modalOpen || overlay) {
     return (
       <div className="overlay">
@@ -23,13 +27,15 @@ function Overlay({ item, overlay, itemKey }) {
             />
           </CardModal>
         </div>
-        {/* <div className="overlay-item">
-          <GuessCard
-            item={item}
-            setModalOpen={setModalOpen}
-            itemKey={itemKey}
-          />
-        </div> */}
+        {!isObserver && (
+          <div className="overlay-item">
+            <GuessCard
+              item={item}
+              setModalOpen={setModalOpen}
+              itemKey={itemKey}
+            />
+          </div>
+        )}
       </div>
     );
   }

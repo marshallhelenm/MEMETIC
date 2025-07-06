@@ -18,13 +18,15 @@ function PlayersProvider({ children }) {
   const [myPlayerCard, setMyPlayerCard] = useState(
     sessionStorage.getItem(`guessy-${roomKey}-player-card`)
   );
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState({});
   const allPlayersRef = useRef("");
   const [player1Uuid, setPlayer1Uuid] = useState("");
   const [player2Uuid, setPlayer2Uuid] = useState("");
   const isObserver = ![player1Uuid, player2Uuid].includes(
     sessionStorage.getItem("guessy-uuid")
   );
+  const player1Card = players[player1Uuid]?.card;
+  const player2Card = players[player2Uuid]?.card;
 
   // ** Functions
 
@@ -52,21 +54,23 @@ function PlayersProvider({ children }) {
 
   useEffect(() => {
     let allPlayers = "";
+
+    console.log("PlayersContext", lastJsonMessage);
     if (lastJsonMessage.players) {
       allPlayers = Object.keys(lastJsonMessage.players).join();
-    }
-    if (allPlayersRef.current != allPlayers) {
-      if (lastJsonMessage?.players) {
-        setPlayers({ ...lastJsonMessage.players });
-        setPlayer1Uuid(lastJsonMessage.player1Uuid);
+      if (allPlayersRef.current != allPlayers) {
+        if (lastJsonMessage?.players) {
+          setPlayers({ ...lastJsonMessage.players });
+          setPlayer1Uuid(lastJsonMessage.player1Uuid);
+          setPlayer2Uuid(lastJsonMessage.player2Uuid);
+          allPlayersRef.current = allPlayers;
+        }
+      } else if (
+        lastJsonMessage.player2Uuid &&
+        player2Uuid != lastJsonMessage.player2Uuid
+      ) {
         setPlayer2Uuid(lastJsonMessage.player2Uuid);
-        allPlayersRef.current = allPlayers;
       }
-    } else if (
-      lastJsonMessage.player2Uuid &&
-      player2Uuid != lastJsonMessage.player2Uuid
-    ) {
-      setPlayer2Uuid(lastJsonMessage.player2Uuid);
     }
     if (!myPlayerCard || myPlayerCard == "" || gameKeyRef.current != gameKey) {
       assignNewMyPlayerCard();
@@ -91,6 +95,8 @@ function PlayersProvider({ children }) {
       player1Uuid,
       player2Uuid,
       demotePlayer2,
+      player1Card,
+      player2Card,
     };
   }, [
     myPlayerCard,
@@ -100,6 +106,8 @@ function PlayersProvider({ children }) {
     player1Uuid,
     player2Uuid,
     demotePlayer2,
+    player1Card,
+    player2Card,
   ]);
 
   // ** render provider:

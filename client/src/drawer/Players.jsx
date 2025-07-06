@@ -38,7 +38,7 @@ function Players() {
     Object.keys(players).forEach((uuid) => {
       if (uuid != myUuid) {
         playersItems.push(
-          <ListItem key={"player-" + players[uuid]}>
+          <ListItem key={"player-" + players[uuid].username}>
             <i
               className={`fa-regular fa-user fa-md`}
               style={{
@@ -47,7 +47,7 @@ function Players() {
                 opacity: 0.8,
               }}
             ></i>
-            <ListItemText primary={players[uuid]} />
+            <ListItemText primary={players[uuid].username} />
             {star(uuid)}
           </ListItem>
         );

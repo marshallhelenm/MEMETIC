@@ -22,6 +22,7 @@ const emptyRoomTemplate = {
 const emptyPlayerTemplate = {
   uuid: undefined,
   username: undefined,
+  card: undefined,
 };
 
 // ** Message Handling
@@ -115,11 +116,15 @@ const joinRoom = ({ roomKey, uuid, username }) => {
   });
 
   // add em
-  if (!room.players[uuid]) room.players[uuid] = player.username;
+  let roomPlayer = room.players[uuid];
+  if (!roomPlayer) room.players[uuid] = { ...emptyPlayerTemplate };
 
   player.uuid = uuid;
+  roomPlayer.uuid = uuid;
+
   if (username && username != "undefined") {
     player.username = username;
+    roomPlayer.username = username;
   }
 
   const validRoom =
