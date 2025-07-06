@@ -34,12 +34,16 @@ function PlayersProvider({ children }) {
     return function () {
       let newCard = randomCardKey(allKeys);
       setMyPlayerCard(newCard);
-      sessionStorage.setItem(`guessy-${roomKey}-player-card`, newCard);
+      sessionStorage.setItem(
+        `guessy-${roomKey}-player-card-${gameKey}`,
+        newCard
+      );
       sessionStorage.removeItem(
         `guessy-${roomKey}-player-card-${Number(gameKey) - 1}`
       );
+      sendJsonMessage({ type: "setPlayerCard", roomKey, card: newCard });
     };
-  }, [allKeys, roomKey, gameKey]);
+  }, [allKeys, roomKey, gameKey, sendJsonMessage]);
 
   const demotePlayer2 = useMemo(() => {
     return function (demoteeUuid) {
@@ -54,10 +58,8 @@ function PlayersProvider({ children }) {
 
   useEffect(() => {
     let allPlayers = "";
-
-    console.log("PlayersContext", lastJsonMessage);
     if (lastJsonMessage.players) {
-      allPlayers = Object.keys(lastJsonMessage.players).join();
+      allPlayers = JSON.stringify(lastJsonMessage.players);
       if (allPlayersRef.current != allPlayers) {
         if (lastJsonMessage?.players) {
           setPlayers({ ...lastJsonMessage.players });

@@ -19,7 +19,7 @@ function PlayPage() {
     serverError,
     sendJsonMessage,
   } = useWS();
-  const { validGame } = useGame();
+  const { validGame, gameKey } = useGame();
   const [attempts, setAttempts] = useState(0);
   const roomKey = searchParams.get("roomKey");
 
@@ -38,6 +38,9 @@ function PlayPage() {
           type: "joinRoom",
           roomKey,
           username: searchParams.get("username"),
+          card: sessionStorage.getItem(
+            `guessy-${roomKey}-player-card-${gameKey}`
+          ),
         });
         setAttempts((a) => a++);
       }, 500);
@@ -52,6 +55,7 @@ function PlayPage() {
     navigate,
     roomKey,
     sendJsonMessage,
+    gameKey,
   ]);
 
   // ** RENDER

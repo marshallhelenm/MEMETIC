@@ -83,11 +83,11 @@ function GameProvider({ children }) {
 
   // **UseEffect
   useEffect(() => {
-    console.log(
-      "GameContext: lastGameContentsMessage: ",
-      JSON.stringify(lastGameContentsMessage.gameKey),
-      gameKey
-    );
+    // console.log(
+    //   "GameContext: lastGameContentsMessage: ",
+    //   JSON.stringify(lastGameContentsMessage.gameKey),
+    //   gameKey
+    // );
 
     if (lastJsonMessageChanged && lastJsonMessage?.type === "noGameAlert") {
       createGame();

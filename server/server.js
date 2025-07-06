@@ -77,6 +77,10 @@ const handleMessage = (bytes, uuid, connection) => {
 
         broadcastGameContents(message.roomKey);
         break;
+      case "setPlayerCard":
+        if (message.card) room.players[uuid].card = message.card;
+        broadcastGameContents(roomKey);
+        break;
       case "joinRoom":
         joinRoom({
           roomKey: message.roomKey,
@@ -118,6 +122,7 @@ const joinRoom = ({ roomKey, uuid, username }) => {
   // add em
   let roomPlayer = room.players[uuid];
   if (!roomPlayer) room.players[uuid] = { ...emptyPlayerTemplate };
+  roomPlayer = room.players[uuid];
 
   player.uuid = uuid;
   roomPlayer.uuid = uuid;
