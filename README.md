@@ -13,6 +13,8 @@ A web-based multiplayer game inspired by the classic **“Guess Who?”**, but w
 * ⚡️ Fast development with Vite
 * 🎞️ Toggle to play GIFs only when hovered
 * 🔗 Link to meme source shown on hover
+* 🎯 Guess Opponent’s Card with confirmation prompts and win-condition logic
+* 🧑‍🤝‍🧑 Two-Player Rooms with Observer Mode
 
 ---
 
@@ -29,8 +31,6 @@ This project includes a custom algorithm to **dynamically arrange meme images** 
 ## 📌 TODO
 
 * ⏳ Dockerize for deployment
-* ⏳ Implement “guess opponent’s card” feature (with confirmation / win logic)
-* ⏳ Limit rooms to two players + observers (spectator mode)
 * ⏳ Chat between players
 * ⏳ Specific alternate still images for gifs
 
