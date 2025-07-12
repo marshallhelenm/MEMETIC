@@ -26,6 +26,9 @@ function WSProvider({ children }) {
     { share: false, shouldReconnect: () => true }
   );
   const [lastGameContentsMessage, setLastGameContentsMessage] = useState({});
+  const [lastMessageReceivedAt, setLastMessageReceivedAt] = useState(
+    Date.now()
+  );
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting",
@@ -37,50 +40,6 @@ function WSProvider({ children }) {
   const connectionError =
     connectionStatus == "Closed" && connectionAttemptsRef.current > 10;
   const connectionOpen = connectionStatus == "Open";
-
-  const handleIncomingMessage = useMemo(() => {
-    return () => {
-      let message = lastJsonMessage;
-      if (!message) return;
-      try {
-        if (!uuidRef.current && message.type != "uuid") {
-          // we're not ready to receive messages, ask for a uuid
-          sendJsonMessage({
-            type: "requestUuid",
-          });
-          return;
-        }
-
-        switch (message.type) {
-          case "serverError":
-            setServerError(JSON.parse(message.error));
-            break;
-          case "uuid":
-            if (!uuidRef.current) {
-              sessionStorage.setItem("guessy-uuid", message.uuid);
-              uuidRef.current = message.uuid;
-              sendJsonMessage({
-                type: "acceptUuid",
-              });
-            }
-            break;
-          case "gameContents":
-            if (message?.allKeys && message?.columnsObject) {
-              setLastGameContentsMessage({ ...lastJsonMessage });
-            }
-            break;
-          default:
-            devLog([
-              "Unhandled message type in WSProvider:",
-              message.type,
-              message,
-            ]);
-        }
-      } catch (error) {
-        devLog(["Error in WSProvider", error, JSON.stringify(message)]);
-      }
-    };
-  }, []);
 
   useEffect(() => {
     const socket = new WebSocket("wss://echo.websocket.events/");
@@ -107,7 +66,46 @@ function WSProvider({ children }) {
     socket.onclose = () => (isReadyRef.current = false);
 
     socket.onmessage = () => {
-      handleIncomingMessage();
+      let message = lastJsonMessage;
+      if (!message) return;
+      setLastMessageReceivedAt(Date.now());
+      try {
+        if (!uuidRef.current && message.type != "uuid") {
+          // we're not ready to receive messages, ask for a uuid
+          sendJsonMessage({
+            type: "requestUuid",
+          });
+          return;
+        }
+
+        switch (message.type) {
+          case "serverError":
+            setServerError(JSON.parse(message.error));
+            break;
+          case "uuid":
+            if (!sessionStorage.getItem("guessy-uuid") || !uuidRef.current) {
+              sessionStorage.setItem("guessy-uuid", message.uuid);
+              uuidRef.current = message.uuid;
+              sendJsonMessage({
+                type: "acceptUuid",
+              });
+            }
+            break;
+          case "gameContents":
+            if (message?.allKeys && message?.columnsObject) {
+              setLastGameContentsMessage({ ...lastJsonMessage });
+            }
+            break;
+          default:
+            devLog([
+              "Unhandled message type in WSProvider:",
+              message.type,
+              message,
+            ]);
+        }
+      } catch (error) {
+        devLog(["Error in WSProvider", error, JSON.stringify(message)]);
+      }
     };
 
     ws.current = socket;
@@ -130,12 +128,14 @@ function WSProvider({ children }) {
       sendJsonMessage,
       readyState,
       lastJsonMessage,
+      connectionStatus,
       connectionError,
       connectionOpen,
       uuidRef,
       tryingToConnect: tryingToConnectRef.current,
       serverError,
       setServerError,
+      lastMessageReceivedAt,
       lastGameContentsMessage,
     };
   }, [
@@ -143,12 +143,14 @@ function WSProvider({ children }) {
     sendJsonMessage,
     readyState,
     lastJsonMessage,
+    connectionStatus,
     connectionError,
     connectionOpen,
     tryingToConnectRef,
     serverError,
     setServerError,
     uuidRef,
+    lastMessageReceivedAt,
     lastGameContentsMessage,
   ]);
 

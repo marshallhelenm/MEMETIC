@@ -65,20 +65,9 @@ function GameProvider({ children }) {
 
   // **UseEffect
   useEffect(() => {
-    if (columnsObjectChanged || allKeysChanged) {
-      setLoadingCards(false);
-      setValidGame(
-        allKeys.length == 24 && Object.keys(columnsObject).length == 6
-      );
-    }
-  }, []);
-
-  useEffect(() => {
     if (lastJsonMessageChanged && lastJsonMessage?.type === "noGameAlert") {
       createGame();
-      return;
-    }
-    if (
+    } else if (
       lastGameContentsMessageChanged ||
       !validGame ||
       (lastGameContentsMessage?.gameKey &&
@@ -95,6 +84,12 @@ function GameProvider({ children }) {
         setGameKey(lastGameContentsMessage.gameKey);
       }
     }
+    if (columnsObjectChanged || allKeysChanged) {
+      setLoadingCards(false);
+      setValidGame(
+        allKeys.length == 24 && Object.keys(columnsObject).length == 6
+      );
+    }
   }, [
     allKeys,
     columnsObject,
@@ -109,7 +104,7 @@ function GameProvider({ children }) {
     gameKey,
   ]);
 
-  //  ** return value for the context provider **
+  //  ** value for the context provider **
   const value = useMemo(() => {
     return {
       createGame,
