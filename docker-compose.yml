@@ -1,17 +1,17 @@
 services:
   ws:
-    container_name: guessy_ws_server
+    container_name: memetic_ws_server
     build:
       context: ./server
       dockerfile: Dockerfile
-    image: guessy/server
+    image: memetic/server
     command: node server.js
     ports:
-      - "6969:8080"
+      - "8000:8080"
     restart: on-failure
 
   react-app:
-    container_name: guessy_react_app
+    container_name: memetic_react_app
     build: 
       context: ./client
       dockerfile: Dockerfile
@@ -24,7 +24,7 @@ services:
             - node_modules/
         - action: rebuild
           path: package.json
-    image: guessy/client
+    image: memetic/client
     command: npm run dev --host
     ports:
       - "5173:3000"

@@ -1,3 +1,5 @@
+import React from "react";
+import PropTypes from "prop-types";
 import { useState } from "react";
 import ReactCardFlip from "react-card-flip";
 
@@ -52,5 +54,13 @@ function StubCard({ roomKey, itemKey, item }) {
     </div>
   );
 }
+
+StubCard.propTypes = {
+  item: PropTypes.shape({
+    height_multiplier: PropTypes.number,
+  }),
+  itemKey: PropTypes.string,
+  roomKey: PropTypes.string,
+};
 
 export default StubCard;

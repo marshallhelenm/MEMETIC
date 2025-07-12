@@ -1,9 +1,14 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import eslint from 'vite-plugin-eslint'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import eslint from "vite-plugin-eslint";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  resolve: {
+    alias: {
+      crypto: "crypto-browserify",
+    },
+  },
   plugins: [react(), eslint()],
   build: {
     chunkSizeWarningLimit: 1000,

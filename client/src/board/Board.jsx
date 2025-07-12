@@ -1,3 +1,4 @@
+import React from "react";
 import { useRef, useEffect, lazy, Suspense } from "react";
 
 import LoadingColumns from "./LoadingColumns";
