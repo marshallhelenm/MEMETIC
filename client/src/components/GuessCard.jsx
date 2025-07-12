@@ -20,6 +20,7 @@ function GuessCard({ setModalOpen, itemKey, testId }) {
   const myUuid = sessionStorage.getItem("guessy-uuid");
   const isPlayer1 = myUuid == player1Uuid;
   const isPlayer2 = myUuid == player2Uuid;
+  if (!player2Uuid || !player1Uuid) return;
 
   const handleCancel = (e) => {
     e.stopPropagation();
@@ -72,8 +73,8 @@ function GuessCard({ setModalOpen, itemKey, testId }) {
           <DialogContent dividers>
             Do you think this is{" "}
             {isPlayer1
-              ? players[player2Uuid].username
-              : players[player1Uuid].username}
+              ? players[player2Uuid]?.username
+              : players[player1Uuid]?.username}
             {"'"}s card?
           </DialogContent>
           <DialogActions>
