@@ -1,3 +1,4 @@
+import React from "react";
 import PropTypes from "prop-types";
 import { useState } from "react";
 
@@ -22,18 +23,8 @@ function ClearGame({ opacity, drawerOpen }) {
     setClearGameOpen(false);
   };
 
-  return (
-    <>
-      <DrawerItem onClick={() => setClearGameOpen(true)}>
-        <DrawerButton drawerOpen={drawerOpen}>
-          <Tooltip title="New Game" placement="right-end">
-            <div>
-              <DrawerIcon icon="rotate" drawerOpen={drawerOpen} />
-            </div>
-          </Tooltip>
-          <ListItemText primary="New Game" sx={[opacity]} />
-        </DrawerButton>
-      </DrawerItem>
+  function dialogContents() {
+    return (
       <Dialog
         sx={{ "& .MuiDialog-paper": { width: "80%", maxHeight: 435 } }}
         maxWidth="xs"
@@ -45,14 +36,39 @@ function ClearGame({ opacity, drawerOpen }) {
           room!
         </DialogContent>
         <DialogActions>
-          <GuessyButton autoFocus onClick={handleCancel} dark>
+          <GuessyButton
+            autoFocus
+            onClick={handleCancel}
+            dark
+            id="cancelClearGame"
+          >
             Cancel
           </GuessyButton>
-          <GuessyButton onClick={handleOk} dark>
+          <GuessyButton onClick={handleOk} dark id="confirmClearGame">
             Ok
           </GuessyButton>
         </DialogActions>
       </Dialog>
+    );
+  }
+
+  return (
+    <>
+      <DrawerItem onClick={() => setClearGameOpen(true)}>
+        <DrawerButton drawerOpen={drawerOpen}>
+          <Tooltip title="New Game" placement="right-end">
+            <div>
+              <DrawerIcon
+                icon="rotate"
+                drawerOpen={drawerOpen}
+                data-testid="clearGameIcon"
+              />
+            </div>
+          </Tooltip>
+          <ListItemText primary="New Game" sx={[opacity]} />
+        </DrawerButton>
+      </DrawerItem>
+      {clearGameOpen && dialogContents()}
     </>
   );
 }

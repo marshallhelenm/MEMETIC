@@ -1,3 +1,4 @@
+import React from "react";
 import { useState, lazy } from "react";
 import { useSearchParams } from "react-router-dom";
 

@@ -1,3 +1,4 @@
+import React from "react";
 import { lazy } from "react";
 import PropTypes from "prop-types";
 
@@ -26,13 +27,14 @@ DrawerButton.propTypes = {
   drawerOpen: PropTypes.bool,
 };
 
-function DrawerIcon({ drawerOpen, icon, classes = "" }) {
+function DrawerIcon({ drawerOpen, icon, classes = "", ...props }) {
   return (
     <ListItemIcon
       sx={[
         { minWidth: 0, justifyContent: "center" },
         drawerOpen ? { mr: 3 } : { mr: "auto" },
       ]}
+      {...props}
     >
       <i className={`fa-solid fa-${icon} fa-lg ${classes}`}></i>
     </ListItemIcon>

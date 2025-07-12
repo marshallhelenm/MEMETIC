@@ -1,4 +1,6 @@
+import React from "react";
 import { useState } from "react";
+
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -9,7 +11,7 @@ import { devLog } from "../utils/Helpers";
 import { usePlayers } from "../hooks/useContextHooks";
 import Confetti from "./Confetti";
 
-function GuessCard({ setModalOpen, itemKey }) {
+function GuessCard({ setModalOpen, itemKey, testId }) {
   const [open, setOpen] = useState(false);
   const { player1Uuid, player2Uuid, player1Card, player2Card, players } =
     usePlayers();
@@ -75,10 +77,15 @@ function GuessCard({ setModalOpen, itemKey }) {
             {"'"}s card?
           </DialogContent>
           <DialogActions>
-            <GuessyButton autoFocus onClick={handleCancel} dark>
+            <GuessyButton
+              autoFocus
+              onClick={handleCancel}
+              dark
+              id="cancelGuessButton"
+            >
               No
             </GuessyButton>
-            <GuessyButton onClick={handleOk} dark>
+            <GuessyButton onClick={handleOk} dark id="confirmGuessButton">
               Yes!
             </GuessyButton>
           </DialogActions>
@@ -104,7 +111,7 @@ function GuessCard({ setModalOpen, itemKey }) {
 
   return (
     <>
-      <div onClick={handleOpen}>
+      <div onClick={handleOpen} data-testid={testId}>
         <i className={`fa-solid fa-square-check fa-lg overlay-icon`}></i>
       </div>
       {dialog()}

@@ -10,7 +10,7 @@ const Join = lazy(() => import("./pages/Join"));
 const Upload = lazy(() => import("./pages/Upload"));
 const ImageAnalyzer = lazy(() => import("./pages/ImageAnalyzer"));
 const NameForm = lazy(() => import("./pages/NameForm"));
-const PlayPage = lazy(() => import("./pages/PlayPage"));
+const PlayPage = lazy(() => import("./pages/PlayPage/PlayPage"));
 
 const router = createBrowserRouter([
   {
