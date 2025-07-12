@@ -1,33 +1,15 @@
 import { createContext, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import useBreakpoint from "use-breakpoint";
 
 import { useWS } from "../hooks/useContextHooks";
 import { memeSampler } from "../assets/memeCollection";
-import { useSearchParams } from "react-router-dom";
 import { useTraceUpdate } from "../hooks/useTraceUpdate";
+import { calculateDialogWidth } from "../utils/Helpers";
 
 const GameContext = createContext();
 
 const BREAKPOINTS = { 1: 0, 2: 540, 3: 740, 4: 980, 5: 1158, 6: 1380 };
-
-const calculateDialogWidth = (breakpoint) => {
-  switch (breakpoint) {
-    case "1":
-      return "230px";
-    case "2":
-      return "300px";
-    case "3":
-      return "400px";
-    case "4":
-      return "500px";
-    case "5":
-      return "700px";
-    case "6":
-      return "800px";
-    default:
-      return "400px";
-  }
-};
 
 function GameProvider({ children }) {
   const [searchParams] = useSearchParams();
@@ -83,15 +65,20 @@ function GameProvider({ children }) {
 
   // **UseEffect
   useEffect(() => {
-    // console.log(
-    //   "GameContext: lastGameContentsMessage: ",
-    //   JSON.stringify(lastGameContentsMessage.gameKey),
-    //   gameKey
-    // );
+    if (columnsObjectChanged || allKeysChanged) {
+      setLoadingCards(false);
+      setValidGame(
+        allKeys.length == 24 && Object.keys(columnsObject).length == 6
+      );
+    }
+  }, []);
 
+  useEffect(() => {
     if (lastJsonMessageChanged && lastJsonMessage?.type === "noGameAlert") {
       createGame();
-    } else if (
+      return;
+    }
+    if (
       lastGameContentsMessageChanged ||
       !validGame ||
       (lastGameContentsMessage?.gameKey &&
@@ -108,12 +95,6 @@ function GameProvider({ children }) {
         setGameKey(lastGameContentsMessage.gameKey);
       }
     }
-    if (columnsObjectChanged || allKeysChanged) {
-      setLoadingCards(false);
-      setValidGame(
-        allKeys.length == 24 && Object.keys(columnsObject).length == 6
-      );
-    }
   }, [
     allKeys,
     columnsObject,
@@ -128,7 +109,7 @@ function GameProvider({ children }) {
     gameKey,
   ]);
 
-  //  ** value for the context provider **
+  //  ** return value for the context provider **
   const value = useMemo(() => {
     return {
       createGame,
