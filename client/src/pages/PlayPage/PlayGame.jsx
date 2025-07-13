@@ -1,6 +1,6 @@
-import Board from "../board/Board";
-import ChatBox from "../chat/ChatBox";
-import MiniDrawer from "../drawer/Drawer";
+import Board from "../../board/Board";
+import ChatBox from "./ChatBox";
+import MiniDrawer from "../../drawer/Drawer";
 
 function PlayGame() {
   return (

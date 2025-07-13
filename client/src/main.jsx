@@ -2,8 +2,9 @@ import React, { lazy } from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import "./index.css";
-import "./App.css";
+import "./themes/index.css";
+import "./themes/App.css";
+
 import App from "./App.jsx";
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const Join = lazy(() => import("./pages/Join"));

@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 const InvalidRoomKey = lazy(() => import("./InvalidRoomKey"));
 const ErrorPage = lazy(() => import("../ErrorPage"));
-const PlayGame = lazy(() => import("../../containers/PlayGame"));
+const PlayGame = lazy(() => import("./PlayGame"));
 import RoomLoading from "../RoomLoading";
 import { PlayersProvider } from "../../contexts/PlayersContext";
 import { useGame, useWS } from "../../hooks/useContextHooks";

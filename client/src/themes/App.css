@@ -299,3 +299,47 @@ button:focus {
   background-color: var(--colorB);
   color: var(--colorE);
 }
+
+.cs-message-list.memetic {
+  background-color: var(--colorE) !important;
+}
+
+.cs-message--outgoing.memetic
+  > .cs-message__content-wrapper
+  > .cs-message__content {
+  background-color: var(--colorC) !important;
+}
+.cs-message--incoming.memetic
+  > .cs-message__content-wrapper
+  > .cs-message__content {
+  background-color: var(--colorD) !important;
+}
+
+.cs-message-input.memetic {
+  background-color: var(--colorE) !important;
+}
+.cs-message-input.memetic
+  > .cs-message-input__content-editor-wrapper
+  > .cs-message-input__content-editor-container
+  > .cs-message-input__content-editor {
+  background-color: var(--colorD) !important;
+}
+.cs-message-input.memetic > .cs-message-input__content-editor-wrapper {
+  background-color: var(--colorD) !important;
+}
+.cs-message-input.memetic
+  > .cs-message-input__tools
+  > .cs-button--send
+  > .fa-paper-plane {
+  color: var(--colorB) !important;
+}
+
+.cs-conversation-header.memetic {
+  background-color: var(--colorC) !important;
+  cursor: pointer;
+  height: 30px;
+}
+
+.chat-collapse {
+  margin-left: 5px;
+}
