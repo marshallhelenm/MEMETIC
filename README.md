@@ -15,6 +15,7 @@ A web-based multiplayer game inspired by the classic **“Guess Who?”**, but w
 * 🔗 Link to meme source shown on hover
 * 🎯 Guess Opponent’s Card with confirmation prompts and win-condition logic
 * 🧑‍🤝‍🧑 Two-Player Rooms with Observer Mode
+* 💬 Live chat for all room members
 
 ---
 
@@ -31,7 +32,6 @@ This project includes a custom algorithm to **dynamically arrange meme images** 
 ## 📌 TODO
 
 * ⏳ Dockerize for deployment
-* ⏳ Chat between players
 * ⏳ Specific alternate still images for gifs
 
 ### 🚀 Ambitious Ideas
@@ -57,6 +57,7 @@ This project includes a custom algorithm to **dynamically arrange meme images** 
 * [`usebreakpoint`](https://www.npmjs.com/package/use-breakpoint) – React hook for handling responsive breakpoints
 * [`@faker-js/faker`](https://www.npmjs.com/package/@faker-js/faker) – generate fake data for random usernames
 * [`react-confetti-explosion`](https://www.npmjs.com/package/react-confetti-explosion) – confetti on a correct guess
+* [`chat-ui-kit-react`](https://github.com/chatscope/chat-ui-kit-react) – for chat box styling
 
 ---
 

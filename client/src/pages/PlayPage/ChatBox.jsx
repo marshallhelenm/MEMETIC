@@ -21,7 +21,8 @@ const ChatBox = () => {
   const myUsername = searchParams.get("username");
   const roomKey = searchParams.get("roomKey");
   const [open, setOpen] = useState(sessionStorage.getItem("guessy-chat-open"));
-  const { sendJsonMessage, lastChatHistoryMessage } = useWS();
+  const { sendJsonMessage, lastChatHistoryMessage, lastMessageReceivedAt } =
+    useWS();
   const [newMessage, setNewMessage] = useState("");
   const { messageHistory, setMessageHistory } = useGame();
   // const { setMessageHistory } = useGame();
