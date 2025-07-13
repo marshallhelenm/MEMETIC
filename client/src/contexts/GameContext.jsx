@@ -24,6 +24,7 @@ function GameProvider({ children }) {
     sessionStorage.getItem("guessy-gifs") === "true"
   );
   const [gameKey, setGameKey] = useState(null);
+  const [messageHistory, setMessageHistory] = useState([]);
 
   const roomKey = searchParams.get("roomKey");
   const columnCount = Number(breakpoint);
@@ -82,6 +83,7 @@ function GameProvider({ children }) {
         setAllKeys(lastGameContentsMessage.allKeys.slice(0));
         setColumnsObject({ ...lastGameContentsMessage.columnsObject });
         setGameKey(lastGameContentsMessage.gameKey);
+        setMessageHistory(lastGameContentsMessage.chatHistory);
       }
     }
     if (columnsObjectChanged || allKeysChanged) {
@@ -118,6 +120,8 @@ function GameProvider({ children }) {
       allKeys,
       gameKey,
       dialogWidth,
+      messageHistory,
+      setMessageHistory,
     };
   }, [
     createGame,
@@ -131,6 +135,8 @@ function GameProvider({ children }) {
     allKeys,
     gameKey,
     dialogWidth,
+    messageHistory,
+    setMessageHistory,
   ]);
 
   // ** render provider:

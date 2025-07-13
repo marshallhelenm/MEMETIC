@@ -2,7 +2,6 @@ export default {
   root: true,
   env: {
     browser: true,
-    es2020: true,
     node: true,
   },
   extends: [
@@ -20,7 +19,7 @@ export default {
   settings: {
     react: { version: "18.2" },
   },
-  plugins: ["react-refresh", "jest"],
+  plugins: ["react-refresh"],
   rules: {
     "no-unused-vars": "off",
     "react/prop-types": "off",
@@ -29,22 +28,4 @@ export default {
       { allowConstantExport: true },
     ],
   },
-  overrides: [
-    {
-      files: [
-        "**/*.test.js",
-        "**/*.test.jsx",
-        "**/*.test.ts",
-        "**/*.test.tsx",
-        "**/*.spec.js",
-        "**/*.spec.jsx",
-        "**/*.spec.ts",
-        "**/*.spec.tsx",
-        "**/__tests__/**/*.[jt]s?(x)",
-      ],
-      env: {
-        jest: true,
-      },
-    },
-  ],
 };

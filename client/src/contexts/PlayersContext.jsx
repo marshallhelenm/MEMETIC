@@ -58,7 +58,7 @@ function PlayersProvider({ children }) {
 
   useEffect(() => {
     let allPlayers = "";
-    if (lastJsonMessage.players) {
+    if (lastJsonMessage?.players) {
       allPlayers = JSON.stringify(lastJsonMessage.players);
       if (allPlayersRef.current != allPlayers) {
         if (lastJsonMessage?.players) {

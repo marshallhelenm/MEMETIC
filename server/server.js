@@ -17,6 +17,7 @@ const emptyRoomTemplate = {
   players: {},
   player1Uuid: null,
   player2Uuid: null,
+  messageHistory: [],
 };
 
 const emptyPlayerTemplate = {
@@ -56,6 +57,19 @@ const handleMessage = (bytes, uuid, connection) => {
         if (!player) players[uuid] = { ...emptyPlayerTemplate };
         console.log(`New connection established with UUID: ${uuid}`);
         break;
+      case "chatMessage":
+        connections[uuid] = connection;
+        room.messageHistory = [...room.messageHistory, message.messageContents];
+        broadcast(
+          roomKey,
+          {
+            type: "chatHistory",
+            chatHistory: room.messageHistory,
+            timeStamp: Date.now(),
+          },
+          uuid
+        );
+        break;
       case "demotePlayer2":
         for (let i = 0; i < roomPlayerKeys.length; i++) {
           let u = roomPlayerKeys[i];
@@ -78,6 +92,7 @@ const handleMessage = (bytes, uuid, connection) => {
         broadcastGameContents(message.roomKey);
         break;
       case "setPlayerCard":
+        if (!room || !room.players[uuid]) return;
         if (message.card) room.players[uuid].card = message.card;
         broadcastGameContents(roomKey);
         break;
@@ -182,6 +197,7 @@ const sendGameContentsToUuid = (roomKey, uuid) => {
     gameKey: room.gameKey,
     player1Uuid: room.player1Uuid,
     player2Uuid: room.player2Uuid,
+    chatHistory: room.messageHistory,
   });
 };
 

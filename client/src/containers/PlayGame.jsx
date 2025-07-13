@@ -1,4 +1,5 @@
 import Board from "../board/Board";
+import ChatBox from "../chat/ChatBox";
 import MiniDrawer from "../drawer/Drawer";
 
 function PlayGame() {
@@ -6,6 +7,7 @@ function PlayGame() {
     <div className="play-game">
       <MiniDrawer>
         <Board />
+        <ChatBox />
       </MiniDrawer>
     </div>
   );

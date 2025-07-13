@@ -26,6 +26,7 @@ function WSProvider({ children }) {
     { share: false, shouldReconnect: () => true }
   );
   const [lastGameContentsMessage, setLastGameContentsMessage] = useState({});
+  const [lastChatHistoryMessage, setLastChatHistoryMessage] = useState({});
   const [lastMessageReceivedAt, setLastMessageReceivedAt] = useState(
     Date.now()
   );
@@ -68,6 +69,8 @@ function WSProvider({ children }) {
     socket.onmessage = () => {
       let message = lastJsonMessage;
       if (!message) return;
+      console.log("WSContext message received: ", message.type);
+
       setLastMessageReceivedAt(Date.now());
       try {
         if (!uuidRef.current && message.type != "uuid") {
@@ -79,6 +82,16 @@ function WSProvider({ children }) {
         }
 
         switch (message.type) {
+          case "chatHistory":
+            if (message?.chatHistory && message.chatHistory.length > 0) {
+              setLastChatHistoryMessage({ ...lastJsonMessage });
+            }
+            break;
+          case "gameContents":
+            if (message?.allKeys && message?.columnsObject) {
+              setLastGameContentsMessage({ ...lastJsonMessage });
+            }
+            break;
           case "serverError":
             setServerError(JSON.parse(message.error));
             break;
@@ -89,11 +102,6 @@ function WSProvider({ children }) {
               sendJsonMessage({
                 type: "acceptUuid",
               });
-            }
-            break;
-          case "gameContents":
-            if (message?.allKeys && message?.columnsObject) {
-              setLastGameContentsMessage({ ...lastJsonMessage });
             }
             break;
           default:
@@ -137,6 +145,7 @@ function WSProvider({ children }) {
       setServerError,
       lastMessageReceivedAt,
       lastGameContentsMessage,
+      lastChatHistoryMessage,
     };
   }, [
     isReadyRef,
@@ -151,7 +160,7 @@ function WSProvider({ children }) {
     setServerError,
     uuidRef,
     lastMessageReceivedAt,
-    lastGameContentsMessage,
+    lastChatHistoryMessage,
   ]);
 
   return <WSContext.Provider value={value}>{children}</WSContext.Provider>;

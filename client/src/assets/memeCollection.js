@@ -6,8 +6,6 @@ const memeData = memes;
 const memeKeys = Object.keys(memes);
 
 function memeSampler() {
-  // eslint-disable-next-line no-debugger
-  // debugger;
   let memesArray = memeKeys.slice(0);
   let gameKeys = [];
   let randomIndex;
