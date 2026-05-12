@@ -23,12 +23,12 @@ function WSProvider({ children }) {
   const ws = useRef(null);
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
     `${socketURL}?uuid=${uuidRef.current}`,
-    { share: false, shouldReconnect: () => true }
+    { share: false, shouldReconnect: () => true },
   );
   const [lastGameContentsMessage, setLastGameContentsMessage] = useState({});
   const [lastChatHistoryMessage, setLastChatHistoryMessage] = useState({});
   const [lastMessageReceivedAt, setLastMessageReceivedAt] = useState(
-    Date.now()
+    Date.now(),
   );
 
   const connectionStatus = {
@@ -43,7 +43,7 @@ function WSProvider({ children }) {
   const connectionOpen = connectionStatus == "Open";
 
   useEffect(() => {
-    const socket = new WebSocket("wss://echo.websocket.events/");
+    const socket = new WebSocket(`${socketURL}`);
     if (
       !connectionOpen &&
       connectionAttemptsRef.current < 11 &&
