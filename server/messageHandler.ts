@@ -1,20 +1,27 @@
 // Handles incoming WebSocket messages and related logic
-const {
+import {
   deepClone,
   emptyRoomTemplate,
   emptyPlayerTemplate,
-} = require("./roomManager");
-
-const {
+} from "./roomManager.ts";
+import {
   broadcast,
   broadcastGameContents,
   sendToUuid,
   joinRoom,
-} = require("./broadcaster");
+} from "./broadcaster.ts";
+import type { Rooms, Connections, Player } from "./broadcaster.ts";
 
-function handleMessage(bytes, uuid, connection, rooms, players, connections) {
+export function handleMessage(
+  bytes: Buffer,
+  uuid: string,
+  connection: any,
+  rooms: Rooms,
+  players: { [uuid: string]: Player },
+  connections: Connections
+): void {
   // Simple sanitization utility
-  function sanitizeInput(str, maxLen = 256) {
+  function sanitizeInput(str: any, maxLen = 256): string {
     if (typeof str !== "string") return "";
     // Remove control characters, trim, and limit length
     return str
@@ -23,7 +30,7 @@ function handleMessage(bytes, uuid, connection, rooms, players, connections) {
       .trim()
       .slice(0, maxLen);
   }
-  let message;
+  let message: any;
   try {
     message = JSON.parse(bytes.toString());
     console.log("Message: ", message.type);
@@ -100,16 +107,17 @@ function handleMessage(bytes, uuid, connection, rooms, players, connections) {
     // Basic in-memory rate limiting per user (after validation, before state access)
     const RATE_LIMIT_WINDOW_MS = 5000; // 5 seconds
     const RATE_LIMIT_MAX = 10; // max messages per window
-    if (!handleMessage.rateLimitMap) handleMessage.rateLimitMap = {};
+    if (!(handleMessage as any).rateLimitMap) (handleMessage as any).rateLimitMap = {};
+    const rateLimitMap = (handleMessage as any).rateLimitMap as Record<string, number[]>;
     const now = Date.now();
-    if (!handleMessage.rateLimitMap[uuid]) {
-      handleMessage.rateLimitMap[uuid] = [];
+    if (!rateLimitMap[uuid]) {
+      rateLimitMap[uuid] = [];
     }
     // Remove timestamps outside the window
-    handleMessage.rateLimitMap[uuid] = handleMessage.rateLimitMap[uuid].filter(
-      (ts) => now - ts < RATE_LIMIT_WINDOW_MS,
+    rateLimitMap[uuid] = rateLimitMap[uuid].filter(
+      (ts) => now - ts < RATE_LIMIT_WINDOW_MS
     );
-    if (handleMessage.rateLimitMap[uuid].length >= RATE_LIMIT_MAX) {
+    if (rateLimitMap[uuid].length >= RATE_LIMIT_MAX) {
       const errorMsg = {
         type: "error",
         error: `Rate limit exceeded. Max ${RATE_LIMIT_MAX} messages per ${RATE_LIMIT_WINDOW_MS / 1000}s.`,
@@ -119,7 +127,7 @@ function handleMessage(bytes, uuid, connection, rooms, players, connections) {
       sendToUuid(uuid, errorMsg, connections);
       return;
     }
-    handleMessage.rateLimitMap[uuid].push(now);
+    rateLimitMap[uuid].push(now);
 
     let roomKey = message.roomKey;
     if (
@@ -165,6 +173,8 @@ function handleMessage(bytes, uuid, connection, rooms, players, connections) {
             timeStamp: Date.now(),
           },
           uuid,
+          rooms,
+          connections
         );
         break;
       }
@@ -176,7 +186,7 @@ function handleMessage(bytes, uuid, connection, rooms, players, connections) {
             break;
           }
         }
-        broadcastGameContents(message.roomKey, rooms);
+        broadcastGameContents(message.roomKey, rooms, connections);
         break;
       case "setGame":
         if (!room) {
@@ -187,7 +197,7 @@ function handleMessage(bytes, uuid, connection, rooms, players, connections) {
         room.allKeys = message.allKeys.slice(0);
         room.gameKey = message.gameKey;
 
-        broadcastGameContents(message.roomKey, rooms);
+        broadcastGameContents(message.roomKey, rooms, connections);
         break;
       case "setPlayerCard": {
         // Only allow users to set their own card
@@ -204,7 +214,7 @@ function handleMessage(bytes, uuid, connection, rooms, players, connections) {
           return;
         }
         if (message.card) room.players[uuid].card = message.card;
-        broadcastGameContents(roomKey, rooms);
+        broadcastGameContents(roomKey, rooms, connections);
         break;
       }
       case "joinRoom": {
@@ -217,7 +227,7 @@ function handleMessage(bytes, uuid, connection, rooms, players, connections) {
           },
           rooms,
           players,
-          connections,
+          connections
         );
         break;
       }
@@ -227,7 +237,7 @@ function handleMessage(bytes, uuid, connection, rooms, players, connections) {
       default:
         break;
     }
-  } catch (error) {
+  } catch (error: any) {
     const errorMsg = {
       type: "error",
       error: error.message || String(error),
@@ -240,5 +250,3 @@ function handleMessage(bytes, uuid, connection, rooms, players, connections) {
     return;
   }
 }
-
-module.exports = { handleMessage };

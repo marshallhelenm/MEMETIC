@@ -2,7 +2,7 @@ import { lazy } from "react";
 import PropTypes from "prop-types";
 
 const ReactFreezeframe = lazy(() => import("react-freezeframe"));
-import { colorE } from "../assets/styles";
+import { colorB, colorE } from "../assets/styles";
 import { GuessySuspense } from "../components/GuessySuspense";
 
 function StubImage({ item, flipped, height }) {
@@ -23,6 +23,8 @@ function StubImage({ item, flipped, height }) {
         style={{
           height: height * 0.9,
           margin: height * 0.05,
+          boxSizing: "border-box",
+          border: `2px solid ${colorB}`,
         }}
       ></div>
     );

@@ -1,11 +1,20 @@
 // Broadcast and send utilities, plus joinRoom logic
-const {
-  deepClone,
-  emptyRoomTemplate,
-  emptyPlayerTemplate,
-} = require("./roomManager");
+import { deepClone, emptyRoomTemplate, emptyPlayerTemplate} from "./roomManager.ts";
+import type { Rooms } from "./roomManager.ts";
 
-function sendToUuid(uuid, message, connections) {
+// Types for connections and rooms
+export interface Connections {
+  [uuid: string]: { send: (msg: string) => void };
+}
+
+export interface Player {
+  uuid: string;
+  username?: string;
+  card?: any;
+  // Add other player fields as needed
+}
+
+export function sendToUuid(uuid: string, message: any, connections: Connections): void {
   if (!connections[uuid]) {
     console.warn(`No connection found for UUID: ${uuid}`);
     return;
@@ -18,16 +27,27 @@ function sendToUuid(uuid, message, connections) {
   }
 }
 
-function broadcast(roomKey, message, uuidToExclude, rooms, connections) {
+export function broadcast(
+  roomKey: string,
+  message: any,
+  uuidToExclude: string | undefined,
+  rooms: Rooms,
+  connections: Connections
+): void {
   const room = rooms[roomKey];
   if (!room) return;
   Object.keys(room.players).forEach((u) => {
-    if ((!uuidToExclude || u != uuidToExclude) && connections[u])
+    if ((!uuidToExclude || u !== uuidToExclude) && connections[u])
       sendToUuid(u, message, connections);
   });
 }
 
-function sendGameContentsToUuid(roomKey, uuid, rooms, connections) {
+export function sendGameContentsToUuid(
+  roomKey: string,
+  uuid: string,
+  rooms: Rooms,
+  connections: Connections
+): void {
   const room = rooms[roomKey];
   sendToUuid(
     uuid,
@@ -41,11 +61,15 @@ function sendGameContentsToUuid(roomKey, uuid, rooms, connections) {
       player2Uuid: room.player2Uuid,
       chatHistory: room.messageHistory,
     },
-    connections,
+    connections
   );
 }
 
-function broadcastGameContents(roomKey, rooms, connections) {
+export function broadcastGameContents(
+  roomKey: string,
+  rooms: Rooms,
+  connections: Connections
+): void {
   const room = rooms[roomKey];
   if (!room) return;
   Object.keys(room.players).forEach((uuid) => {
@@ -53,7 +77,12 @@ function broadcastGameContents(roomKey, rooms, connections) {
   });
 }
 
-function noGameAlert(roomKey, uuid, info, connections) {
+export function noGameAlert(
+  roomKey: string,
+  uuid: string,
+  info: any,
+  connections: Connections
+): void {
   console.log("No game alert for room:", roomKey);
   const message = {
     type: "noGameAlert",
@@ -63,7 +92,12 @@ function noGameAlert(roomKey, uuid, info, connections) {
   sendToUuid(uuid, message, connections);
 }
 
-function joinRoom({ roomKey, uuid, username }, rooms, players, connections) {
+export function joinRoom(
+  { roomKey, uuid, username }: { roomKey: string; uuid: string; username?: string },
+  rooms: Rooms,
+  players: { [uuid: string]: Player },
+  connections: Connections
+): void {
   let room = rooms[roomKey];
   if (!room) {
     rooms[roomKey] = deepClone(emptyRoomTemplate);
@@ -80,7 +114,7 @@ function joinRoom({ roomKey, uuid, username }, rooms, players, connections) {
   if (!room.players) room.players = {};
 
   Object.keys(room.players).forEach((u) => {
-    if (u != uuid && !connections[u]) {
+    if (u !== uuid && !connections[u]) {
       delete room.players[u];
       delete players[u];
     }
@@ -95,7 +129,7 @@ function joinRoom({ roomKey, uuid, username }, rooms, players, connections) {
   player.uuid = uuid;
   roomPlayer.uuid = uuid;
 
-  if (username && username != "undefined") {
+  if (username && username !== "undefined") {
     player.username = username;
     roomPlayer.username = username;
   }
@@ -103,7 +137,7 @@ function joinRoom({ roomKey, uuid, username }, rooms, players, connections) {
   const validRoom =
     room.columnsObject &&
     Object.keys(room.columnsObject).length > 0 &&
-    room.allKeys.length == 24;
+    room.allKeys.length === 24;
 
   if (validRoom) {
     broadcastGameContents(roomKey, rooms, connections);
@@ -111,12 +145,3 @@ function joinRoom({ roomKey, uuid, username }, rooms, players, connections) {
     noGameAlert(roomKey, uuid, undefined, connections);
   }
 }
-
-module.exports = {
-  sendToUuid,
-  broadcast,
-  sendGameContentsToUuid,
-  broadcastGameContents,
-  noGameAlert,
-  joinRoom,
-};

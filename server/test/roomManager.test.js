@@ -2,7 +2,7 @@ const {
   deepClone,
   emptyRoomTemplate,
   emptyPlayerTemplate,
-} = require("./roomManager");
+} = require("../roomManager");
 
 describe("roomManager", () => {
   it("deepClone should create a deep copy", () => {

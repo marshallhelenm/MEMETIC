@@ -5,12 +5,12 @@ const {
   broadcastGameContents,
   noGameAlert,
   joinRoom,
-} = require("./broadcaster");
+} = require("../broadcaster");
 const {
   deepClone,
   emptyRoomTemplate,
   emptyPlayerTemplate,
-} = require("./roomManager");
+} = require("../roomManager");
 
 describe("broadcaster", () => {
   let rooms, players, connections, uuid, connectionMock;

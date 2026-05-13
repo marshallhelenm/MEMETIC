@@ -29,7 +29,6 @@ DrawerButton.propTypes = {
 };
 
 function DrawerIcon({ draweropen, icon, classes = "", ...props }) {
-  // Remove draweropen from props so it is not forwarded
   return (
     <ListItemIcon
       sx={[

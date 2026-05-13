@@ -145,15 +145,48 @@ const MiniDrawer: React.FC<MiniDrawerProps> = ({ children }) => {
         }}
       >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={[{ marginRight: 5 }, draweropen && { display: "none" }]}
-          >
-            <i className={`fa-solid fa-bars fa-lg`}></i>
-          </IconButton>
+          <Box sx={{ position: 'relative', width: 48, height: 48, marginRight: 1 }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                opacity: draweropen ? 0 : 1,
+                pointerEvents: draweropen ? 'none' : 'auto',
+                transition: 'opacity 0.2s',
+                width: 48,
+                height: 48,
+              }}
+            >
+              <i className={`fa-solid fa-bars fa-lg`}></i>
+            </IconButton>
+            <IconButton
+              color="inherit"
+              aria-label="close drawer"
+              onClick={handleDrawerClose}
+              edge="start"
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                opacity: draweropen ? 1 : 0,
+                pointerEvents: draweropen ? 'auto' : 'none',
+                transition: 'opacity 0.2s',
+                width: 48,
+                height: 48,
+              }}
+            >
+              <i
+                className={`fa-solid fa-chevron-${
+                  theme.direction === "rtl" ? "right" : "left"
+                } fa-lg`}
+              ></i>
+            </IconButton>
+          </Box>
           <Logo spin={false} header={true} />
           <h1 className="heading">MEMETIC</h1>
         </Toolbar>
@@ -162,13 +195,7 @@ const MiniDrawer: React.FC<MiniDrawerProps> = ({ children }) => {
       {/* drawer */}
       <DrawerStyled variant="permanent" open={draweropen}>
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            <i
-              className={`fa-solid fa-chevron-${
-                theme.direction === "rtl" ? "right" : "left"
-              } fa-lg`}
-            ></i>
-          </IconButton>
+          
         </DrawerHeader>
         <Divider />
         <>

@@ -1,9 +1,9 @@
-const { handleMessage } = require("./messageHandler");
+const { handleMessage } = require("../messageHandler");
 const {
   deepClone,
   emptyRoomTemplate,
   emptyPlayerTemplate,
-} = require("./roomManager");
+} = require("../roomManager");
 
 describe("handleMessage", () => {
   let rooms, players, connections, connectionMock, uuid;
