@@ -70,6 +70,7 @@ button:focus-visible {
 
 @font-face {
   font-family: "CherryBomb";
-  src: local("CherryBomb"),
-    url(./fonts/CherryBombOne-Regular.ttf) format("truetype");
+  src: url("/fonts/CherryBombOne-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
 }

@@ -1,6 +1,5 @@
 import React from "react";
 import { expect, describe, it } from "@jest/globals";
-
 import { getPlayPageRender } from "./getPlayPageRender";
 
 describe("getPlayPageRender", () => {
@@ -18,7 +17,7 @@ describe("getPlayPageRender", () => {
         roomKey: "ABCDEFGH",
         validGame: true,
         connectionOpen: true,
-      })
+      }),
     ).toBe("PlayGame");
   });
 
@@ -28,7 +27,7 @@ describe("getPlayPageRender", () => {
         roomKey: "ABCDEFGH",
         connectionError: true,
         tryingToConnect: false,
-      })
+      }),
     ).toBe("ErrorPageConnection");
   });
 
@@ -37,7 +36,7 @@ describe("getPlayPageRender", () => {
       getPlayPageRender({
         roomKey: "ABCDEFGH",
         serverError: "Oops!",
-      })
+      }),
     ).toBe("ErrorPageServer");
   });
 
@@ -46,7 +45,7 @@ describe("getPlayPageRender", () => {
       getPlayPageRender({
         roomKey: "ABCDEFGH",
         serverError: "",
-      })
+      }),
     ).toBe("RoomLoading");
   });
 });

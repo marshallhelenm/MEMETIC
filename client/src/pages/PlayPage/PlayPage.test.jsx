@@ -2,7 +2,6 @@ import React from "react";
 import * as reactRouterDom from "react-router-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-
 import * as useContextHooks from "../../hooks/useContextHooks";
 import PlayPage from "./PlayPage";
 
@@ -11,7 +10,7 @@ jest.mock("./InvalidRoomKey", () => () => <div data-testid="InvalidRoomKey" />);
 jest.mock("../ErrorPage", () => ({ type }) => (
   <div data-testid={`ErrorPage-${type}`} />
 ));
-jest.mock("../../containers/PlayGame", () => () => (
+jest.mock("../../pages/PlayPage/PlayGame", () => () => (
   <div data-testid="PlayGame" />
 ));
 jest.mock("../RoomLoading", () => () => <div data-testid="RoomLoading" />);
@@ -66,7 +65,7 @@ describe("PlayPage Integration", () => {
         initialEntries={[`/play?roomKey=${roomKey}&username=${username}`]}
       >
         <PlayPage />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
   }
 
@@ -88,7 +87,7 @@ describe("PlayPage Integration", () => {
     renderPlayPage("ABCDEFGH", "");
     await waitFor(() => {
       expect(reactRouterDom.__navigateMock).toHaveBeenCalledWith(
-        "/name_thyself?roomKey=ABCDEFGH"
+        "/name_thyself?roomKey=ABCDEFGH",
       );
     });
   });

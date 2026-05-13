@@ -39,7 +39,7 @@ function Upload() {
         workbook.SheetNames.forEach(function (sheetName) {
           // Here is your object
           var XL_row_object = XLSX.utils.sheet_to_row_object_array(
-            workbook.Sheets[sheetName]
+            workbook.Sheets[sheetName],
           );
           $("#xlx_json").val(guessifyData(XL_row_object));
           return;

@@ -270,6 +270,7 @@
     "height_multiplier": 0.5617977528089888
   },
   "distracted_boyfriend": {
+    "title": "Distracted Boyfriend",
     "img": "distracted_boyfriend.jpg",
     "origin": "https://knowyourmeme.com/memes/distracted-boyfriend",
     "alt": "Distracted Boyfriend Template of the original stock photo that went viral and became a meme",
@@ -372,6 +373,7 @@
     "height_multiplier": 0.7462686567164178
   },
   "gnome_barf": {
+    "title": "Gnome Barf",
     "img": "gnome_barf.gif",
     "origin": "https://knowyourmeme.com/memes/subcultures/gravity-falls",
     "alt": "a gif of a gnome from the cartoon Gravity Falls barfing up a rainbow continuously",
@@ -574,7 +576,9 @@
     "height_multiplier": 1.0989010989010988
   },
   "judge_judy_laptop": {
+    "title": "Judge Judy Laptop",
     "img": "judge_judy_laptop.gif",
+    "origin": "https://knowyourmeme.com/memes/subcultures/judge-judy",
     "height_multiplier": 0.8130081300813008
   },
   "keep_your_secrets": {
@@ -629,7 +633,7 @@
   "lex_luthor_took_forty_cakes": {
     "title": "Lex Luthor Took Forty Cakes",
     "img": "lex_luthor_took_forty_cakes.jpg",
-    "origin": "knowyourmeme.com/memes/lex-luthor-took-forty-cakes",
+    "origin": "https://knowyourmeme.com/memes/lex-luthor-took-forty-cakes",
     "alt": "",
     "height_multiplier": 0.5102040816326531
   },
@@ -801,7 +805,9 @@
     "height_multiplier": 0.6944444444444444
   },
   "omg_space": {
+    "title": "OMG SPACE!",
     "img": "omg_space.gif",
+    "origin": "",
     "height_multiplier": 0.6535947712418301
   },
   "one_banana": {
@@ -840,6 +846,7 @@
     "height_multiplier": 0.5617977528089888
   },
   "pointing_spider_man": {
+    "title": "Spider-Man Pointing at Spider-Man",
     "img": "pointing_spider_man.jpg",
     "origin": "https://knowyourmeme.com/memes/spider-man-pointing-at-spider-man",
     "height_multiplier": 0.47619047619047616
@@ -1129,7 +1136,9 @@
     "height_multiplier": 0.9803921568627451
   },
   "thumbs_up_kid": {
+    "title": "Thumbs Up Kid",
     "img": "thumbs_up_kid.gif",
+    "origin": "",
     "height_multiplier": 0.7518796992481203
   },
   "to_shreds_you_say": {

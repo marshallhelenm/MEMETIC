@@ -1,29 +1,32 @@
 import { useSearchParams } from "react-router-dom";
-
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Tooltip from "@mui/material/Tooltip";
-
 import { usePlayers } from "../hooks/useContextHooks";
 import Player2Star from "./Player2Star";
 
-function Players() {
+interface Player {
+  username: string;
+  // Add other player fields if needed
+}
+
+const Players: React.FC = () => {
   const [searchParams] = useSearchParams();
   const myUsername = searchParams.get("username");
   const { players, player1Uuid, player2Uuid } = usePlayers();
   const myUuid = sessionStorage.getItem("guessy-uuid");
-  const isPlayer1 = myUuid == player1Uuid;
+  const isPlayer1 = myUuid === player1Uuid;
 
-  function star(uuid) {
-    if (player1Uuid == uuid) {
+  function star(uuid: string) {
+    if (player1Uuid === uuid) {
       return (
         <Tooltip placement="right-end" title="Player 1">
           <i className={`fa-regular fa-sun fa-md`} style={{ opacity: 0.8 }}></i>
         </Tooltip>
       );
-    } else if (player2Uuid == uuid) {
+    } else if (player2Uuid === uuid) {
       return (
         <Player2Star
           canDemote={isPlayer1 && Object.keys(players).length > 2}
@@ -31,12 +34,13 @@ function Players() {
         />
       );
     }
+    return null;
   }
 
-  function generateOtherPlayers() {
-    let playersItems = [];
+  function generateOtherPlayers(): JSX.Element[] {
+    let playersItems: JSX.Element[] = [];
     Object.keys(players).forEach((uuid) => {
-      if (uuid != myUuid) {
+      if (uuid !== myUuid) {
         playersItems.push(
           <ListItem key={"player-" + players[uuid].username}>
             <i
@@ -49,7 +53,7 @@ function Players() {
             ></i>
             <ListItemText primary={players[uuid].username} />
             {star(uuid)}
-          </ListItem>,
+          </ListItem>
         );
       }
     });
@@ -71,13 +75,13 @@ function Players() {
               }}
             ></i>
             <ListItemText primary={myUsername} />
-            {star(myUuid)}
+            {star(myUuid as string)}
           </ListItem>
           {generateOtherPlayers()}
         </List>
       </div>
     </>
   );
-}
+};
 
 export default Players;
