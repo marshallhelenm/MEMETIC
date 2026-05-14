@@ -1,5 +1,7 @@
 // Room and player management utilities and templates
 
+import { ChatMessage } from "../shared/types/message.ts";
+
 export interface Room {
   roomKey?: string;
   columnsObject: Record<string, any>;
@@ -7,7 +9,7 @@ export interface Room {
   players: Record<string, Player>;
   player1Uuid: string | null;
   player2Uuid: string | null;
-  messageHistory: any[];
+  messageHistory: ChatMessage[] | [];
   gameKey?: any ;
 }
 

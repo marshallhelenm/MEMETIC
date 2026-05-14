@@ -3,8 +3,7 @@ import React, { createContext, useEffect, useMemo, useState, useRef, ReactNode }
 import { randomCardKey } from "../utils/helpers";
 import { useGame, useWS } from "../hooks/useContextHooks";
 import { useSearchParams } from "react-router-dom";
-
-
+import type { GenericMessage } from "../../shared/types/messages";
 
 export interface PlayersContextValue {
   myPlayerCard: string | null;
@@ -32,7 +31,10 @@ const PlayersContext = createContext<PlayersContextValue | undefined>(undefined)
 
 function PlayersProvider({ children }: PlayersProviderProps) {
   const [searchParams] = useSearchParams();
-  const { lastJsonMessage, sendJsonMessage } = useWS();
+  const { lastJsonMessage, sendJsonMessage } = useWS() as {
+    lastJsonMessage?: GenericMessage,
+    sendJsonMessage: (msg: GenericMessage) => void;
+  }
   const { allKeys, gameKey } = useGame();
   const gameKeyRef = useRef<string | null>(gameKey);
   const roomKey = searchParams.get("roomKey");

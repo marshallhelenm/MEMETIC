@@ -10,7 +10,19 @@ import {
   sendToUuid,
   joinRoom,
 } from "./broadcaster.ts";
-import type { Rooms, Connections, Player } from "./broadcaster.ts";
+import type { Connections, Player } from "./broadcaster.ts";
+import type { Rooms } from "./roomManager.ts";
+import type {
+  ChatMessage,
+  JoinRoomMessage,
+  RequestUuidMessage,
+  SetGameMessage,
+  SetPlayerCardMessage,
+  AcceptUuidMessage,
+  DemotePlayer2Message,
+} from "../shared/types/messages.ts";
+
+import { validateMessagePayload } from "../shared/types/messages.ts";
 
 export function handleMessage(
   bytes: Buffer,
@@ -46,63 +58,10 @@ export function handleMessage(
       "requestUuid",
     ];
     if (!message.type || !allowedTypes.includes(message.type)) {
-      throw new Error("Invalid or missing message type");
+      throw new Error("Invalid or missing message type. Message: " + bytes.toString());
     }
 
-    // Payload validation for each type
-    switch (message.type) {
-      case "acceptUuid":
-        // No extra fields required
-        break;
-      case "chatMessage":
-        if (
-          typeof message.messageContents !== "string" ||
-          message.messageContents.length === 0
-        ) {
-          throw new Error("Invalid or missing messageContents for chatMessage");
-        }
-        break;
-      case "demotePlayer2":
-        if (!message.roomKey || typeof message.roomKey !== "string") {
-          throw new Error("Missing or invalid roomKey for demotePlayer2");
-        }
-        break;
-      case "setGame":
-        if (
-          !message.roomKey ||
-          typeof message.roomKey !== "string" ||
-          !message.columnsObject ||
-          typeof message.columnsObject !== "object" ||
-          !Array.isArray(message.allKeys) ||
-          typeof message.gameKey === "undefined"
-        ) {
-          throw new Error("Missing or invalid fields for setGame");
-        }
-        break;
-      case "setPlayerCard":
-        if (
-          !message.roomKey ||
-          typeof message.roomKey !== "string" ||
-          typeof message.card === "undefined"
-        ) {
-          throw new Error("Missing or invalid fields for setPlayerCard");
-        }
-        break;
-      case "joinRoom":
-        if (
-          !message.roomKey ||
-          typeof message.roomKey !== "string" ||
-          typeof message.username !== "string"
-        ) {
-          throw new Error("Missing or invalid fields for joinRoom");
-        }
-        break;
-      case "requestUuid":
-        // No extra fields required
-        break;
-      default:
-        throw new Error("Unknown message type");
-    }
+    validateMessagePayload(message, bytes);
 
     // Basic in-memory rate limiting per user (after validation, before state access)
     const RATE_LIMIT_WINDOW_MS = 5000; // 5 seconds
@@ -161,15 +120,16 @@ export function handleMessage(
         if (!player) players[uuid] = deepClone(emptyPlayerTemplate);
         console.log(`New connection established with UUID: ${uuid}`);
         break;
-      case "chatMessage": {
+      case "chatMessage":
         connections[uuid] = connection;
-        const sanitizedMsg = sanitizeInput(message.messageContents, 512);
-        room.messageHistory = [...room.messageHistory, sanitizedMsg];
+        const sanitizedMsg = sanitizeInput(message.messageContents.chatText, 512);
+        room.messageHistory = [...room.messageHistory, { ...message.messageContents, chatText: sanitizedMsg }];
         broadcast(
           roomKey,
           {
             type: "chatHistory",
             chatHistory: room.messageHistory,
+            roomKey: roomKey,
             timeStamp: Date.now(),
           },
           uuid,
@@ -177,7 +137,6 @@ export function handleMessage(
           connections
         );
         break;
-      }
       case "demotePlayer2":
         for (let i = 0; i < roomPlayerKeys.length; i++) {
           let u = roomPlayerKeys[i];

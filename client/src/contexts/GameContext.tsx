@@ -7,6 +7,8 @@ import { memeSampler } from "../assets/memeCollection";
 import { useTraceUpdate } from "../hooks/useTraceUpdate";
 import { calculateDialogWidth } from "../utils/helpers";
 
+import type { GenericMessage } from "../../shared/types/messages";
+
 // Types for WebSocket context values (temporary, should be improved)
 interface GameContentsMessage {
   allKeys?: any[];
@@ -55,7 +57,11 @@ function GameProvider({ children }: GameProviderProps) {
   const [searchParams] = useSearchParams();
   const { breakpoint, maxWidth, minWidth } = useBreakpoint(BREAKPOINTS, 1);
   let dialogWidth = calculateDialogWidth(breakpoint);
-  const { sendJsonMessage, lastGameContentsMessage, lastJsonMessage } = useWS();
+  const { sendJsonMessage, lastGameContentsMessage, lastJsonMessage } = useWS() as {
+    sendJsonMessage: (msg: GenericMessage) => void;
+    lastGameContentsMessage?: GameContentsMessage;
+    lastJsonMessage?: GenericMessage;
+  }
   const [allKeys, setAllKeys] = useState<any[]>([]);
   const [loadingCards, setLoadingCards] = useState(false);
   const [columnsObject, setColumnsObject] = useState<any>({});

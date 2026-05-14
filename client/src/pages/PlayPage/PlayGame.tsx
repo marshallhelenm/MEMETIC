@@ -7,7 +7,7 @@ const PlayGame: React.FC = () => {
     <div className="play-game">
       <MiniDrawer>
         <Board />
-        <ChatBox />
+        {/* <ChatBox /> */}
       </MiniDrawer>
     </div>
   );

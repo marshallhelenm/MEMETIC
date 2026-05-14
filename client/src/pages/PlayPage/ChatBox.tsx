@@ -12,6 +12,7 @@ import {
 import { useGame, useWS } from "../../hooks/useContextHooks";
 import { useSearchParams } from "react-router-dom";
 import { useTraceUpdate } from "../../hooks/useTraceUpdate";
+import type { ChatMessage } from "../../../shared/types/messages";
 
 const ChatBox: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -21,7 +22,7 @@ const ChatBox: React.FC = () => {
     sessionStorage.getItem("guessy-chat-open") === "true"
   );
   const { sendJsonMessage, lastChatHistoryMessage, lastMessageReceivedAt } = useWS();
-  const [newMessage, setNewMessage] = useState("");
+  const [newChatCMessage, setNewChatCMessage] = useState("");
   const { messageHistory, setMessageHistory } = useGame();
   const { lastChatHistoryMessageChanged } = useTraceUpdate({ lastChatHistoryMessage });
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -31,23 +32,24 @@ const ChatBox: React.FC = () => {
     sessionStorage.setItem("guessy-chat-open", String(!open));
   }
 
-  function sendMessage() {
-    if (newMessage.length > 0) {
-      let message = {
-        props: {
-          model: {
-            sender: myUsername,
-            message: newMessage,
-          },
+  function sendChatMessage() {
+    if (newChatCMessage.length > 0) {
+      let message: ChatMessage = {
+        type: "chatMessage",
+        roomKey,
+        messageContents: {
+          sender: myUsername,
+          chatText: newChatCMessage,
         },
       };
+      console.log("Sending chat message:", message);
       sendJsonMessage({
         type: "chatMessage",
         roomKey,
-        messageContents: message,
+        messageContents: message.messageContents,
       });
       setMessageHistory((prev: any) => [...prev, message]);
-      setNewMessage("");
+      setNewChatCMessage("");
     }
   }
 
@@ -117,9 +119,9 @@ const ChatBox: React.FC = () => {
               autoFocus
               placeholder="Type message here"
               attachButton={false}
-              value={newMessage}
-              onChange={setNewMessage}
-              onSend={sendMessage}
+              value={newChatCMessage}
+              onChange={setNewChatCMessage}
+              onSend={sendChatMessage}
               className="memetic"
             />
           )}
