@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useMemo, useState, useRef, ReactNode } from "react";
 
-import { randomCardKey } from "../utils/helpers";
+import { randomCardKey } from "../utils/Helpers";
 import { useGame, useWS } from "../hooks/useContextHooks";
 import { useSearchParams } from "react-router-dom";
 import type { GenericMessage } from "../../shared/types/messages";

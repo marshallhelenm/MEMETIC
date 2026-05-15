@@ -1,6 +1,6 @@
 import React, { createContext, useMemo, useState, useEffect, useRef, ReactNode, Dispatch, SetStateAction, MutableRefObject } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import { devLog } from "../utils/helpers";
+import { devLog } from "../utils/Helpers";
 import { getSessionItem, setSessionItem } from "../utils/sessionStorageUtils";
 
 export interface WSContextValue {
@@ -26,7 +26,7 @@ export interface WSContextValue {
   }
 
   const WSContext = createContext<WSContextValue | undefined>(undefined);
-  const socketURL = "ws://localhost:6969";
+  const socketURL = "ws://localhost:8080";
 
   function WSProvider({ children }: WSProviderProps) {
     const uuidRef = useRef<string>("");

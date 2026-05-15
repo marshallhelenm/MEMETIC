@@ -5,7 +5,7 @@ import useBreakpoint from "use-breakpoint";
 import { useWS } from "../hooks/useContextHooks";
 import { memeSampler } from "../assets/memeCollection";
 import { useTraceUpdate } from "../hooks/useTraceUpdate";
-import { calculateDialogWidth } from "../utils/helpers";
+import { calculateDialogWidth } from "../utils/Helpers";
 
 import type { GenericMessage } from "../../shared/types/messages";
 

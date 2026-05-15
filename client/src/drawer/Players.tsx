@@ -23,7 +23,7 @@ const Players: React.FC = () => {
     if (player1Uuid === uuid) {
       return (
         <Tooltip placement="right-end" title="Player 1">
-          <i className={`fa-regular fa-sun fa-md`} style={{ opacity: 0.8 }}></i>
+          <i className={`fa-regular fa-sun fa-md`} style={{ opacity: 0.8, marginRight: "5%" }}></i>
         </Tooltip>
       );
     } else if (player2Uuid === uuid) {
@@ -33,8 +33,16 @@ const Players: React.FC = () => {
           uuid={uuid}
         />
       );
+    } else {
+      return <i
+              className={`fa-regular fa-user fa-md`}
+              style={{
+                marginRight: "5%",
+                colorScheme: "light dark",
+                opacity: 0.8,
+              }}
+            ></i>
     }
-    return null;
   }
 
   function generateOtherPlayers(): JSX.Element[] {
@@ -43,16 +51,8 @@ const Players: React.FC = () => {
       if (uuid !== myUuid) {
         playersItems.push(
           <ListItem key={"player-" + players[uuid].username}>
-            <i
-              className={`fa-regular fa-user fa-md`}
-              style={{
-                marginRight: "5%",
-                colorScheme: "light dark",
-                opacity: 0.8,
-              }}
-            ></i>
-            <ListItemText primary={players[uuid].username} />
             {star(uuid)}
+            <ListItemText primary={players[uuid].username} />
           </ListItem>
         );
       }
@@ -66,16 +66,8 @@ const Players: React.FC = () => {
       <div style={{ marginLeft: "5%" }}>
         <List component="div" disablePadding>
           <ListItem>
-            <i
-              className={`fa-regular fa-user fa-md`}
-              style={{
-                marginRight: "5%",
-                colorScheme: "light dark",
-                opacity: 0.8,
-              }}
-            ></i>
-            <ListItemText primary={myUsername} />
             {star(myUuid as string)}
+            <ListItemText primary={myUsername} />
           </ListItem>
           {generateOtherPlayers()}
         </List>

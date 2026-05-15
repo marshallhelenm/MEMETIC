@@ -6,7 +6,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 
 import GuessyButton from "./GuessyButton";
-import { devLog } from "../utils/helpers";
+import { devLog } from "../utils/Helpers";
 import { usePlayers } from "../hooks/useContextHooks";
 import Confetti from "./Confetti";
 

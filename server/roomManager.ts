@@ -1,6 +1,6 @@
 // Room and player management utilities and templates
 
-import { ChatMessage } from "../shared/types/message.ts";
+import type { ChatMessage } from "./types/messages";
 
 export interface Room {
   roomKey?: string;

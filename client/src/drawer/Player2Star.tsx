@@ -37,7 +37,7 @@ const Player2Star: React.FC<Player2StarProps> = ({ uuid, canDemote = false }) =>
   if (!canDemote) {
     return (
       <Tooltip placement="right-end" title="Player 2">
-        <i className={"fa-regular fa-star fa-md"} style={{ opacity: 0.8 }}></i>
+        <i className={"fa-regular fa-star fa-md"} style={{ opacity: 0.8, marginRight: "5%" }}></i>
       </Tooltip>
     );
   }

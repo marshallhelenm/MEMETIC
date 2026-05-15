@@ -1,14 +1,14 @@
 import http from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { v4 as uuidv4 } from "uuid";
-import { handleMessage } from "./messageHandler.ts";
-import { broadcastGameContents } from "./broadcaster.ts";
-import type { Rooms } from "./roomManager.ts";
-import type { Connections, Player } from "./broadcaster.ts";
+import { handleMessage } from "./messageHandler";
+import { broadcastGameContents } from "./broadcaster";
+import type { Rooms } from "./roomManager";
+import type { Connections, Player } from "./broadcaster";
 
 const server = http.createServer();
 const wsServer = new WebSocketServer({ server });
-const port = 6969;
+const port = 8080;
 
 const connections: Connections = {};
 const rooms: Rooms = {};

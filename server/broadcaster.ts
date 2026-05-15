@@ -1,6 +1,6 @@
 // Broadcast and send utilities, plus joinRoom logic
-import { deepClone, emptyRoomTemplate, emptyPlayerTemplate} from "./roomManager.ts";
-import type { Rooms } from "./roomManager.ts";
+import { deepClone, emptyRoomTemplate, emptyPlayerTemplate} from "./roomManager";
+import type { Rooms } from "./roomManager";
 
 // Types for connections and rooms
 export interface Connections {

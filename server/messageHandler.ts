@@ -3,26 +3,17 @@ import {
   deepClone,
   emptyRoomTemplate,
   emptyPlayerTemplate,
-} from "./roomManager.ts";
+} from "./roomManager";
 import {
   broadcast,
   broadcastGameContents,
   sendToUuid,
   joinRoom,
-} from "./broadcaster.ts";
-import type { Connections, Player } from "./broadcaster.ts";
-import type { Rooms } from "./roomManager.ts";
-import type {
-  ChatMessage,
-  JoinRoomMessage,
-  RequestUuidMessage,
-  SetGameMessage,
-  SetPlayerCardMessage,
-  AcceptUuidMessage,
-  DemotePlayer2Message,
-} from "../shared/types/messages.ts";
+} from "./broadcaster";
+import type { Connections, Player } from "./broadcaster";
+import type { Rooms } from "./roomManager";
 
-import { validateMessagePayload } from "../shared/types/messages.ts";
+import { validateMessagePayload } from "./types/messages";
 
 export function handleMessage(
   bytes: Buffer,
