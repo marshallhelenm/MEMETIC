@@ -7,12 +7,13 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { colorC } from "../assets/styles";
 
-function DrawerButton({ children, drawerOpen }) {
+function DrawerButton({ children, draweropen }) {
+  // Destructure draweropen so it is not passed to ListItemButton
   return (
     <ListItemButton
       sx={[
         { minHeight: 48, px: 2.5 },
-        drawerOpen
+        draweropen
           ? { justifyContent: "initial" }
           : { justifyContent: "center" },
       ]}
@@ -24,17 +25,16 @@ function DrawerButton({ children, drawerOpen }) {
 
 DrawerButton.propTypes = {
   children: PropTypes.any,
-  drawerOpen: PropTypes.bool,
+  draweropen: PropTypes.bool,
 };
 
-function DrawerIcon({ drawerOpen, icon, classes = "", ...props }) {
+function DrawerIcon({ draweropen, icon, classes = "", ...props }) {
   return (
     <ListItemIcon
       sx={[
         { minWidth: 0, justifyContent: "center" },
-        drawerOpen ? { mr: 3 } : { mr: "auto" },
+        draweropen ? { mr: 3 } : { mr: "auto" },
       ]}
-      {...props}
     >
       <i className={`fa-solid fa-${icon} fa-lg ${classes}`}></i>
     </ListItemIcon>
@@ -43,7 +43,7 @@ function DrawerIcon({ drawerOpen, icon, classes = "", ...props }) {
 
 DrawerIcon.propTypes = {
   classes: PropTypes.string,
-  drawerOpen: PropTypes.bool,
+  draweropen: PropTypes.bool,
   icon: PropTypes.string,
 };
 

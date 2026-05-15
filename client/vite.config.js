@@ -8,6 +8,7 @@ export default defineConfig({
     alias: {
       crypto: "crypto-browserify",
     },
+    extensions: [".js", ".jsx", ".ts", ".tsx"],
   },
   plugins: [react(), eslint()],
   build: {

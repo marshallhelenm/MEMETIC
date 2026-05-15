@@ -1,27 +1,77 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/client/node_modules
-/server/node_modules
+# Node dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
 client/.pnp
 server/.pnp
 .pnp.js
 
-# testing
-/client/coverage
+# Editor & OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+*.log
+.vscode/
+.idea/
+.history/
+*.code-workspace
 
-# production
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Build outputs
+build/
+dist/
+out/
+server/dist/
+client/dist/
+server/build/
+client/build/
+
+# Test coverage
+coverage/
+client/coverage/
+server/coverage/
+
+# TypeScript
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Production
 /build
 
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Misc
+DevNotes.txt
+memetic.pem
 
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-DevNotes.txt
-memetic.pem
+pnpm-debug.log*
+
+# Mac system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache

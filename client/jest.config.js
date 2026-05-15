@@ -1,10 +1,11 @@
 export default {
   testEnvironment: "jest-environment-jsdom",
   setupFilesAfterEnv: ["./jest.setup.mjs"],
-  extensionsToTreatAsEsm: [".jsx"],
+  extensionsToTreatAsEsm: [".jsx", ".ts", ".tsx"],
   transform: {
-    "^.+\\.[jt]sx?$": "babel-jest",
+    "^.+\\.[jt]sx?$": ["babel-jest", { configFile: "./babel.config.mjs" }],
   },
+  moduleFileExtensions: ["js", "jsx", "ts", "tsx", "json", "node"],
   collectCoverage: false,
   collectCoverageFrom: [
     "./src/**/*.{js,jsx,ts,tsx}",

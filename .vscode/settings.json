@@ -2,5 +2,10 @@
     "cSpell.words": [
         "UNINSTANTIATED",
         "uuidv"
+    ],
+    "cSpell.ignoreWords": [
+        "demotee",
+        "draweropen",
+        "splodin"
     ]
 }

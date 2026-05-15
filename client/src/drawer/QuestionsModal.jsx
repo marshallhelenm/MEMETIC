@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import StyledDialog from "../components/StyledDialog";
 import { DrawerButton, DrawerIcon, DrawerItem } from "./DrawerComponents";
 
-const QuestionsModal = ({ opacity, drawerOpen }) => {
+const QuestionsModal = ({ opacity, draweropen }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -101,10 +101,10 @@ const QuestionsModal = ({ opacity, drawerOpen }) => {
   return (
     <>
       <DrawerItem onClick={handleOpen}>
-        <DrawerButton drawerOpen={drawerOpen}>
+        <DrawerButton draweropen={draweropen}>
           <Tooltip title="How To Play" placement="right-end">
             <div>
-              <DrawerIcon icon="circle-question" drawerOpen={drawerOpen} />
+              <DrawerIcon icon="circle-question" draweropen={draweropen} />
             </div>
           </Tooltip>
           <ListItemText primary="How To Play" sx={[opacity]} />

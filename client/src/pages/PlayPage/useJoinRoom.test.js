@@ -1,7 +1,6 @@
 import React from "react";
 import { renderHook, act } from "@testing-library/react";
 import { useJoinRoom } from "./useJoinRoom";
-
 // test useJoinRoom
 jest.useFakeTimers();
 
@@ -15,7 +14,7 @@ describe("useJoinRoom", () => {
         username: "test",
         gameKey: "gamekey",
         sendJsonMessage: sendMock,
-      })
+      }),
     );
     jest.advanceTimersByTime(500);
     expect(sendMock).not.toHaveBeenCalled();
@@ -31,7 +30,7 @@ describe("useJoinRoom", () => {
         gameKey: "gamekey",
         sendJsonMessage: sendMock,
         retryDelay: 200,
-      })
+      }),
     );
 
     expect(sendMock).not.toHaveBeenCalled();
@@ -45,7 +44,7 @@ describe("useJoinRoom", () => {
         type: "joinRoom",
         roomKey: "ABCDEFGH",
         username: "test",
-      })
+      }),
     );
   });
 
@@ -59,7 +58,7 @@ describe("useJoinRoom", () => {
         username: "test",
         gameKey: "gamekey",
         sendJsonMessage: sendMock,
-      })
+      }),
     );
 
     jest.advanceTimersByTime(500);

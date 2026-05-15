@@ -1,0 +1,345 @@
+:root {
+  --colorA: #2f184b;
+  --colorB: #532b88;
+  --colorC: #9b72cf;
+  --colorD: #c8b1e4;
+  --colorE: #f4effa;
+  --colorF: #c2e7da;
+  --colorG: #80fbc6;
+  --corners: 0.3rem;
+}
+
+/* const BREAKPOINTS = { 1: 0, 2: 540, 3: 740, 4: 980, 5: 1158, 6: 1380 }; */
+/* 6 */
+@media only screen and (min-width: 1380px) {
+  .gameBoard {
+    width: 1280px;
+  }
+}
+/* 5 */
+@media only screen and (min-width: 1158px) and (max-width: 1379px) {
+  .gameBoard {
+    width: 1070px;
+  }
+}
+/* 4 */
+@media only screen and (min-width: 980px) and (max-width: 1157px) {
+  .gameBoard {
+    width: 860px;
+  }
+}
+/* 3 */
+@media only screen and (min-width: 740px) and (max-width: 980px) {
+  .gameBoard {
+    min-width: 650px;
+  }
+}
+/* 2 */
+@media only screen and (min-width: 540) and (max-width: 739px) {
+  .gameBoard {
+    width: 440px;
+  }
+}
+/* 1 */
+@media only screen and (max-width: 539px) {
+  .gameBoard {
+    width: 230px;
+  }
+}
+
+.corners {
+  border-radius: var(--corners);
+}
+
+.colorF {
+  color: var(--colorF);
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+html,
+body {
+  font-family: "Roboto", sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+#root {
+  height: 100vh;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+}
+
+button:focus {
+  outline: 0;
+}
+
+.heading {
+  color: var(--colorC);
+  font-size: 3.5em;
+  margin: 0;
+  font-family: "CherryBomb";
+  text-align: center;
+  padding-bottom: 1%;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.guessy-background {
+  background-color: var(--colorA);
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+/* PlayGame */
+.play-game {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  overflow: scroll;
+}
+
+.play-header {
+  display: flex;
+  justify-content: space-between;
+  height: 15vh;
+  align-items: center;
+}
+
+.header-title {
+  align-items: center;
+  margin-right: 2%;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  /* grid-row-start: 1;
+  grid-row-end: 3; */
+}
+
+.header-buttons {
+  justify-items: end;
+  margin-right: 2%;
+}
+
+.header-box {
+  color: var(--colorD);
+  font-size: 1.2em;
+  border-radius: var(--corners);
+  height: fit-content;
+  padding: 0.5%;
+}
+
+.gameBoard {
+  text-align: center;
+  background-color: var(--colorB);
+  min-height: 33em;
+  max-height: 33 em;
+  display: flex;
+  flex-flow: row;
+  overflow-x: none;
+  overflow-y: scroll;
+  gap: 10px 12px;
+  padding: 1%;
+  border-radius: var(--corners);
+  margin: auto;
+  justify-content: center;
+}
+
+.gameBoard .boardColumn {
+  display: flex;
+  flex-flow: column wrap;
+  column-gap: 10px !important;
+  /* justify-content: space-between; */
+  justify-content: flex-start;
+  /* justify-content: center; */
+}
+
+/* Stub */
+
+.stub {
+  border-radius: var(--corners);
+  background-color: var(--colorE);
+  width: 200px;
+  position: relative;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.stub-back {
+  background-image: url("images/bgqtile-small.png");
+  height: 90%;
+  border-radius: var(--corners);
+}
+
+.stub-image {
+  border-radius: var(--corners);
+  margin: 1%;
+  max-width: 98%;
+}
+
+.dud-origin {
+  color: var(--colorB) !important;
+}
+
+.stub-image.back {
+  padding: 15%;
+}
+
+.stub > .loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 0;
+  padding-bottom: 50%;
+  padding-top: 50%;
+}
+
+.ff-canvas {
+  border-radius: var(--corners);
+  padding: 1%;
+  /* max-height: 100%;
+  max-width: 98%; */
+}
+
+.overlay {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  bottom: 0;
+  z-index: 99;
+  height: fit-content;
+  width: 98%;
+  background-color: var(--colorA);
+  opacity: 0.8;
+  border-bottom-left-radius: var(--corners);
+  border-bottom-right-radius: var(--corners);
+  margin: 1%;
+}
+
+.overlay-item {
+  z-index: 99;
+  opacity: 1;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  cursor: pointer;
+}
+
+.overlay-icon {
+  color: var(--colorE) !important;
+}
+
+.player-card-star {
+  z-index: 99;
+  height: 45px;
+  margin: 3%;
+}
+
+.observer-star {
+  /* color: var(--colorG) !important; */
+  color: var(--colorD) !important;
+  z-index: 99;
+}
+
+.absolute {
+  position: absolute;
+}
+.modal-image {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+/* Logo */
+.guessy-logo-spin {
+  height: 40vmin;
+  pointer-events: none;
+  border-radius: var(--corners);
+}
+
+.small-logo {
+  margin-right: 10px;
+  height: 2.8em;
+}
+
+.small-logo img {
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .guessy-logo-spin {
+    animation: guessy-logo-spin infinite 20s linear;
+  }
+}
+
+@keyframes guessy-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.popover > .MuiPaper-root {
+  background-color: var(--colorB);
+  color: var(--colorE);
+}
+
+.cs-message-list.memetic {
+  background-color: var(--colorE) !important;
+}
+
+.cs-message--outgoing.memetic
+  > .cs-message__content-wrapper
+  > .cs-message__content {
+  background-color: var(--colorC) !important;
+}
+.cs-message--incoming.memetic
+  > .cs-message__content-wrapper
+  > .cs-message__content {
+  background-color: var(--colorD) !important;
+}
+
+.cs-message-input.memetic {
+  background-color: var(--colorE) !important;
+}
+.cs-message-input.memetic
+  > .cs-message-input__content-editor-wrapper
+  > .cs-message-input__content-editor-container
+  > .cs-message-input__content-editor {
+  background-color: var(--colorD) !important;
+}
+.cs-message-input.memetic > .cs-message-input__content-editor-wrapper {
+  background-color: var(--colorD) !important;
+}
+.cs-message-input.memetic
+  > .cs-message-input__tools
+  > .cs-button--send
+  > .fa-paper-plane {
+  color: var(--colorB) !important;
+}
+
+.cs-conversation-header.memetic {
+  background-color: var(--colorC) !important;
+  cursor: pointer;
+  height: 30px;
+}
+
+.chat-collapse {
+  margin-left: 5px;
+}
