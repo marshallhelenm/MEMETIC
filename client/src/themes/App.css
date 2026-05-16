@@ -180,7 +180,7 @@ button:focus {
 }
 
 .stub-back {
-  background-image: url("images/bgqtile-small.png");
+  background-image: url("../assets/bgqtile-small.png");
   height: 90%;
   border-radius: var(--corners);
 }
