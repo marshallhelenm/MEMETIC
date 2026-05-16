@@ -8,10 +8,9 @@ import "./themes/App.css";
 import App from "./App.js";
 const LandingPage = lazy(() => import("./pages/LandingPage.jsx"));
 const Join = lazy(() => import("./pages/Join.jsx"));
-const Upload = lazy(() => import("./pages/Upload.jsx"));
-const ImageAnalyzer = lazy(() => import("./pages/ImageAnalyzer.jsx"));
 const NameForm = lazy(() => import("./pages/NameForm.jsx"));
 const PlayPage = lazy(() => import("./pages/PlayPage/PlayPage.js"));
+const MemeUploader = lazy(() => import("./pages/MemeUploader.js"));
 
 const router = createBrowserRouter([
   {
@@ -35,12 +34,8 @@ const router = createBrowserRouter([
         element: <NameForm />,
       },
       {
-        path: "/upload",
-        element: <Upload />,
-      },
-      {
-        path: "/image_analyzer",
-        element: <ImageAnalyzer />,
+        path: "/meme_uploader",
+        element: <MemeUploader />,
       },
     ],
   },

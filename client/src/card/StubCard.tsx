@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ReactCardFlip from "react-card-flip";
+import ReactCardFlip from "../utils/ReactCardFlip";
 
 import StubBack from "./StubBack";
 import StubFront from "./StubFront";

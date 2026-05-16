@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useMemo, useState, ReactNode } from "react";
 import { useSearchParams } from "react-router-dom";
-import useBreakpoint from "use-breakpoint";
+import useBreakpoint from "../useBreakpoint/useBreakpoint";
 
 import { useWS } from "../hooks/useContextHooks";
 import { memeSampler } from "../assets/memeCollection";
