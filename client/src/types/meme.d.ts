@@ -6,3 +6,7 @@ export interface MemeData {
   height_multiplier: number;
   alt?: string;
 }
+
+export interface MemeLibrary {
+  [key: string]: MemeData;
+}

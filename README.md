@@ -29,22 +29,22 @@ This project includes a custom algorithm to **dynamically arrange meme images** 
 
 ---
 
-## 📌 TODO
+### 📌 To Do
 
-* ⏳ Dockerize for deployment
+* 💬 Live chat in rooms
+
+### 🚀 Ideas for Future
+
 * ⏳ Specific alternate still images for gifs
-
-### 🚀 Ambitious Ideas
-
-* ⏳ User accounts with saved custom meme boards
+* ⬆️ Ability to upload new memes in-app
 
 ---
 
 ## 🛠️ Tech Stack
 
-* **Frontend:** React (with Vite), Material UI, CSS/Styled Components
+* **Frontend:** React (with Vite), TypeScript, Material UI, CSS/Styled Components
 * **Real-time:** [react-use-websocket](https://github.com/robtaussig/react-use-websocket)
-* **Backend:** Node.js (WebSocket server)
+* **Backend:** Node.js (WebSocket server, TypeScript)
 * **Styling/Layout:** Material UI theming, CSS styling, custom image-sorting algorithm for responsive boards
 
 ---
@@ -84,10 +84,21 @@ npm install
 
 ### 3️⃣ Run locally
 
+#### 🐳 With Docker Compose (recommended)
+
+```bash
+# From the project root
+docker-compose up --build
+```
+
+This will start both the backend and frontend in production mode. Access the app at [http://localhost](http://localhost).
+
+#### For local development without Docker
+
 ```bash
 # Start backend
 cd server
-node server.js
+npm run dev
 
 # Start frontend (Vite dev server)
 cd ../client
