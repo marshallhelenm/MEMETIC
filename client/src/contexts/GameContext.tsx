@@ -1,11 +1,10 @@
 import React, { createContext, useEffect, useMemo, useState, ReactNode } from "react";
 import { useSearchParams } from "react-router-dom";
-import useBreakpoint from "../useBreakpoint/useBreakpoint";
 
 import { useWS } from "../hooks/useContextHooks";
+import useLayoutBreakpoint from "../hooks/useLayoutBreakpoint";
 import { memeSampler } from "../assets/memeCollection";
 import { useTraceUpdate } from "../hooks/useTraceUpdate";
-import { calculateDialogWidth } from "../utils/Helpers";
 
 import type { GenericMessage } from "../../shared/types/messages";
 
@@ -36,6 +35,8 @@ interface GameContextType {
   loadingCards: boolean;
   columns: any;
   columnCount: number;
+  columnWidth: number;
+  boardWidth: number;
   staticGifs: boolean;
   setStaticGifs: React.Dispatch<React.SetStateAction<boolean>>;
   allKeys: any[];
@@ -43,11 +44,10 @@ interface GameContextType {
   dialogWidth: string;
   messageHistory: any[];
   setMessageHistory: React.Dispatch<React.SetStateAction<any[]>>;
+  mobile?: boolean;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
-
-const BREAKPOINTS = { 1: 0, 2: 540, 3: 740, 4: 980, 5: 1158, 6: 1380 };
 
 interface GameProviderProps {
   children: ReactNode;
@@ -55,8 +55,8 @@ interface GameProviderProps {
 
 function GameProvider({ children }: GameProviderProps) {
   const [searchParams] = useSearchParams();
-  const { breakpoint, maxWidth, minWidth } = useBreakpoint(BREAKPOINTS, 1);
-  let dialogWidth = calculateDialogWidth(breakpoint);
+  const { columnCount, columnWidth, boardWidth, dialogWidth, mobile } =
+    useLayoutBreakpoint();
   const { sendJsonMessage, lastGameContentsMessage, lastJsonMessage } = useWS() as {
     sendJsonMessage: (msg: GenericMessage) => void;
     lastGameContentsMessage?: GameContentsMessage;
@@ -73,7 +73,6 @@ function GameProvider({ children }: GameProviderProps) {
   const [messageHistory, setMessageHistory] = useState<any[]>([]);
 
   const roomKey = searchParams.get("roomKey");
-  const columnCount = Number(breakpoint);
 
   const {
     allKeysChanged,
@@ -161,6 +160,8 @@ function GameProvider({ children }: GameProviderProps) {
       loadingCards,
       columns: columnsObject[columnCount],
       columnCount,
+      columnWidth,
+      boardWidth,
       staticGifs,
       setStaticGifs,
       allKeys,
@@ -168,12 +169,15 @@ function GameProvider({ children }: GameProviderProps) {
       dialogWidth,
       messageHistory,
       setMessageHistory,
+      mobile,
     };
   }, [
     createGame,
     validGame,
     columnsObject,
     columnCount,
+    columnWidth,
+    boardWidth,
     setLoadingCards,
     loadingCards,
     staticGifs,
@@ -183,6 +187,7 @@ function GameProvider({ children }: GameProviderProps) {
     dialogWidth,
     messageHistory,
     setMessageHistory,
+    mobile
   ]);
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

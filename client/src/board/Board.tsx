@@ -5,8 +5,11 @@ const CardColumns = lazy(() => import("./CardColumns"));
 import { useGame } from "../hooks/useContextHooks";
 
 const Board: React.FC = () => {
-  const { setLoadingCards, loadingCards, gameKey } = useGame();
+  const { setLoadingCards, loadingCards, gameKey, boardWidth } = useGame();
   const gameKeyRef = useRef<number | null>(gameKey);
+  const boardStyle = {
+    width: `min(100%, ${boardWidth}px)`,
+  };
 
   useEffect(() => {
     if (gameKeyRef.current !== gameKey) {
@@ -17,13 +20,13 @@ const Board: React.FC = () => {
 
   if (loadingCards) {
     return (
-      <div className="gameBoard">
+      <div className="gameBoard" style={boardStyle}>
         <LoadingColumns />
       </div>
     );
   } else {
     return (
-      <div className="gameBoard">
+      <div className="gameBoard" style={boardStyle}>
         <Suspense fallback={<LoadingColumns />}>
           <CardColumns />
         </Suspense>

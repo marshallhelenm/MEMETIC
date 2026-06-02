@@ -1,22 +1,30 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import StubImage from "./StubImage";
+import MemeCardImage from "./MemeCardImage";
 import { colorD, colorG } from "../assets/styles";
 
-function StubBack({ itemKey, item, isPlayerCard, flip, height }) {
+function MemeCardBack({
+  itemKey,
+  item,
+  isPlayerCard,
+  flip,
+  height,
+  cardWidth,
+}) {
   return (
     <div
-      className={`stub`}
+      className="stub"
       id={itemKey}
       style={{
         height: `${height}px`,
+        width: `${cardWidth}px`,
         backgroundImage: "images/bgq1.png",
         backgroundColor: isPlayerCard ? colorG : colorD,
       }}
       onClick={flip}
     >
-      <StubImage
+      <MemeCardImage
         item={item}
         flip={flip}
         flipped={true}
@@ -27,7 +35,7 @@ function StubBack({ itemKey, item, isPlayerCard, flip, height }) {
   );
 }
 
-StubBack.propTypes = {
+MemeCardBack.propTypes = {
   flip: PropTypes.func,
   height: PropTypes.number,
   isPlayerCard: PropTypes.bool,
@@ -37,6 +45,7 @@ StubBack.propTypes = {
     title: PropTypes.string,
   }),
   itemKey: PropTypes.string,
+  cardWidth: PropTypes.number,
 };
 
-export default StubBack;
+export default MemeCardBack;

@@ -5,7 +5,7 @@ const ReactFreezeframe = lazy(() => import("react-freezeframe"));
 import { colorB, colorE } from "../assets/styles";
 import { GuessySuspense } from "../components/GuessySuspense";
 
-function StubImage({ item, flipped, height }) {
+function MemeCardImage({ item, flipped, height }) {
   const staticGifs = sessionStorage.getItem("guessy-gifs") === "true";
 
   const imgElement = (
@@ -54,7 +54,7 @@ function StubImage({ item, flipped, height }) {
   }
 }
 
-StubImage.propTypes = {
+MemeCardImage.propTypes = {
   flipped: PropTypes.bool,
   height: PropTypes.number,
   item: PropTypes.shape({
@@ -64,4 +64,4 @@ StubImage.propTypes = {
   }),
 };
 
-export default StubImage;
+export default MemeCardImage;

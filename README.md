@@ -54,7 +54,6 @@ This project includes a custom algorithm to **dynamically arrange meme images** 
 * [`react-use-websocket`](https://www.npmjs.com/package/react-use-websocket) – easy WebSocket integration for React
 * [`react-card-flip`](https://www.npmjs.com/package/react-card-flip) – smooth flipping animation for cards
 * [`react-freezeframe`](https://www.npmjs.com/package/react-freezeframe) – freeze and control animated GIFs
-* [`usebreakpoint`](https://www.npmjs.com/package/use-breakpoint) – React hook for handling responsive breakpoints
 * [`@faker-js/faker`](https://www.npmjs.com/package/@faker-js/faker) – generate fake data for random usernames
 * [`react-confetti-explosion`](https://www.npmjs.com/package/react-confetti-explosion) – confetti on a correct guess
 * [`chat-ui-kit-react`](https://github.com/chatscope/chat-ui-kit-react) – for chat box styling

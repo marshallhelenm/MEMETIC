@@ -35,7 +35,7 @@ const waitUntil = (
       ping();
       pingCount++;
     } else {
-      setTimeout(waitForConditional.bind(this, resolve, reject), 30);
+      setTimeout(() => waitForConditional(resolve, reject), 30);
     }
   }
 };
@@ -48,23 +48,4 @@ function randomCardKey<T = any>(keys: T[]): T | undefined {
   return keys[index];
 }
 
-const calculateDialogWidth = (breakpoint: string): string => {
-  switch (breakpoint) {
-    case "1":
-      return "230px";
-    case "2":
-      return "300px";
-    case "3":
-      return "400px";
-    case "4":
-      return "500px";
-    case "5":
-      return "700px";
-    case "6":
-      return "800px";
-    default:
-      return "400px";
-  }
-};
-
-export { devLog, waitUntil, randomCardKey, calculateDialogWidth };
+export { devLog, waitUntil, randomCardKey };

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import ReactCardFlip from "../utils/ReactCardFlip";
 
-import StubBack from "./StubBack";
-import StubFront from "./StubFront";
-import { usePlayers } from "../hooks/useContextHooks";
+import MemeCardBack from "./MemeCardBack";
+import MemeCardFront from "./MemeCardFront";
+import { useGame, usePlayers } from "../hooks/useContextHooks";
 import type { MemeData } from "../types/meme";
 
 
-interface StubCardProps {
+interface MemeCardProps {
   roomKey: string | null;
   itemKey: string;
   item: MemeData;
@@ -27,14 +27,18 @@ type LocalReactFlipCardProps = {
   children: [React.ReactNode, React.ReactNode];
 };
 
-const StubCard: React.FC<StubCardProps> = ({ roomKey, itemKey, item }) => {
+const MemeCard: React.FC<MemeCardProps> = ({ roomKey, itemKey, item }) => {
+  const { columnWidth } = useGame();
   const { myPlayerCard } = usePlayers();
   const isPlayerCard = itemKey === myPlayerCard;
   const storageId = `${roomKey}-flipped-${itemKey}`;
   const [flipped, setFlipped] = useState<boolean>(
     sessionStorage.getItem(storageId) === "true"
   );
-  const height = 200 * item.height_multiplier + 2;
+
+  const cardWidth = Math.floor(columnWidth);
+
+  const height = cardWidth * item.height_multiplier + 2;
 
   function flip(e: React.MouseEvent) {
     e.preventDefault();
@@ -57,23 +61,25 @@ const StubCard: React.FC<StubCardProps> = ({ roomKey, itemKey, item }) => {
         isFlipped={flipped}
         flipDirection="horizontal"
       >
-        <StubFront
+        <MemeCardFront
           itemKey={itemKey}
           item={item}
           isPlayerCard={isPlayerCard}
           flip={flip}
           height={height}
+          cardWidth={cardWidth}
         />
-        <StubBack
+        <MemeCardBack
           itemKey={itemKey}
           item={item}
           isPlayerCard={isPlayerCard}
           flip={flip}
           height={height}
+          cardWidth={cardWidth}
         />
       </TypedReactCardFlip>
     </div>
   );
 };
 
-export default StubCard;
+export default MemeCard;

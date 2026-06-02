@@ -9,43 +9,7 @@
   --corners: 0.3rem;
 }
 
-/* const BREAKPOINTS = { 1: 0, 2: 540, 3: 740, 4: 980, 5: 1158, 6: 1380 }; */
-/* 6 */
-@media only screen and (min-width: 1380px) {
-  .gameBoard {
-    width: 1280px;
-  }
-}
-/* 5 */
-@media only screen and (min-width: 1158px) and (max-width: 1379px) {
-  .gameBoard {
-    width: 1070px;
-  }
-}
-/* 4 */
-@media only screen and (min-width: 980px) and (max-width: 1157px) {
-  .gameBoard {
-    width: 860px;
-  }
-}
-/* 3 */
-@media only screen and (min-width: 740px) and (max-width: 980px) {
-  .gameBoard {
-    min-width: 650px;
-  }
-}
-/* 2 */
-@media only screen and (min-width: 540) and (max-width: 739px) {
-  .gameBoard {
-    width: 440px;
-  }
-}
-/* 1 */
-@media only screen and (max-width: 539px) {
-  .gameBoard {
-    width: 230px;
-  }
-}
+/* Layout sizing is computed in GameContext + Board from standard viewport breakpoints. */
 
 .corners {
   border-radius: var(--corners);
@@ -148,14 +112,17 @@ button:focus {
   background-color: var(--colorB);
   min-height: 33em;
   max-height: 33 em;
+  box-sizing: border-box;
   display: flex;
   flex-flow: row;
   overflow-x: none;
   overflow-y: scroll;
   gap: 10px 12px;
-  padding: 1%;
+  padding: 8px;
   border-radius: var(--corners);
-  margin: auto;
+  margin-left: 1vw;
+  margin-right: 1vw;
+  margin-top: 2vh;
   justify-content: center;
 }
 
@@ -173,7 +140,6 @@ button:focus {
 .stub {
   border-radius: var(--corners);
   background-color: var(--colorE);
-  width: 200px;
   position: relative;
   display: inline-block;
   margin-bottom: 10px;
@@ -189,6 +155,7 @@ button:focus {
   border-radius: var(--corners);
   margin: 1%;
   max-width: 98%;
+  width: 98%;
 }
 
 .dud-origin {
@@ -342,4 +309,34 @@ button:focus {
 
 .chat-collapse {
   margin-left: 5px;
+}
+
+/* Responsive styles for mobile devices */
+@media (max-width: 768px) {
+  .heading {
+    font-size: 2.5em;
+  }
+
+  .play-header {
+    flex-direction: column;
+    height: auto;
+    gap: 10px;
+  }
+
+  .header-title {
+    margin-right: 0;
+    grid-column-start: auto;
+    grid-column-end: auto;
+  }
+
+  .header-buttons {
+    justify-items: center;
+    margin-right: 0;
+  }
+
+  .gameBoard {
+    margin: auto;
+    margin-top: 5vh;
+    padding-top: 10px;
+  }
 }

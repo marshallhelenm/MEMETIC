@@ -10,8 +10,8 @@ import * as memeCollection from "../src/assets/memeCollection";
 jest.mock("../src/card/MissingStub", () => () => (
   <div data-testid="MissingStub" />
 ));
-jest.mock("../src/card/StubCard", () => ({ itemKey, roomKey }: { itemKey: string; roomKey: string }) => (
-  <div data-testid={`StubCard-${itemKey}`} data-roomkey={roomKey}>
+jest.mock("../src/card/MemeCard", () => ({ itemKey, roomKey }: { itemKey: string; roomKey: string }) => (
+  <div data-testid={`MemeCard-${itemKey}`} data-roomkey={roomKey}>
     {itemKey}
   </div>
 ));
@@ -79,15 +79,15 @@ describe("CardColumns", () => {
 
     const columns = screen.getAllByTestId("BoardColumn");
     expect(columns).toHaveLength(2);
-    expect(screen.getByTestId("StubCard-item1")).toHaveAttribute(
+    expect(screen.getByTestId("MemeCard-item1")).toHaveAttribute(
       "data-roomkey",
       "testRoom"
     );
-    expect(screen.getByTestId("StubCard-item2")).toHaveAttribute(
+    expect(screen.getByTestId("MemeCard-item2")).toHaveAttribute(
       "data-roomkey",
       "testRoom"
     );
-    expect(screen.getByTestId("StubCard-item3")).toHaveAttribute(
+    expect(screen.getByTestId("MemeCard-item3")).toHaveAttribute(
       "data-roomkey",
       "testRoom"
     );
@@ -116,7 +116,7 @@ describe("CardColumns", () => {
 
     await screen.findAllByTestId("BoardColumn");
     expect(screen.getAllByTestId("BoardColumn")).toHaveLength(1);
-    expect(screen.getByTestId("StubCard-validItem")).toBeInTheDocument();
+    expect(screen.getByTestId("MemeCard-validItem")).toBeInTheDocument();
     expect(screen.getByTestId("MissingStub")).toBeInTheDocument();
   });
 

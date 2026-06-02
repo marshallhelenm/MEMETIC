@@ -1,8 +1,8 @@
 import ProgressWheel from "../components/ProgressWheel";
 
-function LoadingStub() {
+function LoadingStub({ cardWidth }) {
   return (
-    <div className="stub">
+    <div className="stub" style={{ width: `${cardWidth}px` }}>
       <div className="loading">
         <ProgressWheel />
       </div>

@@ -5,7 +5,7 @@ import { useGame } from "../hooks/useContextHooks";
 import { memeData } from "../assets/memeCollection";
 import BoardColumn from "./BoardColumn";
 const MissingStub = lazy(() => import("../card/MissingStub"));
-import StubCard from "../card/StubCard";
+import MemeCard from "../card/MemeCard";
 import type { MemeData } from "../types/meme.js";
 
 const CardColumns: React.FC = () => {
@@ -24,7 +24,7 @@ const CardColumns: React.FC = () => {
           cards.push(<MissingStub key={itemKey + "-missing"} />);
         } else {
           cards.push(
-            <StubCard
+            <MemeCard
               itemKey={itemKey}
               item={item}
               key={`${itemKey}-card`}

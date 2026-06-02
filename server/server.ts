@@ -8,7 +8,7 @@ import type { Connections, Player } from "./broadcaster";
 
 const server = http.createServer();
 const wsServer = new WebSocketServer({ server });
-const port = 8080;
+const port = 4020;
 
 const connections: Connections = {};
 const rooms: Rooms = {};

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import StubImage from "../card/StubImage";
+import MemeCardImage from "../card/MemeCardImage";
 import Overlay from "./Overlay";
 import { colorE, colorG } from "../assets/styles";
 import goldStar from "../assets/goldStar.png";
@@ -7,15 +7,16 @@ import { Tooltip } from "@mui/material";
 import { usePlayers } from "../hooks/useContextHooks";
 import type { MemeData } from "../types/meme";
 
-interface StubFrontProps {
+interface MemeCardFrontProps {
   itemKey: string;
   item: MemeData;
   isPlayerCard: boolean;
   flip: (e: React.MouseEvent) => void;
   height: number;
+  cardWidth: number;
 }
 
-const StubFront: React.FC<StubFrontProps> = ({ itemKey, item, isPlayerCard, flip, height }) => {
+const MemeCardFront: React.FC<MemeCardFrontProps> = ({ itemKey, item, isPlayerCard, flip, height, cardWidth }) => {
   const [overlay, setOverlay] = useState<boolean>(false);
   const { isObserver } = usePlayers();
   function playerStar() {
@@ -35,15 +36,18 @@ const StubFront: React.FC<StubFrontProps> = ({ itemKey, item, isPlayerCard, flip
         id={itemKey}
         style={{
           height: `${height}px`,
+          width: `${cardWidth}px`,
           backgroundImage: "images/bgq1.png",
           backgroundColor: isPlayerCard && !isObserver ? colorG : colorE,
+          alignItems: "center",
+          justifyContent: "center",
         }}
         onClick={flip}
         onMouseEnter={() => setOverlay(true)}
         onMouseLeave={() => setOverlay(false)}
       >
         <Overlay item={item} overlay={overlay} itemKey={itemKey} />
-        <StubImage
+        <MemeCardImage
           item={item}
           flipped={false}
           height={height}
@@ -53,4 +57,4 @@ const StubFront: React.FC<StubFrontProps> = ({ itemKey, item, isPlayerCard, flip
   );
 };
 
-export default StubFront;
+export default MemeCardFront;

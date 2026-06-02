@@ -26,7 +26,7 @@ export interface WSContextValue {
   }
 
   const WSContext = createContext<WSContextValue | undefined>(undefined);
-  const socketURL = "ws://localhost:8080";
+  const socketURL = "ws://localhost:4020";
 
   function WSProvider({ children }: WSProviderProps) {
     const uuidRef = useRef<string>("");

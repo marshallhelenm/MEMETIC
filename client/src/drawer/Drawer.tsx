@@ -1,6 +1,7 @@
 import React, { useState, ReactNode } from "react";
 import { useSearchParams } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -24,12 +25,15 @@ import { usePlayers } from "../hooks/useContextHooks";
 const drawerWidth = 200;
 
 const openedMixin = (theme: any) => ({
-  width: drawerWidth,
+  width: "100vw",
   transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: "hidden",
+  [theme.breakpoints.up("sm")]: {
+    width: drawerWidth,
+  },
 });
 
 const closedMixin = (theme: any) => ({
@@ -38,7 +42,7 @@ const closedMixin = (theme: any) => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: "hidden",
-  width: `calc(${theme.spacing(7)} + 1px)`,
+  width: 0,
   [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
@@ -64,8 +68,12 @@ const AppBar = styled(MuiAppBar, {
     {
       props: ({ open }: { open: boolean }) => open,
       style: {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: 0,
+        width: "100%",
+        [theme.breakpoints.up("sm")]: {
+          marginLeft: drawerWidth,
+          width: `calc(100% - ${drawerWidth}px)`,
+        },
         transition: theme.transitions.create(["width", "margin"], {
           easing: theme.transitions.easing.sharp,
           duration: theme.transitions.duration.enteringScreen,
@@ -113,6 +121,7 @@ interface MiniDrawerProps {
 
 const MiniDrawer: React.FC<MiniDrawerProps> = ({ children }) => {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [searchParams] = useSearchParams();
   const [draweropen, setDrawerOpen] = useState<boolean>(false);
   const { player1Uuid } = usePlayers();
@@ -190,7 +199,7 @@ const MiniDrawer: React.FC<MiniDrawerProps> = ({ children }) => {
           <Logo spin={false} header={true} />
           <h1 className="heading">MEMETIC</h1>
         </Toolbar>
-        <GifPauseButton draweropen={draweropen} />
+        {!isMobile && <GifPauseButton draweropen={draweropen} />}
       </AppBar>
       {/* drawer */}
       <DrawerStyled variant="permanent" open={draweropen}>
@@ -199,6 +208,11 @@ const MiniDrawer: React.FC<MiniDrawerProps> = ({ children }) => {
         </DrawerHeader>
         <Divider />
         <>
+          {isMobile && (
+            <Box sx={{ px: 2, py: 1, display: "flex", justifyContent: "flex-end" }}>
+              <GifPauseButton draweropen={draweropen} />
+            </Box>
+          )}
           <DrawerItem onClick={handleCopyKey}>
             {/* Room Key */}
             <DrawerButton draweropen={draweropen}>
@@ -243,7 +257,7 @@ const MiniDrawer: React.FC<MiniDrawerProps> = ({ children }) => {
           )}
         </>
       </DrawerStyled>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" id="app-main" sx={{ flexGrow: 1}}>
         <DrawerHeader />
         {children}
       </Box>
