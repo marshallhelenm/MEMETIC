@@ -120,8 +120,7 @@ button:focus {
   gap: 10px 12px;
   padding: 8px;
   border-radius: var(--corners);
-  margin-left: 1vw;
-  margin-right: 1vw;
+  margin: auto;
   margin-top: 2vh;
   justify-content: center;
 }
@@ -335,7 +334,6 @@ button:focus {
   }
 
   .gameBoard {
-    margin: auto;
     margin-top: 5vh;
     padding-top: 10px;
   }

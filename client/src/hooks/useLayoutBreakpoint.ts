@@ -25,8 +25,8 @@ const SIDEBAR_RESERVED_WIDTH = 65;
 const BOARD_MAX_WIDTH = 1280;
 const BOARD_COLUMN_GAP = 12;
 const BOARD_HORIZONTAL_PADDING = 16;
-const MIN_BOARD_WIDTH = 120;
-const MIN_CARD_WIDTH = 100;
+const MIN_BOARD_WIDTH = 100;
+const MIN_CARD_WIDTH = 80;
 
 const LAYOUT_CONFIGS: LayoutConfig[] = [
   { maxViewport: 639, tier: "xs", columnCount: 1, dialogWidth: "230px" },
@@ -124,7 +124,7 @@ function useLayoutBreakpoint(): LayoutBreakpointState {
     const layout = getLayoutConfig(viewportWidth);
     const availableBoardWidth = Math.max(
       MIN_BOARD_WIDTH,
-      Math.min(BOARD_MAX_WIDTH, contentWidth)
+      Math.min(BOARD_MAX_WIDTH, contentWidth * 0.95)
     ); // Ensure board doesn't exceed max width or available content width, but has a minimum width for very small viewports.
 
     const boardInnerWidth = Math.max(
