@@ -6,9 +6,18 @@ import { broadcastGameContents } from "./broadcaster";
 import type { Rooms } from "./roomManager";
 import type { Connections, Player } from "./broadcaster";
 
-const server = http.createServer();
-const wsServer = new WebSocketServer({ server });
-const port = 4020;
+const server = http.createServer((req, res) => {
+  if (req.url === "/health") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ status: "ok" }));
+    return;
+  }
+
+  res.writeHead(404, { "Content-Type": "application/json" });
+  res.end(JSON.stringify({ error: "Not Found" }));
+});
+const wsServer = new WebSocketServer({ server, path: "/ws" });
+const port = Number(process.env.PORT) || 4020;
 
 const connections: Connections = {};
 const rooms: Rooms = {};
@@ -22,8 +31,9 @@ const sendNewUuid = (connection: WebSocket) => {
 };
 
 wsServer.on("connection", (connection: WebSocket, request: http.IncomingMessage) => {
-  const searchParams = new URLSearchParams(request.url ? request.url.slice(1) : "");
-  let uuid = searchParams.get("uuid");
+  const host = request.headers.host || "localhost";
+  const requestUrl = new URL(request.url || "/ws", `http://${host}`);
+  let uuid = requestUrl.searchParams.get("uuid");
   console.log("received uuid: ", uuid);
 
   if (!uuid || uuid === "null" || uuid === "undefined") {
@@ -56,6 +66,6 @@ wsServer.on("connection", (connection: WebSocket, request: http.IncomingMessage)
   });
 });
 
-server.listen(port, () => {
+server.listen(port, "0.0.0.0", () => {
   console.log(`Websocket server is running on port ${port}`);
 });

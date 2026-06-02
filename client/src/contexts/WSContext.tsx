@@ -26,7 +26,64 @@ export interface WSContextValue {
   }
 
   const WSContext = createContext<WSContextValue | undefined>(undefined);
-  const socketURL = "ws://localhost:4020";
+  const LOCAL_WS_URL = "ws://localhost:4020/ws";
+
+  const parseWebSocketUrl = (rawUrl: string): string | null => {
+    const trimmed = rawUrl.trim();
+    if (!trimmed) return null;
+
+    try {
+      const hasScheme = /^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(trimmed);
+      const candidateUrl = hasScheme ? trimmed : `https://${trimmed}`;
+      const parsed = new URL(candidateUrl);
+
+      if (parsed.protocol === "http:") parsed.protocol = "ws:";
+      if (parsed.protocol === "https:") parsed.protocol = "wss:";
+
+      if (parsed.protocol !== "ws:" && parsed.protocol !== "wss:") {
+        return null;
+      }
+
+      if (!parsed.pathname || parsed.pathname === "/") {
+        parsed.pathname = "/ws";
+      }
+
+      return parsed.toString();
+    } catch {
+      return null;
+    }
+  };
+
+  const getConfiguredSocketURL = () => {
+    if (typeof __VITE_WS_URL__ === "string") {
+      return parseWebSocketUrl(__VITE_WS_URL__);
+    }
+    return null;
+  };
+
+  const resolveSocketURL = () => {
+    const configuredSocketURL = getConfiguredSocketURL();
+    if (configuredSocketURL) {
+      return configuredSocketURL;
+    }
+
+    if (typeof window === "undefined") {
+      return LOCAL_WS_URL;
+    }
+
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const isLocalhost =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1";
+
+    if (isLocalhost) {
+      return LOCAL_WS_URL;
+    }
+
+    return `${protocol}//${window.location.host}/ws`;
+  };
+
+  const socketURL = resolveSocketURL();
 
   function WSProvider({ children }: WSProviderProps) {
     const uuidRef = useRef<string>("");

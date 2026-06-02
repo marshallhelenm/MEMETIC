@@ -4,6 +4,9 @@ import eslint from "vite-plugin-eslint";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  define: {
+    __VITE_WS_URL__: JSON.stringify(process.env.VITE_WS_URL || ""),
+  },
   resolve: {
     alias: {
       crypto: "crypto-browserify",
