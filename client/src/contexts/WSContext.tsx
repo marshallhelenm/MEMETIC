@@ -155,7 +155,7 @@ export interface WSContextValue {
         socket.onmessage = () => {
           const message = lastJsonMessage as any;
           if (!message) return;
-          console.log("WSContext message received: ", message.type);
+          // console.log("WSContext message received: ", message.type);
 
           setLastMessageReceivedAt(Date.now());
           try {

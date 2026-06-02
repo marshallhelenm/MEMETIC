@@ -36,7 +36,7 @@ export function handleMessage(
   let message: any;
   try {
     message = JSON.parse(bytes.toString());
-    console.log("Message: ", message.type);
+    // console.log("Message: ", message.type);
 
     // Message type validation
     const allowedTypes = [
@@ -109,7 +109,7 @@ export function handleMessage(
       case "acceptUuid":
         connections[uuid] = connection;
         if (!player) players[uuid] = deepClone(emptyPlayerTemplate);
-        console.log(`New connection established with UUID: ${uuid}`);
+        // console.log(`New connection established with UUID: ${uuid}`);
         break;
       case "chatMessage":
         connections[uuid] = connection;

@@ -145,7 +145,6 @@ function useLayoutBreakpoint(): LayoutBreakpointState {
     ); // Calculate total board width by adding column widths, gaps, and horizontal padding, ensuring a minimum board width.
 
 
-    console.log(`Layout Breakpoint: viewportWidth=${viewportWidth}, contentWidth=${contentWidth}, tier=${layout.tier}, columnCount=${layout.columnCount}, columnWidth=${columnWidth}, boardWidth=${boardWidth}, dialogWidth=${layout.dialogWidth}`)
     return {
       viewportWidth,
       tier: layout.tier,

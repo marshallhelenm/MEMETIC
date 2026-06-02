@@ -25,7 +25,7 @@ const players: { [uuid: string]: Player } = {};
 
 // *server management
 const sendNewUuid = (connection: WebSocket) => {
-  console.log("sending new uuid");
+  // console.log("sending new uuid");
   const uuid = uuidv4();
   connection.send(JSON.stringify({ type: "uuid", uuid: uuid }));
 };
@@ -34,7 +34,7 @@ wsServer.on("connection", (connection: WebSocket, request: http.IncomingMessage)
   const host = request.headers.host || "localhost";
   const requestUrl = new URL(request.url || "/ws", `http://${host}`);
   let uuid = requestUrl.searchParams.get("uuid");
-  console.log("received uuid: ", uuid);
+  // console.log("received uuid: ", uuid);
 
   if (!uuid || uuid === "null" || uuid === "undefined") {
     sendNewUuid(connection);
@@ -42,7 +42,7 @@ wsServer.on("connection", (connection: WebSocket, request: http.IncomingMessage)
     connections[uuid] = connection;
     let player = players[uuid];
     // player template assignment handled in messageHandler if needed
-    console.log("connection established with uuid: ", uuid);
+    // console.log("connection established with uuid: ", uuid);
   }
 
   connection.on("message", (message: Buffer) => {

@@ -22,7 +22,7 @@ export function sendToUuid(uuid: string, message: any, connections: Connections)
   if (typeof message === "string") {
     connections[uuid].send(message);
   } else {
-    console.log("sendToUuid: ", uuid, message.type);
+    // console.log("sendToUuid: ", uuid, message.type);
     connections[uuid].send(JSON.stringify(message));
   }
 }
@@ -83,7 +83,7 @@ export function noGameAlert(
   info: any,
   connections: Connections
 ): void {
-  console.log("No game alert for room:", roomKey);
+  // console.log("No game alert for room:", roomKey);
   const message = {
     type: "noGameAlert",
     roomKey: roomKey,
