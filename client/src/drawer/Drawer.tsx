@@ -124,10 +124,9 @@ const MiniDrawer: React.FC<MiniDrawerProps> = ({ children }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [searchParams] = useSearchParams();
   const [draweropen, setDrawerOpen] = useState<boolean>(false);
-  const { player1Uuid } = usePlayers();
+  const { isPlayer1 } = usePlayers();
   const roomKey = searchParams.get("roomKey");
   const opacity = draweropen ? { opacity: 1 } : { opacity: 0 };
-  const isPlayer1 = sessionStorage.getItem("guessy-uuid") === player1Uuid;
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);

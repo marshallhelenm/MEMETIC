@@ -10,6 +10,10 @@ import type { PlayerState } from "../messages";
 export const cardStorageKey = (roomKey: string | null) => `guessy-${roomKey}-player-card`;
 
 export interface PlayersContextValue {
+  /** This tab's player ID. */
+  myUuid: string;
+  isPlayer1: boolean;
+  isPlayer2: boolean;
   myPlayerCard: string | null;
   players: Record<string, PlayerState>;
   player1Uuid: string;
@@ -40,7 +44,9 @@ function PlayersProvider({ children }: PlayersProviderProps) {
   const players = lastGameContentsMessage?.players ?? NO_PLAYERS;
   const player1Uuid = lastGameContentsMessage?.player1Uuid ?? "";
   const player2Uuid = lastGameContentsMessage?.player2Uuid ?? "";
-  const isObserver = ![player1Uuid, player2Uuid].includes(myUuid);
+  const isPlayer1 = myUuid === player1Uuid;
+  const isPlayer2 = myUuid === player2Uuid;
+  const isObserver = !isPlayer1 && !isPlayer2;
   const myPlayerCard: string | null = players[myUuid]?.card ?? null;
   const player1Card = players[player1Uuid]?.card;
   const player2Card = players[player2Uuid]?.card;
@@ -67,6 +73,9 @@ function PlayersProvider({ children }: PlayersProviderProps) {
 
   const value: PlayersContextValue = useMemo(
     () => ({
+      myUuid,
+      isPlayer1,
+      isPlayer2,
       myPlayerCard,
       players,
       player1Uuid,
@@ -78,6 +87,9 @@ function PlayersProvider({ children }: PlayersProviderProps) {
       demotePlayer2,
     }),
     [
+      myUuid,
+      isPlayer1,
+      isPlayer2,
       myPlayerCard,
       players,
       player1Uuid,

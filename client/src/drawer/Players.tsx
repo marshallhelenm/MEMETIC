@@ -15,9 +15,7 @@ interface Player {
 const Players: React.FC = () => {
   const [searchParams] = useSearchParams();
   const myUsername = searchParams.get("username");
-  const { players, player1Uuid, player2Uuid } = usePlayers();
-  const myUuid = sessionStorage.getItem("guessy-uuid");
-  const isPlayer1 = myUuid === player1Uuid;
+  const { players, player1Uuid, player2Uuid, myUuid, isPlayer1 } = usePlayers();
 
   function star(uuid: string) {
     if (player1Uuid === uuid) {
@@ -66,7 +64,7 @@ const Players: React.FC = () => {
       <div style={{ marginLeft: "5%" }}>
         <List component="div" disablePadding>
           <ListItem>
-            {star(myUuid as string)}
+            {star(myUuid)}
             <ListItemText primary={myUsername} />
           </ListItem>
           {generateOtherPlayers()}

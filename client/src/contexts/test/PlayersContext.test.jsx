@@ -52,6 +52,9 @@ describe("PlayersContext", () => {
     expect(ctx.myPlayerCard).toBe("cat");
     expect(ctx.player1Card).toBe("cat");
     expect(ctx.player2Card).toBe("dog");
+    expect(ctx.myUuid).toBe("me");
+    expect(ctx.isPlayer1).toBe(true);
+    expect(ctx.isPlayer2).toBe(false);
     expect(ctx.isObserver).toBe(false);
   });
 

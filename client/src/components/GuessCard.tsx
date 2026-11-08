@@ -19,12 +19,10 @@ interface GuessCardProps {
 
 const GuessCard: React.FC<GuessCardProps> = ({ setModalOpen, itemKey, testId }) => {
   const [open, setOpen] = useState<boolean>(false);
-  const { player1Uuid, player2Uuid, player1Card, player2Card, players } = usePlayers();
+  const { player1Uuid, player2Uuid, player1Card, player2Card, players, isPlayer1, isPlayer2 } =
+    usePlayers();
   const [guessedRight, setGuessedRight] = useState<boolean>(false);
   const [guessedWrong, setGuessedWrong] = useState<boolean>(false);
-  const myUuid = sessionStorage.getItem("guessy-uuid");
-  const isPlayer1 = myUuid === player1Uuid;
-  const isPlayer2 = myUuid === player2Uuid;
   if (!player2Uuid || !player1Uuid) return null;
 
   const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
