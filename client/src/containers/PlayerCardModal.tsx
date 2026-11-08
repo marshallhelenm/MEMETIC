@@ -13,7 +13,7 @@ import {
 } from "../drawer/DrawerComponents";
 import { colorA, colorB } from "../assets/styles";
 import { memeData } from "../assets/memeCollection";
-import { useGame, usePlayers } from "../hooks/useContextHooks";
+import { useLayout, usePlayers } from "../hooks/useContextHooks";
 import YourMemeImage from "../drawer/YourMemeImage";
 import ObserverStar from "../components/ObserverStar";
 
@@ -27,7 +27,7 @@ interface PlayerCardModalProps {
 const PlayerCardModal = ({ draweropen, opacity }: PlayerCardModalProps) => {
   const { myPlayerCard, assignNewMyPlayerCard, isObserver } = usePlayers();
   const [open, setOpen] = useState<boolean>(false);
-  const { dialogWidth } = useGame();
+  const { dialogWidth } = useLayout();
   let item: MemeData | undefined = memeData[myPlayerCard as keyof typeof memeData];
 
   const handleOpen = (e: React.MouseEvent<HTMLButtonElement>) => {

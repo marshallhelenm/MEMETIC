@@ -6,14 +6,14 @@ import Logo from "../components/Logo";
 import GuessyButton from "../components/GuessyButton";
 import TextField from "@mui/material/TextField";
 import { colorA, colorD, corners } from "../assets/styles";
-import { useGame } from "../hooks/useContextHooks";
+import { useLayout } from "../hooks/useContextHooks";
 
 //The first page you see. Holds options to join a game or start a new game.
 function NameForm() {
   const [searchParams] = useSearchParams();
   let navigate = useNavigate();
   const [proposedUsername, setProposedUsername] = useState("");
-  const { mobile } = useGame();
+  const { mobile } = useLayout();
   function polishFakerOutput(fakerOutput) {
     let arr = fakerOutput.split(" ");
     arr.forEach((word, i) => {

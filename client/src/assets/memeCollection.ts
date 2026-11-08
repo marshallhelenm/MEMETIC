@@ -1,24 +1,25 @@
 import { cardSorter } from "../utils/cardSorter";
 import memes from "./memes.json" with { type: "json" };
 import type { MemeData } from "../types/meme.js";
+import type { BoardLayouts } from "../messages";
 
 // const memeData = JSON.parse(memes);
 const memeData: Record<string, MemeData> = memes;
 const memeKeys = Object.keys(memes);
 
-function memeSampler() {
+function memeSampler(): { columnsObject: BoardLayouts; allKeys: string[] } {
   let memesArray = memeKeys.slice(0);
-  let gameKeys = [];
+  let gameKeys: string[] = [];
   let randomIndex;
 
   for (let i = 0; i < 24; i++) {
-    randomIndex = Math.floor(Math.random() * (memesArray.length - 1));
+    randomIndex = Math.floor(Math.random() * memesArray.length);
     gameKeys.push(memesArray.splice(randomIndex, 1)[0]);
   }
 
-  let memeSet = { columnsObject: { "1": { 1: gameKeys } } as Record<string, any>, allKeys: gameKeys };
+  const memeSet = { columnsObject: { 1: { 1: gameKeys } } as BoardLayouts, allKeys: gameKeys };
   for (let i = 2; i <= 6; i++) {
-    memeSet.columnsObject[i.toString()] = cardSorter(gameKeys, i);
+    memeSet.columnsObject[i] = cardSorter(gameKeys, i);
   }
 
   return memeSet;

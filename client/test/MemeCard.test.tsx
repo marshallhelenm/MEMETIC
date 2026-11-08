@@ -25,6 +25,15 @@ beforeAll(() => {
   });
 });
 
+jest.mock("../src/utils/ReactCardFlip", () => ({
+  __esModule: true,
+  default: ({ isFlipped, children }: any) => (
+    <div data-testid="card-flip" data-flipped={String(isFlipped)}>
+      {children}
+    </div>
+  ),
+}));
+
 jest.mock("../src/card/MemeCardFront", () => {
   return {
     __esModule: true,
@@ -46,16 +55,16 @@ jest.mock("../src/card/MemeCardBack", () => {
 describe("MemeCard", () => {
   const roomKey = "room123";
   const itemKey = "item456";
-  const item = { height_multiplier: 1.5 };
+  const item = { height_multiplier: 1.5 } as any;
 
-  const storageId = `${roomKey}-flipped-${itemKey}`;
+  const gameKey = 1794170000000;
+  const storageId = `${roomKey}-${gameKey}-flipped-${itemKey}`;
 
   beforeEach(() => {
     sessionStorage.clear();
 
-    jest.spyOn(useContextHooks, "useGame").mockReturnValue({
-      columnWidth: 220,
-    } as any);
+    jest.spyOn(useContextHooks, "useGame").mockReturnValue({ gameKey } as any);
+    jest.spyOn(useContextHooks, "useLayout").mockReturnValue({ columnWidth: 220 } as any);
 
     // Mock usePlayers to return a player card id
     jest.spyOn(useContextHooks, "usePlayers").mockReturnValue({
@@ -101,5 +110,30 @@ describe("MemeCard", () => {
       }),
       undefined
     );
+  });
+
+  it("saves a flip under the current game", () => {
+    render(<MemeCard roomKey={roomKey} itemKey={itemKey} item={item} />);
+
+    fireEvent.click(screen.getByTestId("MemeCardFront"));
+
+    expect(screen.getByTestId("card-flip").dataset.flipped).toBe("true");
+    expect(sessionStorage.getItem(storageId)).toBe("true");
+  });
+
+  it("restores a flip saved for the current game", () => {
+    sessionStorage.setItem(storageId, "true");
+
+    render(<MemeCard roomKey={roomKey} itemKey={itemKey} item={item} />);
+
+    expect(screen.getByTestId("card-flip").dataset.flipped).toBe("true");
+  });
+
+  it("ignores a flip saved for a previous game", () => {
+    sessionStorage.setItem(`${roomKey}-${gameKey - 1}-flipped-${itemKey}`, "true");
+
+    render(<MemeCard roomKey={roomKey} itemKey={itemKey} item={item} />);
+
+    expect(screen.getByTestId("card-flip").dataset.flipped).toBe("false");
   });
 });

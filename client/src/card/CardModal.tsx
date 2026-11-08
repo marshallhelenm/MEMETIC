@@ -3,7 +3,7 @@ import IconButton from "@mui/material/IconButton";
 import StyledDialog from "../components/StyledDialog.js";
 const DialogContent = lazy(() => import("@mui/material/DialogContent"));
 import { colorA } from "../assets/styles.js";
-import { useGame } from "../hooks/useContextHooks";
+import { useLayout } from "../hooks/useContextHooks";
 import { GuessySuspense } from "../components/GuessySuspense.js";
 import type { MemeData } from "../types/meme.js";
 
@@ -15,7 +15,7 @@ interface CardModalProps {
 }
 
 const CardModal: React.FC<CardModalProps> = ({ item, children, icon, setModalOpen }) => {
-  const { dialogWidth } = useGame();
+  const { dialogWidth } = useLayout();
   const [open, setOpen] = useState<boolean>(false);
   const handleOpen = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();

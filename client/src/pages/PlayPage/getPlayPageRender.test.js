@@ -21,6 +21,28 @@ describe("getPlayPageRender", () => {
     ).toBe("PlayGame");
   });
 
+  it("keeps PlayGame while a loaded game is reconnecting", () => {
+    expect(
+      getPlayPageRender({
+        roomKey: "ABCDEFGH",
+        validGame: true,
+        connectionOpen: false,
+        tryingToConnect: true,
+      }),
+    ).toBe("PlayGame");
+  });
+
+  it("returns ErrorPageConnection once reconnecting gives up, even with a loaded game", () => {
+    expect(
+      getPlayPageRender({
+        roomKey: "ABCDEFGH",
+        validGame: true,
+        connectionError: true,
+        tryingToConnect: false,
+      }),
+    ).toBe("ErrorPageConnection");
+  });
+
   it("returns ErrorPageConnection if connectionError and not tryingToConnect", () => {
     expect(
       getPlayPageRender({

@@ -1,10 +1,10 @@
 import React from "react";
 import BoardColumn from "./BoardColumn";
 import LoadingStub from "../card/LoadingStub";
-import { useGame } from "../hooks/useContextHooks";
+import { useLayout } from "../hooks/useContextHooks";
 
 const LoadingColumns: React.FC = () => {
-  const { columnCount, columnWidth } = useGame();
+  const { columnCount, columnWidth } = useLayout();
   const cardWidth = Math.floor(columnWidth);
 
   const generateLoadingColumns = (): JSX.Element[] => {

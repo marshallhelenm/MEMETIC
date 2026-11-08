@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import * as useWebSocketModule from "react-use-websocket";
 
 import { WSProvider, WSContext } from "../WSContext";
@@ -85,51 +85,46 @@ describe("WSProvider", () => {
     expect(screen.getByTestId("serverError").textContent).toBe("");
   });
 
-  it("handles uuid from sessionStorage", () => {
+  it("connects with the stored player ID", () => {
     sessionStorage.setItem("guessy-uuid", "test-uuid");
 
     renderWithConsumer();
 
-    expect(sendJsonMessageMock).not.toHaveBeenCalledWith(
-      expect.objectContaining({
-        type: "requestUuid",
-      })
+    expect(useWebSocketModule.default).toHaveBeenCalledWith(
+      expect.stringContaining("?uuid=test-uuid"),
+      expect.anything()
     );
   });
 
-  it("updates serverError via setServerError", () => {
-    // Use a test component to set serverError
-    render(
+  const mockLastMessage = (lastJsonMessage) =>
+    useWebSocketModule.default.mockImplementation(() => ({
+      sendJsonMessage: sendJsonMessageMock,
+      lastJsonMessage,
+      readyState: useWebSocketModule.ReadyState.OPEN,
+    }));
+
+  it("sets serverError from an error message", () => {
+    mockLastMessage({ type: "error", error: "Rate limit exceeded" });
+
+    renderWithConsumer();
+
+    expect(screen.getByTestId("serverError").textContent).toBe("Rate limit exceeded");
+  });
+
+  it("clears serverError when valid game contents arrive", () => {
+    mockLastMessage({ type: "error", error: "Rate limit exceeded" });
+    const { rerender } = renderWithConsumer();
+    expect(screen.getByTestId("serverError").textContent).toBe("Rate limit exceeded");
+
+    mockLastMessage({ type: "gameContents", allKeys: [], columnsObject: {} });
+    rerender(
       <WSProvider>
         <WSContext.Consumer>
-          {(value) => (
-            <>
-              <div data-testid="serverError">{value.serverError}</div>
-              <button onClick={() => value.setServerError("Bad")}>
-                Set Error
-              </button>
-            </>
-          )}
+          {(value) => <div data-testid="serverError">{value.serverError}</div>}
         </WSContext.Consumer>
       </WSProvider>
     );
 
     expect(screen.getByTestId("serverError").textContent).toBe("");
-
-    act(() => {
-      screen.getByText("Set Error").click();
-    });
-
-    expect(screen.getByTestId("serverError").textContent).toBe("Bad");
-  });
-
-  it("responds to lastJsonMessage with serverError type", () => {
-    useWebSocketModule.default.mockImplementation(() => ({
-      sendJsonMessage: sendJsonMessageMock,
-      lastJsonMessage: { type: "serverError", error: JSON.stringify("Oops!") },
-      readyState: useWebSocketModule.ReadyState.OPEN,
-    }));
-
-    renderWithConsumer();
   });
 });

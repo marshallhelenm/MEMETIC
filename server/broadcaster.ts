@@ -100,12 +100,8 @@ export function joinRoom(
   players: { [uuid: string]: Player },
   connections: Connections
 ): void {
-  let room = rooms[roomKey];
-  if (!room) {
-    rooms[roomKey] = deepClone(emptyRoomTemplate);
-    noGameAlert(roomKey, uuid, undefined, connections);
-    return;
-  }
+  if (!rooms[roomKey]) rooms[roomKey] = deepClone(emptyRoomTemplate);
+  const room = rooms[roomKey];
   let player = players[uuid];
   if (!player) {
     players[uuid] = deepClone(emptyPlayerTemplate);

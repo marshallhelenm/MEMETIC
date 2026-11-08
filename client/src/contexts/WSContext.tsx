@@ -1,24 +1,23 @@
-import React, { createContext, useMemo, useState, useEffect, useRef, ReactNode, Dispatch, SetStateAction, MutableRefObject } from "react";
+import React, { createContext, useMemo, useState, useEffect, ReactNode } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { devLog } from "../utils/Helpers";
 import { getPlayerId } from "../utils/playerId";
+import type {
+  ChatHistoryMessage,
+  ClientMessage,
+  GameContentsMessage,
+  ServerMessage,
+} from "../messages";
 
 export interface WSContextValue {
-    serverReady: boolean;
-    sendJsonMessage: (msg: any) => void;
-    readyState: number;
-    lastJsonMessage: any;
-    connectionStatus: string;
+    sendJsonMessage: (msg: ClientMessage) => void;
+    lastJsonMessage: ServerMessage | null;
     connectionError: boolean;
     connectionOpen: boolean;
-    uuidRef: MutableRefObject<string>;
     tryingToConnect: boolean;
-    serverError: string | object;
-    setServerError: Dispatch<SetStateAction<string | object>>;
-    lastMessageReceivedAt: number;
-    lastGameContentsMessage: any;
-    lastChatHistoryMessage: any;
-    error: string | null;
+    serverError: string;
+    lastGameContentsMessage: GameContentsMessage | null;
+    lastChatHistoryMessage: ChatHistoryMessage | null;
   }
 
   interface WSProviderProps {
@@ -89,16 +88,16 @@ export interface WSContextValue {
 
   function WSProvider({ children }: WSProviderProps) {
     // Resolved synchronously so the first connection includes the player ID.
-    const uuidRef = useRef<string>(getPlayerId());
-    const [error, setError] = useState<string | null>(null);
-    const [serverError, setServerError] = useState<string | object>("");
+    const [playerId] = useState<string>(getPlayerId);
+    const [serverError, setServerError] = useState<string>("");
     const [reconnectGaveUp, setReconnectGaveUp] = useState<boolean>(false);
-    const [lastGameContentsMessage, setLastGameContentsMessage] = useState<any>({});
-    const [lastChatHistoryMessage, setLastChatHistoryMessage] = useState<any>({});
-    const [lastMessageReceivedAt, setLastMessageReceivedAt] = useState<number>(Date.now());
+    const [lastGameContentsMessage, setLastGameContentsMessage] =
+      useState<GameContentsMessage | null>(null);
+    const [lastChatHistoryMessage, setLastChatHistoryMessage] =
+      useState<ChatHistoryMessage | null>(null);
 
-    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
-      `${socketURL}?uuid=${encodeURIComponent(uuidRef.current)}`,
+    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket<ServerMessage | null>(
+      `${socketURL}?uuid=${encodeURIComponent(playerId)}`,
       {
         share: false,
         shouldReconnect: () => true,
@@ -110,87 +109,60 @@ export interface WSContextValue {
       },
     );
 
-    const connectionStatus = {
-      [ReadyState.CONNECTING]: "Connecting",
-      [ReadyState.OPEN]: "Open",
-      [ReadyState.CLOSING]: "Closing",
-      [ReadyState.CLOSED]: "Closed",
-      [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-    }[readyState];
     const connectionOpen = readyState === ReadyState.OPEN;
     const connectionError = reconnectGaveUp && !connectionOpen;
     const tryingToConnect = !connectionOpen && !reconnectGaveUp;
 
     // Dispatch each incoming message by type.
     useEffect(() => {
-      const message = lastJsonMessage as any;
+      const message = lastJsonMessage;
       if (!message) return;
 
-      setLastMessageReceivedAt(Date.now());
-      try {
-        switch (message.type) {
-          case "chatHistory":
-            if (message?.chatHistory && message.chatHistory.length > 0) {
-              setLastChatHistoryMessage({ ...message });
-            }
-            break;
-          case "gameContents":
-            if (message?.allKeys && message?.columnsObject) {
-              setLastGameContentsMessage({ ...message });
-            }
-            break;
-          case "serverError":
-            devLog(["Server error message:", message.error]);
-            setServerError(JSON.parse(message.error));
-            break;
-          case "uuid":
-            // Player IDs are created by the client; server-sent IDs are ignored.
-            break;
-          case "error":
-            devLog(["Error message from server:", message.error]);
-            setServerError(message.error);
-            break;
-          default:
-            devLog(["Unhandled message type in WSProvider:", message.type, message]);
-        }
-        setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : String(err));
-        devLog(["Error in WSProvider", err, JSON.stringify(message)]);
+      switch (message.type) {
+        case "chatHistory":
+          if (message.chatHistory && message.chatHistory.length > 0) {
+            setLastChatHistoryMessage({ ...message });
+          }
+          break;
+        case "gameContents":
+          if (message.allKeys && message.columnsObject) {
+            setLastGameContentsMessage({ ...message });
+            // A valid game state means any earlier server error no longer applies.
+            setServerError("");
+          }
+          break;
+        case "error":
+          devLog(["Error message from server:", message.error]);
+          setServerError(message.error);
+          break;
+        case "noGameAlert":
+          // Handled by GameContext.
+          break;
+        default:
+          devLog(["Unhandled message type in WSProvider:", message]);
       }
     }, [lastJsonMessage]);
 
     const value = useMemo(() => {
       return {
-        serverReady: connectionOpen,
         sendJsonMessage,
-        readyState,
         lastJsonMessage,
-        connectionStatus,
         connectionError,
         connectionOpen,
-        uuidRef,
         tryingToConnect,
         serverError,
-        setServerError,
-        lastMessageReceivedAt,
         lastGameContentsMessage,
         lastChatHistoryMessage,
-        error,
       };
     }, [
       sendJsonMessage,
-      readyState,
       lastJsonMessage,
-      connectionStatus,
       connectionError,
       connectionOpen,
       tryingToConnect,
       serverError,
-      lastMessageReceivedAt,
       lastGameContentsMessage,
       lastChatHistoryMessage,
-      error,
     ]);
 
     return <WSContext.Provider value={value}>{children}</WSContext.Provider>;

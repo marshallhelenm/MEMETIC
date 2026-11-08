@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { WSProvider } from "./contexts/WSContext";
 import { GameProvider } from "./contexts/GameContext";
+import { LayoutProvider } from "./contexts/LayoutContext";
 
 const App: React.FC = () => {
   const navigate = useNavigate();
@@ -13,11 +14,13 @@ const App: React.FC = () => {
 
   return (
     <div className="guessy-background">
-      <WSProvider>
-        <GameProvider>
-          <Outlet />
-        </GameProvider>
-      </WSProvider>
+      <LayoutProvider>
+        <WSProvider>
+          <GameProvider>
+            <Outlet />
+          </GameProvider>
+        </WSProvider>
+      </LayoutProvider>
     </div>
   );
 };

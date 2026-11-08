@@ -62,7 +62,7 @@ describe("GifPauseButton", () => {
     expect(switchInput).not.toBeChecked();
   });
 
-  test("toggleStaticGifs toggles staticGifs and updates sessionStorage", () => {
+  test("toggleStaticGifs toggles staticGifs", () => {
     const setStaticGifs = jest.fn();
     renderWithContext(false, setStaticGifs);
 
@@ -72,9 +72,6 @@ describe("GifPauseButton", () => {
 
     // Fire click to toggle
     fireEvent.click(switchInput);
-
-    // It should update sessionStorage with the negation of staticGifs (which was false)
-    expect(window.sessionStorage.getItem("guessy-gifs")).toBe("true");
 
     // It should call setStaticGifs with the new value (true)
     expect(setStaticGifs).toHaveBeenCalledWith(true);

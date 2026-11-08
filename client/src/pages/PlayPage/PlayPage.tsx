@@ -6,6 +6,7 @@ import { useGame, useWS } from "../../hooks/useContextHooks";
 import { LogoSuspense } from "../../components/GuessySuspense";
 import { useJoinRoom } from "./useJoinRoom";
 import { getPlayPageRender } from "./getPlayPageRender";
+import ReconnectingBanner from "./ReconnectingBanner";
 
 const InvalidRoomKey = lazy(() => import("./InvalidRoomKey"));
 const ErrorPage = lazy(() => import("../ErrorPage"));
@@ -22,7 +23,7 @@ const PlayPage: React.FC = () => {
     serverError,
     sendJsonMessage,
   } = useWS();
-  const { validGame, gameKey } = useGame();
+  const { validGame } = useGame();
 
   const roomKey = searchParams.get("roomKey");
   const username = searchParams.get("username");
@@ -37,13 +38,12 @@ const PlayPage: React.FC = () => {
   }, [roomKey, username, navigate]);
 
   // Join room effect
-  useJoinRoom({ validGame, roomKey, username, gameKey, sendJsonMessage, connectionOpen });
+  useJoinRoom({ validGame, roomKey, username, sendJsonMessage, connectionOpen });
 
   // Decide what to render
   const renderKey = getPlayPageRender({
     roomKey,
     validGame,
-    connectionOpen,
     connectionError,
     tryingToConnect,
     serverError,
@@ -60,6 +60,7 @@ const PlayPage: React.FC = () => {
     case "PlayGame":
       return (
         <PlayersProvider>
+          <ReconnectingBanner open={!connectionOpen} />
           <Suspense fallback={<RoomLoading />}>
             <PlayGame />
           </Suspense>

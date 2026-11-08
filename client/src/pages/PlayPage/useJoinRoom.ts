@@ -6,7 +6,6 @@ interface UseJoinRoomProps {
   validGame: boolean;
   roomKey: string | null | undefined;
   username: string | null | undefined;
-  gameKey?: number | string | null;
   sendJsonMessage: (msg: any) => void;
   connectionOpen?: boolean;
   maxAttempts?: number;

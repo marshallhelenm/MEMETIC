@@ -4,6 +4,7 @@ import {
   emptyRoomTemplate,
   emptyPlayerTemplate,
   pickRandomCard,
+  nextGameKey,
 } from "./roomManager";
 import {
   broadcast,
@@ -118,16 +119,30 @@ export function handleMessage(
           connections
         );
         break;
-      case "demotePlayer2":
-        for (let i = 0; i < roomPlayerKeys.length; i++) {
-          let u = roomPlayerKeys[i];
-          if (u != room.player1Uuid && u != room.player2Uuid) {
-            room.player2Uuid = u;
-            break;
-          }
+      case "demotePlayer2": {
+        if (uuid !== room.player1Uuid) {
+          sendToUuid(
+            uuid,
+            {
+              type: "error",
+              error: "Unauthorized: only player 1 can demote player 2.",
+              uuid,
+              time: new Date().toISOString(),
+            },
+            connections
+          );
+          return;
         }
+        // Promote the first player who isn't already player 1 or 2. With no one
+        // to promote, player 2 stays as is (an empty slot would just be refilled
+        // by the next message from a non-player-1 user).
+        const replacement = roomPlayerKeys.find(
+          (u) => u !== room.player1Uuid && u !== room.player2Uuid
+        );
+        if (replacement) room.player2Uuid = replacement;
         broadcastGameContents(message.roomKey, rooms, connections);
         break;
+      }
       case "setGame":
         if (!room) {
           room = deepClone(emptyRoomTemplate);
@@ -135,7 +150,7 @@ export function handleMessage(
         room.roomKey = roomKey;
         room.columnsObject = { ...message.columnsObject };
         room.allKeys = message.allKeys.slice(0);
-        room.gameKey = message.gameKey;
+        room.gameKey = nextGameKey(room.gameKey);
         // New game: the server deals everyone in the room a fresh card.
         Object.keys(room.players).forEach((u) => {
           room.players[u].card = pickRandomCard(room.allKeys);

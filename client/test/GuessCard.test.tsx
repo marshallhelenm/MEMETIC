@@ -19,18 +19,16 @@ describe("GuessCard", () => {
   beforeEach(() => {
     setModalOpenMock = jest.fn();
     jest.clearAllMocks();
-
-    // Mock sessionStorage.getItem for player UUID
-    jest
-      .spyOn(window.sessionStorage.__proto__, "getItem")
-      .mockImplementation((key) => {
-        if (key === "guessy-uuid") return "my-uuid";
-        return null;
-      });
   });
 
+  // This tab's player is "my-uuid"; derive the role flags the context would provide.
   function renderGuessCard(playerProps, itemKey = "card123") {
-    jest.spyOn(useContextHooks, "usePlayers").mockReturnValue(playerProps);
+    jest.spyOn(useContextHooks, "usePlayers").mockReturnValue({
+      ...playerProps,
+      myUuid: "my-uuid",
+      isPlayer1: playerProps.player1Uuid === "my-uuid",
+      isPlayer2: playerProps.player2Uuid === "my-uuid",
+    });
 
     return render(
       <GuessCard

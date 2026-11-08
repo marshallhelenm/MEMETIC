@@ -1,53 +1,23 @@
-import React, { createContext, useEffect, useMemo, useState, ReactNode } from "react";
+import React, { createContext, useEffect, useMemo, useRef, useState, ReactNode } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { useWS } from "../hooks/useContextHooks";
-import useLayoutBreakpoint from "../hooks/useLayoutBreakpoint";
 import { memeSampler } from "../assets/memeCollection";
-import { useTraceUpdate } from "../hooks/useTraceUpdate";
+import type { BoardLayouts, ServerMessage } from "../messages";
+import { getSessionItem, setSessionItem } from "../utils/sessionStorageUtils";
 
-import type { GenericMessage } from "../messages";
+const STATIC_GIFS_KEY = "guessy-gifs";
 
-// Types for WebSocket context values (temporary, should be improved)
-interface GameContentsMessage {
-  allKeys?: any[];
-  columnsObject?: any;
-  gameKey?: number;
-  chatHistory?: any[];
-}
-
-interface JsonMessage {
-  type?: string;
-}
-
-type TraceUpdateResult = {
-  allKeysChanged?: boolean;
-  columnsObjectChanged?: boolean;
-  lastGameContentsMessageChanged?: boolean;
-  lastJsonMessageChanged?: boolean;
-};
-
-export type GameContextValue = GameContextType;
-interface GameContextType {
+export interface GameContextValue {
   createGame: () => void;
   validGame: boolean;
-  setLoadingCards: React.Dispatch<React.SetStateAction<boolean>>;
-  loadingCards: boolean;
-  columns: any;
-  columnCount: number;
-  columnWidth: number;
-  boardWidth: number;
+  columnsObject: BoardLayouts;
   staticGifs: boolean;
   setStaticGifs: React.Dispatch<React.SetStateAction<boolean>>;
-  allKeys: any[];
   gameKey: number | null;
-  dialogWidth: string;
-  messageHistory: any[];
-  setMessageHistory: React.Dispatch<React.SetStateAction<any[]>>;
-  mobile?: boolean;
 }
 
-const GameContext = createContext<GameContextType | undefined>(undefined);
+const GameContext = createContext<GameContextValue | undefined>(undefined);
 
 interface GameProviderProps {
   children: ReactNode;
@@ -55,47 +25,26 @@ interface GameProviderProps {
 
 function GameProvider({ children }: GameProviderProps) {
   const [searchParams] = useSearchParams();
-  const { columnCount, columnWidth, boardWidth, dialogWidth, mobile } =
-    useLayoutBreakpoint();
-  const { sendJsonMessage, lastGameContentsMessage, lastJsonMessage } = useWS() as {
-    sendJsonMessage: (msg: GenericMessage) => void;
-    lastGameContentsMessage?: GameContentsMessage;
-    lastJsonMessage?: GenericMessage;
-  }
-  const [allKeys, setAllKeys] = useState<any[]>([]);
-  const [loadingCards, setLoadingCards] = useState(false);
-  const [columnsObject, setColumnsObject] = useState<any>({});
-  const [validGame, setValidGame] = useState(false);
+  const { sendJsonMessage, lastGameContentsMessage, lastJsonMessage } = useWS();
+  const [allKeys, setAllKeys] = useState<string[]>([]);
+  const [columnsObject, setColumnsObject] = useState<BoardLayouts>({});
   const [staticGifs, setStaticGifs] = useState(
-    sessionStorage.getItem("guessy-gifs") === "true"
+    () => getSessionItem(STATIC_GIFS_KEY) === "true"
   );
   const [gameKey, setGameKey] = useState<number | null>(null);
-  const [messageHistory, setMessageHistory] = useState<any[]>([]);
 
   const roomKey = searchParams.get("roomKey");
-
-  const {
-    allKeysChanged,
-    columnsObjectChanged,
-    lastGameContentsMessageChanged,
-    lastJsonMessageChanged,
-  } = useTraceUpdate(
-    { allKeys, columnsObject, validGame, lastJsonMessage, gameKey },
-    false,
-    "GameProvider"
-  ) as TraceUpdateResult;
+  // True from dealing a game until the server confirms it with gameContents.
+  const dealPendingRef = useRef(false);
+  const handledAlertRef = useRef<ServerMessage | null>(null);
 
   const createGame = useMemo(() => {
     return () => {
-      setLoadingCards(true);
-      setValidGame(false);
-      setAllKeys([]);
-      setColumnsObject({});
+      if (!roomKey) return;
+      dealPendingRef.current = true;
       Object.keys(sessionStorage).forEach((key) => {
-        if (roomKey && key.includes(roomKey)) window.sessionStorage.removeItem(key);
+        if (key.includes(roomKey)) window.sessionStorage.removeItem(key);
       });
-      let newGameKey = Number(gameKey) + 1;
-      setGameKey(newGameKey);
       const newMemes = memeSampler();
       setColumnsObject({ ...newMemes.columnsObject });
       setAllKeys(newMemes.allKeys.slice(0));
@@ -104,91 +53,46 @@ function GameProvider({ children }: GameProviderProps) {
         roomKey: roomKey,
         columnsObject: newMemes.columnsObject,
         allKeys: newMemes.allKeys,
-        gameKey: newGameKey,
       });
     };
-  }, [sendJsonMessage, roomKey, gameKey]);
+  }, [sendJsonMessage, roomKey]);
+
+  // The server's game state is the source of truth: copy it in whenever it arrives.
+  useEffect(() => {
+    if (!lastGameContentsMessage) return;
+    dealPendingRef.current = false;
+    setAllKeys(lastGameContentsMessage.allKeys.slice(0));
+    setColumnsObject({ ...lastGameContentsMessage.columnsObject });
+    setGameKey(lastGameContentsMessage.gameKey ?? null);
+  }, [lastGameContentsMessage]);
+
+  // The room has no game yet: deal one. Each alert is handled once, and alerts
+  // that arrive while our own deal awaits confirmation (answers to earlier join
+  // retries) are ignored so the room isn't dealt twice.
+  useEffect(() => {
+    if (lastJsonMessage?.type !== "noGameAlert") return;
+    if (handledAlertRef.current === lastJsonMessage) return;
+    handledAlertRef.current = lastJsonMessage;
+    if (dealPendingRef.current) return;
+    createGame();
+  }, [lastJsonMessage, createGame]);
 
   useEffect(() => {
-    const typedLastJsonMessage = lastJsonMessage as JsonMessage;
-    const typedLastGameContentsMessage = lastGameContentsMessage as GameContentsMessage;
-    if (lastJsonMessageChanged && typedLastJsonMessage?.type === "noGameAlert") {
-      createGame();
-    } else if (
-      lastGameContentsMessageChanged ||
-      !validGame ||
-      (typedLastGameContentsMessage?.gameKey &&
-        typedLastGameContentsMessage.gameKey != gameKey)
-    ) {
-      if (
-        typedLastGameContentsMessage?.allKeys &&
-        typedLastGameContentsMessage?.columnsObject
-      ) {
-        setAllKeys([]);
-        setColumnsObject({});
-        setAllKeys(typedLastGameContentsMessage.allKeys.slice(0));
-        setColumnsObject({ ...typedLastGameContentsMessage.columnsObject });
-        setGameKey(typedLastGameContentsMessage.gameKey ?? null);
-        setMessageHistory(typedLastGameContentsMessage.chatHistory ?? []);
-      }
-    }
-    if (columnsObjectChanged || allKeysChanged) {
-      setLoadingCards(false);
-      setValidGame(
-        allKeys.length == 24 && Object.keys(columnsObject).length == 6
-      );
-    }
-  }, [
-    allKeys,
-    columnsObject,
-    columnsObjectChanged,
-    allKeysChanged,
-    lastGameContentsMessage,
-    lastGameContentsMessageChanged,
-    validGame,
-    createGame,
-    lastJsonMessage,
-    lastJsonMessageChanged,
-    gameKey,
-  ]);
+    setSessionItem(STATIC_GIFS_KEY, String(staticGifs));
+  }, [staticGifs]);
+
+  const validGame = allKeys.length === 24 && Object.keys(columnsObject).length === 6;
 
   const value = useMemo(() => {
     return {
       createGame,
       validGame,
-      setLoadingCards,
-      loadingCards,
-      columns: columnsObject[columnCount],
-      columnCount,
-      columnWidth,
-      boardWidth,
+      columnsObject,
       staticGifs,
       setStaticGifs,
-      allKeys,
       gameKey,
-      dialogWidth,
-      messageHistory,
-      setMessageHistory,
-      mobile,
     };
-  }, [
-    createGame,
-    validGame,
-    columnsObject,
-    columnCount,
-    columnWidth,
-    boardWidth,
-    setLoadingCards,
-    loadingCards,
-    staticGifs,
-    setStaticGifs,
-    allKeys,
-    gameKey,
-    dialogWidth,
-    messageHistory,
-    setMessageHistory,
-    mobile
-  ]);
+  }, [createGame, validGame, columnsObject, staticGifs, setStaticGifs, gameKey]);
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }

@@ -1,25 +1,26 @@
-import React, { createContext, useEffect, useMemo, useState, useRef, ReactNode } from "react";
+import React, { createContext, useCallback, useEffect, useMemo, ReactNode } from "react";
 
 import { useGame, useWS } from "../hooks/useContextHooks";
 import { useSearchParams } from "react-router-dom";
-import type { GenericMessage } from "../messages";
 import { setSessionItem } from "../utils/sessionStorageUtils";
 import { getPlayerId } from "../utils/playerId";
+import type { PlayerState } from "../messages";
 
 /** Where this tab remembers its card, so it can hand it back to the server on re-join. */
 export const cardStorageKey = (roomKey: string | null) => `guessy-${roomKey}-player-card`;
 
 export interface PlayersContextValue {
+  /** This tab's player ID. */
+  myUuid: string;
+  isPlayer1: boolean;
+  isPlayer2: boolean;
   myPlayerCard: string | null;
-  players: Record<string, any>;
-  setPlayers: React.Dispatch<React.SetStateAction<Record<string, any>>>;
+  players: Record<string, PlayerState>;
   player1Uuid: string;
-  setPlayer1Uuid: React.Dispatch<React.SetStateAction<string>>;
   player2Uuid: string;
-  setPlayer2Uuid: React.Dispatch<React.SetStateAction<string>>;
   isObserver: boolean;
-  player1Card: any;
-  player2Card: any;
+  player1Card: string | undefined;
+  player2Card: string | undefined;
   assignNewMyPlayerCard: () => void;
   demotePlayer2: (demoteeUuid: string) => void;
 }
@@ -30,65 +31,39 @@ interface PlayersProviderProps {
 
 const PlayersContext = createContext<PlayersContextValue | undefined>(undefined);
 
-// ** Provider Logic Start
+const NO_PLAYERS: Record<string, PlayerState> = {};
 
 function PlayersProvider({ children }: PlayersProviderProps) {
   const [searchParams] = useSearchParams();
-  const { lastJsonMessage, sendJsonMessage } = useWS() as {
-    lastJsonMessage?: GenericMessage,
-    sendJsonMessage: (msg: GenericMessage) => void;
-  }
+  const { lastGameContentsMessage, sendJsonMessage } = useWS();
   const { gameKey } = useGame();
   const roomKey = searchParams.get("roomKey");
   const myUuid = getPlayerId();
-  const [players, setPlayers] = useState<Record<string, any>>({});
-  const allPlayersRef = useRef<string>("");
-  const [player1Uuid, setPlayer1Uuid] = useState<string>("");
-  const [player2Uuid, setPlayer2Uuid] = useState<string>("");
-  const isObserver = ![player1Uuid, player2Uuid].includes(myUuid);
-  // Cards are dealt and stored by the server.
+
+  // Players, roles and cards all come from the server's latest game contents.
+  const players = lastGameContentsMessage?.players ?? NO_PLAYERS;
+  const player1Uuid = lastGameContentsMessage?.player1Uuid ?? "";
+  const player2Uuid = lastGameContentsMessage?.player2Uuid ?? "";
+  const isPlayer1 = myUuid === player1Uuid;
+  const isPlayer2 = myUuid === player2Uuid;
+  const isObserver = !isPlayer1 && !isPlayer2;
   const myPlayerCard: string | null = players[myUuid]?.card ?? null;
   const player1Card = players[player1Uuid]?.card;
   const player2Card = players[player2Uuid]?.card;
 
-  // ** Functions
-
-  const assignNewMyPlayerCard = useMemo(() => {
-    return function () {
-      sendJsonMessage({ type: "requestNewCard", roomKey: roomKey ?? undefined });
-    };
+  const assignNewMyPlayerCard = useCallback(() => {
+    if (!roomKey) return;
+    sendJsonMessage({ type: "requestNewCard", roomKey });
   }, [roomKey, sendJsonMessage]);
 
-  const demotePlayer2 = useMemo<((demoteeUuid: string) => void)>(() => {
-    return function (demoteeUuid: string) {
-      if (demoteeUuid == player2Uuid) {
-        setPlayer2Uuid("");
-        sendJsonMessage({ type: "demotePlayer2", roomKey: roomKey ?? undefined });
+  const demotePlayer2 = useCallback(
+    (demoteeUuid: string) => {
+      if (roomKey && demoteeUuid === player2Uuid) {
+        sendJsonMessage({ type: "demotePlayer2", roomKey });
       }
-    };
-  }, [player2Uuid, sendJsonMessage, roomKey]);
-
-  // **UseEffect
-
-  useEffect(() => {
-    let allPlayers = "";
-    if (lastJsonMessage?.players) {
-      allPlayers = JSON.stringify(lastJsonMessage.players);
-      if (allPlayersRef.current != allPlayers) {
-        if (lastJsonMessage?.players) {
-          setPlayers({ ...lastJsonMessage.players });
-          setPlayer1Uuid(lastJsonMessage.player1Uuid);
-          setPlayer2Uuid(lastJsonMessage.player2Uuid);
-          allPlayersRef.current = allPlayers;
-        }
-      } else if (
-        lastJsonMessage.player2Uuid &&
-        player2Uuid != lastJsonMessage.player2Uuid
-      ) {
-        setPlayer2Uuid(lastJsonMessage.player2Uuid);
-      }
-    }
-  }, [lastJsonMessage, player2Uuid]);
+    },
+    [player2Uuid, sendJsonMessage, roomKey]
+  );
 
   // Remember the server's card for this game as a backup (sent back on re-join).
   useEffect(() => {
@@ -96,41 +71,38 @@ function PlayersProvider({ children }: PlayersProviderProps) {
     setSessionItem(cardStorageKey(roomKey), JSON.stringify({ gameKey, card: myPlayerCard }));
   }, [myPlayerCard, gameKey, roomKey]);
 
-  //  ** value for the context provider **
-  const value: PlayersContextValue = useMemo(() => {
-    return {
+  const value: PlayersContextValue = useMemo(
+    () => ({
+      myUuid,
+      isPlayer1,
+      isPlayer2,
       myPlayerCard,
       players,
-      setPlayers,
       player1Uuid,
-      setPlayer1Uuid,
       player2Uuid,
-      setPlayer2Uuid,
       isObserver,
       player1Card,
       player2Card,
       assignNewMyPlayerCard,
       demotePlayer2,
-    };
-  }, [
-    myPlayerCard,
-    players,
-    setPlayers,
-    player1Uuid,
-    setPlayer1Uuid,
-    player2Uuid,
-    setPlayer2Uuid,
-    isObserver,
-    player1Card,
-    player2Card,
-    assignNewMyPlayerCard,
-    demotePlayer2,
-  ]);
-
-  // ** render provider:
-  return (
-    <PlayersContext.Provider value={value}>{children}</PlayersContext.Provider>
+    }),
+    [
+      myUuid,
+      isPlayer1,
+      isPlayer2,
+      myPlayerCard,
+      players,
+      player1Uuid,
+      player2Uuid,
+      isObserver,
+      player1Card,
+      player2Card,
+      assignNewMyPlayerCard,
+      demotePlayer2,
+    ]
   );
+
+  return <PlayersContext.Provider value={value}>{children}</PlayersContext.Provider>;
 }
 
 export { PlayersProvider, PlayersContext };

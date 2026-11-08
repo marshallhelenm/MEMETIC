@@ -27,6 +27,7 @@ jest.mock("react-router-dom", () => ({
 describe("CardColumns", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.spyOn(useContextHooks, "useLayout").mockReturnValue({ columnCount: 1 } as any);
     // Reset memeData to empty before each test
     Object.defineProperty(memeCollection, "memeData", {
       value: {},
@@ -39,17 +40,11 @@ describe("CardColumns", () => {
     return {
       createGame: jest.fn(),
       validGame: true,
-      setLoadingCards: jest.fn(),
-      loadingCards: false,
-      columns: columnsObj,
-      columnCount: 1,
+      // The board laid out for one column (the mocked layout's columnCount).
+      columnsObject: { 1: columnsObj },
       staticGifs: false,
       setStaticGifs: jest.fn(),
-      allKeys: [],
       gameKey: 1,
-      dialogWidth: "100px",
-      messageHistory: [],
-      setMessageHistory: jest.fn(),
     };
   }
 

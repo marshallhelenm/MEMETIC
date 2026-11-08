@@ -1,10 +1,10 @@
 // Shared message types for client and server
 
-export interface GenericMessage {
-  type: string;
-  roomKey?: string;
-  [key: string]: any;
-}
+/** One board arrangement: column number (from 1) -> the meme keys in that column. */
+export type ColumnLayout = Record<number, string[]>;
+
+/** The board arranged for every column count (1-6), keyed by column count. */
+export type BoardLayouts = Record<number, ColumnLayout>;
 
 export interface ChatMessage {
   type: "chatMessage";
@@ -29,11 +29,14 @@ export function isChatMessage(obj: any): obj is ChatMessage {
   );
 }
 
+/** One line of chat as stored by the server. */
+export type ChatEntry = ChatMessage["messageContents"];
+
 export interface ChatHistoryMessage {
-    type: "chatHistory";
-    roomKey: string;
-    chatHistory: ChatMessage[];
-    timeStamp: number;
+  type: "chatHistory";
+  roomKey: string;
+  chatHistory: ChatEntry[];
+  timeStamp: number;
 }
 
 
@@ -54,9 +57,8 @@ export function isDemotePlayer2Message(obj: any): obj is DemotePlayer2Message {
 export interface SetGameMessage {
   type: "setGame";
   roomKey: string;
-  columnsObject: Record<string, any>;
-  allKeys: any[];
-  gameKey: any;
+  columnsObject: BoardLayouts;
+  allKeys: string[];
 }
 
 export function isSetGameMessage(obj: any): obj is SetGameMessage {
@@ -66,8 +68,7 @@ export function isSetGameMessage(obj: any): obj is SetGameMessage {
     typeof obj.roomKey === "string" &&
     typeof obj.columnsObject === "object" &&
     obj.columnsObject !== null &&
-    Array.isArray(obj.allKeys) &&
-    typeof obj.gameKey !== "undefined"
+    Array.isArray(obj.allKeys)
   );
 }
 
@@ -90,6 +91,10 @@ export interface JoinRoomMessage {
   type: "joinRoom";
   roomKey: string;
   username: string;
+  /** The card this client last held in the room, used if the server has none. */
+  card?: string;
+  /** The game that `card` belongs to. */
+  gameKey?: number | null;
 }
 
 export function isJoinRoomMessage(obj: any): obj is JoinRoomMessage {
@@ -148,10 +153,49 @@ export function validateMessagePayload(message: any, bytes: Buffer) {
   }
 }
 
-export type Message =
+/** Messages the client sends to the server. */
+export type ClientMessage =
   | ChatMessage
   | DemotePlayer2Message
   | JoinRoomMessage
   | RequestNewCardMessage
   | SetGameMessage
   | SetPlayerCardMessage;
+
+// --- Messages the server sends to the client ---
+
+export interface PlayerState {
+  uuid: string;
+  username?: string;
+  card?: string;
+  /** False while the player's socket is down but they're still in the grace period. */
+  connected?: boolean;
+}
+
+export interface GameContentsMessage {
+  type: "gameContents";
+  allKeys: string[];
+  columnsObject: BoardLayouts;
+  players: Record<string, PlayerState>;
+  gameKey: number | null;
+  player1Uuid: string | null;
+  player2Uuid: string | null;
+  chatHistory: ChatEntry[];
+}
+
+export interface NoGameAlertMessage {
+  type: "noGameAlert";
+  roomKey: string;
+  info?: unknown;
+}
+
+export interface ServerErrorMessage {
+  type: "error";
+  error: string;
+}
+
+export type ServerMessage =
+  | GameContentsMessage
+  | ChatHistoryMessage
+  | NoGameAlertMessage
+  | ServerErrorMessage;

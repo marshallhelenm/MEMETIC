@@ -9,10 +9,9 @@ import {
   Message,
   MessageInput,
 } from "@chatscope/chat-ui-kit-react";
-import { useGame, useWS } from "../../hooks/useContextHooks";
+import { useWS } from "../../hooks/useContextHooks";
 import { useSearchParams } from "react-router-dom";
-import { useTraceUpdate } from "../../hooks/useTraceUpdate";
-import type { ChatMessage } from "../../messages";
+import type { ChatEntry } from "../../messages";
 
 const ChatBox: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -21,10 +20,11 @@ const ChatBox: React.FC = () => {
   const [open, setOpen] = useState(
     sessionStorage.getItem("guessy-chat-open") === "true"
   );
-  const { sendJsonMessage, lastChatHistoryMessage, lastMessageReceivedAt } = useWS();
+  const { sendJsonMessage, lastChatHistoryMessage, lastGameContentsMessage } = useWS();
   const [newChatCMessage, setNewChatCMessage] = useState("");
-  const { messageHistory, setMessageHistory } = useGame();
-  const { lastChatHistoryMessageChanged } = useTraceUpdate({ lastChatHistoryMessage });
+  const [messageHistory, setMessageHistory] = useState<ChatEntry[]>(
+    lastGameContentsMessage?.chatHistory ?? []
+  );
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   function handleSetOpen() {
@@ -33,46 +33,49 @@ const ChatBox: React.FC = () => {
   }
 
   function sendChatMessage() {
-    if (newChatCMessage.length > 0) {
-      let message: ChatMessage = {
-        type: "chatMessage",
-        roomKey,
-        messageContents: {
-          sender: myUsername,
-          chatText: newChatCMessage,
-        },
-      };
-      console.log("Sending chat message:", message);
-      sendJsonMessage({
-        type: "chatMessage",
-        roomKey,
-        messageContents: message.messageContents,
-      });
-      setMessageHistory((prev: any) => [...prev, message]);
-      setNewChatCMessage("");
-    }
+    if (!roomKey || !myUsername || newChatCMessage.length === 0) return;
+    const entry: ChatEntry = {
+      sender: myUsername,
+      chatText: newChatCMessage,
+      timestamp: Date.now(),
+    };
+    sendJsonMessage({ type: "chatMessage", roomKey, messageContents: entry });
+    // The server broadcasts history to everyone except the sender, so show it locally.
+    setMessageHistory((prev) => [...prev, entry]);
+    setNewChatCMessage("");
   }
 
+  // Both messages carry the room's full chat history; take whichever arrived last.
   useEffect(() => {
-    if (lastChatHistoryMessageChanged && lastChatHistoryMessage.chatHistory) {
+    if (lastGameContentsMessage?.chatHistory) {
+      setMessageHistory(lastGameContentsMessage.chatHistory);
+    }
+  }, [lastGameContentsMessage]);
+
+  useEffect(() => {
+    if (lastChatHistoryMessage?.chatHistory) {
       setMessageHistory(lastChatHistoryMessage.chatHistory);
     }
-  }, [lastChatHistoryMessage, lastChatHistoryMessageChanged, setMessageHistory]);
+  }, [lastChatHistoryMessage]);
 
   function messageList() {
     return (
       <MessageList style={{ height: "500px" }} className="memetic">
-        {messageHistory.map((m: any, i: number) => {
-          let message = { ...m };
-          let model = message.props.model;
-          model.position = "single";
-          model.direction =
-            model.sender === myUsername ? "outgoing" : "incoming";
-          let sequential =
-            i > 0 && messageHistory[i - 1].props.model.sender == model.sender;
+        {messageHistory.map((entry, i) => {
+          // Only the first of several consecutive messages from one sender gets a name header.
+          const sequential = i > 0 && messageHistory[i - 1].sender === entry.sender;
           return (
-            <Message key={i} {...message.props} className="memetic">
-              {!sequential && <Message.Header sender={model.sender} />}
+            <Message
+              key={`${entry.timestamp}-${i}`}
+              className="memetic"
+              model={{
+                message: entry.chatText,
+                sender: entry.sender,
+                direction: entry.sender === myUsername ? "outgoing" : "incoming",
+                position: "single",
+              }}
+            >
+              {!sequential && <Message.Header sender={entry.sender} />}
             </Message>
           );
         })}

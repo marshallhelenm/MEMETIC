@@ -4,9 +4,10 @@ import PropTypes from "prop-types";
 const ReactFreezeframe = lazy(() => import("react-freezeframe"));
 import { colorB, colorE } from "../assets/styles";
 import { GuessySuspense } from "../components/GuessySuspense";
+import { useGame } from "../hooks/useContextHooks";
 
 function MemeCardImage({ item, flipped, height }) {
-  const staticGifs = sessionStorage.getItem("guessy-gifs") === "true";
+  const { staticGifs } = useGame();
 
   const imgElement = (
     <img
