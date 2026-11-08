@@ -1,6 +1,7 @@
 import { deepClone, emptyRoomTemplate, emptyPlayerTemplate, fillRoles, removePlayer } from "../roomManager";
 import type { Room, Rooms } from "../roomManager";
 import { handleMessage } from "../messageHandler";
+import { resetRateLimits } from "../rateLimiter";
 
 /** A room whose players joined in the given order, with roles as given. */
 function roomWith(uuids: string[], p1: string | null, p2: string | null): Room {
@@ -77,7 +78,7 @@ describe("taking a role", () => {
     handleMessage(Buffer.from(JSON.stringify(message)), uuid, null, rooms, {}, connections);
 
   beforeEach(() => {
-    (handleMessage as any).rateLimitMap = {};
+    resetRateLimits();
     jest.spyOn(console, "warn").mockImplementation(() => {});
   });
   afterEach(() => jest.restoreAllMocks());

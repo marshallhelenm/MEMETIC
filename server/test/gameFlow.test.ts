@@ -1,5 +1,6 @@
 import { handleMessage } from "../messageHandler";
 import { joinRoom } from "../broadcaster";
+import { resetRateLimits } from "../rateLimiter";
 import type { Rooms, Player } from "../roomManager";
 
 const ROOM = "ROOM0001";
@@ -36,7 +37,7 @@ beforeEach(() => {
   rooms = {};
   players = {};
   connections = {};
-  (handleMessage as any).rateLimitMap = {};
+  resetRateLimits();
   jest.spyOn(console, "warn").mockImplementation(() => {});
 });
 

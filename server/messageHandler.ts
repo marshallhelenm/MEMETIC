@@ -17,6 +17,7 @@ import type { Connections, Player } from "./broadcaster";
 import type { Rooms } from "./roomManager";
 
 import { validateMessagePayload } from "./types/messages";
+import { allowMessage, RATE_LIMIT_MAX, RATE_LIMIT_WINDOW_MS } from "./rateLimiter";
 
 export function handleMessage(
   bytes: Buffer,
@@ -36,6 +37,21 @@ export function handleMessage(
       .trim()
       .slice(0, maxLen);
   }
+  // Every message counts towards the limit, including malformed ones.
+  if (!allowMessage(uuid)) {
+    sendToUuid(
+      uuid,
+      {
+        type: "error",
+        error: `Rate limit exceeded. Max ${RATE_LIMIT_MAX} messages per ${RATE_LIMIT_WINDOW_MS / 1000}s.`,
+        uuid,
+        time: new Date().toISOString(),
+      },
+      connections
+    );
+    return;
+  }
+
   let message: any;
   try {
     message = JSON.parse(bytes.toString());
@@ -56,31 +72,6 @@ export function handleMessage(
     }
 
     validateMessagePayload(message, bytes);
-
-    // Basic in-memory rate limiting per user (after validation, before state access)
-    const RATE_LIMIT_WINDOW_MS = 5000; // 5 seconds
-    const RATE_LIMIT_MAX = 10; // max messages per window
-    if (!(handleMessage as any).rateLimitMap) (handleMessage as any).rateLimitMap = {};
-    const rateLimitMap = (handleMessage as any).rateLimitMap as Record<string, number[]>;
-    const now = Date.now();
-    if (!rateLimitMap[uuid]) {
-      rateLimitMap[uuid] = [];
-    }
-    // Remove timestamps outside the window
-    rateLimitMap[uuid] = rateLimitMap[uuid].filter(
-      (ts) => now - ts < RATE_LIMIT_WINDOW_MS
-    );
-    if (rateLimitMap[uuid].length >= RATE_LIMIT_MAX) {
-      const errorMsg = {
-        type: "error",
-        error: `Rate limit exceeded. Max ${RATE_LIMIT_MAX} messages per ${RATE_LIMIT_WINDOW_MS / 1000}s.`,
-        uuid: uuid,
-        time: new Date().toISOString(),
-      };
-      sendToUuid(uuid, errorMsg, connections);
-      return;
-    }
-    rateLimitMap[uuid].push(now);
 
     let roomKey = message.roomKey;
     if (!roomKey) return;

@@ -3,6 +3,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import { handleMessage } from "./messageHandler";
 import { broadcastGameContents } from "./broadcaster";
 import { removePlayer } from "./roomManager";
+import { forgetPlayer } from "./rateLimiter";
 import type { Rooms } from "./roomManager";
 import type { Connections, Player } from "./broadcaster";
 
@@ -45,6 +46,7 @@ const markDisconnected = (uuid: string) => {
       broadcastGameContents(roomKey, rooms, connections);
     });
     delete players[uuid];
+    forgetPlayer(uuid);
   }, DISCONNECT_GRACE_MS);
 };
 
