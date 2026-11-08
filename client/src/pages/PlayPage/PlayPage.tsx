@@ -6,6 +6,7 @@ import { useGame, useWS } from "../../hooks/useContextHooks";
 import { LogoSuspense } from "../../components/GuessySuspense";
 import { useJoinRoom } from "./useJoinRoom";
 import { getPlayPageRender } from "./getPlayPageRender";
+import ReconnectingBanner from "./ReconnectingBanner";
 
 const InvalidRoomKey = lazy(() => import("./InvalidRoomKey"));
 const ErrorPage = lazy(() => import("../ErrorPage"));
@@ -43,7 +44,6 @@ const PlayPage: React.FC = () => {
   const renderKey = getPlayPageRender({
     roomKey,
     validGame,
-    connectionOpen,
     connectionError,
     tryingToConnect,
     serverError,
@@ -60,6 +60,7 @@ const PlayPage: React.FC = () => {
     case "PlayGame":
       return (
         <PlayersProvider>
+          <ReconnectingBanner open={!connectionOpen} />
           <Suspense fallback={<RoomLoading />}>
             <PlayGame />
           </Suspense>
