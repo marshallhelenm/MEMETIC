@@ -1,18 +1,10 @@
-import React, { createContext, useEffect, useMemo, useState, ReactNode } from "react";
+import React, { createContext, useEffect, useMemo, useRef, useState, ReactNode } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { useWS } from "../hooks/useContextHooks";
 import useLayoutBreakpoint from "../hooks/useLayoutBreakpoint";
 import { memeSampler } from "../assets/memeCollection";
-import { useTraceUpdate } from "../hooks/useTraceUpdate";
-import type { ChatEntry } from "../messages";
-
-type TraceUpdateResult = {
-  allKeysChanged?: boolean;
-  columnsObjectChanged?: boolean;
-  lastGameContentsMessageChanged?: boolean;
-  lastJsonMessageChanged?: boolean;
-};
+import type { ChatEntry, ServerMessage } from "../messages";
 
 export type GameContextValue = GameContextType;
 interface GameContextType {
@@ -56,21 +48,14 @@ function GameProvider({ children }: GameProviderProps) {
   const [messageHistory, setMessageHistory] = useState<ChatEntry[]>([]);
 
   const roomKey = searchParams.get("roomKey");
-
-  const {
-    allKeysChanged,
-    columnsObjectChanged,
-    lastGameContentsMessageChanged,
-    lastJsonMessageChanged,
-  } = useTraceUpdate(
-    { allKeys, columnsObject, validGame, lastJsonMessage, gameKey },
-    false,
-    "GameProvider"
-  ) as TraceUpdateResult;
+  // True from dealing a game until the server confirms it with gameContents.
+  const dealPendingRef = useRef(false);
+  const handledAlertRef = useRef<ServerMessage | null>(null);
 
   const createGame = useMemo(() => {
     return () => {
       if (!roomKey) return;
+      dealPendingRef.current = true;
       setLoadingCards(true);
       setValidGame(false);
       setAllKeys([]);
@@ -93,43 +78,31 @@ function GameProvider({ children }: GameProviderProps) {
     };
   }, [sendJsonMessage, roomKey, gameKey]);
 
+  // The server's game state is the source of truth: copy it in whenever it arrives.
   useEffect(() => {
-    if (lastJsonMessageChanged && lastJsonMessage?.type === "noGameAlert") {
-      createGame();
-    } else if (
-      lastGameContentsMessageChanged ||
-      !validGame ||
-      (lastGameContentsMessage?.gameKey &&
-        lastGameContentsMessage.gameKey != gameKey)
-    ) {
-      if (lastGameContentsMessage?.allKeys && lastGameContentsMessage?.columnsObject) {
-        setAllKeys([]);
-        setColumnsObject({});
-        setAllKeys(lastGameContentsMessage.allKeys.slice(0));
-        setColumnsObject({ ...lastGameContentsMessage.columnsObject });
-        setGameKey(lastGameContentsMessage.gameKey ?? null);
-        setMessageHistory(lastGameContentsMessage.chatHistory ?? []);
-      }
-    }
-    if (columnsObjectChanged || allKeysChanged) {
-      setLoadingCards(false);
-      setValidGame(
-        allKeys.length == 24 && Object.keys(columnsObject).length == 6
-      );
-    }
-  }, [
-    allKeys,
-    columnsObject,
-    columnsObjectChanged,
-    allKeysChanged,
-    lastGameContentsMessage,
-    lastGameContentsMessageChanged,
-    validGame,
-    createGame,
-    lastJsonMessage,
-    lastJsonMessageChanged,
-    gameKey,
-  ]);
+    if (!lastGameContentsMessage) return;
+    dealPendingRef.current = false;
+    setAllKeys(lastGameContentsMessage.allKeys.slice(0));
+    setColumnsObject({ ...lastGameContentsMessage.columnsObject });
+    setGameKey(lastGameContentsMessage.gameKey ?? null);
+    setMessageHistory(lastGameContentsMessage.chatHistory ?? []);
+  }, [lastGameContentsMessage]);
+
+  // The room has no game yet: deal one. Each alert is handled once, and alerts
+  // that arrive while our own deal awaits confirmation (answers to earlier join
+  // retries) are ignored so the room isn't dealt twice.
+  useEffect(() => {
+    if (lastJsonMessage?.type !== "noGameAlert") return;
+    if (handledAlertRef.current === lastJsonMessage) return;
+    handledAlertRef.current = lastJsonMessage;
+    if (dealPendingRef.current) return;
+    createGame();
+  }, [lastJsonMessage, createGame]);
+
+  useEffect(() => {
+    setLoadingCards(false);
+    setValidGame(allKeys.length == 24 && Object.keys(columnsObject).length == 6);
+  }, [allKeys, columnsObject]);
 
   const value = useMemo(() => {
     return {
