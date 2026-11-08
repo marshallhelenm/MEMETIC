@@ -139,6 +139,22 @@ export function handleMessage(
         break;
       }
       case "setGame":
+        if (!room.players[uuid]) return;
+        // Once there's a game, only player 1 can replace it. Before that, anyone in
+        // the room may deal (every joiner is told there's no game and deals one).
+        if (room.allKeys.length > 0 && uuid !== room.player1Uuid) {
+          sendToUuid(
+            uuid,
+            {
+              type: "error",
+              error: "Unauthorized: only player 1 can start a new game.",
+              uuid,
+              time: new Date().toISOString(),
+            },
+            connections
+          );
+          return;
+        }
         room.roomKey = roomKey;
         room.columnsObject = { ...message.columnsObject };
         room.allKeys = message.allKeys.slice(0);

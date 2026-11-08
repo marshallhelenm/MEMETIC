@@ -78,6 +78,48 @@ describe("joining and dealing", () => {
   });
 });
 
+describe("who can deal", () => {
+  beforeEach(() => {
+    ["a", "b"].forEach((u) => {
+      connect(u);
+      join(u);
+    });
+  });
+
+  it("lets any player deal while the room has no game", () => {
+    deal("b");
+
+    expect(rooms[ROOM].allKeys).toEqual(keys);
+  });
+
+  it("rejects a new game from player 2 once a game exists", () => {
+    deal("a");
+    const gameKey = rooms[ROOM].gameKey;
+
+    deal("b", { allKeys: [...keys].reverse() });
+
+    expect(rooms[ROOM].gameKey).toBe(gameKey);
+    expect(lastOfType("b", "error").error).toMatch(/only player 1/);
+  });
+
+  it("lets player 1 start a new game", () => {
+    deal("a");
+    const gameKey = rooms[ROOM].gameKey!;
+
+    deal("a");
+
+    expect(rooms[ROOM].gameKey).toBeGreaterThan(gameKey);
+  });
+
+  it("ignores a deal from someone who isn't in the room", () => {
+    connect("stranger");
+
+    deal("stranger");
+
+    expect(rooms[ROOM].allKeys).toEqual([]);
+  });
+});
+
 describe("game keys", () => {
   it("assigns a time-based key and ignores one sent by the client", () => {
     connect("a");
