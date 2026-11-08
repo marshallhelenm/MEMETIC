@@ -88,11 +88,6 @@ export function handleMessage(
       room = deepClone(emptyRoomTemplate);
       rooms[roomKey] = room;
     }
-    if (room && !room.player1Uuid) {
-      room.player1Uuid = uuid;
-    } else if (room && !room.player2Uuid && room.player1Uuid != uuid) {
-      room.player2Uuid = uuid;
-    }
     let player = players[uuid];
     if (!player) {
       player = deepClone(emptyPlayerTemplate);

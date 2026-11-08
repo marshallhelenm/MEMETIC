@@ -1,5 +1,5 @@
 // Broadcast and send utilities, plus joinRoom logic
-import { deepClone, emptyRoomTemplate, emptyPlayerTemplate, ensureCard } from "./roomManager";
+import { deepClone, emptyRoomTemplate, emptyPlayerTemplate, ensureCard, fillRoles } from "./roomManager";
 import type { Rooms, Player } from "./roomManager";
 
 // Types for connections and rooms
@@ -120,6 +120,8 @@ export function joinRoom(
   player.uuid = uuid;
   roomPlayer.uuid = uuid;
   roomPlayer.connected = true;
+  // Joining is the only way to take an empty player 1 or 2 slot.
+  fillRoles(room);
 
   if (username && username !== "undefined") {
     player.username = username;
