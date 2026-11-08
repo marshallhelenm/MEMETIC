@@ -28,10 +28,10 @@ type LocalReactFlipCardProps = {
 };
 
 const MemeCard: React.FC<MemeCardProps> = ({ roomKey, itemKey, item }) => {
-  const { columnWidth } = useGame();
+  const { columnWidth, gameKey } = useGame();
   const { myPlayerCard } = usePlayers();
   const isPlayerCard = itemKey === myPlayerCard;
-  const storageId = `${roomKey}-flipped-${itemKey}`;
+  const storageId = `${roomKey}-${gameKey}-flipped-${itemKey}`;
   const [flipped, setFlipped] = useState<boolean>(
     sessionStorage.getItem(storageId) === "true"
   );

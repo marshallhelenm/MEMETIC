@@ -11,7 +11,7 @@ import type { MemeData } from "../types/meme.js";
 const CardColumns: React.FC = () => {
   const [searchParams] = useSearchParams();
   const roomKey = searchParams.get("roomKey");
-  const { columns } = useGame();
+  const { columns, gameKey } = useGame();
 
   const generateColumns = (): JSX.Element[] => {
     let boardColumns: JSX.Element[] = [];
@@ -27,7 +27,8 @@ const CardColumns: React.FC = () => {
             <MemeCard
               itemKey={itemKey}
               item={item}
-              key={`${itemKey}-card`}
+              // Keyed by game so a meme that reappears in a new game starts unflipped.
+              key={`${gameKey}-${itemKey}-card`}
               roomKey={roomKey}
             />
           );
