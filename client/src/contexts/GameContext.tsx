@@ -5,6 +5,7 @@ import { useWS } from "../hooks/useContextHooks";
 import useLayoutBreakpoint from "../hooks/useLayoutBreakpoint";
 import { memeSampler } from "../assets/memeCollection";
 import { useTraceUpdate } from "../hooks/useTraceUpdate";
+import type { ChatEntry } from "../messages";
 
 type TraceUpdateResult = {
   allKeysChanged?: boolean;
@@ -28,8 +29,8 @@ interface GameContextType {
   allKeys: any[];
   gameKey: number | null;
   dialogWidth: string;
-  messageHistory: any[];
-  setMessageHistory: React.Dispatch<React.SetStateAction<any[]>>;
+  messageHistory: ChatEntry[];
+  setMessageHistory: React.Dispatch<React.SetStateAction<ChatEntry[]>>;
   mobile?: boolean;
 }
 
@@ -52,7 +53,7 @@ function GameProvider({ children }: GameProviderProps) {
     sessionStorage.getItem("guessy-gifs") === "true"
   );
   const [gameKey, setGameKey] = useState<number | null>(null);
-  const [messageHistory, setMessageHistory] = useState<any[]>([]);
+  const [messageHistory, setMessageHistory] = useState<ChatEntry[]>([]);
 
   const roomKey = searchParams.get("roomKey");
 
