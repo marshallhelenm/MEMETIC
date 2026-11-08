@@ -10,7 +10,8 @@ export interface Room {
   player1Uuid: string | null;
   player2Uuid: string | null;
   messageHistory: ChatEntry[];
-  gameKey?: any ;
+  /** Identifies the room's current game; assigned by the server on each setGame. */
+  gameKey: number | null;
 }
 
 export interface Rooms {
@@ -33,7 +34,7 @@ export const emptyRoomTemplate: Room = {
   player1Uuid: null,
   player2Uuid: null,
   messageHistory: [],
-  gameKey: undefined,
+  gameKey: null,
 };
 
 export const emptyPlayerTemplate: Player = {
@@ -68,4 +69,12 @@ export function ensureCard(room: Room, uuid: string): void {
   const player = room.players[uuid];
   if (!player || room.allKeys.length === 0) return;
   if (!hasValidCard(room, uuid)) player.card = pickRandomCard(room.allKeys);
+}
+
+/**
+ * Key for a room's next game: the current time, bumped if needed so it is always
+ * greater than the previous key. Keys stay unique across server restarts.
+ */
+export function nextGameKey(previous: number | null): number {
+  return Math.max(Date.now(), (previous ?? 0) + 1);
 }

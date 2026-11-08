@@ -23,7 +23,7 @@ const PlayPage: React.FC = () => {
     serverError,
     sendJsonMessage,
   } = useWS();
-  const { validGame, gameKey } = useGame();
+  const { validGame } = useGame();
 
   const roomKey = searchParams.get("roomKey");
   const username = searchParams.get("username");
@@ -38,7 +38,7 @@ const PlayPage: React.FC = () => {
   }, [roomKey, username, navigate]);
 
   // Join room effect
-  useJoinRoom({ validGame, roomKey, username, gameKey, sendJsonMessage, connectionOpen });
+  useJoinRoom({ validGame, roomKey, username, sendJsonMessage, connectionOpen });
 
   // Decide what to render
   const renderKey = getPlayPageRender({

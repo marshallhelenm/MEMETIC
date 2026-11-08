@@ -53,7 +53,6 @@ export interface SetGameMessage {
   roomKey: string;
   columnsObject: Record<string, any>;
   allKeys: any[];
-  gameKey: any;
 }
 
 export function isSetGameMessage(obj: any): obj is SetGameMessage {
@@ -63,8 +62,7 @@ export function isSetGameMessage(obj: any): obj is SetGameMessage {
     typeof obj.roomKey === "string" &&
     typeof obj.columnsObject === "object" &&
     obj.columnsObject !== null &&
-    Array.isArray(obj.allKeys) &&
-    typeof obj.gameKey !== "undefined"
+    Array.isArray(obj.allKeys)
   );
 }
 

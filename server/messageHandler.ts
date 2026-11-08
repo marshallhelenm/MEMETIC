@@ -4,6 +4,7 @@ import {
   emptyRoomTemplate,
   emptyPlayerTemplate,
   pickRandomCard,
+  nextGameKey,
 } from "./roomManager";
 import {
   broadcast,
@@ -135,7 +136,7 @@ export function handleMessage(
         room.roomKey = roomKey;
         room.columnsObject = { ...message.columnsObject };
         room.allKeys = message.allKeys.slice(0);
-        room.gameKey = message.gameKey;
+        room.gameKey = nextGameKey(room.gameKey);
         // New game: the server deals everyone in the room a fresh card.
         Object.keys(room.players).forEach((u) => {
           room.players[u].card = pickRandomCard(room.allKeys);

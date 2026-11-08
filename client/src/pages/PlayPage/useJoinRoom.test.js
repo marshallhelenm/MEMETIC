@@ -12,7 +12,6 @@ describe("useJoinRoom", () => {
         validGame: true,
         roomKey: "ABCDEFGH",
         username: "test",
-        gameKey: "gamekey",
         sendJsonMessage: sendMock,
       }),
     );
@@ -27,7 +26,6 @@ describe("useJoinRoom", () => {
         validGame: false,
         roomKey: "ABCDEFGH",
         username: "test",
-        gameKey: "gamekey",
         sendJsonMessage: sendMock,
         retryDelay: 200,
       }),
@@ -56,7 +54,6 @@ describe("useJoinRoom", () => {
         validGame: false,
         roomKey: null,
         username: "test",
-        gameKey: "gamekey",
         sendJsonMessage: sendMock,
       }),
     );

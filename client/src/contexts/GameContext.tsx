@@ -54,8 +54,6 @@ function GameProvider({ children }: GameProviderProps) {
       Object.keys(sessionStorage).forEach((key) => {
         if (key.includes(roomKey)) window.sessionStorage.removeItem(key);
       });
-      let newGameKey = Number(gameKey) + 1;
-      setGameKey(newGameKey);
       const newMemes = memeSampler();
       setColumnsObject({ ...newMemes.columnsObject });
       setAllKeys(newMemes.allKeys.slice(0));
@@ -64,10 +62,9 @@ function GameProvider({ children }: GameProviderProps) {
         roomKey: roomKey,
         columnsObject: newMemes.columnsObject,
         allKeys: newMemes.allKeys,
-        gameKey: newGameKey,
       });
     };
-  }, [sendJsonMessage, roomKey, gameKey]);
+  }, [sendJsonMessage, roomKey]);
 
   // The server's game state is the source of truth: copy it in whenever it arrives.
   useEffect(() => {

@@ -110,6 +110,7 @@ describe("GameContext", () => {
       rerender(tree());
 
       expect(setGameCalls()).toHaveLength(1);
+      expect(setGameCalls()[0][0]).not.toHaveProperty("gameKey");
       expect(screen.getByTestId("validGame").textContent).toBe("true");
     });
 
@@ -130,8 +131,8 @@ describe("GameContext", () => {
 
       ws = { ...ws, lastJsonMessage: { type: "noGameAlert", roomKey: "ABCDEFGH" } };
       rerender(tree());
-      const [{ allKeys, columnsObject, gameKey }] = setGameCalls()[0];
-      const contents = { type: "gameContents", allKeys, columnsObject, gameKey, players: {}, chatHistory: [] };
+      const [{ allKeys, columnsObject }] = setGameCalls()[0];
+      const contents = { type: "gameContents", allKeys, columnsObject, gameKey: 1001, players: {}, chatHistory: [] };
       ws = { ...ws, lastJsonMessage: contents, lastGameContentsMessage: contents };
       rerender(tree());
       // e.g. the server restarted and lost the room.
