@@ -9,7 +9,7 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "jest --config jest.config.cjs",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --config jest.config.cjs --coverage"
   },
   "dependencies": {
     "22": "^0.0.0",

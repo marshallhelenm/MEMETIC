@@ -36,13 +36,7 @@ export interface ChatHistoryMessage {
     timeStamp: number;
 }
 
-export interface AcceptUuidMessage {
-  type: "acceptUuid";
-}
 
-export function isAcceptUuidMessage(obj: any): obj is AcceptUuidMessage {
-  return obj && obj.type === "acceptUuid";
-}
 
 export interface DemotePlayer2Message {
   type: "demotePlayer2";
@@ -107,22 +101,18 @@ export function isJoinRoomMessage(obj: any): obj is JoinRoomMessage {
   );
 }
 
-export interface RequestUuidMessage {
-  type: "requestUuid";
+export interface RequestNewCardMessage {
+  type: "requestNewCard";
+  roomKey: string;
 }
 
-export function isRequestUuidMessage(obj: any): obj is RequestUuidMessage {
-  return obj && obj.type === "requestUuid";
+export function isRequestNewCardMessage(obj: any): obj is RequestNewCardMessage {
+  return obj && obj.type === "requestNewCard" && typeof obj.roomKey === "string";
 }
 
 // --- Extracted message payload validation ---
 export function validateMessagePayload(message: any, bytes: Buffer) {
   switch (message.type) {
-    case "acceptUuid":
-      if (!isAcceptUuidMessage(message)) {
-        throw new Error("Invalid acceptUuid message. Message: " + bytes.toString());
-      }
-      break;
     case "chatMessage":
       if (!isChatMessage(message)) {
         throw new Error("Invalid or missing messageContents for chatMessage. Message: " + bytes.toString());
@@ -148,9 +138,9 @@ export function validateMessagePayload(message: any, bytes: Buffer) {
         throw new Error("Missing or invalid fields for joinRoom. Message: " + bytes.toString());
       }
       break;
-    case "requestUuid":
-      if (!isRequestUuidMessage(message)) {
-        throw new Error("Missing or invalid fields for requestUuid. Message: " + bytes.toString());
+    case "requestNewCard":
+      if (!isRequestNewCardMessage(message)) {
+        throw new Error("Missing or invalid roomKey for requestNewCard. Message: " + bytes.toString());
       }
       break;
     default:
@@ -159,10 +149,9 @@ export function validateMessagePayload(message: any, bytes: Buffer) {
 }
 
 export type Message =
-  | AcceptUuidMessage
   | ChatMessage
   | DemotePlayer2Message
   | JoinRoomMessage
-  | RequestUuidMessage
+  | RequestNewCardMessage
   | SetGameMessage
   | SetPlayerCardMessage;

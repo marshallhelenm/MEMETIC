@@ -1,6 +1,5 @@
 import http from "http";
 import { WebSocketServer, WebSocket } from "ws";
-import { v4 as uuidv4 } from "uuid";
 import { handleMessage } from "./messageHandler";
 import { broadcastGameContents } from "./broadcaster";
 import type { Rooms } from "./roomManager";
@@ -23,46 +22,61 @@ const connections: Connections = {};
 const rooms: Rooms = {};
 const players: { [uuid: string]: Player } = {};
 
-// *server management
-const sendNewUuid = (connection: WebSocket) => {
-  // console.log("sending new uuid");
-  const uuid = uuidv4();
-  connection.send(JSON.stringify({ type: "uuid", uuid: uuid }));
+// How long a disconnected player keeps their seat (and card) before being removed.
+const DISCONNECT_GRACE_MS = Number(process.env.DISCONNECT_GRACE_MS) || 5 * 60 * 1000;
+const removalTimers: { [uuid: string]: NodeJS.Timeout } = {};
+
+const roomsWithPlayer = (uuid: string) =>
+  Object.keys(rooms).filter((roomKey) => rooms[roomKey].players[uuid]);
+
+const markDisconnected = (uuid: string) => {
+  roomsWithPlayer(uuid).forEach((roomKey) => {
+    rooms[roomKey].players[uuid].connected = false;
+    broadcastGameContents(roomKey, rooms, connections);
+  });
+
+  clearTimeout(removalTimers[uuid]);
+  removalTimers[uuid] = setTimeout(() => {
+    delete removalTimers[uuid];
+    if (connections[uuid]) return; // came back in time
+    roomsWithPlayer(uuid).forEach((roomKey) => {
+      delete rooms[roomKey].players[uuid];
+      broadcastGameContents(roomKey, rooms, connections);
+    });
+    delete players[uuid];
+  }, DISCONNECT_GRACE_MS);
 };
 
 wsServer.on("connection", (connection: WebSocket, request: http.IncomingMessage) => {
   const host = request.headers.host || "localhost";
   const requestUrl = new URL(request.url || "/ws", `http://${host}`);
-  let uuid = requestUrl.searchParams.get("uuid");
-  // console.log("received uuid: ", uuid);
+  const uuid = requestUrl.searchParams.get("uuid");
 
+  // Clients create their own player ID and must send it when connecting.
   if (!uuid || uuid === "null" || uuid === "undefined") {
-    sendNewUuid(connection);
-  } else {
-    connections[uuid] = connection;
-    let player = players[uuid];
-    // player template assignment handled in messageHandler if needed
-    // console.log("connection established with uuid: ", uuid);
+    connection.send(JSON.stringify({ type: "error", error: "Missing player id" }));
+    connection.close(4000, "Missing player id");
+    return;
   }
 
+  // A newer connection for the same player replaces the old one.
+  const previous = connections[uuid] as WebSocket | undefined;
+  connections[uuid] = connection;
+  if (previous && previous !== connection) previous.close(4001, "Replaced by newer connection");
+
+  // Cancel any pending removal; the client re-joins to resync its state.
+  clearTimeout(removalTimers[uuid]);
+  delete removalTimers[uuid];
+
   connection.on("message", (message: Buffer) => {
-    if (!uuid) {
-      sendNewUuid(connection);
-    } else {
-      handleMessage(message, uuid!, connection, rooms, players, connections);
-    }
+    handleMessage(message, uuid, connection, rooms, players, connections);
   });
 
   connection.on("close", () => {
-    if (!uuid) return;
+    // Ignore closes from connections that have already been replaced.
+    if (connections[uuid] !== connection) return;
     delete connections[uuid];
-    Object.keys(rooms).forEach((roomKey) => {
-      let room = rooms[roomKey];
-      if (room.players[uuid!]) {
-        delete room.players[uuid!];
-        broadcastGameContents(roomKey, rooms, connections);
-      }
-    });
+    markDisconnected(uuid);
   });
 });
 

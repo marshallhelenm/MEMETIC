@@ -3,6 +3,7 @@ import {
   deepClone,
   emptyRoomTemplate,
   emptyPlayerTemplate,
+  pickRandomCard,
 } from "./roomManager";
 import {
   broadcast,
@@ -40,13 +41,12 @@ export function handleMessage(
 
     // Message type validation
     const allowedTypes = [
-      "acceptUuid",
       "chatMessage",
       "demotePlayer2",
       "setGame",
       "setPlayerCard",
+      "requestNewCard",
       "joinRoom",
-      "requestUuid",
     ];
     if (!message.type || !allowedTypes.includes(message.type)) {
       throw new Error("Invalid or missing message type. Message: " + bytes.toString());
@@ -80,12 +80,7 @@ export function handleMessage(
     rateLimitMap[uuid].push(now);
 
     let roomKey = message.roomKey;
-    if (
-      !roomKey &&
-      message.type !== "acceptUuid" &&
-      message.type !== "requestUuid"
-    )
-      return;
+    if (!roomKey) return;
 
     let room = rooms[roomKey];
     if (roomKey && !room) {
@@ -106,11 +101,6 @@ export function handleMessage(
     let roomPlayerKeys = room ? Object.keys(room.players) : [];
 
     switch (message.type) {
-      case "acceptUuid":
-        connections[uuid] = connection;
-        if (!player) players[uuid] = deepClone(emptyPlayerTemplate);
-        // console.log(`New connection established with UUID: ${uuid}`);
-        break;
       case "chatMessage":
         connections[uuid] = connection;
         const sanitizedMsg = sanitizeInput(message.messageContents.chatText, 512);
@@ -146,6 +136,10 @@ export function handleMessage(
         room.columnsObject = { ...message.columnsObject };
         room.allKeys = message.allKeys.slice(0);
         room.gameKey = message.gameKey;
+        // New game: the server deals everyone in the room a fresh card.
+        Object.keys(room.players).forEach((u) => {
+          room.players[u].card = pickRandomCard(room.allKeys);
+        });
 
         broadcastGameContents(message.roomKey, rooms, connections);
         break;
@@ -163,7 +157,16 @@ export function handleMessage(
           sendToUuid(uuid, errorMsg, connections);
           return;
         }
-        if (message.card) room.players[uuid].card = message.card;
+        // Only accept cards that are actually in this game.
+        if (message.card && room.allKeys.includes(message.card)) {
+          room.players[uuid].card = message.card;
+        }
+        broadcastGameContents(roomKey, rooms, connections);
+        break;
+      }
+      case "requestNewCard": {
+        if (!room || !room.players[uuid]) return;
+        room.players[uuid].card = pickRandomCard(room.allKeys, room.players[uuid].card);
         broadcastGameContents(roomKey, rooms, connections);
         break;
       }
@@ -174,6 +177,8 @@ export function handleMessage(
             roomKey: message.roomKey,
             uuid,
             username: sanitizedUsername,
+            card: message.card,
+            gameKey: message.gameKey,
           },
           rooms,
           players,
@@ -181,9 +186,6 @@ export function handleMessage(
         );
         break;
       }
-      case "requestUuid":
-        sendToUuid(uuid, { type: "uuid", uuid: uuid }, connections);
-        break;
       default:
         break;
     }

@@ -1,18 +1,13 @@
 // Broadcast and send utilities, plus joinRoom logic
-import { deepClone, emptyRoomTemplate, emptyPlayerTemplate} from "./roomManager";
-import type { Rooms } from "./roomManager";
+import { deepClone, emptyRoomTemplate, emptyPlayerTemplate, ensureCard } from "./roomManager";
+import type { Rooms, Player } from "./roomManager";
 
 // Types for connections and rooms
 export interface Connections {
   [uuid: string]: { send: (msg: string) => void };
 }
 
-export interface Player {
-  uuid: string;
-  username?: string;
-  card?: any;
-  // Add other player fields as needed
-}
+export type { Player } from "./roomManager";
 
 export function sendToUuid(uuid: string, message: any, connections: Connections): void {
   if (!connections[uuid]) {
@@ -73,7 +68,8 @@ export function broadcastGameContents(
   const room = rooms[roomKey];
   if (!room) return;
   Object.keys(room.players).forEach((uuid) => {
-    sendGameContentsToUuid(roomKey, uuid, rooms, connections);
+    // Disconnected players (in their grace period) catch up when they re-join.
+    if (connections[uuid]) sendGameContentsToUuid(roomKey, uuid, rooms, connections);
   });
 }
 
@@ -93,7 +89,13 @@ export function noGameAlert(
 }
 
 export function joinRoom(
-  { roomKey, uuid, username }: { roomKey: string; uuid: string; username?: string },
+  {
+    roomKey,
+    uuid,
+    username,
+    card,
+    gameKey,
+  }: { roomKey: string; uuid: string; username?: string; card?: any; gameKey?: any },
   rooms: Rooms,
   players: { [uuid: string]: Player },
   connections: Connections
@@ -113,13 +115,6 @@ export function joinRoom(
   // Ensure room.players is always an object
   if (!room.players) room.players = {};
 
-  Object.keys(room.players).forEach((u) => {
-    if (u !== uuid && !connections[u]) {
-      delete room.players[u];
-      delete players[u];
-    }
-  });
-
   let roomPlayer = room.players[uuid];
   if (!roomPlayer) {
     room.players[uuid] = deepClone(emptyPlayerTemplate);
@@ -128,6 +123,7 @@ export function joinRoom(
 
   player.uuid = uuid;
   roomPlayer.uuid = uuid;
+  roomPlayer.connected = true;
 
   if (username && username !== "undefined") {
     player.username = username;
@@ -140,6 +136,19 @@ export function joinRoom(
     room.allKeys.length === 24;
 
   if (validRoom) {
+    // Joining (or re-joining after a reconnect) keeps an existing card;
+    // only players without one for this game get dealt a new one.
+    // If the server has no card for this player but the client remembers one
+    // from the current game (e.g. after a server restart), use it.
+    if (
+      !roomPlayer.card &&
+      card != null &&
+      gameKey == room.gameKey &&
+      room.allKeys.includes(card)
+    ) {
+      roomPlayer.card = card;
+    }
+    ensureCard(room, uuid);
     broadcastGameContents(roomKey, rooms, connections);
   } else {
     noGameAlert(roomKey, uuid, undefined, connections);

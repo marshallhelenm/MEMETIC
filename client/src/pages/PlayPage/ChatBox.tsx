@@ -12,7 +12,7 @@ import {
 import { useGame, useWS } from "../../hooks/useContextHooks";
 import { useSearchParams } from "react-router-dom";
 import { useTraceUpdate } from "../../hooks/useTraceUpdate";
-import type { ChatMessage } from "../../../shared/types/messages";
+import type { ChatMessage } from "../../messages";
 
 const ChatBox: React.FC = () => {
   const [searchParams] = useSearchParams();
