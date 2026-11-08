@@ -90,6 +90,24 @@ describe("taking a role", () => {
     expect(roles(rooms.R)).toEqual(["a", null]);
   });
 
+  it("removes a player who leaves and hands on their role straight away", () => {
+    const rooms: Rooms = { R: roomWith(["a", "b", "c"], "a", "b") };
+
+    send(rooms, "a", { type: "leaveRoom", roomKey: "R" });
+
+    expect(rooms.R.players.a).toBeUndefined();
+    expect(roles(rooms.R)).toEqual(["c", "b"]);
+  });
+
+  it("ignores leaveRoom from someone who isn't in the room", () => {
+    const rooms: Rooms = { R: roomWith(["a", "b"], "a", "b") };
+
+    send(rooms, "stranger", { type: "leaveRoom", roomKey: "R" });
+
+    expect(Object.keys(rooms.R.players)).toEqual(["a", "b"]);
+    expect(roles(rooms.R)).toEqual(["a", "b"]);
+  });
+
   it("gives an empty slot to the next player who joins", () => {
     const rooms: Rooms = { R: roomWith(["a"], "a", null) };
 

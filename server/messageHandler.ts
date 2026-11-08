@@ -5,6 +5,7 @@ import {
   emptyPlayerTemplate,
   pickRandomCard,
   nextGameKey,
+  removePlayerFromRoom,
 } from "./roomManager";
 import {
   broadcast,
@@ -48,6 +49,7 @@ export function handleMessage(
       "setPlayerCard",
       "requestNewCard",
       "joinRoom",
+      "leaveRoom",
     ];
     if (!message.type || !allowedTypes.includes(message.type)) {
       throw new Error("Invalid or missing message type. Message: " + bytes.toString());
@@ -180,6 +182,13 @@ export function handleMessage(
         broadcastGameContents(roomKey, rooms, connections);
         break;
       }
+      case "leaveRoom":
+        // The player navigated away from the room: remove them now rather than
+        // waiting for a disconnect grace period that would never start.
+        if (removePlayerFromRoom(room, uuid)) {
+          broadcastGameContents(roomKey, rooms, connections);
+        }
+        break;
       case "joinRoom": {
         const sanitizedUsername = sanitizeInput(message.username, 64);
         joinRoom(

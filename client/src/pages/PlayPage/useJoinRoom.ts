@@ -38,6 +38,18 @@ export function useJoinRoom({
     const { card, gameKey } = rememberedCard(roomKey);
     sendJsonMessage({ type: "joinRoom", roomKey, username, card, gameKey });
   };
+  const latest = useRef({ sendJoin, sendJsonMessage });
+  latest.current = { sendJoin, sendJsonMessage };
+
+  // Join when entering a room and leave when navigating away from it (or to
+  // another room), so the server doesn't keep us in a room we've left. The
+  // socket stays open across pages, so a disconnect would never signal this.
+  // Under StrictMode this runs join, leave, join, which ends up joined.
+  useEffect(() => {
+    if (!roomKey || !username) return;
+    latest.current.sendJoin();
+    return () => latest.current.sendJsonMessage({ type: "leaveRoom", roomKey });
+  }, [roomKey, username]);
 
   // Initial join: retry until the game contents arrive.
   useEffect(() => {

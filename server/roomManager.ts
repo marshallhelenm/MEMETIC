@@ -113,9 +113,17 @@ export function fillRoles(room: Room): void {
  */
 export function removePlayer(rooms: Rooms, uuid: string): string[] {
   const changed = Object.keys(rooms).filter((roomKey) => rooms[roomKey].players[uuid]);
-  changed.forEach((roomKey) => {
-    delete rooms[roomKey].players[uuid];
-    fillRoles(rooms[roomKey]);
-  });
+  changed.forEach((roomKey) => removePlayerFromRoom(rooms[roomKey], uuid));
   return changed;
+}
+
+/**
+ * Remove a player from one room and hand on any role they held.
+ * Returns whether they were in the room.
+ */
+export function removePlayerFromRoom(room: Room, uuid: string): boolean {
+  if (!room.players[uuid]) return false;
+  delete room.players[uuid];
+  fillRoles(room);
+  return true;
 }
