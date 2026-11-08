@@ -137,11 +137,9 @@ export interface WSContextValue {
           case "gameContents":
             if (message?.allKeys && message?.columnsObject) {
               setLastGameContentsMessage({ ...message });
+              // A valid game state means any earlier server error no longer applies.
+              setServerError("");
             }
-            break;
-          case "serverError":
-            devLog(["Server error message:", message.error]);
-            setServerError(JSON.parse(message.error));
             break;
           case "uuid":
             // Player IDs are created by the client; server-sent IDs are ignored.

@@ -123,13 +123,35 @@ describe("WSProvider", () => {
     expect(screen.getByTestId("serverError").textContent).toBe("Bad");
   });
 
-  it("responds to lastJsonMessage with serverError type", () => {
+  const mockLastMessage = (lastJsonMessage) =>
     useWebSocketModule.default.mockImplementation(() => ({
       sendJsonMessage: sendJsonMessageMock,
-      lastJsonMessage: { type: "serverError", error: JSON.stringify("Oops!") },
+      lastJsonMessage,
       readyState: useWebSocketModule.ReadyState.OPEN,
     }));
 
+  it("sets serverError from an error message", () => {
+    mockLastMessage({ type: "error", error: "Rate limit exceeded" });
+
     renderWithConsumer();
+
+    expect(screen.getByTestId("serverError").textContent).toBe("Rate limit exceeded");
+  });
+
+  it("clears serverError when valid game contents arrive", () => {
+    mockLastMessage({ type: "error", error: "Rate limit exceeded" });
+    const { rerender } = renderWithConsumer();
+    expect(screen.getByTestId("serverError").textContent).toBe("Rate limit exceeded");
+
+    mockLastMessage({ type: "gameContents", allKeys: [], columnsObject: {} });
+    rerender(
+      <WSProvider>
+        <WSContext.Consumer>
+          {(value) => <div data-testid="serverError">{value.serverError}</div>}
+        </WSContext.Consumer>
+      </WSProvider>
+    );
+
+    expect(screen.getByTestId("serverError").textContent).toBe("");
   });
 });
