@@ -35,6 +35,7 @@ function DrawerIcon({ draweropen, icon, classes = "", ...props }) {
         { minWidth: 0, justifyContent: "center" },
         draweropen ? { mr: 3 } : { mr: "auto" },
       ]}
+      {...props}
     >
       <i className={`fa-solid fa-${icon} fa-lg ${classes}`}></i>
     </ListItemIcon>

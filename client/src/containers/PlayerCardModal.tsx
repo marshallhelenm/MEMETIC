@@ -104,11 +104,7 @@ const PlayerCardModal = ({ draweropen, opacity }: PlayerCardModalProps) => {
             {/* Remove draweropen from div, only use on custom components */}
             <div>
               <DrawerButton draweropen={draweropen}>
-                <DrawerIcon
-                  onClick={handleOpen}
-                  draweropen={draweropen}
-                  icon="star"
-                />
+                <DrawerIcon draweropen={draweropen} icon="star" />
                 <ListItemText primary={"Your Meme"} sx={{ opacity: typeof opacity === "number" ? opacity : opacity.opacity }} />
               </DrawerButton>
             </div>
