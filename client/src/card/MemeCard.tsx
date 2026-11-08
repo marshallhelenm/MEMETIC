@@ -3,7 +3,7 @@ import ReactCardFlip from "../utils/ReactCardFlip";
 
 import MemeCardBack from "./MemeCardBack";
 import MemeCardFront from "./MemeCardFront";
-import { useGame, usePlayers } from "../hooks/useContextHooks";
+import { useGame, useLayout, usePlayers } from "../hooks/useContextHooks";
 import type { MemeData } from "../types/meme";
 
 
@@ -28,7 +28,8 @@ type LocalReactFlipCardProps = {
 };
 
 const MemeCard: React.FC<MemeCardProps> = ({ roomKey, itemKey, item }) => {
-  const { columnWidth, gameKey } = useGame();
+  const { gameKey } = useGame();
+  const { columnWidth } = useLayout();
   const { myPlayerCard } = usePlayers();
   const isPlayerCard = itemKey === myPlayerCard;
   const storageId = `${roomKey}-${gameKey}-flipped-${itemKey}`;

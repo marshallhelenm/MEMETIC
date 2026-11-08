@@ -2,7 +2,6 @@ import React, { createContext, useEffect, useMemo, useRef, useState, ReactNode }
 import { useSearchParams } from "react-router-dom";
 
 import { useWS } from "../hooks/useContextHooks";
-import useLayoutBreakpoint from "../hooks/useLayoutBreakpoint";
 import { memeSampler } from "../assets/memeCollection";
 import type { ServerMessage } from "../messages";
 import { getSessionItem, setSessionItem } from "../utils/sessionStorageUtils";
@@ -13,15 +12,11 @@ export type GameContextValue = GameContextType;
 interface GameContextType {
   createGame: () => void;
   validGame: boolean;
-  columns: any;
-  columnCount: number;
-  columnWidth: number;
-  boardWidth: number;
+  /** The board laid out for every column count (1–6), keyed by column count. */
+  columnsObject: Record<string, any>;
   staticGifs: boolean;
   setStaticGifs: React.Dispatch<React.SetStateAction<boolean>>;
   gameKey: number | null;
-  dialogWidth: string;
-  mobile?: boolean;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -32,8 +27,6 @@ interface GameProviderProps {
 
 function GameProvider({ children }: GameProviderProps) {
   const [searchParams] = useSearchParams();
-  const { columnCount, columnWidth, boardWidth, dialogWidth, mobile } =
-    useLayoutBreakpoint();
   const { sendJsonMessage, lastGameContentsMessage, lastJsonMessage } = useWS();
   const [allKeys, setAllKeys] = useState<any[]>([]);
   const [columnsObject, setColumnsObject] = useState<any>({});
@@ -96,29 +89,12 @@ function GameProvider({ children }: GameProviderProps) {
     return {
       createGame,
       validGame,
-      columns: columnsObject[columnCount],
-      columnCount,
-      columnWidth,
-      boardWidth,
+      columnsObject,
       staticGifs,
       setStaticGifs,
       gameKey,
-      dialogWidth,
-      mobile,
     };
-  }, [
-    createGame,
-    validGame,
-    columnsObject,
-    columnCount,
-    columnWidth,
-    boardWidth,
-    staticGifs,
-    setStaticGifs,
-    gameKey,
-    dialogWidth,
-    mobile
-  ]);
+  }, [createGame, validGame, columnsObject, staticGifs, setStaticGifs, gameKey]);
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }

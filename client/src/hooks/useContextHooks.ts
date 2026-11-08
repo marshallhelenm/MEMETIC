@@ -2,10 +2,12 @@ import { useContext } from "react";
 import { PlayersContext } from "../contexts/PlayersContext";
 import { GameContext } from "../contexts/GameContext";
 import { WSContext } from "../contexts/WSContext";
+import { LayoutContext } from "../contexts/LayoutContext";
 
 import type { GameContextValue } from "../contexts/GameContext";
 import type { PlayersContextValue } from "../contexts/PlayersContext";
 import type { WSContextValue } from "../contexts/WSContext";
+import type { LayoutContextValue } from "../contexts/LayoutContext";
 
 function useGame(): GameContextValue {
   const context = useContext(GameContext);
@@ -28,4 +30,11 @@ function useWS(): WSContextValue {
   return context;
 }
 
-export { usePlayers, useGame, useWS };
+function useLayout(): LayoutContextValue {
+  const context = useContext(LayoutContext);
+  if (context === undefined)
+    throw new Error("LayoutContext was used outside of the LayoutProvider");
+  return context;
+}
+
+export { usePlayers, useGame, useWS, useLayout };

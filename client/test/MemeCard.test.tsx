@@ -63,10 +63,8 @@ describe("MemeCard", () => {
   beforeEach(() => {
     sessionStorage.clear();
 
-    jest.spyOn(useContextHooks, "useGame").mockReturnValue({
-      columnWidth: 220,
-      gameKey,
-    } as any);
+    jest.spyOn(useContextHooks, "useGame").mockReturnValue({ gameKey } as any);
+    jest.spyOn(useContextHooks, "useLayout").mockReturnValue({ columnWidth: 220 } as any);
 
     // Mock usePlayers to return a player card id
     jest.spyOn(useContextHooks, "usePlayers").mockReturnValue({

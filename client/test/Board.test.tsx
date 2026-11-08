@@ -10,7 +10,7 @@ jest.mock("../src/board/CardColumns", () => () => <div>CardColumns Mock</div>);
 describe("Board component", () => {
   beforeEach(() => {
     jest.restoreAllMocks();
-    jest.spyOn(useContextHooks, "useGame").mockReturnValue({ boardWidth: 900 } as any);
+    jest.spyOn(useContextHooks, "useLayout").mockReturnValue({ boardWidth: 900 } as any);
   });
 
   it("renders the card columns", async () => {

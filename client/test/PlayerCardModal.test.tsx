@@ -44,9 +44,9 @@ describe("PlayerCardModal", () => {
     jest.clearAllMocks();
     assignNewMyPlayerCardMock = jest.fn();
 
-    jest.spyOn(useContextHooks, "useGame").mockReturnValue({
+    jest.spyOn(useContextHooks, "useLayout").mockReturnValue({
       dialogWidth: "sm",
-    });
+    } as any);
 
     // Default memeData
     // @ts-expect-error: Overriding for test
