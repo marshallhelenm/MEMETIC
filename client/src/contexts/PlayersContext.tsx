@@ -46,7 +46,7 @@ function PlayersProvider({ children }: PlayersProviderProps) {
   const [player1Uuid, setPlayer1Uuid] = useState<string>("");
   const [player2Uuid, setPlayer2Uuid] = useState<string>("");
   const isObserver = ![player1Uuid, player2Uuid].includes(myUuid);
-  // The server deals and stores cards; this is just our view of it.
+  // Cards are dealt and stored by the server.
   const myPlayerCard: string | null = players[myUuid]?.card ?? null;
   const player1Card = players[player1Uuid]?.card;
   const player2Card = players[player2Uuid]?.card;

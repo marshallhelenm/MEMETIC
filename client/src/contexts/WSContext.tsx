@@ -88,9 +88,7 @@ export interface WSContextValue {
   const MAX_RECONNECT_ATTEMPTS = 10;
 
   function WSProvider({ children }: WSProviderProps) {
-    // The player ID is created/read synchronously so the very first connection
-    // already carries it. Previously it was read in an effect after the first
-    // render, so every page load connected once without an ID and then again.
+    // Resolved synchronously so the first connection includes the player ID.
     const uuidRef = useRef<string>(getPlayerId());
     const [error, setError] = useState<string | null>(null);
     const [serverError, setServerError] = useState<string | object>("");
@@ -123,7 +121,7 @@ export interface WSContextValue {
     const connectionError = reconnectGaveUp && !connectionOpen;
     const tryingToConnect = !connectionOpen && !reconnectGaveUp;
 
-    // Handle each incoming message exactly once, from the single managed socket.
+    // Dispatch each incoming message by type.
     useEffect(() => {
       const message = lastJsonMessage as any;
       if (!message) return;
@@ -146,7 +144,7 @@ export interface WSContextValue {
             setServerError(JSON.parse(message.error));
             break;
           case "uuid":
-            // The client owns its ID now; ignore any server-issued one.
+            // Player IDs are created by the client; server-sent IDs are ignored.
             break;
           case "error":
             devLog(["Error message from server:", message.error]);

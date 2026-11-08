@@ -64,7 +64,7 @@ wsServer.on("connection", (connection: WebSocket, request: http.IncomingMessage)
   connections[uuid] = connection;
   if (previous && previous !== connection) previous.close(4001, "Replaced by newer connection");
 
-  // Back within the grace period: keep everything. The client re-joins to resync.
+  // Cancel any pending removal; the client re-joins to resync its state.
   clearTimeout(removalTimers[uuid]);
   delete removalTimers[uuid];
 

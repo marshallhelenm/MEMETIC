@@ -138,8 +138,8 @@ export function joinRoom(
   if (validRoom) {
     // Joining (or re-joining after a reconnect) keeps an existing card;
     // only players without one for this game get dealt a new one.
-    // If the server lost our card (e.g. it restarted) but the client still
-    // remembers one for this same game, trust it.
+    // If the server has no card for this player but the client remembers one
+    // from the current game (e.g. after a server restart), use it.
     if (
       !roomPlayer.card &&
       card != null &&
