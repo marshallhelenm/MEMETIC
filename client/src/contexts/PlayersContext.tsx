@@ -1,13 +1,16 @@
 import React, { createContext, useEffect, useMemo, useState, useRef, ReactNode } from "react";
 
-import { randomCardKey } from "../utils/Helpers";
 import { useGame, useWS } from "../hooks/useContextHooks";
 import { useSearchParams } from "react-router-dom";
-import type { GenericMessage } from "../../shared/types/messages";
+import type { GenericMessage } from "../messages";
+import { setSessionItem } from "../utils/sessionStorageUtils";
+import { getPlayerId } from "../utils/playerId";
+
+/** Where this tab remembers its card, so it can hand it back to the server on re-join. */
+export const cardStorageKey = (roomKey: string | null) => `guessy-${roomKey}-player-card`;
 
 export interface PlayersContextValue {
   myPlayerCard: string | null;
-  setMyPlayerCard: React.Dispatch<React.SetStateAction<string | null>>;
   players: Record<string, any>;
   setPlayers: React.Dispatch<React.SetStateAction<Record<string, any>>>;
   player1Uuid: string;
@@ -35,19 +38,16 @@ function PlayersProvider({ children }: PlayersProviderProps) {
     lastJsonMessage?: GenericMessage,
     sendJsonMessage: (msg: GenericMessage) => void;
   }
-  const { allKeys, gameKey } = useGame();
-  const gameKeyRef = useRef<string | null>(gameKey);
+  const { gameKey } = useGame();
   const roomKey = searchParams.get("roomKey");
-  const [myPlayerCard, setMyPlayerCard] = useState<string | null>(
-    sessionStorage.getItem(`guessy-${roomKey}-player-card`),
-  );
+  const myUuid = getPlayerId();
   const [players, setPlayers] = useState<Record<string, any>>({});
   const allPlayersRef = useRef<string>("");
   const [player1Uuid, setPlayer1Uuid] = useState<string>("");
   const [player2Uuid, setPlayer2Uuid] = useState<string>("");
-  const isObserver = ![player1Uuid, player2Uuid].includes(
-    sessionStorage.getItem("guessy-uuid") || "",
-  );
+  const isObserver = ![player1Uuid, player2Uuid].includes(myUuid);
+  // The server deals and stores cards; this is just our view of it.
+  const myPlayerCard: string | null = players[myUuid]?.card ?? null;
   const player1Card = players[player1Uuid]?.card;
   const player2Card = players[player2Uuid]?.card;
 
@@ -55,24 +55,15 @@ function PlayersProvider({ children }: PlayersProviderProps) {
 
   const assignNewMyPlayerCard = useMemo(() => {
     return function () {
-      let newCard = randomCardKey(allKeys);
-      setMyPlayerCard(newCard);
-      sessionStorage.setItem(
-        `guessy-${roomKey}-player-card-${gameKey}`,
-        newCard,
-      );
-      sessionStorage.removeItem(
-        `guessy-${roomKey}-player-card-${Number(gameKey) - 1}`,
-      );
-      sendJsonMessage({ type: "setPlayerCard", roomKey, card: newCard });
+      sendJsonMessage({ type: "requestNewCard", roomKey: roomKey ?? undefined });
     };
-  }, [allKeys, roomKey, gameKey, sendJsonMessage]);
+  }, [roomKey, sendJsonMessage]);
 
   const demotePlayer2 = useMemo<((demoteeUuid: string) => void)>(() => {
     return function (demoteeUuid: string) {
       if (demoteeUuid == player2Uuid) {
         setPlayer2Uuid("");
-        sendJsonMessage({ type: "demotePlayer2", roomKey });
+        sendJsonMessage({ type: "demotePlayer2", roomKey: roomKey ?? undefined });
       }
     };
   }, [player2Uuid, sendJsonMessage, roomKey]);
@@ -97,24 +88,18 @@ function PlayersProvider({ children }: PlayersProviderProps) {
         setPlayer2Uuid(lastJsonMessage.player2Uuid);
       }
     }
-    if (!myPlayerCard || myPlayerCard == "" || gameKeyRef.current != gameKey) {
-      assignNewMyPlayerCard();
-      gameKeyRef.current = gameKey;
-    }
-  }, [
-    lastJsonMessage,
-    assignNewMyPlayerCard,
-    myPlayerCard,
-    gameKeyRef,
-    gameKey,
-    player2Uuid,
-  ]);
+  }, [lastJsonMessage, player2Uuid]);
+
+  // Remember the server's card for this game as a backup (sent back on re-join).
+  useEffect(() => {
+    if (myPlayerCard == null || gameKey == null) return;
+    setSessionItem(cardStorageKey(roomKey), JSON.stringify({ gameKey, card: myPlayerCard }));
+  }, [myPlayerCard, gameKey, roomKey]);
 
   //  ** value for the context provider **
   const value: PlayersContextValue = useMemo(() => {
     return {
       myPlayerCard,
-      setMyPlayerCard,
       players,
       setPlayers,
       player1Uuid,
@@ -129,7 +114,6 @@ function PlayersProvider({ children }: PlayersProviderProps) {
     };
   }, [
     myPlayerCard,
-    setMyPlayerCard,
     players,
     setPlayers,
     player1Uuid,

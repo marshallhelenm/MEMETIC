@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "server",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "server", "run", "dev"],
+      "port": 4020
+    },
+    {
+      "name": "client",
+      "runtimeExecutable": "env",
+      "runtimeArgs": ["VITE_WS_URL=ws://localhost:4020/ws", "npm", "--prefix", "client", "run", "dev", "--", "--port", "5173", "--strictPort"],
+      "port": 5173
+    }
+  ]
+}

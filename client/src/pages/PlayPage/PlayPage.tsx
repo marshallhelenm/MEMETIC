@@ -37,7 +37,7 @@ const PlayPage: React.FC = () => {
   }, [roomKey, username, navigate]);
 
   // Join room effect
-  useJoinRoom({ validGame, roomKey, username, gameKey, sendJsonMessage });
+  useJoinRoom({ validGame, roomKey, username, gameKey, sendJsonMessage, connectionOpen });
 
   // Decide what to render
   const renderKey = getPlayPageRender({

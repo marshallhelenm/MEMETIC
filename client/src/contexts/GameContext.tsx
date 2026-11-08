@@ -6,7 +6,7 @@ import useLayoutBreakpoint from "../hooks/useLayoutBreakpoint";
 import { memeSampler } from "../assets/memeCollection";
 import { useTraceUpdate } from "../hooks/useTraceUpdate";
 
-import type { GenericMessage } from "../../shared/types/messages";
+import type { GenericMessage } from "../messages";
 
 // Types for WebSocket context values (temporary, should be improved)
 interface GameContentsMessage {
