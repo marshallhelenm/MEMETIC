@@ -39,8 +39,6 @@ describe("CardColumns", () => {
     return {
       createGame: jest.fn(),
       validGame: true,
-      setLoadingCards: jest.fn(),
-      loadingCards: false,
       columns: columnsObj,
       columnCount: 1,
       staticGifs: false,

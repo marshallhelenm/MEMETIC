@@ -10,8 +10,6 @@ export type GameContextValue = GameContextType;
 interface GameContextType {
   createGame: () => void;
   validGame: boolean;
-  setLoadingCards: React.Dispatch<React.SetStateAction<boolean>>;
-  loadingCards: boolean;
   columns: any;
   columnCount: number;
   columnWidth: number;
@@ -38,9 +36,7 @@ function GameProvider({ children }: GameProviderProps) {
     useLayoutBreakpoint();
   const { sendJsonMessage, lastGameContentsMessage, lastJsonMessage } = useWS();
   const [allKeys, setAllKeys] = useState<any[]>([]);
-  const [loadingCards, setLoadingCards] = useState(false);
   const [columnsObject, setColumnsObject] = useState<any>({});
-  const [validGame, setValidGame] = useState(false);
   const [staticGifs, setStaticGifs] = useState(
     sessionStorage.getItem("guessy-gifs") === "true"
   );
@@ -56,10 +52,6 @@ function GameProvider({ children }: GameProviderProps) {
     return () => {
       if (!roomKey) return;
       dealPendingRef.current = true;
-      setLoadingCards(true);
-      setValidGame(false);
-      setAllKeys([]);
-      setColumnsObject({});
       Object.keys(sessionStorage).forEach((key) => {
         if (key.includes(roomKey)) window.sessionStorage.removeItem(key);
       });
@@ -99,17 +91,12 @@ function GameProvider({ children }: GameProviderProps) {
     createGame();
   }, [lastJsonMessage, createGame]);
 
-  useEffect(() => {
-    setLoadingCards(false);
-    setValidGame(allKeys.length == 24 && Object.keys(columnsObject).length == 6);
-  }, [allKeys, columnsObject]);
+  const validGame = allKeys.length === 24 && Object.keys(columnsObject).length === 6;
 
   const value = useMemo(() => {
     return {
       createGame,
       validGame,
-      setLoadingCards,
-      loadingCards,
       columns: columnsObject[columnCount],
       columnCount,
       columnWidth,
@@ -130,8 +117,6 @@ function GameProvider({ children }: GameProviderProps) {
     columnCount,
     columnWidth,
     boardWidth,
-    setLoadingCards,
-    loadingCards,
     staticGifs,
     setStaticGifs,
     allKeys,
