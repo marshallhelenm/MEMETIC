@@ -37,7 +37,7 @@ describe("handleMessage", () => {
     const msg = {
       type: "chatMessage",
       roomKey: "room1",
-      messageContents: "<script>alert(1)</script>",
+      messageContents: { sender: "A", chatText: "<script>alert(1)</script>", timestamp: 1 },
     };
     rooms["room1"] = deepClone(emptyRoomTemplate);
     handleMessage(
@@ -48,14 +48,14 @@ describe("handleMessage", () => {
       players,
       connections,
     );
-    expect(rooms["room1"].messageHistory[0]).not.toMatch(/[<>]/);
+    expect(rooms["room1"].messageHistory[0].chatText).not.toMatch(/[<>]/);
   });
 
   it("should enforce rate limiting", () => {
     const msg = {
       type: "chatMessage",
       roomKey: "room1",
-      messageContents: "hi",
+      messageContents: { sender: "A", chatText: "hi", timestamp: 1 },
     };
     rooms["room1"] = deepClone(emptyRoomTemplate);
     for (let i = 0; i < 11; i++) {
