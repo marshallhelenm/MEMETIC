@@ -1,11 +1,11 @@
 // Handles incoming WebSocket messages and related logic
 import {
   deepClone,
-  emptyRoomTemplate,
   emptyPlayerTemplate,
   pickRandomCard,
   nextGameKey,
   removePlayerFromRoom,
+  deleteRoomIfEmpty,
 } from "./roomManager";
 import {
   broadcast,
@@ -85,11 +85,9 @@ export function handleMessage(
     let roomKey = message.roomKey;
     if (!roomKey) return;
 
-    let room = rooms[roomKey];
-    if (roomKey && !room) {
-      room = deepClone(emptyRoomTemplate);
-      rooms[roomKey] = room;
-    }
+    // Only joining creates a room; anything else for an unknown room is ignored.
+    const room = rooms[roomKey];
+    if (!room && message.type !== "joinRoom") return;
     let player = players[uuid];
     if (!player) {
       player = deepClone(emptyPlayerTemplate);
@@ -141,9 +139,6 @@ export function handleMessage(
         break;
       }
       case "setGame":
-        if (!room) {
-          room = deepClone(emptyRoomTemplate);
-        }
         room.roomKey = roomKey;
         room.columnsObject = { ...message.columnsObject };
         room.allKeys = message.allKeys.slice(0);
@@ -186,6 +181,7 @@ export function handleMessage(
         // The player navigated away from the room: remove them now rather than
         // waiting for a disconnect grace period that would never start.
         if (removePlayerFromRoom(room, uuid)) {
+          deleteRoomIfEmpty(rooms, roomKey);
           broadcastGameContents(roomKey, rooms, connections);
         }
         break;

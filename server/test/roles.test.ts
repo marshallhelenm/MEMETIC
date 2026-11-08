@@ -52,12 +52,12 @@ describe("removePlayer", () => {
     expect(roles(rooms.R)).toEqual(["a", "c"]);
   });
 
-  it("clears both roles when the last player leaves", () => {
+  it("deletes the room when the last player is removed", () => {
     const rooms: Rooms = { R: roomWith(["a"], "a", null) };
 
     removePlayer(rooms, "a");
 
-    expect(roles(rooms.R)).toEqual([null, null]);
+    expect(rooms.R).toBeUndefined();
   });
 
   it("only changes the rooms the player was in, and reports them", () => {
@@ -97,6 +97,23 @@ describe("taking a role", () => {
 
     expect(rooms.R.players.a).toBeUndefined();
     expect(roles(rooms.R)).toEqual(["c", "b"]);
+  });
+
+  it("deletes the room when its last player leaves", () => {
+    const rooms: Rooms = { R: roomWith(["a"], "a", null) };
+
+    send(rooms, "a", { type: "leaveRoom", roomKey: "R" });
+
+    expect(rooms.R).toBeUndefined();
+  });
+
+  it("does not create a room for a message other than joinRoom", () => {
+    const rooms: Rooms = {};
+
+    send(rooms, "a", { type: "requestNewCard", roomKey: "NOSUCHRM" });
+    send(rooms, "a", { type: "leaveRoom", roomKey: "NOSUCHRM" });
+
+    expect(rooms).toEqual({});
   });
 
   it("ignores leaveRoom from someone who isn't in the room", () => {

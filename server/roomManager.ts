@@ -113,8 +113,18 @@ export function fillRoles(room: Room): void {
  */
 export function removePlayer(rooms: Rooms, uuid: string): string[] {
   const changed = Object.keys(rooms).filter((roomKey) => rooms[roomKey].players[uuid]);
-  changed.forEach((roomKey) => removePlayerFromRoom(rooms[roomKey], uuid));
+  changed.forEach((roomKey) => {
+    removePlayerFromRoom(rooms[roomKey], uuid);
+    deleteRoomIfEmpty(rooms, roomKey);
+  });
   return changed;
+}
+
+/** Delete a room once its last player has gone. */
+export function deleteRoomIfEmpty(rooms: Rooms, roomKey: string): void {
+  if (rooms[roomKey] && Object.keys(rooms[roomKey].players).length === 0) {
+    delete rooms[roomKey];
+  }
 }
 
 /**
