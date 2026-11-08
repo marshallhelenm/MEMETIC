@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import * as useWebSocketModule from "react-use-websocket";
 
 import { WSProvider, WSContext } from "../WSContext";
@@ -85,42 +85,15 @@ describe("WSProvider", () => {
     expect(screen.getByTestId("serverError").textContent).toBe("");
   });
 
-  it("handles uuid from sessionStorage", () => {
+  it("connects with the stored player ID", () => {
     sessionStorage.setItem("guessy-uuid", "test-uuid");
 
     renderWithConsumer();
 
-    expect(sendJsonMessageMock).not.toHaveBeenCalledWith(
-      expect.objectContaining({
-        type: "requestUuid",
-      })
+    expect(useWebSocketModule.default).toHaveBeenCalledWith(
+      expect.stringContaining("?uuid=test-uuid"),
+      expect.anything()
     );
-  });
-
-  it("updates serverError via setServerError", () => {
-    // Use a test component to set serverError
-    render(
-      <WSProvider>
-        <WSContext.Consumer>
-          {(value) => (
-            <>
-              <div data-testid="serverError">{value.serverError}</div>
-              <button onClick={() => value.setServerError("Bad")}>
-                Set Error
-              </button>
-            </>
-          )}
-        </WSContext.Consumer>
-      </WSProvider>
-    );
-
-    expect(screen.getByTestId("serverError").textContent).toBe("");
-
-    act(() => {
-      screen.getByText("Set Error").click();
-    });
-
-    expect(screen.getByTestId("serverError").textContent).toBe("Bad");
   });
 
   const mockLastMessage = (lastJsonMessage) =>

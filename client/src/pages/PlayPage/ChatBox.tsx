@@ -21,7 +21,7 @@ const ChatBox: React.FC = () => {
   const [open, setOpen] = useState(
     sessionStorage.getItem("guessy-chat-open") === "true"
   );
-  const { sendJsonMessage, lastChatHistoryMessage, lastMessageReceivedAt } = useWS();
+  const { sendJsonMessage, lastChatHistoryMessage } = useWS();
   const [newChatCMessage, setNewChatCMessage] = useState("");
   const { messageHistory, setMessageHistory } = useGame();
   const { lastChatHistoryMessageChanged } = useTraceUpdate({ lastChatHistoryMessage });
