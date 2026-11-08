@@ -1,11 +1,5 @@
 // Shared message types for client and server
 
-export interface GenericMessage {
-  type: string;
-  roomKey?: string;
-  [key: string]: any;
-}
-
 export interface ChatMessage {
   type: "chatMessage";
   roomKey: string;
@@ -29,11 +23,14 @@ export function isChatMessage(obj: any): obj is ChatMessage {
   );
 }
 
+/** One line of chat as stored by the server. */
+export type ChatEntry = ChatMessage["messageContents"];
+
 export interface ChatHistoryMessage {
-    type: "chatHistory";
-    roomKey: string;
-    chatHistory: ChatMessage[];
-    timeStamp: number;
+  type: "chatHistory";
+  roomKey: string;
+  chatHistory: ChatEntry[];
+  timeStamp: number;
 }
 
 
@@ -90,6 +87,10 @@ export interface JoinRoomMessage {
   type: "joinRoom";
   roomKey: string;
   username: string;
+  /** The card this client last held in the room, used if the server has none. */
+  card?: string;
+  /** The game that `card` belongs to. */
+  gameKey?: number | null;
 }
 
 export function isJoinRoomMessage(obj: any): obj is JoinRoomMessage {
@@ -148,10 +149,49 @@ export function validateMessagePayload(message: any, bytes: Buffer) {
   }
 }
 
-export type Message =
+/** Messages the client sends to the server. */
+export type ClientMessage =
   | ChatMessage
   | DemotePlayer2Message
   | JoinRoomMessage
   | RequestNewCardMessage
   | SetGameMessage
   | SetPlayerCardMessage;
+
+// --- Messages the server sends to the client ---
+
+export interface PlayerState {
+  uuid: string;
+  username?: string;
+  card?: string;
+  /** False while the player's socket is down but they're still in the grace period. */
+  connected?: boolean;
+}
+
+export interface GameContentsMessage {
+  type: "gameContents";
+  allKeys: string[];
+  columnsObject: Record<string, any>;
+  players: Record<string, PlayerState>;
+  gameKey: number | null;
+  player1Uuid: string | null;
+  player2Uuid: string | null;
+  chatHistory: ChatEntry[];
+}
+
+export interface NoGameAlertMessage {
+  type: "noGameAlert";
+  roomKey: string;
+  info?: unknown;
+}
+
+export interface ServerErrorMessage {
+  type: "error";
+  error: string;
+}
+
+export type ServerMessage =
+  | GameContentsMessage
+  | ChatHistoryMessage
+  | NoGameAlertMessage
+  | ServerErrorMessage;

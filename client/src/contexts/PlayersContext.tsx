@@ -2,7 +2,6 @@ import React, { createContext, useEffect, useMemo, useState, useRef, ReactNode }
 
 import { useGame, useWS } from "../hooks/useContextHooks";
 import { useSearchParams } from "react-router-dom";
-import type { GenericMessage } from "../messages";
 import { setSessionItem } from "../utils/sessionStorageUtils";
 import { getPlayerId } from "../utils/playerId";
 
@@ -34,10 +33,7 @@ const PlayersContext = createContext<PlayersContextValue | undefined>(undefined)
 
 function PlayersProvider({ children }: PlayersProviderProps) {
   const [searchParams] = useSearchParams();
-  const { lastJsonMessage, sendJsonMessage } = useWS() as {
-    lastJsonMessage?: GenericMessage,
-    sendJsonMessage: (msg: GenericMessage) => void;
-  }
+  const { lastJsonMessage, sendJsonMessage } = useWS();
   const { gameKey } = useGame();
   const roomKey = searchParams.get("roomKey");
   const myUuid = getPlayerId();
@@ -55,15 +51,16 @@ function PlayersProvider({ children }: PlayersProviderProps) {
 
   const assignNewMyPlayerCard = useMemo(() => {
     return function () {
-      sendJsonMessage({ type: "requestNewCard", roomKey: roomKey ?? undefined });
+      if (!roomKey) return;
+      sendJsonMessage({ type: "requestNewCard", roomKey });
     };
   }, [roomKey, sendJsonMessage]);
 
   const demotePlayer2 = useMemo<((demoteeUuid: string) => void)>(() => {
     return function (demoteeUuid: string) {
-      if (demoteeUuid == player2Uuid) {
+      if (roomKey && demoteeUuid == player2Uuid) {
         setPlayer2Uuid("");
-        sendJsonMessage({ type: "demotePlayer2", roomKey: roomKey ?? undefined });
+        sendJsonMessage({ type: "demotePlayer2", roomKey });
       }
     };
   }, [player2Uuid, sendJsonMessage, roomKey]);
@@ -71,22 +68,18 @@ function PlayersProvider({ children }: PlayersProviderProps) {
   // **UseEffect
 
   useEffect(() => {
-    let allPlayers = "";
-    if (lastJsonMessage?.players) {
-      allPlayers = JSON.stringify(lastJsonMessage.players);
-      if (allPlayersRef.current != allPlayers) {
-        if (lastJsonMessage?.players) {
-          setPlayers({ ...lastJsonMessage.players });
-          setPlayer1Uuid(lastJsonMessage.player1Uuid);
-          setPlayer2Uuid(lastJsonMessage.player2Uuid);
-          allPlayersRef.current = allPlayers;
-        }
-      } else if (
-        lastJsonMessage.player2Uuid &&
-        player2Uuid != lastJsonMessage.player2Uuid
-      ) {
-        setPlayer2Uuid(lastJsonMessage.player2Uuid);
-      }
+    if (lastJsonMessage?.type !== "gameContents" || !lastJsonMessage.players) return;
+    const allPlayers = JSON.stringify(lastJsonMessage.players);
+    if (allPlayersRef.current != allPlayers) {
+      setPlayers({ ...lastJsonMessage.players });
+      setPlayer1Uuid(lastJsonMessage.player1Uuid ?? "");
+      setPlayer2Uuid(lastJsonMessage.player2Uuid ?? "");
+      allPlayersRef.current = allPlayers;
+    } else if (
+      lastJsonMessage.player2Uuid &&
+      player2Uuid != lastJsonMessage.player2Uuid
+    ) {
+      setPlayer2Uuid(lastJsonMessage.player2Uuid);
     }
   }, [lastJsonMessage, player2Uuid]);
 

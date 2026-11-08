@@ -1,6 +1,6 @@
 // Room and player management utilities and templates
 
-import type { ChatMessage } from "./types/messages";
+import type { ChatEntry } from "./types/messages";
 
 export interface Room {
   roomKey?: string;
@@ -9,7 +9,7 @@ export interface Room {
   players: Record<string, Player>;
   player1Uuid: string | null;
   player2Uuid: string | null;
-  messageHistory: ChatMessage[] | [];
+  messageHistory: ChatEntry[];
   gameKey?: any ;
 }
 

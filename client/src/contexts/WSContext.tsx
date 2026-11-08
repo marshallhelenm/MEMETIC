@@ -2,16 +2,22 @@ import React, { createContext, useMemo, useState, useEffect, ReactNode } from "r
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { devLog } from "../utils/Helpers";
 import { getPlayerId } from "../utils/playerId";
+import type {
+  ChatHistoryMessage,
+  ClientMessage,
+  GameContentsMessage,
+  ServerMessage,
+} from "../messages";
 
 export interface WSContextValue {
-    sendJsonMessage: (msg: any) => void;
-    lastJsonMessage: any;
+    sendJsonMessage: (msg: ClientMessage) => void;
+    lastJsonMessage: ServerMessage | null;
     connectionError: boolean;
     connectionOpen: boolean;
     tryingToConnect: boolean;
-    serverError: string | object;
-    lastGameContentsMessage: any;
-    lastChatHistoryMessage: any;
+    serverError: string;
+    lastGameContentsMessage: GameContentsMessage | null;
+    lastChatHistoryMessage: ChatHistoryMessage | null;
   }
 
   interface WSProviderProps {
@@ -83,12 +89,14 @@ export interface WSContextValue {
   function WSProvider({ children }: WSProviderProps) {
     // Resolved synchronously so the first connection includes the player ID.
     const [playerId] = useState<string>(getPlayerId);
-    const [serverError, setServerError] = useState<string | object>("");
+    const [serverError, setServerError] = useState<string>("");
     const [reconnectGaveUp, setReconnectGaveUp] = useState<boolean>(false);
-    const [lastGameContentsMessage, setLastGameContentsMessage] = useState<any>({});
-    const [lastChatHistoryMessage, setLastChatHistoryMessage] = useState<any>({});
+    const [lastGameContentsMessage, setLastGameContentsMessage] =
+      useState<GameContentsMessage | null>(null);
+    const [lastChatHistoryMessage, setLastChatHistoryMessage] =
+      useState<ChatHistoryMessage | null>(null);
 
-    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
+    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket<ServerMessage | null>(
       `${socketURL}?uuid=${encodeURIComponent(playerId)}`,
       {
         share: false,
@@ -107,17 +115,17 @@ export interface WSContextValue {
 
     // Dispatch each incoming message by type.
     useEffect(() => {
-      const message = lastJsonMessage as any;
+      const message = lastJsonMessage;
       if (!message) return;
 
       switch (message.type) {
         case "chatHistory":
-          if (message?.chatHistory && message.chatHistory.length > 0) {
+          if (message.chatHistory && message.chatHistory.length > 0) {
             setLastChatHistoryMessage({ ...message });
           }
           break;
         case "gameContents":
-          if (message?.allKeys && message?.columnsObject) {
+          if (message.allKeys && message.columnsObject) {
             setLastGameContentsMessage({ ...message });
             // A valid game state means any earlier server error no longer applies.
             setServerError("");
@@ -127,8 +135,11 @@ export interface WSContextValue {
           devLog(["Error message from server:", message.error]);
           setServerError(message.error);
           break;
+        case "noGameAlert":
+          // Handled by GameContext.
+          break;
         default:
-          devLog(["Unhandled message type in WSProvider:", message.type, message]);
+          devLog(["Unhandled message type in WSProvider:", message]);
       }
     }, [lastJsonMessage]);
 

@@ -6,20 +6,6 @@ import useLayoutBreakpoint from "../hooks/useLayoutBreakpoint";
 import { memeSampler } from "../assets/memeCollection";
 import { useTraceUpdate } from "../hooks/useTraceUpdate";
 
-import type { GenericMessage } from "../messages";
-
-// Types for WebSocket context values (temporary, should be improved)
-interface GameContentsMessage {
-  allKeys?: any[];
-  columnsObject?: any;
-  gameKey?: number;
-  chatHistory?: any[];
-}
-
-interface JsonMessage {
-  type?: string;
-}
-
 type TraceUpdateResult = {
   allKeysChanged?: boolean;
   columnsObjectChanged?: boolean;
@@ -57,11 +43,7 @@ function GameProvider({ children }: GameProviderProps) {
   const [searchParams] = useSearchParams();
   const { columnCount, columnWidth, boardWidth, dialogWidth, mobile } =
     useLayoutBreakpoint();
-  const { sendJsonMessage, lastGameContentsMessage, lastJsonMessage } = useWS() as {
-    sendJsonMessage: (msg: GenericMessage) => void;
-    lastGameContentsMessage?: GameContentsMessage;
-    lastJsonMessage?: GenericMessage;
-  }
+  const { sendJsonMessage, lastGameContentsMessage, lastJsonMessage } = useWS();
   const [allKeys, setAllKeys] = useState<any[]>([]);
   const [loadingCards, setLoadingCards] = useState(false);
   const [columnsObject, setColumnsObject] = useState<any>({});
@@ -87,12 +69,13 @@ function GameProvider({ children }: GameProviderProps) {
 
   const createGame = useMemo(() => {
     return () => {
+      if (!roomKey) return;
       setLoadingCards(true);
       setValidGame(false);
       setAllKeys([]);
       setColumnsObject({});
       Object.keys(sessionStorage).forEach((key) => {
-        if (roomKey && key.includes(roomKey)) window.sessionStorage.removeItem(key);
+        if (key.includes(roomKey)) window.sessionStorage.removeItem(key);
       });
       let newGameKey = Number(gameKey) + 1;
       setGameKey(newGameKey);
@@ -110,26 +93,21 @@ function GameProvider({ children }: GameProviderProps) {
   }, [sendJsonMessage, roomKey, gameKey]);
 
   useEffect(() => {
-    const typedLastJsonMessage = lastJsonMessage as JsonMessage;
-    const typedLastGameContentsMessage = lastGameContentsMessage as GameContentsMessage;
-    if (lastJsonMessageChanged && typedLastJsonMessage?.type === "noGameAlert") {
+    if (lastJsonMessageChanged && lastJsonMessage?.type === "noGameAlert") {
       createGame();
     } else if (
       lastGameContentsMessageChanged ||
       !validGame ||
-      (typedLastGameContentsMessage?.gameKey &&
-        typedLastGameContentsMessage.gameKey != gameKey)
+      (lastGameContentsMessage?.gameKey &&
+        lastGameContentsMessage.gameKey != gameKey)
     ) {
-      if (
-        typedLastGameContentsMessage?.allKeys &&
-        typedLastGameContentsMessage?.columnsObject
-      ) {
+      if (lastGameContentsMessage?.allKeys && lastGameContentsMessage?.columnsObject) {
         setAllKeys([]);
         setColumnsObject({});
-        setAllKeys(typedLastGameContentsMessage.allKeys.slice(0));
-        setColumnsObject({ ...typedLastGameContentsMessage.columnsObject });
-        setGameKey(typedLastGameContentsMessage.gameKey ?? null);
-        setMessageHistory(typedLastGameContentsMessage.chatHistory ?? []);
+        setAllKeys(lastGameContentsMessage.allKeys.slice(0));
+        setColumnsObject({ ...lastGameContentsMessage.columnsObject });
+        setGameKey(lastGameContentsMessage.gameKey ?? null);
+        setMessageHistory(lastGameContentsMessage.chatHistory ?? []);
       }
     }
     if (columnsObjectChanged || allKeysChanged) {

@@ -54,7 +54,7 @@ const ChatBox: React.FC = () => {
   }
 
   useEffect(() => {
-    if (lastChatHistoryMessageChanged && lastChatHistoryMessage.chatHistory) {
+    if (lastChatHistoryMessageChanged && lastChatHistoryMessage?.chatHistory) {
       setMessageHistory(lastChatHistoryMessage.chatHistory);
     }
   }, [lastChatHistoryMessage, lastChatHistoryMessageChanged, setMessageHistory]);
