@@ -3,23 +3,21 @@ import { useSearchParams } from "react-router-dom";
 
 import { useWS } from "../hooks/useContextHooks";
 import { memeSampler } from "../assets/memeCollection";
-import type { ServerMessage } from "../messages";
+import type { BoardLayouts, ServerMessage } from "../messages";
 import { getSessionItem, setSessionItem } from "../utils/sessionStorageUtils";
 
 const STATIC_GIFS_KEY = "guessy-gifs";
 
-export type GameContextValue = GameContextType;
-interface GameContextType {
+export interface GameContextValue {
   createGame: () => void;
   validGame: boolean;
-  /** The board laid out for every column count (1–6), keyed by column count. */
-  columnsObject: Record<string, any>;
+  columnsObject: BoardLayouts;
   staticGifs: boolean;
   setStaticGifs: React.Dispatch<React.SetStateAction<boolean>>;
   gameKey: number | null;
 }
 
-const GameContext = createContext<GameContextType | undefined>(undefined);
+const GameContext = createContext<GameContextValue | undefined>(undefined);
 
 interface GameProviderProps {
   children: ReactNode;
@@ -28,8 +26,8 @@ interface GameProviderProps {
 function GameProvider({ children }: GameProviderProps) {
   const [searchParams] = useSearchParams();
   const { sendJsonMessage, lastGameContentsMessage, lastJsonMessage } = useWS();
-  const [allKeys, setAllKeys] = useState<any[]>([]);
-  const [columnsObject, setColumnsObject] = useState<any>({});
+  const [allKeys, setAllKeys] = useState<string[]>([]);
+  const [columnsObject, setColumnsObject] = useState<BoardLayouts>({});
   const [staticGifs, setStaticGifs] = useState(
     () => getSessionItem(STATIC_GIFS_KEY) === "true"
   );

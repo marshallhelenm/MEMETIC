@@ -1,11 +1,10 @@
 import memeData from "../assets/memes.json";
 
-// Type for the columns object: keys are numbers, values are arrays of strings (card keys)
-type ColumnsObject = { [key: number]: string[] };
+import type { ColumnLayout } from "../messages";
 
-function cardSorter(unsortedKeys: string[], columnCount: number): ColumnsObject {
+function cardSorter(unsortedKeys: string[], columnCount: number): ColumnLayout {
   let itemKeys = sortKeysByHeight(unsortedKeys);
-  let columnsObject: ColumnsObject = {};
+  let columnsObject: ColumnLayout = {};
   for (let index = 1; index < columnCount + 1; index++) {
     columnsObject[index] = [];
   }
@@ -34,7 +33,7 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnsObject 
     return height;
   }
 
-  function findColHeights(columns: ColumnsObject): number[] {
+  function findColHeights(columns: ColumnLayout): number[] {
     const heights: number[] = [];
     Object.keys(columns).forEach((key) => {
       heights.push(findColHeight(columns[Number(key)]));
@@ -42,7 +41,7 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnsObject 
     return heights;
   }
 
-  function avgColHeight(columns: ColumnsObject): number {
+  function avgColHeight(columns: ColumnLayout): number {
     const heights = findColHeights(columns);
     let curTotalHeight = heights.reduce((sum, h) => sum + h, 0.0);
     let avg = curTotalHeight / heights.length;
@@ -60,7 +59,7 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnsObject 
 
   // ** assessment methods
 
-  function findShortestColumn(columns: ColumnsObject): number {
+  function findShortestColumn(columns: ColumnLayout): number {
     const heights = findColHeights(columns);
     let shortestCol = 1;
     for (let i = 1; i < heights.length + 1; i++) {
@@ -98,7 +97,7 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnsObject 
     return closestMatch;
   }
 
-  function bestColumn(key: string, columns: ColumnsObject, targetHeight: number, finalCards = false): number {
+  function bestColumn(key: string, columns: ColumnLayout, targetHeight: number, finalCards = false): number {
     let cardHeight = parseHeight(key);
     let isTall = cardHeight * 3 > targetHeight;
     let bestFitColumn = 1;
@@ -150,8 +149,8 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnsObject 
     return col.sort(() => Math.random() - 0.5);
   }
 
-  function assignCardsToColumns(columns: ColumnsObject): ColumnsObject {
-    let workingCols: ColumnsObject = { ...columns };
+  function assignCardsToColumns(columns: ColumnLayout): ColumnLayout {
+    let workingCols: ColumnLayout = { ...columns };
     let targetHeight = fullCardsHeight / columnCount;
     let finalCards = false;
     itemKeys.forEach((key, i) => {
@@ -165,7 +164,7 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnsObject 
     return workingCols;
   }
 
-  function sortColumnsByHeight(columnsObject: ColumnsObject): ColumnsObject {
+  function sortColumnsByHeight(columnsObject: ColumnLayout): ColumnLayout {
     let colCount = Object.keys(columnsObject).length;
     const finalHeights: number[] = [];
     let columnKeys = Array.from({ length: colCount }, (_, i) => i + 1);
@@ -175,15 +174,15 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnsObject 
     columnKeys = columnKeys.sort((a, b) => {
       return parseFloat(finalHeights[a - 1].toString()) - parseFloat(finalHeights[b - 1].toString());
     });
-    let orderedColumns: ColumnsObject = {};
+    let orderedColumns: ColumnLayout = {};
     for (let i = 0; i < colCount; i++) {
       orderedColumns[i + 1] = shuffleColumn(columnsObject[columnKeys[i]]);
     }
     return orderedColumns;
   }
 
-  function unsortedColumns(itemKeys: string[], columnCount: number): ColumnsObject {
-    const columns: ColumnsObject = {};
+  function unsortedColumns(itemKeys: string[], columnCount: number): ColumnLayout {
+    const columns: ColumnLayout = {};
     for (let index = 1; index < columnCount + 1; index++) {
       columns[index] = [];
     }

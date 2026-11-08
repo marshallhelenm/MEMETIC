@@ -1,5 +1,11 @@
 // Shared message types for client and server
 
+/** One board arrangement: column number (from 1) -> the meme keys in that column. */
+export type ColumnLayout = Record<number, string[]>;
+
+/** The board arranged for every column count (1-6), keyed by column count. */
+export type BoardLayouts = Record<number, ColumnLayout>;
+
 export interface ChatMessage {
   type: "chatMessage";
   roomKey: string;
@@ -51,8 +57,8 @@ export function isDemotePlayer2Message(obj: any): obj is DemotePlayer2Message {
 export interface SetGameMessage {
   type: "setGame";
   roomKey: string;
-  columnsObject: Record<string, any>;
-  allKeys: any[];
+  columnsObject: BoardLayouts;
+  allKeys: string[];
 }
 
 export function isSetGameMessage(obj: any): obj is SetGameMessage {
@@ -169,7 +175,7 @@ export interface PlayerState {
 export interface GameContentsMessage {
   type: "gameContents";
   allKeys: string[];
-  columnsObject: Record<string, any>;
+  columnsObject: BoardLayouts;
   players: Record<string, PlayerState>;
   gameKey: number | null;
   player1Uuid: string | null;
