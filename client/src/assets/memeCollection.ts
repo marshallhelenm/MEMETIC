@@ -13,7 +13,7 @@ function memeSampler(): { columnsObject: BoardLayouts; allKeys: string[] } {
   let randomIndex;
 
   for (let i = 0; i < 24; i++) {
-    randomIndex = Math.floor(Math.random() * (memesArray.length - 1));
+    randomIndex = Math.floor(Math.random() * memesArray.length);
     gameKeys.push(memesArray.splice(randomIndex, 1)[0]);
   }
 
