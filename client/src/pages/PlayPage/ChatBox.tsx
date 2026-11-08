@@ -9,7 +9,7 @@ import {
   Message,
   MessageInput,
 } from "@chatscope/chat-ui-kit-react";
-import { useGame, useWS } from "../../hooks/useContextHooks";
+import { useWS } from "../../hooks/useContextHooks";
 import { useSearchParams } from "react-router-dom";
 import type { ChatEntry } from "../../messages";
 
@@ -20,9 +20,11 @@ const ChatBox: React.FC = () => {
   const [open, setOpen] = useState(
     sessionStorage.getItem("guessy-chat-open") === "true"
   );
-  const { sendJsonMessage, lastChatHistoryMessage } = useWS();
+  const { sendJsonMessage, lastChatHistoryMessage, lastGameContentsMessage } = useWS();
   const [newChatCMessage, setNewChatCMessage] = useState("");
-  const { messageHistory, setMessageHistory } = useGame();
+  const [messageHistory, setMessageHistory] = useState<ChatEntry[]>(
+    lastGameContentsMessage?.chatHistory ?? []
+  );
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   function handleSetOpen() {
@@ -43,11 +45,18 @@ const ChatBox: React.FC = () => {
     setNewChatCMessage("");
   }
 
+  // Both messages carry the room's full chat history; take whichever arrived last.
+  useEffect(() => {
+    if (lastGameContentsMessage?.chatHistory) {
+      setMessageHistory(lastGameContentsMessage.chatHistory);
+    }
+  }, [lastGameContentsMessage]);
+
   useEffect(() => {
     if (lastChatHistoryMessage?.chatHistory) {
       setMessageHistory(lastChatHistoryMessage.chatHistory);
     }
-  }, [lastChatHistoryMessage, setMessageHistory]);
+  }, [lastChatHistoryMessage]);
 
   function messageList() {
     return (

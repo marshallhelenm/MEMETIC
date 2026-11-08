@@ -34,16 +34,12 @@ jest.mock("@chatscope/chat-ui-kit-react", () => {
 
 import ChatBox from "../src/pages/PlayPage/ChatBox";
 
-function renderChatBox({ messageHistory = [] as any[] } = {}) {
+function renderChatBox({ chatHistory = [] as any[] } = {}) {
   const sendJsonMessage = jest.fn();
-  const setMessageHistory = jest.fn();
   jest.spyOn(useContextHooks, "useWS").mockReturnValue({
     sendJsonMessage,
     lastChatHistoryMessage: null,
-  } as any);
-  jest.spyOn(useContextHooks, "useGame").mockReturnValue({
-    messageHistory,
-    setMessageHistory,
+    lastGameContentsMessage: { type: "gameContents", chatHistory },
   } as any);
 
   render(
@@ -51,7 +47,7 @@ function renderChatBox({ messageHistory = [] as any[] } = {}) {
       <ChatBox />
     </MemoryRouter>
   );
-  return { sendJsonMessage, setMessageHistory };
+  return { sendJsonMessage };
 }
 
 describe("ChatBox", () => {
@@ -61,7 +57,7 @@ describe("ChatBox", () => {
   });
 
   it("sends a chat message with sender, text and timestamp", () => {
-    const { sendJsonMessage, setMessageHistory } = renderChatBox();
+    const { sendJsonMessage } = renderChatBox();
 
     fireEvent.change(screen.getByTestId("chat-input"), { target: { value: "hi there" } });
     fireEvent.click(screen.getByText("Send"));
@@ -71,7 +67,8 @@ describe("ChatBox", () => {
       roomKey: "ABCDEFGH",
       messageContents: { sender: "Alice", chatText: "hi there", timestamp: expect.any(Number) },
     });
-    expect(setMessageHistory).toHaveBeenCalled();
+    // The sender sees their own message straight away.
+    expect(screen.getByText("hi there")).toBeInTheDocument();
   });
 
   it("does not send an empty message", () => {
@@ -84,7 +81,7 @@ describe("ChatBox", () => {
 
   it("renders history with one sender header per run of messages", () => {
     renderChatBox({
-      messageHistory: [
+      chatHistory: [
         { sender: "Bob", chatText: "first", timestamp: 1 },
         { sender: "Bob", chatText: "second", timestamp: 2 },
         { sender: "Alice", chatText: "reply", timestamp: 3 },

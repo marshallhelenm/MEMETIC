@@ -34,7 +34,6 @@ const GifPauseButton: React.FC<GifPauseButtonProps> = ({ draweropen }) => {
   }));
 
   function toggleStaticGifs() {
-    sessionStorage.setItem("guessy-gifs", String(!staticGifs));
     setStaticGifs(!staticGifs);
   }
 

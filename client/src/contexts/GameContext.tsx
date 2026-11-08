@@ -4,7 +4,10 @@ import { useSearchParams } from "react-router-dom";
 import { useWS } from "../hooks/useContextHooks";
 import useLayoutBreakpoint from "../hooks/useLayoutBreakpoint";
 import { memeSampler } from "../assets/memeCollection";
-import type { ChatEntry, ServerMessage } from "../messages";
+import type { ServerMessage } from "../messages";
+import { getSessionItem, setSessionItem } from "../utils/sessionStorageUtils";
+
+const STATIC_GIFS_KEY = "guessy-gifs";
 
 export type GameContextValue = GameContextType;
 interface GameContextType {
@@ -16,11 +19,8 @@ interface GameContextType {
   boardWidth: number;
   staticGifs: boolean;
   setStaticGifs: React.Dispatch<React.SetStateAction<boolean>>;
-  allKeys: any[];
   gameKey: number | null;
   dialogWidth: string;
-  messageHistory: ChatEntry[];
-  setMessageHistory: React.Dispatch<React.SetStateAction<ChatEntry[]>>;
   mobile?: boolean;
 }
 
@@ -38,10 +38,9 @@ function GameProvider({ children }: GameProviderProps) {
   const [allKeys, setAllKeys] = useState<any[]>([]);
   const [columnsObject, setColumnsObject] = useState<any>({});
   const [staticGifs, setStaticGifs] = useState(
-    sessionStorage.getItem("guessy-gifs") === "true"
+    () => getSessionItem(STATIC_GIFS_KEY) === "true"
   );
   const [gameKey, setGameKey] = useState<number | null>(null);
-  const [messageHistory, setMessageHistory] = useState<ChatEntry[]>([]);
 
   const roomKey = searchParams.get("roomKey");
   // True from dealing a game until the server confirms it with gameContents.
@@ -77,7 +76,6 @@ function GameProvider({ children }: GameProviderProps) {
     setAllKeys(lastGameContentsMessage.allKeys.slice(0));
     setColumnsObject({ ...lastGameContentsMessage.columnsObject });
     setGameKey(lastGameContentsMessage.gameKey ?? null);
-    setMessageHistory(lastGameContentsMessage.chatHistory ?? []);
   }, [lastGameContentsMessage]);
 
   // The room has no game yet: deal one. Each alert is handled once, and alerts
@@ -91,6 +89,10 @@ function GameProvider({ children }: GameProviderProps) {
     createGame();
   }, [lastJsonMessage, createGame]);
 
+  useEffect(() => {
+    setSessionItem(STATIC_GIFS_KEY, String(staticGifs));
+  }, [staticGifs]);
+
   const validGame = allKeys.length === 24 && Object.keys(columnsObject).length === 6;
 
   const value = useMemo(() => {
@@ -103,11 +105,8 @@ function GameProvider({ children }: GameProviderProps) {
       boardWidth,
       staticGifs,
       setStaticGifs,
-      allKeys,
       gameKey,
       dialogWidth,
-      messageHistory,
-      setMessageHistory,
       mobile,
     };
   }, [
@@ -119,11 +118,8 @@ function GameProvider({ children }: GameProviderProps) {
     boardWidth,
     staticGifs,
     setStaticGifs,
-    allKeys,
     gameKey,
     dialogWidth,
-    messageHistory,
-    setMessageHistory,
     mobile
   ]);
 

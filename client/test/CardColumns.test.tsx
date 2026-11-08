@@ -43,11 +43,8 @@ describe("CardColumns", () => {
       columnCount: 1,
       staticGifs: false,
       setStaticGifs: jest.fn(),
-      allKeys: [],
       gameKey: 1,
       dialogWidth: "100px",
-      messageHistory: [],
-      setMessageHistory: jest.fn(),
     };
   }
 

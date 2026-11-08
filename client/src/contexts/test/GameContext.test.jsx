@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, act } from "@testing-library/react";
 import { GameProvider, GameContext } from "../GameContext";
 import { MemoryRouter } from "react-router-dom";
 import { WSProvider } from "../WSContext";
@@ -139,6 +139,23 @@ describe("GameContext", () => {
       rerender(tree());
 
       expect(setGameCalls()).toHaveLength(2);
+    });
+
+    it("reads staticGifs from sessionStorage and saves changes back", () => {
+      sessionStorage.setItem("guessy-gifs", "true");
+      let ctx;
+      render(
+        <MemoryRouter>
+          <GameProvider>
+            <GameContext.Consumer>{(value) => ((ctx = value), null)}</GameContext.Consumer>
+          </GameProvider>
+        </MemoryRouter>
+      );
+      expect(ctx.staticGifs).toBe(true);
+
+      act(() => ctx.setStaticGifs(false));
+
+      expect(sessionStorage.getItem("guessy-gifs")).toBe("false");
     });
 
     it("copies game contents from the server", () => {
