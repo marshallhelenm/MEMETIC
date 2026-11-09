@@ -64,29 +64,52 @@ export interface SetGameMessage {
   allKeys: string[];
 }
 
+/** Memes dealt per game. */
+export const GAME_SIZE = 24;
+/** The most columns the board is laid out for. */
+export const MAX_COLUMNS = 6;
+const MEME_KEY = /^[A-Za-z0-9_]{1,64}$/;
+
+const sameKeys = (a: string[], b: string[]) =>
+  a.length === b.length && [...a].sort().join("\n") === [...b].sort().join("\n");
+
+/** GAME_SIZE different, meme-shaped keys. */
+export function isGameKeys(keys: unknown): keys is string[] {
+  return (
+    Array.isArray(keys) &&
+    keys.length === GAME_SIZE &&
+    keys.every((k) => typeof k === "string" && MEME_KEY.test(k)) &&
+    new Set(keys).size === GAME_SIZE
+  );
+}
+
+/**
+ * A layout for every column count from 1 to MAX_COLUMNS: layout n has columns
+ * 1..n, and between them those columns hold exactly `allKeys`.
+ */
+export function isBoardLayouts(layouts: unknown, allKeys: string[]): layouts is BoardLayouts {
+  if (!isRecord(layouts) || Object.keys(layouts).length !== MAX_COLUMNS) return false;
+  for (let count = 1; count <= MAX_COLUMNS; count++) {
+    const layout = layouts[count];
+    if (!isRecord(layout) || Object.keys(layout).length !== count) return false;
+    const keys: string[] = [];
+    for (let column = 1; column <= count; column++) {
+      const cards = layout[column];
+      if (!Array.isArray(cards) || !cards.every((k) => typeof k === "string")) return false;
+      keys.push(...cards);
+    }
+    if (!sameKeys(keys, allKeys)) return false;
+  }
+  return true;
+}
+
 export function isSetGameMessage(obj: unknown): obj is SetGameMessage {
   return (
     isRecord(obj) &&
     obj.type === "setGame" &&
     typeof obj.roomKey === "string" &&
-    typeof obj.columnsObject === "object" &&
-    obj.columnsObject !== null &&
-    Array.isArray(obj.allKeys)
-  );
-}
-
-export interface SetPlayerCardMessage {
-  type: "setPlayerCard";
-  roomKey: string;
-  card: string;
-}
-
-export function isSetPlayerCardMessage(obj: unknown): obj is SetPlayerCardMessage {
-  return (
-    isRecord(obj) &&
-    obj.type === "setPlayerCard" &&
-    typeof obj.roomKey === "string" &&
-    typeof obj.card === "string"
+    isGameKeys(obj.allKeys) &&
+    isBoardLayouts(obj.columnsObject, obj.allKeys)
   );
 }
 
@@ -128,45 +151,40 @@ export function isRequestNewCardMessage(obj: unknown): obj is RequestNewCardMess
 }
 
 // --- Extracted message payload validation ---
-export function validateMessagePayload(message: { type?: unknown }, bytes: Buffer) {
+export function validateMessagePayload(message: { type?: unknown }) {
   switch (message.type) {
     case "chatMessage":
       if (!isChatMessage(message)) {
-        throw new Error("Invalid or missing messageContents for chatMessage. Message: " + bytes.toString());
+        throw new Error("Invalid or missing messageContents for chatMessage.");
       }
       break;
     case "demotePlayer2":
       if (!isDemotePlayer2Message(message)) {
-        throw new Error("Missing or invalid roomKey for demotePlayer2. Message: " + bytes.toString());
+        throw new Error("Missing or invalid roomKey for demotePlayer2.");
       }
       break;
     case "setGame":
       if (!isSetGameMessage(message)) {
-        throw new Error("Missing or invalid fields for setGame. Message: " + bytes.toString());
-      }
-      break;
-    case "setPlayerCard":
-      if (!isSetPlayerCardMessage(message)) {
-        throw new Error("Missing or invalid fields for setPlayerCard. Message: " + bytes.toString());
+        throw new Error("Missing or invalid fields for setGame.");
       }
       break;
     case "joinRoom":
       if (!isJoinRoomMessage(message)) {
-        throw new Error("Missing or invalid fields for joinRoom. Message: " + bytes.toString());
+        throw new Error("Missing or invalid fields for joinRoom.");
       }
       break;
     case "leaveRoom":
       if (!isLeaveRoomMessage(message)) {
-        throw new Error("Missing or invalid roomKey for leaveRoom. Message: " + bytes.toString());
+        throw new Error("Missing or invalid roomKey for leaveRoom.");
       }
       break;
     case "requestNewCard":
       if (!isRequestNewCardMessage(message)) {
-        throw new Error("Missing or invalid roomKey for requestNewCard. Message: " + bytes.toString());
+        throw new Error("Missing or invalid roomKey for requestNewCard.");
       }
       break;
     default:
-      throw new Error("Unknown message type. Message: " + bytes.toString());
+      throw new Error("Unknown message type.");
   }
 }
 
@@ -177,8 +195,7 @@ export type ClientMessage =
   | JoinRoomMessage
   | LeaveRoomMessage
   | RequestNewCardMessage
-  | SetGameMessage
-  | SetPlayerCardMessage;
+  | SetGameMessage;
 
 // --- Messages the server sends to the client ---
 
@@ -207,6 +224,12 @@ export interface NoGameAlertMessage {
   info?: unknown;
 }
 
+/** Sent on connect: the public ID other players will see for this client. */
+export interface WelcomeMessage {
+  type: "welcome";
+  playerId: string;
+}
+
 export interface ServerErrorMessage {
   type: "error";
   error: string;
@@ -216,4 +239,5 @@ export type ServerMessage =
   | GameContentsMessage
   | ChatHistoryMessage
   | NoGameAlertMessage
-  | ServerErrorMessage;
+  | ServerErrorMessage
+  | WelcomeMessage;

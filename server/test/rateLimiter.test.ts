@@ -38,6 +38,19 @@ describe("allowMessage", () => {
   });
 });
 
+describe("error replies", () => {
+  it("do not echo the rejected input back", () => {
+    const send = jest.fn();
+    const secret = "SOME-LARGE-PAYLOAD-" + "y".repeat(500);
+
+    handleMessage(Buffer.from(JSON.stringify({ type: "nope", junk: secret })), "a", null, {}, {}, { a: { send } });
+
+    const reply = send.mock.calls[0][0] as string;
+    expect(JSON.parse(reply).type).toBe("error");
+    expect(reply).not.toContain("SOME-LARGE-PAYLOAD");
+  });
+});
+
 describe("handleMessage rate limiting", () => {
   it("counts malformed messages too", () => {
     const send = jest.fn();

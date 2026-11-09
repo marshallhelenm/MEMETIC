@@ -8,8 +8,14 @@ const GRACE_MS = 600;
 // 127.0.0.1, not localhost: the server listens on IPv4 (0.0.0.0), and on Node 18
 // "localhost" resolves to IPv6 ::1 first without falling back.
 const URL = `ws://127.0.0.1:${PORT}/ws`;
-const keys = Array.from({ length: 24 }, (_, i) => `meme_${i}`);
-const columnsObject = { 1: {}, 2: {}, 3: {}, 4: {}, 5: {}, 6: {} };
+import { gameKeys as keys, layoutsFor } from "./helpers";
+import { publicIdFor } from "../identity";
+
+/** Each test player connects with a private secret; others see its public ID. */
+const secretFor = (name: string) => `${name}-secret-for-tests`;
+const id = (name: string) => publicIdFor(secretFor(name));
+
+const columnsObject = layoutsFor(keys);
 
 let server: ChildProcess;
 const open: WebSocket[] = [];
@@ -28,8 +34,8 @@ beforeAll(async () => {
 afterEach(() => open.splice(0).forEach((ws) => ws.close()));
 afterAll(() => server.kill());
 
-function connect(uuid?: string): Promise<WebSocket> {
-  const ws = new WebSocket(uuid ? `${URL}?uuid=${uuid}` : URL);
+function connect(name?: string, secret = name && secretFor(name)): Promise<WebSocket> {
+  const ws = new WebSocket(secret ? `${URL}?uuid=${secret}` : URL);
   open.push(ws);
   return new Promise((resolve) => ws.on("open", () => resolve(ws)));
 }
@@ -66,22 +72,75 @@ async function rejoin(ws: WebSocket, roomKey: string, uuid: string) {
   return contents;
 }
 
+it("closes a connection that sends an oversized message", async () => {
+  const ws = await connect("int-big");
+  const wasClosed = closed(ws);
+
+  ws.send("x".repeat(65 * 1024));
+
+  expect(await wasClosed).toBe(1009); // "message too big"
+});
+
+it("stays up after a client sends a malformed frame", async () => {
+  const bad = await connect("int-bad-frame");
+  const wasClosed = closed(bad);
+
+  // A masked frame with a reserved opcode (3): a protocol error.
+  (bad as any)._socket.write(Buffer.from([0x83, 0x80, 0, 0, 0, 0]));
+  await wasClosed;
+
+  const probe = await connect("int-probe");
+  expect(probe.readyState).toBe(WebSocket.OPEN);
+});
+
 it("rejects a connection without a player ID", async () => {
   const ws = await connect();
   expect(await closed(ws)).toBe(4000);
 });
 
+it("rejects a player ID that is too short to be a secret", async () => {
+  const ws = await connect("short", "abc");
+  expect(await closed(ws)).toBe(4000);
+});
+
+it("tells a client its public ID, which isn't its secret", async () => {
+  const ws = new WebSocket(`${URL}?uuid=${secretFor("int-w")}`);
+  open.push(ws);
+
+  const welcome = await next(ws, "welcome");
+
+  expect(welcome.playerId).toBe(id("int-w"));
+  expect(welcome.playerId).not.toContain(secretFor("int-w"));
+});
+
+it("doesn't let someone who knows player 1's public ID connect as player 1", async () => {
+  const p1 = await connect("int-victim");
+  const { player1Uuid } = await startGame(p1, "INTROOM6", "int-victim");
+  const victimClosed = jest.fn();
+  p1.on("close", victimClosed);
+
+  // An attacker in the room sees player 1's ID in gameContents and tries it.
+  const attacker = await connect("attacker", player1Uuid);
+  const contents = await rejoin(attacker, "INTROOM6", "attacker");
+
+  expect(contents.player1Uuid).toBe(id("int-victim"));
+  expect(contents.player1Uuid).not.toBe(publicIdFor(player1Uuid));
+  expect(Object.keys(contents.players)).toHaveLength(2);
+  await wait(100);
+  expect(victimClosed).not.toHaveBeenCalled();
+});
+
 it("keeps a player's card when they reconnect within the grace period", async () => {
   const first = await connect("int-a");
   const { players } = await startGame(first, "INTROOM1", "int-a");
-  const card = players["int-a"].card;
+  const card = players[id("int-a")].card;
 
   first.close();
   await wait(GRACE_MS / 3);
   const second = await connect("int-a");
   const contents = await rejoin(second, "INTROOM1", "int-a");
 
-  expect(contents.players["int-a"].card).toBe(card);
+  expect(contents.players[id("int-a")].card).toBe(card);
 });
 
 it("removes a player who stays away longer than the grace period", async () => {
@@ -94,7 +153,7 @@ it("removes a player who stays away longer than the grace period", async () => {
   await wait(GRACE_MS * 2);
   const contents = await rejoin(a, "INTROOM2", "int-b");
 
-  expect(contents.players["int-c"]).toBeUndefined();
+  expect(contents.players[id("int-c")]).toBeUndefined();
 });
 
 it("hands player 1 on when player 1 stays away longer than the grace period", async () => {
@@ -102,13 +161,13 @@ it("hands player 1 on when player 1 stays away longer than the grace period", as
   await startGame(p1, "INTROOM5", "int-g");
   const p2 = await connect("int-h");
   const joined = await rejoin(p2, "INTROOM5", "int-h");
-  expect([joined.player1Uuid, joined.player2Uuid]).toEqual(["int-g", "int-h"]);
+  expect([joined.player1Uuid, joined.player2Uuid]).toEqual([id("int-g"), id("int-h")]);
 
   p1.close();
   await wait(GRACE_MS * 2);
   const contents = await rejoin(p2, "INTROOM5", "int-h");
 
-  expect(contents.player1Uuid).toBe("int-h");
+  expect(contents.player1Uuid).toBe(id("int-h"));
 });
 
 it("marks a player as disconnected during the grace period", async () => {
@@ -120,7 +179,7 @@ it("marks a player as disconnected during the grace period", async () => {
   const update = next(a, "gameContents");
   b.close();
 
-  expect((await update).players["int-e"].connected).toBe(false);
+  expect((await update).players[id("int-e")].connected).toBe(false);
 });
 
 it("closes the older socket when the same player connects again, and keeps them in the room", async () => {
@@ -132,5 +191,5 @@ it("closes the older socket when the same player connects again, and keeps them 
 
   expect(await olderClosed).toBe(4001);
   const contents = await rejoin(newer, "INTROOM4", "int-f");
-  expect(contents.players["int-f"].card).toBe(players["int-f"].card);
+  expect(contents.players[id("int-f")].card).toBe(players[id("int-f")].card);
 });

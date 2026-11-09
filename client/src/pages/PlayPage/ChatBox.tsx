@@ -69,6 +69,8 @@ const ChatBox: React.FC = () => {
               key={`${entry.timestamp}-${i}`}
               className="memetic"
               model={{
+                // The chat kit renders "html" (its default) as raw HTML; chat is plain text.
+                type: "text",
                 message: entry.chatText,
                 sender: entry.sender,
                 direction: entry.sender === myUsername ? "outgoing" : "incoming",

@@ -1,5 +1,6 @@
 import memes from "../src/assets/memes.json";
 import { memeSampler } from "../src/assets/memeCollection";
+import { isBoardLayouts, isGameKeys } from "../src/messages";
 
 const allMemeKeys = Object.keys(memes);
 
@@ -33,5 +34,13 @@ describe("memeSampler", () => {
 
     // allKeys comes back sorted by card height, so check membership rather than position.
     expect(allKeys).toContain(allMemeKeys[allMemeKeys.length - 1]);
+  });
+
+  it("deals games the server accepts", () => {
+    for (let i = 0; i < 20; i++) {
+      const { allKeys, columnsObject } = memeSampler();
+      expect(isGameKeys(allKeys)).toBe(true);
+      expect(isBoardLayouts(JSON.parse(JSON.stringify(columnsObject)), allKeys)).toBe(true);
+    }
   });
 });

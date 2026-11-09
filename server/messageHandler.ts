@@ -17,6 +17,10 @@ import type { Connections, Player } from "./broadcaster";
 import type { Rooms } from "./roomManager";
 
 import { validateMessagePayload } from "./types/messages";
+import type { ChatEntry } from "./types/messages";
+
+/** How many chat messages a room keeps (and sends to players). */
+export const MAX_CHAT_HISTORY = 100;
 import { allowMessage, RATE_LIMIT_MAX, RATE_LIMIT_WINDOW_MS } from "./rateLimiter";
 
 export function handleMessage(
@@ -62,16 +66,15 @@ export function handleMessage(
       "chatMessage",
       "demotePlayer2",
       "setGame",
-      "setPlayerCard",
       "requestNewCard",
       "joinRoom",
       "leaveRoom",
     ];
     if (!message.type || !allowedTypes.includes(message.type)) {
-      throw new Error("Invalid or missing message type. Message: " + bytes.toString());
+      throw new Error("Invalid or missing message type.");
     }
 
-    validateMessagePayload(message, bytes);
+    validateMessagePayload(message);
 
     let roomKey = message.roomKey;
     if (!roomKey) return;
@@ -88,10 +91,19 @@ export function handleMessage(
     let roomPlayerKeys = room ? Object.keys(room.players) : [];
 
     switch (message.type) {
-      case "chatMessage":
-        connections[uuid] = connection;
-        const sanitizedMsg = sanitizeInput(message.messageContents.chatText, 512);
-        room.messageHistory = [...room.messageHistory, { ...message.messageContents, chatText: sanitizedMsg }];
+      case "chatMessage": {
+        const sender = room.players[uuid];
+        if (!sender) return;
+        // Build the stored entry ourselves: the name the player joined with (so
+        // nobody can post as someone else), cleaned text, and the server's clock.
+        // Any other fields the client sent are dropped.
+        const entry: ChatEntry = {
+          sender: sender.username ?? "",
+          chatText: sanitizeInput(message.messageContents.chatText, 512),
+          timestamp: Date.now(),
+        };
+        if (!entry.chatText) return;
+        room.messageHistory = [...room.messageHistory, entry].slice(-MAX_CHAT_HISTORY);
         broadcast(
           roomKey,
           {
@@ -105,6 +117,7 @@ export function handleMessage(
           connections
         );
         break;
+      }
       case "demotePlayer2": {
         if (uuid !== room.player1Uuid) {
           sendToUuid(
@@ -157,27 +170,6 @@ export function handleMessage(
 
         broadcastGameContents(message.roomKey, rooms, connections);
         break;
-      case "setPlayerCard": {
-        // Only allow users to set their own card
-        if (!room || !room.players[uuid]) return;
-        // If message contains a uuid field, it must match the sender's uuid
-        if (message.uuid && message.uuid !== uuid) {
-          const errorMsg = {
-            type: "error",
-            error: "Unauthorized: cannot set another player's card.",
-            uuid: uuid,
-            time: new Date().toISOString(),
-          };
-          sendToUuid(uuid, errorMsg, connections);
-          return;
-        }
-        // Only accept cards that are actually in this game.
-        if (message.card && room.allKeys.includes(message.card)) {
-          room.players[uuid].card = message.card;
-        }
-        broadcastGameContents(roomKey, rooms, connections);
-        break;
-      }
       case "requestNewCard": {
         if (!room || !room.players[uuid]) return;
         room.players[uuid].card = pickRandomCard(room.allKeys, room.players[uuid].card);
@@ -212,15 +204,15 @@ export function handleMessage(
         break;
     }
   } catch (error: any) {
+    // Don't echo the raw input back, and only log a short preview of it.
     const errorMsg = {
       type: "error",
       error: error.message || String(error),
-      received: bytes.toString(),
       uuid: uuid,
       time: new Date().toISOString(),
     };
     sendToUuid(uuid, errorMsg, connections);
-    console.error("Error parsing message:", errorMsg, error);
+    console.error("Rejected message:", errorMsg.error, "|", bytes.toString().slice(0, 200));
     return;
   }
 }

@@ -12,7 +12,7 @@ jest.mock("@chatscope/chat-ui-kit-react", () => {
   ConversationHeader.Content = passthrough;
   ConversationHeader.Actions = passthrough;
   const Message: any = ({ model, children }: any) => (
-    <div data-testid="chat-message" data-direction={model.direction}>
+    <div data-testid="chat-message" data-direction={model.direction} data-type={model.type}>
       {children}
       <span>{model.message}</span>
     </div>
@@ -97,5 +97,11 @@ describe("ChatBox", () => {
       .getAllByTestId("chat-message")
       .map((el) => el.getAttribute("data-direction"));
     expect(directions).toEqual(["incoming", "incoming", "outgoing"]);
+  });
+
+  it("renders messages as plain text, not HTML", () => {
+    renderChatBox({ chatHistory: [{ sender: "Bob", chatText: "<img src=x onerror=alert(1)>", timestamp: 1 }] });
+
+    expect(screen.getByTestId("chat-message").getAttribute("data-type")).toBe("text");
   });
 });

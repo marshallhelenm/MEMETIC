@@ -103,6 +103,18 @@ describe("WSProvider", () => {
       readyState: useWebSocketModule.ReadyState.OPEN,
     }));
 
+  it("learns its public player ID from the welcome message", () => {
+    mockLastMessage({ type: "welcome", playerId: "public-id-123" });
+    let ctx;
+    render(
+      <WSProvider>
+        <WSContext.Consumer>{(value) => ((ctx = value), null)}</WSContext.Consumer>
+      </WSProvider>
+    );
+
+    expect(ctx.myPlayerId).toBe("public-id-123");
+  });
+
   it("sets serverError from an error message", () => {
     mockLastMessage({ type: "error", error: "Rate limit exceeded" });
 

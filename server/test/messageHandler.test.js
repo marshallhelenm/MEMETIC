@@ -41,6 +41,7 @@ describe("handleMessage", () => {
       messageContents: { sender: "A", chatText: "<script>alert(1)</script>", timestamp: 1 },
     };
     rooms["room1"] = deepClone(emptyRoomTemplate);
+    rooms["room1"].players[uuid] = { ...deepClone(emptyPlayerTemplate), uuid, username: "A" };
     handleMessage(
       Buffer.from(JSON.stringify(msg)),
       uuid,
@@ -74,32 +75,6 @@ describe("handleMessage", () => {
     );
     expect(connectionMock.send).toHaveBeenCalledWith(
       expect.stringContaining("Rate limit exceeded"),
-    );
-  });
-
-  it("should not allow setPlayerCard for other users", () => {
-    const msg = {
-      type: "setPlayerCard",
-      roomKey: "room1",
-      card: "A",
-      uuid: "other-uuid",
-    };
-    rooms["room1"] = deepClone(emptyRoomTemplate);
-    rooms["room1"].players[uuid] = deepClone(emptyPlayerTemplate);
-    handleMessage(
-      Buffer.from(JSON.stringify(msg)),
-      uuid,
-      connectionMock,
-      rooms,
-      players,
-      connections,
-    );
-    // Match the exact error string sent by handleMessage
-    expect(connectionMock.send).toHaveBeenCalledWith(
-      expect.stringContaining('"type":"error"'),
-    );
-    expect(connectionMock.send).toHaveBeenCalledWith(
-      expect.stringContaining("Unauthorized: cannot set another player"),
     );
   });
 
