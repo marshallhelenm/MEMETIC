@@ -1,7 +1,7 @@
 import { Box, TextField } from "@mui/material";
-import { useState } from "react";
+import React, { useState } from "react";
 
-import type { MemeLibrary } from "../types/memeTypes";
+import type { MemeLibrary } from "../types/meme";
 import { colorA, colorD, corners } from "../assets/styles";
 import GuessyButton from "../components/GuessyButton.js";
 
@@ -43,8 +43,8 @@ function MemeUploader() {
     // code to write newMeme to memes.json goes here
   }
 
-  function processImage(url) {
-    return new Promise((resolve, reject) => {
+  function processImage(url: string) {
+    return new Promise<{ width: number; height: number }>((resolve, reject) => {
       const img = new Image();
       console.log("Processing image:", url);
       img.src = url;
@@ -60,13 +60,13 @@ function MemeUploader() {
     });
   }
 
-  function handleKeyDown(e) {
+  function handleKeyDown(e: React.KeyboardEvent) {
     if (e.key === "Enter") {
       processImage(imgSrc);
     }
   }
 
-  function handleImgSrcChange(e) {
+  function handleImgSrcChange(e: React.ChangeEvent<HTMLInputElement>) {
     setImgSrc(e.target.value);
     processImage(e.target.value);
   }

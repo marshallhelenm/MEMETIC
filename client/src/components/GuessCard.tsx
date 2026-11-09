@@ -41,7 +41,8 @@ const GuessCard: React.FC<GuessCardProps> = ({ setModalOpen, itemKey, testId }) 
       correct = itemKey === player1Card;
       devLog(["guess player1 card: ", itemKey, correct]);
     }
-    correct ? setGuessedRight(true) : setGuessedWrong(true);
+    if (correct) setGuessedRight(true);
+    else setGuessedWrong(true);
   };
 
   function handleOpen(e: React.MouseEvent<HTMLDivElement>) {

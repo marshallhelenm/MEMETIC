@@ -2,12 +2,9 @@ import React, { createContext, useCallback, useEffect, useMemo, ReactNode } from
 
 import { useGame, useWS } from "../hooks/useContextHooks";
 import { useSearchParams } from "react-router-dom";
-import { setSessionItem } from "../utils/sessionStorageUtils";
+import { rememberCard } from "../utils/rememberedCard";
 import { getPlayerId } from "../utils/playerId";
 import type { PlayerState } from "../messages";
-
-/** Where this tab remembers its card, so it can hand it back to the server on re-join. */
-export const cardStorageKey = (roomKey: string | null) => `guessy-${roomKey}-player-card`;
 
 export interface PlayersContextValue {
   /** This tab's player ID. */
@@ -68,7 +65,7 @@ function PlayersProvider({ children }: PlayersProviderProps) {
   // Remember the server's card for this game as a backup (sent back on re-join).
   useEffect(() => {
     if (myPlayerCard == null || gameKey == null) return;
-    setSessionItem(cardStorageKey(roomKey), JSON.stringify({ gameKey, card: myPlayerCard }));
+    rememberCard(roomKey, gameKey, myPlayerCard);
   }, [myPlayerCard, gameKey, roomKey]);
 
   const value: PlayersContextValue = useMemo(

@@ -1,24 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { getSessionItem } from "../../utils/sessionStorageUtils";
-import { cardStorageKey } from "../../contexts/PlayersContext";
+import { getRememberedCard } from "../../utils/rememberedCard";
+import type { ClientMessage } from "../../messages";
 
 interface UseJoinRoomProps {
   validGame: boolean;
   roomKey: string | null | undefined;
   username: string | null | undefined;
-  sendJsonMessage: (msg: any) => void;
+  sendJsonMessage: (msg: ClientMessage) => void;
   connectionOpen?: boolean;
   maxAttempts?: number;
   retryDelay?: number;
-}
-
-/** The card this tab last had in this room, so the server can restore it. */
-function rememberedCard(roomKey: string): { card?: string; gameKey?: number } {
-  try {
-    return JSON.parse(getSessionItem(cardStorageKey(roomKey)) || "{}");
-  } catch {
-    return {};
-  }
 }
 
 export function useJoinRoom({
@@ -35,7 +26,8 @@ export function useJoinRoom({
 
   const sendJoin = () => {
     if (!roomKey || !username) return;
-    const { card, gameKey } = rememberedCard(roomKey);
+    // The card this tab last had in this room, so the server can restore it.
+    const { card, gameKey } = getRememberedCard(roomKey);
     sendJsonMessage({ type: "joinRoom", roomKey, username, card, gameKey });
   };
   const latest = useRef({ sendJoin, sendJsonMessage });
@@ -61,19 +53,19 @@ export function useJoinRoom({
 
     if (attempts < maxAttempts) {
       const timer = setTimeout(() => {
-        sendJoin();
+        latest.current.sendJoin();
         setAttempts((a) => a + 1);
       }, retryDelay);
       return () => clearTimeout(timer);
     }
-  }, [attempts, validGame, roomKey, username, sendJsonMessage, maxAttempts, retryDelay]);
+  }, [attempts, validGame, roomKey, username, maxAttempts, retryDelay]);
 
   // Re-join as soon as the socket comes back after a drop, so the server
   // re-links us to our existing player (and card) in the room.
   useEffect(() => {
     const wasOpen = wasOpenRef.current;
     wasOpenRef.current = connectionOpen;
-    if (connectionOpen && !wasOpen && validGame) sendJoin();
+    if (connectionOpen && !wasOpen && validGame) latest.current.sendJoin();
   }, [connectionOpen, validGame]);
 
   return attempts;

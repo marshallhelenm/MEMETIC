@@ -8,9 +8,9 @@ const LoadingColumns: React.FC = () => {
   const cardWidth = Math.floor(columnWidth);
 
   const generateLoadingColumns = (): JSX.Element[] => {
-    let boardColumns: JSX.Element[] = [];
+    const boardColumns: JSX.Element[] = [];
     for (let i = 1; i <= columnCount; i++) {
-      let cards: JSX.Element[] = [];
+      const cards: JSX.Element[] = [];
       for (let index = 0; index < 24 / columnCount; index++) {
         cards.unshift(
           <LoadingStub key={`loading-stub-${index}`} cardWidth={cardWidth} />

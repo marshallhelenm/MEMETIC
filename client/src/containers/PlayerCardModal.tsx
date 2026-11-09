@@ -28,7 +28,7 @@ const PlayerCardModal = ({ draweropen, opacity }: PlayerCardModalProps) => {
   const { myPlayerCard, assignNewMyPlayerCard, isObserver } = usePlayers();
   const [open, setOpen] = useState<boolean>(false);
   const { dialogWidth } = useLayout();
-  let item: MemeData | undefined = memeData[myPlayerCard as keyof typeof memeData];
+  const item: MemeData | undefined = memeData[myPlayerCard as keyof typeof memeData];
 
   const handleOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
     setOpen(true);
@@ -42,7 +42,7 @@ const PlayerCardModal = ({ draweropen, opacity }: PlayerCardModalProps) => {
       return <div>No meme data available.</div>;
     }
     return (
-      <StyledDialog open={open} onClose={handleClose} maxWidth={dialogWidth as any}>
+      <StyledDialog open={open} onClose={handleClose} maxWidth={false}>
         <IconButton
           aria-label="close"
           onClick={handleClose}
@@ -95,7 +95,12 @@ const PlayerCardModal = ({ draweropen, opacity }: PlayerCardModalProps) => {
 
 
   if (isObserver) {
-    return <ObserverStar draweropen={draweropen} opacity={opacity} />;
+    return (
+      <ObserverStar
+        draweropen={draweropen}
+        opacity={typeof opacity === "number" ? { opacity } : opacity}
+      />
+    );
   } else {
     return (
       <>

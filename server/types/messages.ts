@@ -1,5 +1,8 @@
 // Shared message types for client and server
 
+const isRecord = (x: unknown): x is Record<string, unknown> =>
+  typeof x === "object" && x !== null;
+
 /** One board arrangement: column number (from 1) -> the meme keys in that column. */
 export type ColumnLayout = Record<number, string[]>;
 
@@ -16,16 +19,16 @@ export interface ChatMessage {
   };
 }
 
-export function isChatMessage(obj: any): obj is ChatMessage {
+export function isChatMessage(obj: unknown): obj is ChatMessage {
+  if (!isRecord(obj) || obj.type !== "chatMessage" || typeof obj.roomKey !== "string") {
+    return false;
+  }
+  const contents = obj.messageContents;
   return (
-    obj &&
-    obj.type === "chatMessage" &&
-    typeof obj.roomKey === "string" &&
-    typeof obj.messageContents === "object" &&
-    obj.messageContents !== null &&
-    typeof obj.messageContents.sender === "string" &&
-    typeof obj.messageContents.chatText === "string" &&
-    typeof obj.messageContents.timestamp === "number"
+    isRecord(contents) &&
+    typeof contents.sender === "string" &&
+    typeof contents.chatText === "string" &&
+    typeof contents.timestamp === "number"
   );
 }
 
@@ -46,9 +49,9 @@ export interface DemotePlayer2Message {
   roomKey: string;
 }
 
-export function isDemotePlayer2Message(obj: any): obj is DemotePlayer2Message {
+export function isDemotePlayer2Message(obj: unknown): obj is DemotePlayer2Message {
   return (
-    obj &&
+    isRecord(obj) &&
     obj.type === "demotePlayer2" &&
     typeof obj.roomKey === "string"
   );
@@ -61,9 +64,9 @@ export interface SetGameMessage {
   allKeys: string[];
 }
 
-export function isSetGameMessage(obj: any): obj is SetGameMessage {
+export function isSetGameMessage(obj: unknown): obj is SetGameMessage {
   return (
-    obj &&
+    isRecord(obj) &&
     obj.type === "setGame" &&
     typeof obj.roomKey === "string" &&
     typeof obj.columnsObject === "object" &&
@@ -75,15 +78,15 @@ export function isSetGameMessage(obj: any): obj is SetGameMessage {
 export interface SetPlayerCardMessage {
   type: "setPlayerCard";
   roomKey: string;
-  card: any;
+  card: string;
 }
 
-export function isSetPlayerCardMessage(obj: any): obj is SetPlayerCardMessage {
+export function isSetPlayerCardMessage(obj: unknown): obj is SetPlayerCardMessage {
   return (
-    obj &&
+    isRecord(obj) &&
     obj.type === "setPlayerCard" &&
     typeof obj.roomKey === "string" &&
-    typeof obj.card !== "undefined"
+    typeof obj.card === "string"
   );
 }
 
@@ -97,9 +100,9 @@ export interface JoinRoomMessage {
   gameKey?: number | null;
 }
 
-export function isJoinRoomMessage(obj: any): obj is JoinRoomMessage {
+export function isJoinRoomMessage(obj: unknown): obj is JoinRoomMessage {
   return (
-    obj &&
+    isRecord(obj) &&
     obj.type === "joinRoom" &&
     typeof obj.roomKey === "string" &&
     typeof obj.username === "string"
@@ -111,8 +114,8 @@ export interface LeaveRoomMessage {
   roomKey: string;
 }
 
-export function isLeaveRoomMessage(obj: any): obj is LeaveRoomMessage {
-  return obj && obj.type === "leaveRoom" && typeof obj.roomKey === "string";
+export function isLeaveRoomMessage(obj: unknown): obj is LeaveRoomMessage {
+  return isRecord(obj) && obj.type === "leaveRoom" && typeof obj.roomKey === "string";
 }
 
 export interface RequestNewCardMessage {
@@ -120,12 +123,12 @@ export interface RequestNewCardMessage {
   roomKey: string;
 }
 
-export function isRequestNewCardMessage(obj: any): obj is RequestNewCardMessage {
-  return obj && obj.type === "requestNewCard" && typeof obj.roomKey === "string";
+export function isRequestNewCardMessage(obj: unknown): obj is RequestNewCardMessage {
+  return isRecord(obj) && obj.type === "requestNewCard" && typeof obj.roomKey === "string";
 }
 
 // --- Extracted message payload validation ---
-export function validateMessagePayload(message: any, bytes: Buffer) {
+export function validateMessagePayload(message: { type?: unknown }, bytes: Buffer) {
   switch (message.type) {
     case "chatMessage":
       if (!isChatMessage(message)) {

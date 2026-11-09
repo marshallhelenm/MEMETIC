@@ -16,12 +16,12 @@ const CardColumns: React.FC = () => {
   const columns = columnsObject[columnCount];
 
   const generateColumns = (): JSX.Element[] => {
-    let boardColumns: JSX.Element[] = [];
+    const boardColumns: JSX.Element[] = [];
     for (let i = 1; i <= Object.keys(columns).length; i++) {
-      let colKeys: string[] = columns[i];
-      let cards: JSX.Element[] = [];
-      for (let itemKey of colKeys) {
-        let item: MemeData | undefined = memeData[itemKey];
+      const colKeys: string[] = columns[i];
+      const cards: JSX.Element[] = [];
+      for (const itemKey of colKeys) {
+        const item: MemeData | undefined = memeData[itemKey];
         if (!item) {
           cards.push(<MissingStub key={itemKey + "-missing"} />);
         } else {

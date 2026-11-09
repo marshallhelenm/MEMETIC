@@ -43,7 +43,6 @@ const GifPauseButton: React.FC<GifPauseButtonProps> = ({ draweropen }) => {
         <PurpleSwitch
           checked={!staticGifs}
           onChange={toggleStaticGifs}
-          color="#907AD6"
         />
       }
       label="Gifs"

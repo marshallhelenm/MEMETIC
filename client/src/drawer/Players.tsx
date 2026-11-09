@@ -44,7 +44,7 @@ const Players: React.FC = () => {
   }
 
   function generateOtherPlayers(): JSX.Element[] {
-    let playersItems: JSX.Element[] = [];
+    const playersItems: JSX.Element[] = [];
     Object.keys(players).forEach((uuid) => {
       if (uuid !== myUuid) {
         playersItems.push(

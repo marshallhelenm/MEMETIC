@@ -3,12 +3,12 @@ import memeData from "../assets/memes.json";
 import type { ColumnLayout } from "../messages";
 
 function cardSorter(unsortedKeys: string[], columnCount: number): ColumnLayout {
-  let itemKeys = sortKeysByHeight(unsortedKeys);
+  const itemKeys = sortKeysByHeight(unsortedKeys);
   let columnsObject: ColumnLayout = {};
   for (let index = 1; index < columnCount + 1; index++) {
     columnsObject[index] = [];
   }
-  let fullCardsHeight = totalCardHeight(itemKeys);
+  const fullCardsHeight = totalCardHeight(itemKeys);
 
   // ** Utility methods
   function sortKeysByHeight(keys: string[]): string[] {
@@ -18,7 +18,8 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnLayout {
   }
 
   function parseHeight(key: string): number {
-    return parseFloat((memeData as any)[key]["height_multiplier"]);
+    const meme = (memeData as Record<string, { height_multiplier: number | string }>)[key];
+    return parseFloat(String(meme.height_multiplier));
   }
 
   function findColHeight(col: string[]): number {
@@ -27,7 +28,7 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnLayout {
       return 0;
     }
     for (let i = 0; i < col.length; i++) {
-      let key = col[i];
+      const key = col[i];
       height = height + parseHeight(key);
     }
     return height;
@@ -43,8 +44,8 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnLayout {
 
   function avgColHeight(columns: ColumnLayout): number {
     const heights = findColHeights(columns);
-    let curTotalHeight = heights.reduce((sum, h) => sum + h, 0.0);
-    let avg = curTotalHeight / heights.length;
+    const curTotalHeight = heights.reduce((sum, h) => sum + h, 0.0);
+    const avg = curTotalHeight / heights.length;
     return avg;
   }
 
@@ -53,7 +54,7 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnLayout {
   }
 
   function avgCardHeight(keys: string[]): number {
-    let height = totalCardHeight(keys);
+    const height = totalCardHeight(keys);
     return height / keys.length;
   }
 
@@ -63,7 +64,7 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnLayout {
     const heights = findColHeights(columns);
     let shortestCol = 1;
     for (let i = 1; i < heights.length + 1; i++) {
-      let currentHeight = heights[i - 1];
+      const currentHeight = heights[i - 1];
       if (currentHeight == 0) {
         return i;
       }
@@ -75,7 +76,7 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnLayout {
   }
 
   function bestFit(currentHeight: number, keys: string[], targetHeight: number): string | undefined {
-    let desiredHeight = Math.abs(targetHeight - currentHeight);
+    const desiredHeight = Math.abs(targetHeight - currentHeight);
     let closestMatch: string | undefined = undefined;
     let closestHeight: number | undefined = undefined;
     for (let i = 0; i < keys.length; i++) {
@@ -83,8 +84,8 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnLayout {
         closestMatch = keys[0];
         closestHeight = parseHeight(closestMatch);
       } else {
-        let currentKey = keys[i];
-        let currentKeyHeight = parseHeight(currentKey);
+        const currentKey = keys[i];
+        const currentKeyHeight = parseHeight(currentKey);
         if (
           closestHeight !== undefined &&
           Math.abs(desiredHeight - currentKeyHeight) < Math.abs(desiredHeight - closestHeight)
@@ -98,15 +99,15 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnLayout {
   }
 
   function bestColumn(key: string, columns: ColumnLayout, targetHeight: number, finalCards = false): number {
-    let cardHeight = parseHeight(key);
-    let isTall = cardHeight * 3 > targetHeight;
+    const cardHeight = parseHeight(key);
+    const isTall = cardHeight * 3 > targetHeight;
     let bestFitColumn = 1;
     let closestFit: number | undefined = undefined;
     for (let i = 1; i < Object.keys(columns).length + 1; i++) {
-      let colHeight = findColHeight(columns[i]);
-      let currentGap = targetHeight - colHeight;
+      const colHeight = findColHeight(columns[i]);
+      const currentGap = targetHeight - colHeight;
       if (!finalCards && currentGap <= 0) continue;
-      let currentFit = currentGap - cardHeight;
+      const currentFit = currentGap - cardHeight;
       if (i == 1) {
         closestFit = currentFit;
         continue;
@@ -150,7 +151,7 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnLayout {
   }
 
   function assignCardsToColumns(columns: ColumnLayout): ColumnLayout {
-    let workingCols: ColumnLayout = { ...columns };
+    const workingCols: ColumnLayout = { ...columns };
     let targetHeight = fullCardsHeight / columnCount;
     let finalCards = false;
     itemKeys.forEach((key, i) => {
@@ -158,14 +159,14 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnLayout {
         targetHeight = avgColHeight(workingCols) + avgCardHeight(itemKeys.slice(18));
         finalCards = true;
       }
-      let bc = bestColumn(key, workingCols, targetHeight, finalCards);
+      const bc = bestColumn(key, workingCols, targetHeight, finalCards);
       workingCols[bc].push(key);
     });
     return workingCols;
   }
 
   function sortColumnsByHeight(columnsObject: ColumnLayout): ColumnLayout {
-    let colCount = Object.keys(columnsObject).length;
+    const colCount = Object.keys(columnsObject).length;
     const finalHeights: number[] = [];
     let columnKeys = Array.from({ length: colCount }, (_, i) => i + 1);
     columnKeys.forEach((key) => {
@@ -174,7 +175,7 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnLayout {
     columnKeys = columnKeys.sort((a, b) => {
       return parseFloat(finalHeights[a - 1].toString()) - parseFloat(finalHeights[b - 1].toString());
     });
-    let orderedColumns: ColumnLayout = {};
+    const orderedColumns: ColumnLayout = {};
     for (let i = 0; i < colCount; i++) {
       orderedColumns[i + 1] = shuffleColumn(columnsObject[columnKeys[i]]);
     }
@@ -188,7 +189,7 @@ function cardSorter(unsortedKeys: string[], columnCount: number): ColumnLayout {
     }
     let count = 0;
     let currentColumn = 1;
-    for (let key of itemKeys) {
+    for (const key of itemKeys) {
       if (count < columnCount) {
         columns[currentColumn].push(key);
         count++;
