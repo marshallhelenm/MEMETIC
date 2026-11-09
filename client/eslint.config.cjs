@@ -1,62 +1,52 @@
-const {
-    defineConfig,
-    globalIgnores,
-} = require("eslint/config");
-
+const js = require("@eslint/js");
+const tseslint = require("typescript-eslint");
+const react = require("eslint-plugin-react");
+const reactHooks = require("eslint-plugin-react-hooks");
+const reactRefresh = require("eslint-plugin-react-refresh");
+const jest = require("eslint-plugin-jest");
 const globals = require("globals");
 
-const {
-    fixupConfigRules,
-} = require("@eslint/compat");
+module.exports = tseslint.config(
+  { ignores: ["dist", "coverage", "node_modules"] },
 
-const reactRefresh = require("eslint-plugin-react-refresh");
-const js = require("@eslint/js");
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  react.configs.flat.recommended,
+  react.configs.flat["jsx-runtime"],
 
-const {
-    FlatCompat,
-} = require("@eslint/eslintrc");
-
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
-});
-
-module.exports = defineConfig([{
+  {
     languageOptions: {
-        globals: {
-            ...globals.browser,
-            ...globals.node,
-        },
-
-        ecmaVersion: "latest",
-        sourceType: "module",
-        parserOptions: {},
+      globals: { ...globals.browser, ...globals.node },
     },
-
-    extends: fixupConfigRules(compat.extends(
-        "eslint:recommended",
-        "plugin:react/recommended",
-        "plugin:react/jsx-runtime",
-        "plugin:react-hooks/recommended",
-    )),
-
-    settings: {
-        react: {
-            version: "18.2",
-        },
-    },
-
+    settings: { react: { version: "detect" } },
     plugins: {
-        "react-refresh": reactRefresh,
+      "react-hooks": reactHooks,
+      "react-refresh": reactRefresh,
     },
-
     rules: {
-        "no-unused-vars": "off",
-        "react/prop-types": "off",
-
-        "react-refresh/only-export-components": ["warn", {
-            allowConstantExport: true,
-        }],
+      ...reactHooks.configs.recommended.rules,
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "react/prop-types": "off",
+      "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     },
-}, globalIgnores(["**/dist", "**/.eslintrc.cjs"])]);
+  },
+
+  {
+    files: ["**/*.test.*", "**/*.spec.*", "test/**", "jest.setup.mjs"],
+    ...jest.configs["flat/recommended"],
+    rules: {
+      ...jest.configs["flat/recommended"].rules,
+      // jest.mock factories commonly require() modules and return unnamed components,
+      // and partial context mocks are typed loosely on purpose.
+      "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "react/display-name": "off",
+    },
+  },
+
+  {
+    files: ["**/*.cjs"],
+    rules: { "@typescript-eslint/no-require-imports": "off" },
+  }
+);
