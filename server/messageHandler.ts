@@ -62,7 +62,6 @@ export function handleMessage(
       "chatMessage",
       "demotePlayer2",
       "setGame",
-      "setPlayerCard",
       "requestNewCard",
       "joinRoom",
       "leaveRoom",
@@ -157,27 +156,6 @@ export function handleMessage(
 
         broadcastGameContents(message.roomKey, rooms, connections);
         break;
-      case "setPlayerCard": {
-        // Only allow users to set their own card
-        if (!room || !room.players[uuid]) return;
-        // If message contains a uuid field, it must match the sender's uuid
-        if (message.uuid && message.uuid !== uuid) {
-          const errorMsg = {
-            type: "error",
-            error: "Unauthorized: cannot set another player's card.",
-            uuid: uuid,
-            time: new Date().toISOString(),
-          };
-          sendToUuid(uuid, errorMsg, connections);
-          return;
-        }
-        // Only accept cards that are actually in this game.
-        if (message.card && room.allKeys.includes(message.card)) {
-          room.players[uuid].card = message.card;
-        }
-        broadcastGameContents(roomKey, rooms, connections);
-        break;
-      }
       case "requestNewCard": {
         if (!room || !room.players[uuid]) return;
         room.players[uuid].card = pickRandomCard(room.allKeys, room.players[uuid].card);

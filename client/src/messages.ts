@@ -75,21 +75,6 @@ export function isSetGameMessage(obj: unknown): obj is SetGameMessage {
   );
 }
 
-export interface SetPlayerCardMessage {
-  type: "setPlayerCard";
-  roomKey: string;
-  card: string;
-}
-
-export function isSetPlayerCardMessage(obj: unknown): obj is SetPlayerCardMessage {
-  return (
-    isRecord(obj) &&
-    obj.type === "setPlayerCard" &&
-    typeof obj.roomKey === "string" &&
-    typeof obj.card === "string"
-  );
-}
-
 export interface JoinRoomMessage {
   type: "joinRoom";
   roomKey: string;
@@ -145,11 +130,6 @@ export function validateMessagePayload(message: { type?: unknown }) {
         throw new Error("Missing or invalid fields for setGame.");
       }
       break;
-    case "setPlayerCard":
-      if (!isSetPlayerCardMessage(message)) {
-        throw new Error("Missing or invalid fields for setPlayerCard.");
-      }
-      break;
     case "joinRoom":
       if (!isJoinRoomMessage(message)) {
         throw new Error("Missing or invalid fields for joinRoom.");
@@ -177,8 +157,7 @@ export type ClientMessage =
   | JoinRoomMessage
   | LeaveRoomMessage
   | RequestNewCardMessage
-  | SetGameMessage
-  | SetPlayerCardMessage;
+  | SetGameMessage;
 
 // --- Messages the server sends to the client ---
 

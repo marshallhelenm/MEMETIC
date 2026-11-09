@@ -77,32 +77,6 @@ describe("handleMessage", () => {
     );
   });
 
-  it("should not allow setPlayerCard for other users", () => {
-    const msg = {
-      type: "setPlayerCard",
-      roomKey: "room1",
-      card: "A",
-      uuid: "other-uuid",
-    };
-    rooms["room1"] = deepClone(emptyRoomTemplate);
-    rooms["room1"].players[uuid] = deepClone(emptyPlayerTemplate);
-    handleMessage(
-      Buffer.from(JSON.stringify(msg)),
-      uuid,
-      connectionMock,
-      rooms,
-      players,
-      connections,
-    );
-    // Match the exact error string sent by handleMessage
-    expect(connectionMock.send).toHaveBeenCalledWith(
-      expect.stringContaining('"type":"error"'),
-    );
-    expect(connectionMock.send).toHaveBeenCalledWith(
-      expect.stringContaining("Unauthorized: cannot set another player"),
-    );
-  });
-
   it("should allow joinRoom with sanitized username", () => {
     const msg = { type: "joinRoom", roomKey: "room1", username: " <bad> " };
     handleMessage(

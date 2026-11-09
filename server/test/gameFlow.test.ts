@@ -186,12 +186,13 @@ describe("keeping and restoring cards", () => {
     expect(keys).toContain(card);
   });
 
-  it("rejects setPlayerCard with a card that is not in the game", () => {
+  it("does not let a player choose their own card", () => {
     const old = rooms[ROOM].players.a.card;
 
-    send("a", { type: "setPlayerCard", roomKey: ROOM, card: "not_a_meme" });
+    send("a", { type: "setPlayerCard", roomKey: ROOM, card: "meme_5" });
 
     expect(rooms[ROOM].players.a.card).toBe(old);
+    expect(lastOfType("a", "error").error).toMatch(/Invalid or missing message type/);
   });
 });
 
