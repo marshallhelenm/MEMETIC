@@ -1,5 +1,6 @@
 import { handleMessage } from "../messageHandler";
 import { joinRoom } from "../broadcaster";
+import { resetRateLimits } from "../rateLimiter";
 import type { Rooms, Player } from "../roomManager";
 
 const ROOM = "ROOM0001";
@@ -36,7 +37,7 @@ beforeEach(() => {
   rooms = {};
   players = {};
   connections = {};
-  (handleMessage as any).rateLimitMap = {};
+  resetRateLimits();
   jest.spyOn(console, "warn").mockImplementation(() => {});
 });
 
@@ -75,6 +76,48 @@ describe("joining and dealing", () => {
 
     expect(rooms.NEWROOM1.players.a).toBeDefined();
     expect(lastOfType("a", "noGameAlert")).toBeDefined();
+  });
+});
+
+describe("who can deal", () => {
+  beforeEach(() => {
+    ["a", "b"].forEach((u) => {
+      connect(u);
+      join(u);
+    });
+  });
+
+  it("lets any player deal while the room has no game", () => {
+    deal("b");
+
+    expect(rooms[ROOM].allKeys).toEqual(keys);
+  });
+
+  it("rejects a new game from player 2 once a game exists", () => {
+    deal("a");
+    const gameKey = rooms[ROOM].gameKey;
+
+    deal("b", { allKeys: [...keys].reverse() });
+
+    expect(rooms[ROOM].gameKey).toBe(gameKey);
+    expect(lastOfType("b", "error").error).toMatch(/only player 1/);
+  });
+
+  it("lets player 1 start a new game", () => {
+    deal("a");
+    const gameKey = rooms[ROOM].gameKey!;
+
+    deal("a");
+
+    expect(rooms[ROOM].gameKey).toBeGreaterThan(gameKey);
+  });
+
+  it("ignores a deal from someone who isn't in the room", () => {
+    connect("stranger");
+
+    deal("stranger");
+
+    expect(rooms[ROOM].allKeys).toEqual([]);
   });
 });
 

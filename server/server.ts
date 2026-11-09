@@ -2,6 +2,8 @@ import http from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { handleMessage } from "./messageHandler";
 import { broadcastGameContents } from "./broadcaster";
+import { removePlayer } from "./roomManager";
+import { forgetPlayer } from "./rateLimiter";
 import type { Rooms } from "./roomManager";
 import type { Connections, Player } from "./broadcaster";
 
@@ -39,11 +41,12 @@ const markDisconnected = (uuid: string) => {
   removalTimers[uuid] = setTimeout(() => {
     delete removalTimers[uuid];
     if (connections[uuid]) return; // came back in time
-    roomsWithPlayer(uuid).forEach((roomKey) => {
-      delete rooms[roomKey].players[uuid];
+    // Removes them from their rooms and hands on any player 1/2 role they held.
+    removePlayer(rooms, uuid).forEach((roomKey) => {
       broadcastGameContents(roomKey, rooms, connections);
     });
     delete players[uuid];
+    forgetPlayer(uuid);
   }, DISCONNECT_GRACE_MS);
 };
 

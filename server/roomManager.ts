@@ -78,3 +78,62 @@ export function ensureCard(room: Room, uuid: string): void {
 export function nextGameKey(previous: number | null): number {
   return Math.max(Date.now(), (previous ?? 0) + 1);
 }
+
+/**
+ * Make sure the room's player 1 and 2 slots point at players who are in the room.
+ * Players are considered in join order.
+ * - No player 1: the first player who isn't player 2 takes it (so player 2 keeps
+ *   guessing); with nobody else, player 2 moves up to player 1.
+ * - No player 2: the first player who isn't player 1 takes it.
+ */
+export function fillRoles(room: Room): void {
+  const inRoom = (uuid: string | null): uuid is string => !!uuid && !!room.players[uuid];
+  const present = Object.keys(room.players);
+
+  if (!inRoom(room.player1Uuid)) {
+    const observer = present.find((u) => u !== room.player2Uuid);
+    if (observer) {
+      room.player1Uuid = observer;
+    } else if (inRoom(room.player2Uuid)) {
+      room.player1Uuid = room.player2Uuid;
+      room.player2Uuid = null;
+    } else {
+      room.player1Uuid = null;
+    }
+  }
+
+  if (!inRoom(room.player2Uuid)) {
+    room.player2Uuid = present.find((u) => u !== room.player1Uuid) ?? null;
+  }
+}
+
+/**
+ * Remove a player from every room they're in and hand on any role they held.
+ * Returns the keys of the rooms that changed.
+ */
+export function removePlayer(rooms: Rooms, uuid: string): string[] {
+  const changed = Object.keys(rooms).filter((roomKey) => rooms[roomKey].players[uuid]);
+  changed.forEach((roomKey) => {
+    removePlayerFromRoom(rooms[roomKey], uuid);
+    deleteRoomIfEmpty(rooms, roomKey);
+  });
+  return changed;
+}
+
+/** Delete a room once its last player has gone. */
+export function deleteRoomIfEmpty(rooms: Rooms, roomKey: string): void {
+  if (rooms[roomKey] && Object.keys(rooms[roomKey].players).length === 0) {
+    delete rooms[roomKey];
+  }
+}
+
+/**
+ * Remove a player from one room and hand on any role they held.
+ * Returns whether they were in the room.
+ */
+export function removePlayerFromRoom(room: Room, uuid: string): boolean {
+  if (!room.players[uuid]) return false;
+  delete room.players[uuid];
+  fillRoles(room);
+  return true;
+}

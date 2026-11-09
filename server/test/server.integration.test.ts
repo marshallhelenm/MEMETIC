@@ -97,6 +97,20 @@ it("removes a player who stays away longer than the grace period", async () => {
   expect(contents.players["int-c"]).toBeUndefined();
 });
 
+it("hands player 1 on when player 1 stays away longer than the grace period", async () => {
+  const p1 = await connect("int-g");
+  await startGame(p1, "INTROOM5", "int-g");
+  const p2 = await connect("int-h");
+  const joined = await rejoin(p2, "INTROOM5", "int-h");
+  expect([joined.player1Uuid, joined.player2Uuid]).toEqual(["int-g", "int-h"]);
+
+  p1.close();
+  await wait(GRACE_MS * 2);
+  const contents = await rejoin(p2, "INTROOM5", "int-h");
+
+  expect(contents.player1Uuid).toBe("int-h");
+});
+
 it("marks a player as disconnected during the grace period", async () => {
   const a = await connect("int-d");
   await startGame(a, "INTROOM3", "int-d");

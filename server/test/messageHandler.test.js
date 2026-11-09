@@ -1,4 +1,5 @@
 const { handleMessage } = require("../messageHandler");
+const { resetRateLimits, RATE_LIMIT_MAX } = require("../rateLimiter");
 const {
   deepClone,
   emptyRoomTemplate,
@@ -16,7 +17,7 @@ describe("handleMessage", () => {
     connectionMock = { send: jest.fn() };
     connections[uuid] = connectionMock;
     // Reset rate limit
-    if (handleMessage.rateLimitMap) handleMessage.rateLimitMap = {};
+    resetRateLimits();
   });
 
   it("should reject unknown message types", () => {
@@ -58,7 +59,7 @@ describe("handleMessage", () => {
       messageContents: { sender: "A", chatText: "hi", timestamp: 1 },
     };
     rooms["room1"] = deepClone(emptyRoomTemplate);
-    for (let i = 0; i < 11; i++) {
+    for (let i = 0; i < RATE_LIMIT_MAX + 1; i++) {
       handleMessage(
         Buffer.from(JSON.stringify(msg)),
         uuid,

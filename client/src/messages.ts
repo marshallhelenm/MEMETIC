@@ -106,6 +106,15 @@ export function isJoinRoomMessage(obj: any): obj is JoinRoomMessage {
   );
 }
 
+export interface LeaveRoomMessage {
+  type: "leaveRoom";
+  roomKey: string;
+}
+
+export function isLeaveRoomMessage(obj: any): obj is LeaveRoomMessage {
+  return obj && obj.type === "leaveRoom" && typeof obj.roomKey === "string";
+}
+
 export interface RequestNewCardMessage {
   type: "requestNewCard";
   roomKey: string;
@@ -143,6 +152,11 @@ export function validateMessagePayload(message: any, bytes: Buffer) {
         throw new Error("Missing or invalid fields for joinRoom. Message: " + bytes.toString());
       }
       break;
+    case "leaveRoom":
+      if (!isLeaveRoomMessage(message)) {
+        throw new Error("Missing or invalid roomKey for leaveRoom. Message: " + bytes.toString());
+      }
+      break;
     case "requestNewCard":
       if (!isRequestNewCardMessage(message)) {
         throw new Error("Missing or invalid roomKey for requestNewCard. Message: " + bytes.toString());
@@ -158,6 +172,7 @@ export type ClientMessage =
   | ChatMessage
   | DemotePlayer2Message
   | JoinRoomMessage
+  | LeaveRoomMessage
   | RequestNewCardMessage
   | SetGameMessage
   | SetPlayerCardMessage;
