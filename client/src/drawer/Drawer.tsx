@@ -1,6 +1,6 @@
 import React, { useState, ReactNode } from "react";
 import { useSearchParams } from "react-router-dom";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -24,7 +24,7 @@ import { usePlayers } from "../hooks/useContextHooks";
 
 const drawerWidth = 200;
 
-const openedMixin = (theme: any) => ({
+const openedMixin = (theme: Theme): CSSObject => ({
   width: "100vw",
   transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
@@ -36,7 +36,7 @@ const openedMixin = (theme: any) => ({
   },
 });
 
-const closedMixin = (theme: any) => ({
+const closedMixin = (theme: Theme): CSSObject => ({
   transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,

@@ -6,7 +6,6 @@ import * as memeCollection from "../src/assets/memeCollection";
 
 jest.mock("../src/components/ObserverStar", () => (props: any) => {
   // Remove draweropen so it is not passed to the DOM
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { draweropen, ...rest } = props;
   return <div data-testid="ObserverStar" {...rest} />;
 });
@@ -108,6 +107,8 @@ describe("PlayerCardModal", () => {
 
     render(<PlayerCardModal draweropen={true} opacity={{ opacity: 0.8 }} />);
     fireEvent.click(screen.getByTestId("DrawerItem"));
-    // ...existing code...
+    fireEvent.click(screen.getByTestId("assignNewCardButton"));
+
+    expect(assignNewMyPlayerCardMock).toHaveBeenCalled();
   });
   });

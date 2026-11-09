@@ -16,12 +16,12 @@ interface MemeCardProps {
 // Local type for ReactCardFlip props (copied from package)
 type LocalReactFlipCardProps = {
   cardZIndex?: string;
-  containerStyle?: {};
+  containerStyle?: React.CSSProperties;
   containerClassName?: string;
   isFlipped?: boolean;
   flipSpeedBackToFront?: number;
   flipSpeedFrontToBack?: number;
-  cardStyles?: { front?: {}; back?: {} };
+  cardStyles?: { front?: React.CSSProperties; back?: React.CSSProperties };
   infinite?: boolean;
   flipDirection?: 'horizontal' | 'vertical';
   children: [React.ReactNode, React.ReactNode];

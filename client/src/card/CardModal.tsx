@@ -3,7 +3,6 @@ import IconButton from "@mui/material/IconButton";
 import StyledDialog from "../components/StyledDialog.js";
 const DialogContent = lazy(() => import("@mui/material/DialogContent"));
 import { colorA } from "../assets/styles.js";
-import { useLayout } from "../hooks/useContextHooks";
 import { GuessySuspense } from "../components/GuessySuspense.js";
 import type { MemeData } from "../types/meme.js";
 
@@ -15,7 +14,6 @@ interface CardModalProps {
 }
 
 const CardModal: React.FC<CardModalProps> = ({ item, children, icon, setModalOpen }) => {
-  const { dialogWidth } = useLayout();
   const [open, setOpen] = useState<boolean>(false);
   const handleOpen = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -35,7 +33,7 @@ const CardModal: React.FC<CardModalProps> = ({ item, children, icon, setModalOpe
       <div onClick={handleOpen}>
         <i className={`fa-solid fa-${icon} fa-lg overlay-icon`}></i>
       </div>
-      <StyledDialog open={open} onClose={handleClose} maxWidth={dialogWidth as any}>
+      <StyledDialog open={open} onClose={handleClose} maxWidth={false}>
         <IconButton
           aria-label="close"
           onClick={handleClose}

@@ -8,8 +8,8 @@ const memeData: Record<string, MemeData> = memes;
 const memeKeys = Object.keys(memes);
 
 function memeSampler(): { columnsObject: BoardLayouts; allKeys: string[] } {
-  let memesArray = memeKeys.slice(0);
-  let gameKeys: string[] = [];
+  const memesArray = memeKeys.slice(0);
+  const gameKeys: string[] = [];
   let randomIndex;
 
   for (let i = 0; i < 24; i++) {

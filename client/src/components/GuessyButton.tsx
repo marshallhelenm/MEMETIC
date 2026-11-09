@@ -1,14 +1,12 @@
 import React from "react";
-import Button from "@mui/material/Button";
+import Button, { ButtonProps } from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import { colorB, colorD } from "../assets/styles";
 
-interface GuessyButtonProps {
-  onClick?: (...args: any[]) => void;
+interface GuessyButtonProps extends Omit<ButtonProps, "sx"> {
   children: React.ReactNode;
   dark?: boolean;
   sx?: object;
-  [key: string]: any;
 }
 
 const BolderButton = styled(Button)({

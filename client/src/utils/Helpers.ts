@@ -21,11 +21,11 @@ const waitUntil = (
   condition: boolean | (() => boolean),
   ping?: () => void
 ): Promise<boolean> => {
-  var start = Date.now();
-  var pingCount = 0;
+  const start = Date.now();
+  let pingCount = 0;
   return new Promise(waitForConditional);
 
-  function waitForConditional(resolve: (value: boolean) => void, reject: (reason?: any) => void) {
+  function waitForConditional(resolve: (value: boolean) => void, reject: (reason?: unknown) => void) {
     const cond = typeof condition === "function" ? condition() : condition;
     if (cond) {
       resolve(true);
@@ -40,11 +40,11 @@ const waitUntil = (
   }
 };
 
-function randomCardKey<T = any>(keys: T[]): T | undefined {
+function randomCardKey<T>(keys: T[]): T | undefined {
   if (!keys) return;
-  let min = Math.ceil(0);
-  let max = Math.floor(23);
-  let index = Math.floor(Math.random() * (max - min + 1)) + min;
+  const min = Math.ceil(0);
+  const max = Math.floor(23);
+  const index = Math.floor(Math.random() * (max - min + 1)) + min;
   return keys[index];
 }
 
