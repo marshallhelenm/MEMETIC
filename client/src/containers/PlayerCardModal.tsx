@@ -95,7 +95,12 @@ const PlayerCardModal = ({ draweropen, opacity }: PlayerCardModalProps) => {
 
 
   if (isObserver) {
-    return <ObserverStar draweropen={draweropen} opacity={opacity} />;
+    return (
+      <ObserverStar
+        draweropen={draweropen}
+        opacity={typeof opacity === "number" ? { opacity } : opacity}
+      />
+    );
   } else {
     return (
       <>

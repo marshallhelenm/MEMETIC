@@ -6,10 +6,10 @@ import * as useContextHooks from "../src/hooks/useContextHooks";
 
 // ----- Mock sessionStorage -----
 const sessionStorageMock = (() => {
-  let store = {};
+  let store: Record<string, string> = {};
   return {
-    getItem: (key) => store[key] || null,
-    setItem: (key, value) => {
+    getItem: (key: string) => store[key] || null,
+    setItem: (key: string, value: string) => {
       store[key] = value.toString();
     },
     clear: () => {
@@ -34,7 +34,7 @@ function renderWithContext(
   jest.spyOn(useContextHooks, "useGame").mockReturnValue({
     staticGifs,
     setStaticGifs,
-  });
+  } as any);
 
   return render(<GifPauseButton draweropen={draweropen} />);
 }

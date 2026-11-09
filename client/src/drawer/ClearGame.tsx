@@ -67,7 +67,7 @@ const ClearGame: React.FC<ClearGameProps> = ({ opacity, draweropen }) => {
               />
             </div>
           </Tooltip>
-          <ListItemText primary="New Game" sx={[opacity]} />
+          <ListItemText primary="New Game" sx={opacity} />
         </DrawerButton>
       </DrawerItem>
       {clearGameOpen && dialogContents()}

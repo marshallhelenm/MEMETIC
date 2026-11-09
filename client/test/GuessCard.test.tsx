@@ -7,14 +7,14 @@ import * as useContextHooks from "../src/hooks/useContextHooks";
 jest.mock("../src/components/Confetti", () => () => (
   <div data-testid="Confetti" />
 ));
-jest.mock("../src/components/GuessyButton", () => (props) => (
+jest.mock("../src/components/GuessyButton", () => (props: any) => (
   <button onClick={props.onClick} data-testid={props.id}>
     {props.children}
   </button>
 ));
 
 describe("GuessCard", () => {
-  let setModalOpenMock;
+  let setModalOpenMock: jest.Mock;
 
   beforeEach(() => {
     setModalOpenMock = jest.fn();
@@ -22,7 +22,7 @@ describe("GuessCard", () => {
   });
 
   // This tab's player is "my-uuid"; derive the role flags the context would provide.
-  function renderGuessCard(playerProps, itemKey = "card123") {
+  function renderGuessCard(playerProps: any, itemKey = "card123") {
     jest.spyOn(useContextHooks, "usePlayers").mockReturnValue({
       ...playerProps,
       myUuid: "my-uuid",

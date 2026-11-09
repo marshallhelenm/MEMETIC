@@ -8,7 +8,7 @@ jest.mock("../src/components/GuessyButton", () => {
 
   return {
     __esModule: true,
-    default: (props) => (
+    default: (props: any) => (
       <button onClick={props.onClick} data-testid={props.id}>
         {props.children}
       </button>
@@ -17,13 +17,13 @@ jest.mock("../src/components/GuessyButton", () => {
 });
 
 describe("ClearGame", () => {
-  let createGameMock;
+  let createGameMock: jest.Mock;
 
-  function renderClearGame(draweropen) {
+  function renderClearGame(draweropen: boolean) {
     createGameMock = jest.fn();
     jest.spyOn(useContextHooks, "useGame").mockReturnValue({
       createGame: createGameMock,
-    });
+    } as any);
 
     return render(
       <ClearGame opacity={{ opacity: 0.8 }} draweropen={draweropen} />,

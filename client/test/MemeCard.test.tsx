@@ -69,7 +69,7 @@ describe("MemeCard", () => {
     // Mock usePlayers to return a player card id
     jest.spyOn(useContextHooks, "usePlayers").mockReturnValue({
       myPlayerCard: itemKey,
-    });
+    } as any);
 
     jest.requireMock("../src/card/MemeCardFront").default.mockClear();
     jest.requireMock("../src/card/MemeCardBack").default.mockClear();

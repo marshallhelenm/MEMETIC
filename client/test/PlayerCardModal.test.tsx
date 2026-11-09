@@ -57,7 +57,7 @@ describe("PlayerCardModal", () => {
   it("renders ObserverStar when isObserver is true", () => {
     jest.spyOn(useContextHooks, "usePlayers").mockReturnValue({
       isObserver: true,
-    });
+    } as any);
 
     render(<PlayerCardModal draweropen={true} opacity={{ opacity: 0.8 }} />);
     expect(screen.getByTestId("ObserverStar")).toBeInTheDocument();
@@ -68,7 +68,7 @@ describe("PlayerCardModal", () => {
       isObserver: false,
       myPlayerCard: "testKey",
       assignNewMyPlayerCard: assignNewMyPlayerCardMock,
-    });
+    } as any);
 
     render(<PlayerCardModal draweropen={true} opacity={{ opacity: 0.8 }} />);
     expect(screen.getByTestId("DrawerItem")).toBeInTheDocument();
@@ -85,7 +85,7 @@ describe("PlayerCardModal", () => {
       isObserver: false,
       myPlayerCard: "testKey",
       assignNewMyPlayerCard: assignNewMyPlayerCardMock,
-    });
+    } as any);
 
     render(<PlayerCardModal draweropen={true} opacity={{ opacity: 0.8 }} />);
     fireEvent.click(screen.getByTestId("DrawerItem"));
@@ -103,7 +103,7 @@ describe("PlayerCardModal", () => {
       isObserver: false,
       myPlayerCard: "testKey",
       assignNewMyPlayerCard: assignNewMyPlayerCardMock,
-    });
+    } as any);
 
     render(<PlayerCardModal draweropen={true} opacity={{ opacity: 0.8 }} />);
     fireEvent.click(screen.getByTestId("DrawerItem"));
