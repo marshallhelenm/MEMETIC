@@ -4,6 +4,7 @@ import { handleMessage } from "./messageHandler";
 import { broadcastGameContents } from "./broadcaster";
 import { removePlayer } from "./roomManager";
 import { forgetPlayer } from "./rateLimiter";
+import { isValidSecret, publicIdFor } from "./identity";
 import type { Rooms } from "./roomManager";
 import type { Connections, Player } from "./broadcaster";
 
@@ -55,14 +56,15 @@ const markDisconnected = (uuid: string) => {
 wsServer.on("connection", (connection: WebSocket, request: http.IncomingMessage) => {
   const host = request.headers.host || "localhost";
   const requestUrl = new URL(request.url || "/ws", `http://${host}`);
-  const uuid = requestUrl.searchParams.get("uuid");
-
-  // Clients create their own player ID and must send it when connecting.
-  if (!uuid || uuid === "null" || uuid === "undefined") {
-    connection.send(JSON.stringify({ type: "error", error: "Missing player id" }));
-    connection.close(4000, "Missing player id");
+  // The client's private secret; everything server-side uses the public ID
+  // derived from it, and that's all other players ever see.
+  const secret = requestUrl.searchParams.get("uuid");
+  if (!isValidSecret(secret)) {
+    connection.send(JSON.stringify({ type: "error", error: "Missing or invalid player id" }));
+    connection.close(4000, "Missing or invalid player id");
     return;
   }
+  const uuid = publicIdFor(secret);
 
   // A newer connection for the same player replaces the old one.
   const previous = connections[uuid] as WebSocket | undefined;
@@ -72,6 +74,9 @@ wsServer.on("connection", (connection: WebSocket, request: http.IncomingMessage)
   // Cancel any pending removal; the client re-joins to resync its state.
   clearTimeout(removalTimers[uuid]);
   delete removalTimers[uuid];
+
+  // Tell the client its public ID so it can recognise itself in the player list.
+  connection.send(JSON.stringify({ type: "welcome", playerId: uuid }));
 
   // Protocol errors (oversized or malformed frames) must not crash the server:
   // without a listener, Node throws on the "error" event. ws closes the socket.

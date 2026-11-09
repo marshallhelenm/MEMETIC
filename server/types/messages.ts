@@ -224,6 +224,12 @@ export interface NoGameAlertMessage {
   info?: unknown;
 }
 
+/** Sent on connect: the public ID other players will see for this client. */
+export interface WelcomeMessage {
+  type: "welcome";
+  playerId: string;
+}
+
 export interface ServerErrorMessage {
   type: "error";
   error: string;
@@ -233,4 +239,5 @@ export type ServerMessage =
   | GameContentsMessage
   | ChatHistoryMessage
   | NoGameAlertMessage
-  | ServerErrorMessage;
+  | ServerErrorMessage
+  | WelcomeMessage;
