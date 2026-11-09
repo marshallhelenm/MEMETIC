@@ -41,6 +41,7 @@ describe("handleMessage", () => {
       messageContents: { sender: "A", chatText: "<script>alert(1)</script>", timestamp: 1 },
     };
     rooms["room1"] = deepClone(emptyRoomTemplate);
+    rooms["room1"].players[uuid] = { ...deepClone(emptyPlayerTemplate), uuid, username: "A" };
     handleMessage(
       Buffer.from(JSON.stringify(msg)),
       uuid,

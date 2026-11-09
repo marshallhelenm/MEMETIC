@@ -17,6 +17,10 @@ import type { Connections, Player } from "./broadcaster";
 import type { Rooms } from "./roomManager";
 
 import { validateMessagePayload } from "./types/messages";
+import type { ChatEntry } from "./types/messages";
+
+/** How many chat messages a room keeps (and sends to players). */
+export const MAX_CHAT_HISTORY = 100;
 import { allowMessage, RATE_LIMIT_MAX, RATE_LIMIT_WINDOW_MS } from "./rateLimiter";
 
 export function handleMessage(
@@ -87,10 +91,19 @@ export function handleMessage(
     let roomPlayerKeys = room ? Object.keys(room.players) : [];
 
     switch (message.type) {
-      case "chatMessage":
-        connections[uuid] = connection;
-        const sanitizedMsg = sanitizeInput(message.messageContents.chatText, 512);
-        room.messageHistory = [...room.messageHistory, { ...message.messageContents, chatText: sanitizedMsg }];
+      case "chatMessage": {
+        const sender = room.players[uuid];
+        if (!sender) return;
+        // Build the stored entry ourselves: the name the player joined with (so
+        // nobody can post as someone else), cleaned text, and the server's clock.
+        // Any other fields the client sent are dropped.
+        const entry: ChatEntry = {
+          sender: sender.username ?? "",
+          chatText: sanitizeInput(message.messageContents.chatText, 512),
+          timestamp: Date.now(),
+        };
+        if (!entry.chatText) return;
+        room.messageHistory = [...room.messageHistory, entry].slice(-MAX_CHAT_HISTORY);
         broadcast(
           roomKey,
           {
@@ -104,6 +117,7 @@ export function handleMessage(
           connections
         );
         break;
+      }
       case "demotePlayer2": {
         if (uuid !== room.player1Uuid) {
           sendToUuid(

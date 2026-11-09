@@ -1,4 +1,4 @@
-import { handleMessage } from "../messageHandler";
+import { handleMessage, MAX_CHAT_HISTORY } from "../messageHandler";
 import { joinRoom } from "../broadcaster";
 import { resetRateLimits } from "../rateLimiter";
 import type { Rooms, Player } from "../roomManager";
@@ -227,5 +227,54 @@ describe("demoting player 2", () => {
 
     expect(rooms[ROOM].player2Uuid).toBe("b");
     expect(lastOfType(requester, "error").error).toMatch(/only player 1/);
+  });
+});
+
+describe("chat", () => {
+  const chat = (uuid: string, chatText: string, extra: object = {}) =>
+    send(uuid, {
+      type: "chatMessage",
+      roomKey: ROOM,
+      messageContents: { sender: "Someone Else", chatText, timestamp: 1, ...extra },
+    });
+
+  beforeEach(() => {
+    connect("a");
+    join("a");
+  });
+
+  it("stores the sender's joined name, cleaned text and the server's time", () => {
+    const before = Date.now();
+
+    chat("a", "  <b>hi</b>  ", { evil: "x".repeat(1000) });
+
+    const [entry] = rooms[ROOM].messageHistory;
+    expect(entry).toEqual({ sender: "a", chatText: "bhi/b", timestamp: expect.any(Number) });
+    expect(entry.timestamp).toBeGreaterThanOrEqual(before);
+  });
+
+  it("ignores chat from someone who isn't in the room", () => {
+    connect("stranger");
+
+    chat("stranger", "hello");
+
+    expect(rooms[ROOM].messageHistory).toEqual([]);
+  });
+
+  it("ignores a message that is empty once cleaned", () => {
+    chat("a", "  <> ");
+
+    expect(rooms[ROOM].messageHistory).toEqual([]);
+  });
+
+  it(`keeps only the last ${MAX_CHAT_HISTORY} messages`, () => {
+    for (let i = 0; i < MAX_CHAT_HISTORY + 5; i++) {
+      resetRateLimits();
+      chat("a", `message ${i}`);
+    }
+
+    const history = rooms[ROOM].messageHistory;
+    expect(history).toHaveLength(MAX_CHAT_HISTORY);
+    expect(history[history.length - 1].chatText).toBe(`message ${MAX_CHAT_HISTORY + 4}`);
   });
 });
