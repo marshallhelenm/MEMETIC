@@ -3,7 +3,6 @@ import React, { createContext, useCallback, useEffect, useMemo, ReactNode } from
 import { useGame, useWS } from "../hooks/useContextHooks";
 import { useSearchParams } from "react-router-dom";
 import { rememberCard } from "../utils/rememberedCard";
-import { getPlayerId } from "../utils/playerId";
 import type { PlayerState } from "../messages";
 
 export interface PlayersContextValue {
@@ -32,17 +31,19 @@ const NO_PLAYERS: Record<string, PlayerState> = {};
 
 function PlayersProvider({ children }: PlayersProviderProps) {
   const [searchParams] = useSearchParams();
-  const { lastGameContentsMessage, sendJsonMessage } = useWS();
+  const { lastGameContentsMessage, sendJsonMessage, myPlayerId } = useWS();
   const { gameKey } = useGame();
   const roomKey = searchParams.get("roomKey");
-  const myUuid = getPlayerId();
+  // The public ID the server told us; other players see this, never our secret.
+  const myUuid = myPlayerId ?? "";
 
   // Players, roles and cards all come from the server's latest game contents.
   const players = lastGameContentsMessage?.players ?? NO_PLAYERS;
   const player1Uuid = lastGameContentsMessage?.player1Uuid ?? "";
   const player2Uuid = lastGameContentsMessage?.player2Uuid ?? "";
-  const isPlayer1 = myUuid === player1Uuid;
-  const isPlayer2 = myUuid === player2Uuid;
+  // Until we know our ID, we aren't either player (an empty ID would match an empty slot).
+  const isPlayer1 = !!myUuid && myUuid === player1Uuid;
+  const isPlayer2 = !!myUuid && myUuid === player2Uuid;
   const isObserver = !isPlayer1 && !isPlayer2;
   const myPlayerCard: string | null = players[myUuid]?.card ?? null;
   const player1Card = players[player1Uuid]?.card;

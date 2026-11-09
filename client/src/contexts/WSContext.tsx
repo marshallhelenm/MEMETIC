@@ -18,6 +18,8 @@ export interface WSContextValue {
     serverError: string;
     lastGameContentsMessage: GameContentsMessage | null;
     lastChatHistoryMessage: ChatHistoryMessage | null;
+    /** This client's public player ID, from the server's welcome; null until then. */
+    myPlayerId: string | null;
   }
 
   interface WSProviderProps {
@@ -87,8 +89,10 @@ export interface WSContextValue {
   const MAX_RECONNECT_ATTEMPTS = 10;
 
   function WSProvider({ children }: WSProviderProps) {
-    // Resolved synchronously so the first connection includes the player ID.
-    const [playerId] = useState<string>(getPlayerId);
+    // This tab's private secret: sent only when connecting, never shown to others.
+    // Resolved synchronously so the first connection includes it.
+    const [playerSecret] = useState<string>(getPlayerId);
+    const [myPlayerId, setMyPlayerId] = useState<string | null>(null);
     const [serverError, setServerError] = useState<string>("");
     const [reconnectGaveUp, setReconnectGaveUp] = useState<boolean>(false);
     const [lastGameContentsMessage, setLastGameContentsMessage] =
@@ -97,7 +101,7 @@ export interface WSContextValue {
       useState<ChatHistoryMessage | null>(null);
 
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket<ServerMessage | null>(
-      `${socketURL}?uuid=${encodeURIComponent(playerId)}`,
+      `${socketURL}?uuid=${encodeURIComponent(playerSecret)}`,
       {
         share: false,
         shouldReconnect: () => true,
@@ -131,6 +135,9 @@ export interface WSContextValue {
             setServerError("");
           }
           break;
+        case "welcome":
+          setMyPlayerId(message.playerId);
+          break;
         case "error":
           devLog(["Error message from server:", message.error]);
           setServerError(message.error);
@@ -153,6 +160,7 @@ export interface WSContextValue {
         serverError,
         lastGameContentsMessage,
         lastChatHistoryMessage,
+        myPlayerId,
       };
     }, [
       sendJsonMessage,
@@ -163,6 +171,7 @@ export interface WSContextValue {
       serverError,
       lastGameContentsMessage,
       lastChatHistoryMessage,
+      myPlayerId,
     ]);
 
     return <WSContext.Provider value={value}>{children}</WSContext.Provider>;

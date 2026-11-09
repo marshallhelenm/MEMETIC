@@ -35,8 +35,7 @@ describe("PlayersContext", () => {
 
   beforeEach(() => {
     sessionStorage.clear();
-    sessionStorage.setItem("guessy-uuid", "me");
-    ws = { sendJsonMessage: jest.fn(), lastGameContentsMessage: contents() };
+    ws = { sendJsonMessage: jest.fn(), lastGameContentsMessage: contents(), myPlayerId: "me" };
     jest.spyOn(useContextHooks, "useWS").mockImplementation(() => ws);
     jest.spyOn(useContextHooks, "useGame").mockImplementation(() => ({ gameKey: 1000 }));
   });
@@ -92,6 +91,15 @@ describe("PlayersContext", () => {
       gameKey: 1000,
       card: "cat",
     });
+  });
+
+  it("isn't any player before the server says who we are", () => {
+    ws = { ...ws, myPlayerId: null, lastGameContentsMessage: contents({ player2Uuid: "" }) };
+    render(tree());
+
+    expect(ctx.isPlayer1).toBe(false);
+    expect(ctx.isPlayer2).toBe(false);
+    expect(ctx.isObserver).toBe(true);
   });
 
   it("has no players before any game contents arrive", () => {
