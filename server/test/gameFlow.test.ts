@@ -4,8 +4,9 @@ import { resetRateLimits } from "../rateLimiter";
 import type { Rooms, Player } from "../roomManager";
 
 const ROOM = "ROOM0001";
-const keys = Array.from({ length: 24 }, (_, i) => `meme_${i}`);
-const columnsObject = { 1: {}, 2: {}, 3: {}, 4: {}, 5: {}, 6: {} };
+import { gameKeys as keys, layoutsFor } from "./helpers";
+
+const columnsObject = layoutsFor(keys);
 
 let rooms: Rooms;
 let players: Record<string, Player>;
@@ -276,5 +277,54 @@ describe("chat", () => {
     const history = rooms[ROOM].messageHistory;
     expect(history).toHaveLength(MAX_CHAT_HISTORY);
     expect(history[history.length - 1].chatText).toBe(`message ${MAX_CHAT_HISTORY + 4}`);
+  });
+});
+
+describe("validating a dealt game", () => {
+  beforeEach(() => {
+    connect("a");
+    join("a");
+  });
+
+  const rejected = (allKeys: unknown, layouts: unknown) => {
+    send("a", { type: "setGame", roomKey: ROOM, allKeys, columnsObject: layouts });
+    return rooms[ROOM].allKeys.length === 0 && lastOfType("a", "error") !== undefined;
+  };
+
+  it("accepts 24 different keys laid out for 1 to 6 columns", () => {
+    expect(rejected(keys, layoutsFor(keys))).toBe(false);
+  });
+
+  it("rejects the wrong number of keys", () => {
+    const more = [...keys, "meme_24"];
+    expect(rejected(more, layoutsFor(more))).toBe(true);
+  });
+
+  it("rejects duplicate keys", () => {
+    const dupes = [...keys.slice(0, 23), "meme_0"];
+    expect(rejected(dupes, layoutsFor(dupes))).toBe(true);
+  });
+
+  it("rejects keys that don't look like meme keys", () => {
+    const odd = [...keys.slice(0, 23), "<script>"];
+    expect(rejected(odd, layoutsFor(odd))).toBe(true);
+  });
+
+  it("rejects layouts that leave out or add a card", () => {
+    const layouts = layoutsFor(keys);
+    layouts[3][1] = [...layouts[3][1], "meme_extra"];
+    expect(rejected(keys, layouts)).toBe(true);
+  });
+
+  it("rejects a layout with the wrong number of columns", () => {
+    const layouts = layoutsFor(keys);
+    layouts[2] = { 1: keys };
+    expect(rejected(keys, layouts)).toBe(true);
+  });
+
+  it("rejects missing or extra column counts", () => {
+    const layouts = layoutsFor(keys) as Record<number, unknown>;
+    delete layouts[6];
+    expect(rejected(keys, layouts)).toBe(true);
   });
 });

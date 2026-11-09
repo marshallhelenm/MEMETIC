@@ -8,8 +8,9 @@ const GRACE_MS = 600;
 // 127.0.0.1, not localhost: the server listens on IPv4 (0.0.0.0), and on Node 18
 // "localhost" resolves to IPv6 ::1 first without falling back.
 const URL = `ws://127.0.0.1:${PORT}/ws`;
-const keys = Array.from({ length: 24 }, (_, i) => `meme_${i}`);
-const columnsObject = { 1: {}, 2: {}, 3: {}, 4: {}, 5: {}, 6: {} };
+import { gameKeys as keys, layoutsFor } from "./helpers";
+
+const columnsObject = layoutsFor(keys);
 
 let server: ChildProcess;
 const open: WebSocket[] = [];

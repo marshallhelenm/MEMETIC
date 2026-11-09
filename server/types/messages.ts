@@ -64,14 +64,52 @@ export interface SetGameMessage {
   allKeys: string[];
 }
 
+/** Memes dealt per game. */
+export const GAME_SIZE = 24;
+/** The most columns the board is laid out for. */
+export const MAX_COLUMNS = 6;
+const MEME_KEY = /^[A-Za-z0-9_]{1,64}$/;
+
+const sameKeys = (a: string[], b: string[]) =>
+  a.length === b.length && [...a].sort().join("\n") === [...b].sort().join("\n");
+
+/** GAME_SIZE different, meme-shaped keys. */
+export function isGameKeys(keys: unknown): keys is string[] {
+  return (
+    Array.isArray(keys) &&
+    keys.length === GAME_SIZE &&
+    keys.every((k) => typeof k === "string" && MEME_KEY.test(k)) &&
+    new Set(keys).size === GAME_SIZE
+  );
+}
+
+/**
+ * A layout for every column count from 1 to MAX_COLUMNS: layout n has columns
+ * 1..n, and between them those columns hold exactly `allKeys`.
+ */
+export function isBoardLayouts(layouts: unknown, allKeys: string[]): layouts is BoardLayouts {
+  if (!isRecord(layouts) || Object.keys(layouts).length !== MAX_COLUMNS) return false;
+  for (let count = 1; count <= MAX_COLUMNS; count++) {
+    const layout = layouts[count];
+    if (!isRecord(layout) || Object.keys(layout).length !== count) return false;
+    const keys: string[] = [];
+    for (let column = 1; column <= count; column++) {
+      const cards = layout[column];
+      if (!Array.isArray(cards) || !cards.every((k) => typeof k === "string")) return false;
+      keys.push(...cards);
+    }
+    if (!sameKeys(keys, allKeys)) return false;
+  }
+  return true;
+}
+
 export function isSetGameMessage(obj: unknown): obj is SetGameMessage {
   return (
     isRecord(obj) &&
     obj.type === "setGame" &&
     typeof obj.roomKey === "string" &&
-    typeof obj.columnsObject === "object" &&
-    obj.columnsObject !== null &&
-    Array.isArray(obj.allKeys)
+    isGameKeys(obj.allKeys) &&
+    isBoardLayouts(obj.columnsObject, obj.allKeys)
   );
 }
 
