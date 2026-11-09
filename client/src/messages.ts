@@ -128,45 +128,45 @@ export function isRequestNewCardMessage(obj: unknown): obj is RequestNewCardMess
 }
 
 // --- Extracted message payload validation ---
-export function validateMessagePayload(message: { type?: unknown }, bytes: Buffer) {
+export function validateMessagePayload(message: { type?: unknown }) {
   switch (message.type) {
     case "chatMessage":
       if (!isChatMessage(message)) {
-        throw new Error("Invalid or missing messageContents for chatMessage. Message: " + bytes.toString());
+        throw new Error("Invalid or missing messageContents for chatMessage.");
       }
       break;
     case "demotePlayer2":
       if (!isDemotePlayer2Message(message)) {
-        throw new Error("Missing or invalid roomKey for demotePlayer2. Message: " + bytes.toString());
+        throw new Error("Missing or invalid roomKey for demotePlayer2.");
       }
       break;
     case "setGame":
       if (!isSetGameMessage(message)) {
-        throw new Error("Missing or invalid fields for setGame. Message: " + bytes.toString());
+        throw new Error("Missing or invalid fields for setGame.");
       }
       break;
     case "setPlayerCard":
       if (!isSetPlayerCardMessage(message)) {
-        throw new Error("Missing or invalid fields for setPlayerCard. Message: " + bytes.toString());
+        throw new Error("Missing or invalid fields for setPlayerCard.");
       }
       break;
     case "joinRoom":
       if (!isJoinRoomMessage(message)) {
-        throw new Error("Missing or invalid fields for joinRoom. Message: " + bytes.toString());
+        throw new Error("Missing or invalid fields for joinRoom.");
       }
       break;
     case "leaveRoom":
       if (!isLeaveRoomMessage(message)) {
-        throw new Error("Missing or invalid roomKey for leaveRoom. Message: " + bytes.toString());
+        throw new Error("Missing or invalid roomKey for leaveRoom.");
       }
       break;
     case "requestNewCard":
       if (!isRequestNewCardMessage(message)) {
-        throw new Error("Missing or invalid roomKey for requestNewCard. Message: " + bytes.toString());
+        throw new Error("Missing or invalid roomKey for requestNewCard.");
       }
       break;
     default:
-      throw new Error("Unknown message type. Message: " + bytes.toString());
+      throw new Error("Unknown message type.");
   }
 }
 

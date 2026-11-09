@@ -17,7 +17,9 @@ const server = http.createServer((req, res) => {
   res.writeHead(404, { "Content-Type": "application/json" });
   res.end(JSON.stringify({ error: "Not Found" }));
 });
-const wsServer = new WebSocketServer({ server, path: "/ws" });
+// Real messages are a few KB at most (setGame is the largest); refuse anything far bigger.
+const MAX_MESSAGE_BYTES = 64 * 1024;
+const wsServer = new WebSocketServer({ server, path: "/ws", maxPayload: MAX_MESSAGE_BYTES });
 const port = Number(process.env.PORT) || 4020;
 
 const connections: Connections = {};
@@ -70,6 +72,12 @@ wsServer.on("connection", (connection: WebSocket, request: http.IncomingMessage)
   // Cancel any pending removal; the client re-joins to resync its state.
   clearTimeout(removalTimers[uuid]);
   delete removalTimers[uuid];
+
+  // Protocol errors (oversized or malformed frames) must not crash the server:
+  // without a listener, Node throws on the "error" event. ws closes the socket.
+  connection.on("error", (err) => {
+    console.warn(`Socket error for ${uuid}:`, err.message);
+  });
 
   connection.on("message", (message: Buffer) => {
     handleMessage(message, uuid, connection, rooms, players, connections);

@@ -68,10 +68,10 @@ export function handleMessage(
       "leaveRoom",
     ];
     if (!message.type || !allowedTypes.includes(message.type)) {
-      throw new Error("Invalid or missing message type. Message: " + bytes.toString());
+      throw new Error("Invalid or missing message type.");
     }
 
-    validateMessagePayload(message, bytes);
+    validateMessagePayload(message);
 
     let roomKey = message.roomKey;
     if (!roomKey) return;
@@ -212,15 +212,15 @@ export function handleMessage(
         break;
     }
   } catch (error: any) {
+    // Don't echo the raw input back, and only log a short preview of it.
     const errorMsg = {
       type: "error",
       error: error.message || String(error),
-      received: bytes.toString(),
       uuid: uuid,
       time: new Date().toISOString(),
     };
     sendToUuid(uuid, errorMsg, connections);
-    console.error("Error parsing message:", errorMsg, error);
+    console.error("Rejected message:", errorMsg.error, "|", bytes.toString().slice(0, 200));
     return;
   }
 }

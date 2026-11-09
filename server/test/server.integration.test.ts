@@ -66,6 +66,27 @@ async function rejoin(ws: WebSocket, roomKey: string, uuid: string) {
   return contents;
 }
 
+it("closes a connection that sends an oversized message", async () => {
+  const ws = await connect("int-big");
+  const wasClosed = closed(ws);
+
+  ws.send("x".repeat(65 * 1024));
+
+  expect(await wasClosed).toBe(1009); // "message too big"
+});
+
+it("stays up after a client sends a malformed frame", async () => {
+  const bad = await connect("int-bad-frame");
+  const wasClosed = closed(bad);
+
+  // A masked frame with a reserved opcode (3): a protocol error.
+  (bad as any)._socket.write(Buffer.from([0x83, 0x80, 0, 0, 0, 0]));
+  await wasClosed;
+
+  const probe = await connect("int-probe");
+  expect(probe.readyState).toBe(WebSocket.OPEN);
+});
+
 it("rejects a connection without a player ID", async () => {
   const ws = await connect();
   expect(await closed(ws)).toBe(4000);
