@@ -39,8 +39,11 @@ jobs:
           cache: npm
           cache-dependency-path: client/package-lock.json
       - run: npm ci
+      - name: Type-check
+        run: npx tsc --noEmit
+      - name: Lint
+        run: npm run lint
       - name: Test
         run: npm test
       - name: Build
         run: npm run build
-      # Not yet enforced: `npx tsc --noEmit` (30 errors) and `npm run lint` (133 errors).
